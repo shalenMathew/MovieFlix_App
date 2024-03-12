@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+  >
+
+  <androidx.constraintlayout.widget.ConstraintLayout
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:background="@drawable/gradient_background"
+      tools:context=".presentation.watchlist.WatchListFragment">
+
+    <TextView
+        android:id="@+id/fragment_watch_list_noMovie"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.5"
+        android:text="No movie in ur Watch List Yet!!!"
+        android:textColor="@color/white"
+        android:gravity="center"
+        android:textSize="@dimen/_20sdp"
+        android:visibility="gone"
+        />
+
+
+    <LinearLayout
+        android:id="@+id/fragment_watch_list_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.5">
+
+      <RelativeLayout
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_gravity="center"
+          android:orientation="horizontal">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_85sdp"
+            android:background="@drawable/gradient_top" />
+
+        <TextView
+            android:id="@+id/fragment_watch_list_tv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/montserrat_medium"
+            android:gravity="start"
+            android:paddingStart="@dimen/_15sdp"
+            android:paddingTop="@dimen/_12sdp"
+            android:paddingBottom="@dimen/_18sdp"
+            android:text="Watch-List"
+            android:textColor="@color/white"
+            android:textSize="@dimen/_15ssp" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/fragment_watch_list_rv"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/fragment_watch_list_tv"
+            android:layout_marginTop="6dp"
+            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintVertical_bias="0.5"
+            app:spanCount="4"
+
+            />
+      </RelativeLayout>
+
+    </LinearLayout>
+
+
+  </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

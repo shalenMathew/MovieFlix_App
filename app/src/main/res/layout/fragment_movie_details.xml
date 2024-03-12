@@ -1,0 +1,291 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clipToPadding="true"
+    android:paddingHorizontal="@dimen/_6sdp"
+    android:paddingTop="@dimen/_10sdp"
+    app:behavior_hideable="true"
+    app:layout_behavior="@string/bottom_sheet_behavior"
+    >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="bottom"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            >
+
+            <TextView
+                android:id="@+id/fragment_movie_details_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/_15sdp"
+                android:textColor="@color/white"
+                tools:text="Batman v Superman: Dawn of Justice"
+                android:gravity="center"
+                android:fontFamily="@font/montserrat_bold"
+                />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/fragment_movie_details_title"
+
+                android:layout_centerHorizontal="true"
+                android:padding="@dimen/_4sdp"
+                >
+                <TextView
+                    android:id="@+id/fragment_movie_details_year"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/montserrat_light"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/_10ssp"
+                    tools:text="2016" />
+
+                <ImageView
+                    android:layout_width="@dimen/_4sdp"
+                    android:layout_height="@dimen/_4sdp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginHorizontal="@dimen/_4sdp"
+                    android:src="@drawable/baseline_fiber_manual_record_24"
+                    app:tint="@color/text_secondary" />
+
+                <TextView
+                    android:id="@+id/fragment_movie_details_rating"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:fontFamily="@font/montserrat_light"
+                    android:gravity="center"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/_10ssp"
+                    tools:text="7.8" />
+
+
+                <ImageView
+                    android:layout_width="@dimen/_4sdp"
+                    android:layout_height="@dimen/_4sdp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginHorizontal="@dimen/_4sdp"
+                    android:src="@drawable/baseline_fiber_manual_record_24"
+                    app:tint="@color/text_secondary" />
+
+                <TextView
+                    android:id="@+id/fragment_movie_details_lang"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:fontFamily="@font/montserrat_light"
+                    android:gravity="center"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/_10ssp"
+                    tools:text="7.8" />
+            </LinearLayout>
+
+        </RelativeLayout>
+
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/fragment_movie_details_yt_card"
+                    style="@style/Widget.Material3.CardView.Filled"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_150sdp"
+                    android:layout_centerInParent="true"
+                    app:cardCornerRadius="@dimen/_16sdp"
+                    app:cardElevation="0dp">
+
+                    <com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
+                        android:id="@+id/fragment_movie_details_yt"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/_150sdp" />
+
+                    <ImageView
+                        android:id="@+id/poster_image"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/poster_bg"
+                        android:scaleType="centerCrop"
+                        />
+
+
+
+                </com.google.android.material.card.MaterialCardView>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_76sdp"
+                    android:layout_alignBottom="@id/fragment_movie_details_yt_card"
+                    android:background="@drawable/gradient_bottom_dark_grey"
+                    android:translationZ="@dimen/_100sdp" />
+
+                <ImageView
+                    android:id="@+id/yt_icon"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_100sdp"
+                    android:layout_centerInParent="true"
+                    android:src="@drawable/yt_icon" />
+
+
+
+            </RelativeLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/black"
+                android:padding="@dimen/_5sdp"
+                android:orientation="vertical"
+                >
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/fragment_movie_details_watch_btn"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/_18sdp"
+                    android:layout_marginVertical="@dimen/_8sdp"
+                    android:backgroundTint="@color/app_color"
+                    android:text="Where to Watch"
+                    android:textAllCaps="false"
+                    android:textColor="@color/white"
+                    app:icon="@drawable/ic_play_arrow"
+                    app:iconGravity="textStart"
+                    app:iconTint="@color/white" />
+
+                <TextView
+                    android:id="@+id/fragment_movie_details_genre"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_5sdp"
+                    android:fontFamily="@font/montserrat_light"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/_8sdp"
+                    tools:text="Action • Adventure • Comedy • Scifi" />
+
+                <TextView
+                    android:id="@+id/fragment_movie_details_overview"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_4sdp"
+                    android:ellipsize="end"
+                    android:fontFamily="@font/montserrat_medium"
+                    android:maxLines="4"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/_9ssp"
+                    android:layout_marginStart="@dimen/_5sdp"
+                    android:layout_marginEnd="@dimen/_5sdp"
+                    tools:text="@tools:sample/lorem"
+                    />
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_12sdp"
+                    android:layout_marginStart="@dimen/_5sdp"
+                    >
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/fragment_movie_details_watchlist_btn"
+                        style="@style/Widget.Material3.CardView.Filled"
+                        android:layout_width="@dimen/_35sdp"
+                        android:layout_height="@dimen/_30sdp"
+                        app:cardBackgroundColor="@color/app_color"
+                        app:cardCornerRadius="8dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="center"
+                            android:gravity="center">
+
+                            <ImageView
+                                android:id="@+id/add_button_icon"
+                                android:layout_width="@dimen/_14sdp"
+                                android:layout_height="@dimen/_14sdp"
+                                android:src="@drawable/ic_add"
+                                app:tint="@color/white" />
+
+                        </LinearLayout>
+
+                    </com.google.android.material.card.MaterialCardView>
+
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/fragment_movie_details_share_btn"
+                        style="@style/Widget.Material3.CardView.Filled"
+                        android:layout_width="@dimen/_35sdp"
+                        android:layout_height="@dimen/_30sdp"
+                        android:layout_marginStart="@dimen/_15sdp"
+                        app:cardBackgroundColor="@color/app_color"
+                        app:cardCornerRadius="8dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="center"
+                            android:gravity="center">
+
+                            <ImageView
+                                android:layout_width="@dimen/_14sdp"
+                                android:layout_height="@dimen/_14sdp"
+                                android:src="@drawable/baseline_share_24"
+                                app:tint="@color/white" />
+
+                        </LinearLayout>
+
+                    </com.google.android.material.card.MaterialCardView>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        <TextView
+            android:id="@+id/recommended_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@color/black"
+            android:fontFamily="@font/montserrat_semibold"
+            android:gravity="start"
+            android:paddingHorizontal="@dimen/_12sdp"
+            android:paddingTop="@dimen/_8sdp"
+            android:text="More Like This"
+            android:textColor="@color/white"
+            android:textSize="@dimen/_12ssp" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/fragment_movie_details_recommend_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/black"
+            android:nestedScrollingEnabled="false"
+            android:orientation="horizontal"
+            android:paddingHorizontal="@dimen/_6sdp"
+            android:paddingTop="@dimen/_4sdp"
+            android:paddingBottom="@dimen/_5sdp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:itemCount="2"
+            tools:listitem="@layout/item_list" />
+
+    </LinearLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

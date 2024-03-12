@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+
+    >
+
+    <data>
+
+    </data>
+
+    <LinearLayout
+
+        android:id="@+id/content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_6sdp"
+        android:layout_marginBottom="@dimen/_2sdp"
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="?selectableItemBackgroundBorderless"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <com.google.android.material.card.MaterialCardView
+            style="@style/Widget.Material3.CardView.Filled"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:cardBackgroundColor="@color/transparent"
+            app:cardCornerRadius="@dimen/_4sdp"
+            app:strokeWidth="1dp"
+            app:strokeColor="@color/white"
+            >
+
+            <ImageView
+                android:id="@+id/movie_image"
+                android:layout_width="@dimen/_78sdp"
+                android:layout_height="@dimen/_40sdp"
+                android:background="@drawable/poster_bg"
+                android:scaleType="centerCrop"
+                tools:src="@tools:sample/backgrounds/scenic"
+
+                />
+
+        </com.google.android.material.card.MaterialCardView>
+
+
+        <TextView
+            android:id="@+id/movie_name_text"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_10sdp"
+            android:layout_weight="1"
+            android:textSize="@dimen/_9ssp"
+            android:fontFamily="@font/montserrat_medium"
+            android:paddingHorizontal="@dimen/_2sdp"
+            android:textColor="@color/white"
+            tools:text="Batman 3" />
+
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/_10sdp"
+            android:src="@drawable/baseline_keyboard_arrow_right_24"
+            app:tint="@color/white" />
+    </LinearLayout>
+</layout>

@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+    android:background="@color/dark_blue"
+        tools:context=".presentation.search.SearchFragment">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_55sdp"
+            android:background="@drawable/gradient_bottom"
+            android:layout_gravity="bottom"
+            />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            >
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:orientation="horizontal"
+                >
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_85sdp"
+                    android:background="@drawable/gradient_top"
+                    />
+
+<RelativeLayout
+    android:id="@+id/fragment_search_layout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="18dp"
+    >
+
+    <EditText
+
+        android:layout_marginStart="15dp"
+        android:layout_marginEnd="15dp"
+        android:id="@+id/fragment_search_et"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Search..."
+        android:textColorHint="@color/white"
+        android:padding="12dp"
+        android:fontFamily="@font/montserrat_medium"
+        android:imeOptions="actionSearch"
+        android:lines="1"
+        android:paddingStart="20dp"
+        android:textSize="@dimen/_12sdp"
+        android:inputType="text"
+        android:background="@drawable/search_et_background"
+        />
+
+    <ImageView
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:src="@drawable/ic_nav_search_24"
+        android:scaleType="centerCrop"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="35dp"
+        android:layout_centerVertical="true"
+
+        />
+
+</RelativeLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                   android:layout_below="@id/fragment_search_layout"
+                    android:layout_marginTop="12dp"
+                    >
+
+                    <ImageView
+                        android:layout_width="@dimen/_15sdp"
+                        android:layout_height="@dimen/_15sdp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/trend_icon"
+                        app:tint="@color/white"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginEnd="@dimen/_8sdp"
+                        />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/montserrat_medium"
+                        android:text="Trending Searches"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/_12ssp"
+
+                        />
+
+                </LinearLayout>
+
+
+            </RelativeLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/fragment_search_trend_rv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_8sdp"
+                android:paddingHorizontal="@dimen/_15sdp"
+                app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                tools:listitem="@layout/item_top_movie"
+
+                />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/fragment_search_search_result"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_8sdp"
+                tools:listitem="@layout/item_list"
+                app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                android:paddingStart="@dimen/_5sdp"
+                android:paddingEnd="@dimen/_5sdp"
+                app:spanCount="3"
+
+                />
+        </LinearLayout>
+
+        <include
+            android:id="@+id/fragment_home_network_check"
+            layout="@layout/layout_network"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom" />
+
+        <ProgressBar
+            android:id="@+id/fragment_search_pb"
+            android:layout_width="@dimen/_28sdp"
+            android:layout_height="@dimen/_28sdp"
+            android:layout_gravity="center"
+            android:indeterminateTint="@color/white"
+            android:visibility="gone"
+            />
+
+
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+</layout>
+

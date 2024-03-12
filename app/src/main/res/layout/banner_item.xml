@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+ >
+
+    <RelativeLayout
+        android:id="@+id/banner_item_container"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_250sdp"
+        android:background="@color/dark_gray"
+        android:orientation="vertical"
+        >
+
+        <ImageView
+            android:id="@+id/banner_item_banner"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"
+           android:scaleType="centerCrop"
+             />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_100sdp"
+            android:layout_alignParentBottom="true"
+            android:background="@drawable/gradient_bottom" />
+
+        <TextView
+            android:id="@+id/banner_item_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/banner_item_genere"
+            android:layout_centerHorizontal="true"
+            android:gravity="center"
+            android:layout_marginBottom="@dimen/_12sdp"
+            android:fontFamily="@font/montserrat_bold"
+            android:text="Movie Name"
+            android:textColor="@color/white"
+            android:textSize="@dimen/_15ssp" />
+
+        <TextView
+            android:id="@+id/banner_item_genere"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Action • Explosive • Suspenseful • Exciting • Adventure"
+            android:textColor="@color/white"
+            android:fontFamily="@font/montserrat_semibold"
+            android:textSize="@dimen/_8ssp"
+            android:translationZ="@dimen/_92sdp"
+            android:layout_centerHorizontal="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="@dimen/_30sdp"
+            />
+
+    </RelativeLayout>
+
+
+</layout>

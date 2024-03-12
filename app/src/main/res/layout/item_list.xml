@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+    </data>
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/item_list_container"
+        style="@style/Widget.Material3.CardView.Filled"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="@dimen/_3sdp"
+        android:layout_marginStart="@dimen/_4sdp"
+        app:cardBackgroundColor="@color/dark_gray"
+        app:cardCornerRadius="@dimen/_3sdp"
+        app:strokeColor="@color/white"
+        app:strokeWidth="1dp"
+        >
+
+        <ImageView
+            android:id="@+id/item_list_poster"
+            android:layout_width="@dimen/_84sdp"
+            android:layout_height="@dimen/_122sdp"
+            android:background="@color/dark_gray"
+            android:scaleType="fitXY"
+            tools:src="@tools:sample/backgrounds/scenic" />
+
+        <TextView
+            android:id="@+id/item_list_rating_txt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|top"
+            android:layout_margin="@dimen/_4sdp"
+            android:background="@drawable/rating_bg"
+            android:gravity="center"
+            android:paddingHorizontal="@dimen/_8sdp"
+            android:paddingVertical="@dimen/_1sdp"
+            android:textColor="@color/white"
+            android:textSize="@dimen/_10ssp"
+            tools:text="7.8" />
+
+
+    </com.google.android.material.card.MaterialCardView>
+</layout>
