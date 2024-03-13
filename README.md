@@ -6,4 +6,15 @@
 The app usese latest android development tools and principles 
 
 ## Built With 🛠
+- Kotlin
+- Flow
+- Coroutines
+- LiveData
+- Clean Architecture + MVVM
+- DataBinding
+- Hilt
+- XML
+- Glide
+- Room
+- Retrofit
 
