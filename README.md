@@ -18,3 +18,4 @@ The app usese latest android development tools and principles
 - Room
 - Retrofit
 
+
