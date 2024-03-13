@@ -31,3 +31,6 @@ The app usese latest android development tools and principles
 ## UI Inspired by
 
 https://github.com/SakshamSharma2026/FilmRave-Android
+
+## Contact 📧
+Connect with me using shalenmj@gmail.com
