@@ -39,3 +39,5 @@ https://github.com/SakshamSharma2026/FilmRave-Android
 
 ## Contact 📧
 Connect me using shalenmj@gmail.com
+Twitter - https://twitter.com/shalenMathew
+Linkedln - https://www.linkedin.com/in/shalen-mathew-3b566921b/
