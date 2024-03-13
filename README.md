@@ -6,6 +6,7 @@
 The app usese latest android development tools and principles.
 
 ***Install the apk from here 👇***
+
 ![Static Badge](https://img.shields.io/badge/MovieFlix-APK-red?logo=android)
 
 
