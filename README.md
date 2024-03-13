@@ -30,3 +30,4 @@ The app usese latest android development tools and principles
 
 ## UI Inspired by
 
+https://github.com/SakshamSharma2026/FilmRave-Android
