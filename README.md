@@ -18,4 +18,12 @@ The app usese latest android development tools and principles
 - Room
 - Retrofit
 
+## Features ⚙️
 
+- Discover new upcoming movies and show
+- Offline support
+- Get Random Movie Recommendation
+- Can save movie in your watchlist
+- Share with your family & friends
+- Watch Movie Trailer
+- Can Search for your favourite movies and shows
