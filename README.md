@@ -27,3 +27,6 @@ The app usese latest android development tools and principles
 - Share with your family & friends
 - Watch Movie Trailer
 - Can Search for your favourite movies and shows
+
+## UI Inspired by
+
