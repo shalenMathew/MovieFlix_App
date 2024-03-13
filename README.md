@@ -38,4 +38,4 @@ The app usese latest android development tools and principles.
 https://github.com/SakshamSharma2026/FilmRave-Android
 
 ## Contact 📧
-Connect with me using shalenmj@gmail.com
+Connect me using shalenmj@gmail.com
