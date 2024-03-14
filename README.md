@@ -33,6 +33,8 @@ The app usese latest android development tools and principles.
 - Watch Movie Trailer
 - Can Search for your favourite movies and shows
 
+## Contribution 🫂
+
 ## UI Inspired by
 
 https://github.com/SakshamSharma2026/FilmRave-Android
