@@ -7,7 +7,7 @@ The app usese latest android development tools and principles.
 
 ***Install the apk from here 👇***
 
-[![Static Badge](https://img.shields.io/badge/MovieFlix-APK-red?logo=android)](https://github.com/shalenMathew/MovieFlix_App/releases/latest/download/MovieFlix.apk)
+[![Static Badge](https://img.shields.io/badge/MovieFlix-APK-red?logo=android)](https://github.com/shalenMathew/MovieFlix_App/releases)
 
 
 ## Built With 🛠
@@ -33,9 +33,16 @@ The app usese latest android development tools and principles.
 - Watch Movie Trailer
 - Can Search for your favourite movies and shows
 
-## UI Inspired by
+## Contribution 🤝
+If your new to contribution and want to practice contribution you can do it here or u can raise issue if you want to make any improvements
+
+## UI Inspired by 💫⚡💡
 
 https://github.com/SakshamSharma2026/FilmRave-Android
 
 ## Contact 📧
-Connect with me using shalenmj@gmail.com
+Connect me using shalenmj@gmail.com
+
+Twitter - https://twitter.com/shalenMathew
+
+Linkedln - https://www.linkedin.com/in/shalen-mathew-3b566921b/
