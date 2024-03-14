@@ -33,7 +33,7 @@ The app usese latest android development tools and principles.
 - Watch Movie Trailer
 - Can Search for your favourite movies and shows
 
-## Contribution 
+## Contribution 🤝
 If your new to contribution and want to practice contribution you can do it here or u can raise issue if you want to make any improvements
 
 ## UI Inspired by
