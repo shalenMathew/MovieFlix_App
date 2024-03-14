@@ -15,7 +15,10 @@ In the end have thats what matters!!!
 
 ### Contributing:
 
+- Open issue regarding proposed change.
+- If your proposed change is approved, Fork this repo and do changes.
+- Open PR against latest `dev` branch. Add nice description in PR.
+- You're done!
 
-#### Issue
-- If u have issue 
+  You can also contribute without rasing issue if your doing just for learning purpose , but your Pull request may not be merged if there are no major changes 
 
