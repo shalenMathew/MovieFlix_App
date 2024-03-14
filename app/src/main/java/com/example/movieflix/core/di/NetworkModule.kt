@@ -38,7 +38,7 @@ object NetworkModule {
    {
        return OkHttpClient().newBuilder()
            .cache(Cache(context.cacheDir,(5 * 1024 * 1024).toLong())) // this will save the response from request in cache, so the client
-           // dont have to send request evertime
+           // dont have to send request everytime
            .addInterceptor(
                HttpLoggingInterceptor().apply {
                    level = HttpLoggingInterceptor.Level.BODY // this is used to get the debug information when request is sent and the also
