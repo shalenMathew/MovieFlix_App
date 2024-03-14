@@ -37,6 +37,7 @@ The app usese latest android development tools and principles.
 
 ## Contribution 🤝
 If your new to contribution and want to practice contribution you can do it here or u can raise issue if you want to make any improvements
+[contribution guidelines](CONTRIBUTING.md)
 
 ## UI Inspired by 💫⚡💡
 
