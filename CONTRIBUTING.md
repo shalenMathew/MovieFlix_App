@@ -20,5 +20,5 @@ In the end have thats what matters!!!
 - Open PR against latest `dev` branch. Add nice description in PR.
 - You're done!
 
- NOTE:Your Pull request may not be merged if there are no major changes 
+ NOTE : Your Pull request may not be merged if there are no major changes 
 
