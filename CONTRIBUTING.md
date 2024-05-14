@@ -20,5 +20,5 @@ In the end have thats what matters!!!
 - Open PR against latest `dev` branch. Add nice description in PR.
 - You're done!
 
-  You can also contribute without rasing issue if your doing just for learning purpose , but your Pull request may not be merged if there are no major changes 
+ NOTE:Your Pull request may not be merged if there are no major changes 
 
