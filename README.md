@@ -5,6 +5,8 @@
 
 This project acts as a playground for developers who want to learn more about android development
 
+Who are trying to find simpler projects for contribution
+
 The app usese latest android development tools and principles.
 
 ***Install the apk from here 👇***
