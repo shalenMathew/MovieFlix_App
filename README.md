@@ -3,7 +3,7 @@
 
 **MovieFlix is a sample Android app used to refine my knowledge in Android development and for fellow Android developers who are looking for projects to learn about Android development.**
 
-This project acts as a playground for developers who want to learn more about android development
+This project acts as a playground for developers who want to learn more about android development or 
 
 Who are trying to find simpler projects for contribution
 
