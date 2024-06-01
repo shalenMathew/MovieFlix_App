@@ -5,7 +5,7 @@
 
 This project acts as a playground for developers who want to learn more about android development or 
 
-Who are trying to find simpler projects for contribution
+Who are trying to find simpler projects to start contribution
 
 The app usese latest android development tools and principles.
 
