@@ -50,6 +50,9 @@
         <action
             android:id="@+id/action_homeFragment_to_randomRecommendationFragment"
             app:destination="@id/randomRecommendationFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_favFragment"
+            app:destination="@id/favFragment" />
     </fragment>
     <dialog
         android:id="@+id/movieDetailsFragment"
@@ -83,4 +86,13 @@
         android:name="com.example.movieflix.presentation.randomRecomm.RandomRecommendationFragment"
         android:label="fragment_random_recommendation"
         tools:layout="@layout/fragment_random_recommendation" />
+    <fragment
+        android:id="@+id/favFragment"
+        android:name="com.example.movieflix.presentation.favorites.FavFragment"
+        android:label="fragment_fav"
+        tools:layout="@layout/fragment_fav" >
+        <action
+            android:id="@+id/action_favFragment_to_movieDetailsFragment"
+            app:destination="@id/movieDetailsFragment" />
+    </fragment>
 </navigation>

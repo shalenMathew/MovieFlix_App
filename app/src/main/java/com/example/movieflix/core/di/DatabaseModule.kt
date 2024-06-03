@@ -5,13 +5,16 @@ import android.content.Context
 import androidx.room.Room
 import com.example.movieflix.core.utils.Constants
 import com.example.movieflix.core.utils.GsonParser
+import com.example.movieflix.core.utils.MIGRATION_2_3
 import com.example.movieflix.data.local.LocalDataSource
 import com.example.movieflix.data.local.MovieDao
 import com.example.movieflix.data.local.MovieDataTypeConverter
 import com.example.movieflix.data.local.MovieDatabase
 import com.example.movieflix.data.remote.RemoteDataSource
+import com.example.movieflix.data.repository.FavMovieRepositoryImpl
 import com.example.movieflix.data.repository.MovieInfoRepositoryImpl
 import com.example.movieflix.data.repository.WatchListRepositoryImpl
+import com.example.movieflix.domain.repository.FavMovieRepository
 import com.example.movieflix.domain.repository.MovieInfoRepository
 import com.example.movieflix.domain.repository.WatchListRepository
 import com.google.gson.Gson
@@ -30,7 +33,8 @@ object DatabaseModule {
     @Singleton
     fun providesMovieDataBase(@ApplicationContext context: Context): MovieDatabase {
         return Room.databaseBuilder(context,MovieDatabase::class.java,Constants.DATABASE_NAME)
-            .fallbackToDestructiveMigration()
+//            .fallbackToDestructiveMigration()
+            .addMigrations(MIGRATION_2_3)
             .addTypeConverter(MovieDataTypeConverter(GsonParser(Gson())))
             .build()
     }
@@ -55,6 +59,12 @@ object DatabaseModule {
     @Singleton
     fun getWatchList(localDataSource: LocalDataSource):WatchListRepository{
         return WatchListRepositoryImpl(localDataSource)
+    }
+
+    @Provides
+    @Singleton
+    fun getFavMovie(localDataSource: LocalDataSource):FavMovieRepository{
+        return FavMovieRepositoryImpl(localDataSource)
     }
 
 }

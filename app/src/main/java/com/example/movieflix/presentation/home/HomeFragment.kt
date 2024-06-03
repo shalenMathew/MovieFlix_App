@@ -74,6 +74,10 @@ binding.apply {
         findNavController().navigate(R.id.action_homeFragment_to_watchListFragment)
     }
 
+    fragmentHomeFavorite.setOnClickListener(){
+        findNavController().navigate(R.id.action_homeFragment_to_favFragment)
+    }
+
     fragmentHomeWatchNowBtn.setOnClickListener(){
         val layoutManger=binding.fragmentHomeBannerImgRv.layoutManager as LinearLayoutManager
         val firstVisibleItem = layoutManger.findFirstVisibleItemPosition()

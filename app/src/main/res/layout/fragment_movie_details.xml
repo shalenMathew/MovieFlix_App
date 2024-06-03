@@ -253,7 +253,7 @@
                     </com.google.android.material.card.MaterialCardView>
 
                     <com.google.android.material.card.MaterialCardView
-                        android:id="@+id/fragment_movie_details_like_btn"
+                        android:id="@+id/fragment_movie_details_fav_btn"
                         style="@style/Widget.Material3.CardView.Filled"
                         android:layout_width="@dimen/_35sdp"
                         android:layout_height="@dimen/_30sdp"
@@ -272,7 +272,7 @@
                                 android:id="@+id/fav_icon"
                                 android:layout_width="@dimen/_14sdp"
                                 android:layout_height="@dimen/_14sdp"
-                                android:src="@drawable/fav"
+                                android:src="@drawable/fav_outline"
                                 app:tint="@color/white" />
 
                         </LinearLayout>

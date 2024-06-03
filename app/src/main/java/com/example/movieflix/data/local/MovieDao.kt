@@ -6,6 +6,7 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import com.example.movieflix.data.local.entity.FavouritesEntity
 import com.example.movieflix.data.local.entity.HomeFeedEntity
 import com.example.movieflix.data.local.entity.WatchListEntity
 import com.example.movieflix.domain.model.MovieResult
@@ -24,5 +25,15 @@ interface MovieDao {
     suspend fun deleteWatchListData(watchListEntity: WatchListEntity)
     @Query(" SELECT * FROM watch_list_news_table ORDER BY id DESC ")
  fun getAllWatchListData():LiveData<List<WatchListEntity>>
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+ suspend fun insertFavMovie(favouritesEntity: FavouritesEntity)
+
+ @Delete
+ suspend fun deleteFavMovie(favouritesEntity: FavouritesEntity)
+
+ @Query( " SELECT * FROM favorites_table ORDER BY id DESC ")
+ fun getAllFavMovies():LiveData<List<FavouritesEntity>>
+
 
 }

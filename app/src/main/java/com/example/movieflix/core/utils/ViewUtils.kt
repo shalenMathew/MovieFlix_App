@@ -5,8 +5,9 @@ import android.content.Intent
 import android.net.ConnectivityManager
 import android.provider.Settings
 import android.view.View
-import android.widget.TextView
 import android.widget.Toast
+import androidx.room.migration.Migration
+import androidx.sqlite.db.SupportSQLiteDatabase
 import com.example.movieflix.domain.model.Genre
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -114,4 +115,10 @@ fun shareMovie(context:Context,title:String,trailer:String){
 fun getRandomChar():String{
     val alphabet = ('a'..'z')
     return alphabet.random().toString()
+}
+
+ val MIGRATION_2_3 = object : Migration(2, 3) {
+    override fun migrate(db: SupportSQLiteDatabase) {
+        db.execSQL("CREATE TABLE IF NOT EXISTS `${Constants.FAVOURITES_TABLE_NAME}` (`id` INTEGER NOT NULL, `movieResult` TEXT NOT NULL, PRIMARY KEY(`id`))")
+    }
 }

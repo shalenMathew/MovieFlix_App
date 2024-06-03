@@ -28,6 +28,7 @@ import com.example.movieflix.core.utils.showToast
 import com.example.movieflix.databinding.FragmentMovieDetailsBinding
 import com.example.movieflix.domain.model.MovieResult
 import com.example.movieflix.domain.model.MovieVideoResult
+import com.example.movieflix.presentation.viewmodels.FavMovieViewModel
 import com.example.movieflix.presentation.viewmodels.HomeInfoViewModel
 import com.example.movieflix.presentation.viewmodels.WatchListViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -54,8 +55,11 @@ class MovieDetailsFragment : BottomSheetDialogFragment(){
         CustomTabsIntent.Builder().setShowTitle(true).build()
     }
     private val watchListViewModel:WatchListViewModel by viewModels()
+    private val favMovieViewModel: FavMovieViewModel by viewModels()
 
     private var isInWatchList:Boolean = false
+    private var isFav:Boolean=false
+
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         setStyle(STYLE_NO_FRAME, R.style.SheetDialog)
@@ -100,6 +104,24 @@ class MovieDetailsFragment : BottomSheetDialogFragment(){
                 }
                isInWatchList=!isInWatchList
             }
+
+            fragmentMovieDetailsFavBtn.setOnClickListener(){
+
+                if (!isFav){
+                    favMovieViewModel.insertFavMovieData(movieResult)
+                    favIcon.setImageDrawable(ContextCompat.getDrawable(requireContext(),R.drawable.fav_red))
+                    showToast(requireContext(),"Movie added to Favourites")
+                }else{
+
+                    favMovieViewModel.deleteWatchListData(movieResult)
+                    favIcon.setImageDrawable(ContextCompat.getDrawable(requireContext(),R.drawable.fav_outline))
+                    showToast(requireContext(),"Movie removed from Favourites")
+                }
+
+                isFav=!isFav
+
+            }
+
 
             fragmentMovieDetailsShareBtn.setOnClickListener(){
              shareMovie(requireContext(),movieResult.title.toString(),youtubeUrl)
@@ -201,6 +223,22 @@ class MovieDetailsFragment : BottomSheetDialogFragment(){
             }
 
         }
+
+        favMovieViewModel.getAllMovieData().observe(viewLifecycleOwner){
+
+            if(it.isNotEmpty()){
+                var isFav:Boolean
+                for (res in it){
+                    isFav = (res.id==mediaId)
+
+                    if(isFav){
+                        changeFavIcon()
+                        break
+                    }
+                }
+            }
+
+        }
     }
 
     private fun changeAddToWatchListIcon() {
@@ -209,6 +247,13 @@ class MovieDetailsFragment : BottomSheetDialogFragment(){
             addButtonIcon.setImageDrawable(ContextCompat.getDrawable(requireContext(),R.drawable.baseline_done_all_24))
         }
     }
+
+   private fun changeFavIcon(){
+       binding.apply {
+           isFav=true
+           favIcon.setImageDrawable(ContextCompat.getDrawable(requireContext(),R.drawable.fav))
+       }
+   }
 
     private fun initializePlayer(key: String?) {
         binding.posterImage.gone()

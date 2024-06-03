@@ -1,4 +1,4 @@
-package com.example.movieflix.presentation.watchlist
+package com.example.movieflix.presentation.favorites
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,30 +9,33 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.movieflix.R
+import com.example.movieflix.core.adapters.FavAdapters
 import com.example.movieflix.core.adapters.WatchListAdapter
 import com.example.movieflix.core.utils.Constants
 import com.example.movieflix.core.utils.gone
 import com.example.movieflix.core.utils.visible
+import com.example.movieflix.databinding.FragmentFavBinding
 import com.example.movieflix.databinding.FragmentWatchListBinding
 import com.example.movieflix.presentation.viewmodels.FavMovieViewModel
 import com.example.movieflix.presentation.viewmodels.WatchListViewModel
 import com.google.gson.Gson
 import dagger.hilt.android.AndroidEntryPoint
 
+
 @AndroidEntryPoint
-class WatchListFragment : Fragment() {
+class FavFragment : Fragment() {
+    private val favMovieViewModel:FavMovieViewModel by viewModels()
 
-private val watchListViewModel:WatchListViewModel by viewModels()
-
-    private var _binding:FragmentWatchListBinding? = null
+    private var _binding: FragmentFavBinding? = null
     private val binding get() =  _binding!!
-    private lateinit var adapter: WatchListAdapter
+    private lateinit var adapter: FavAdapters
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        _binding = DataBindingUtil.inflate(inflater,R.layout.fragment_watch_list,container,false)
+        _binding = DataBindingUtil.inflate(inflater,R.layout.fragment_fav,container,false)
         return binding.root
     }
 
@@ -42,26 +45,27 @@ private val watchListViewModel:WatchListViewModel by viewModels()
         observer()
     }
 
+
     private fun inIt() {
-        watchListViewModel.getAllWatchListData()
-        adapter=WatchListAdapter (onPosterClick = {
+        favMovieViewModel.getAllMovieData()
+        adapter=FavAdapters   (onPosterClick = {
             val bundle = Bundle()
-            bundle.putString(Constants.MEDIA_SEND_REQUEST_KEY,Gson().toJson(it))
-            findNavController().navigate(R.id.action_watchListFragment_to_movieDetailsFragment,bundle)
+            bundle.putString(Constants.MEDIA_SEND_REQUEST_KEY, Gson().toJson(it))
+            findNavController().navigate(R.id.action_favFragment_to_movieDetailsFragment,bundle)
         })
 
-        binding.fragmentWatchListRv.adapter=adapter
+        binding.fragmentFavRv.adapter=adapter
     }
 
     private fun observer() {
-        watchListViewModel.getAllWatchListData().observe(viewLifecycleOwner){
+        favMovieViewModel.getAllMovieData().observe(viewLifecycleOwner){
 
             if (it.isNotEmpty()){
                 adapter.submitList(it)
-                binding.fragmentWatchListNoMovie.gone()
+                binding.fragmentFavNoMovie.gone()
             }else{
-                binding.fragmentWatchListRv.gone()
-                binding.fragmentWatchListNoMovie.visible()
+                binding.fragmentFavRv.gone()
+                binding.fragmentFavNoMovie.visible()
             }
         }
     }

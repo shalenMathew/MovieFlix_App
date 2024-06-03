@@ -62,7 +62,7 @@
             android:paddingBottom="@dimen/_18sdp"
             android:text="Watch-List"
             android:textColor="@color/white"
-            android:textSize="@dimen/_15ssp" />
+            android:textSize="@dimen/_20ssp" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/fragment_watch_list_rv"
