@@ -7,6 +7,10 @@ data class MovieResponseVideoResultList(
     val results: List<MovieResponseVideoResult>?
 ){
     fun toMovieVideoResultList():MovieVideoResultList{
-        return MovieVideoResultList(id = id,results = results?.map { it.toMovieVideoResult() })
+        return MovieVideoResultList(
+            id = id,
+            results = results?.map {
+            it.toMovieVideoResult()
+        })
     }
 }

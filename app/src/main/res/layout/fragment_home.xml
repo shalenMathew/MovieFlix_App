@@ -62,8 +62,8 @@
 
                 <ImageView
                     android:id="@+id/fragment_home_search"
-                    android:layout_width="@dimen/_20sdp"
-                    android:layout_height="@dimen/_20sdp"
+                    android:layout_width="@dimen/_23sdp"
+                    android:layout_height="@dimen/_23sdp"
                     android:layout_centerVertical="true"
                     android:layout_marginEnd="@dimen/_15sdp"
                     android:src="@drawable/ic_nav_search_24"
@@ -73,8 +73,8 @@
 
                 <ImageView
                     android:id="@+id/fragment_home_dice"
-                    android:layout_width="@dimen/_15sdp"
-                    android:layout_height="@dimen/_15sdp"
+                    android:layout_width="@dimen/_18sdp"
+                    android:layout_height="@dimen/_18sdp"
                     android:layout_centerVertical="true"
                     android:src="@drawable/dice"
                     app:tint="@color/white"
@@ -85,11 +85,22 @@
 
                 <ImageView
                     android:id="@+id/fragment_home_watchList"
+                    android:layout_width="@dimen/_25sdp"
+                    android:layout_height="@dimen/_25sdp"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/baseline_playlist_add_check_24"
+                    app:tint="@color/white"
+                    android:layout_marginEnd="@dimen/_8sdp"
+                    android:layout_toStartOf="@id/fragment_home_favorite"
+                    />
+
+                <ImageView
+                    android:id="@+id/fragment_home_favorite"
                     android:layout_width="@dimen/_20sdp"
                     android:layout_height="@dimen/_20sdp"
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
-                    android:src="@drawable/baseline_playlist_add_check_24"
+                    android:src="@drawable/fav_outline"
                     app:tint="@color/white"
                     android:layout_marginEnd="@dimen/_10sdp"
                     />
