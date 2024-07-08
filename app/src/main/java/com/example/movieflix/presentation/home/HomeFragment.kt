@@ -97,6 +97,7 @@ binding.apply {
             fragmentHomeIndicator.attachToRecyclerView(fragmentHomeBannerImgRv)
         }
     }
+
     private fun openDetailFragment(it: MovieResult) {
         val bundle = Bundle()
         bundle.putString(Constants.MEDIA_SEND_REQUEST_KEY,Gson().toJson(it))

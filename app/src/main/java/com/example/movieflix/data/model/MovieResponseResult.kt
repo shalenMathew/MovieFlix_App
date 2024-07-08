@@ -22,6 +22,7 @@ data class MovieResponseResult(
 ){
     // imagine this as a rough raw data we would get from api e would now filter this response by converting it to our Model class in domain
     // domain consist of  business logic so now we are molding the raw data according to our business logic
+
     fun toMovieResult():MovieResult{
         return MovieResult(
             backdropPath = backdrop_path,

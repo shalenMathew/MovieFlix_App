@@ -107,7 +107,8 @@ class RandomRecommendationFragment : Fragment() {
 binding.apply {
     fragmentRrAnime.playAnimation()
 }
-        val query = getRandomChar()
+            val query= getRandomChar()
+
         job?.cancel()
         job = viewLifecycleOwner.lifecycleScope.launch {
             delay(2000)

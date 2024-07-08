@@ -10,7 +10,10 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import okio.IOException
 
-class SearchMovieMovieRepositoryImpl(private val appContext:Application, private val remoteDataSource: RemoteDataSource):SearchMovieRepository {
+class SearchMovieMovieRepositoryImpl(
+    private val appContext:Application,
+    private val remoteDataSource: RemoteDataSource):SearchMovieRepository
+{
     override fun searchMovie(query: String): Flow<NetworkResults<MovieList>> = flow{
         emit(NetworkResults.Loading())
 

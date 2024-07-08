@@ -34,7 +34,8 @@ class MovieInfoRepositoryImpl(
             if (isNetworkAvailable(appContext)){
 
                 withContext(Dispatchers.IO){
-                    // async returns a Deferred object, which represents a future result12. This means the result of the async task isn’t immediately available,
+                    // async returns a Deferred object, which represents a future result12. This means the result of the async
+                    // task isn’t immediately available,
                     // but will be at some point in the future
 
                     val upcomingMovieListDef = async { remoteDataSource.getUpcomingMovies() }
@@ -62,7 +63,6 @@ class MovieInfoRepositoryImpl(
                 // other layers. It also makes it easier to change or swap out implementations in one layer without affecting the others.
 
                     val wholeMoviesList= mutableListOf<HomeFeedResponse>()
-
                     val upcomingMovieList = upcomingMovieListDef.await()
                     val popularMovieList = popularMovieListDef.await()
                     val trendingMovieList= trendingMovieListDef.await()

@@ -102,7 +102,7 @@ fun formatDate(year:String?):String{
 
 fun shareMovie(context:Context,title:String,trailer:String){
 
-    val movieTitle = " Movie \"$title\" ek number..."
+    val movieTitle = " Movie \"$title\" Trailer..."
     val textExtra = "$movieTitle\n\n$trailer"
     val i = Intent()
     i.action = Intent.ACTION_SEND
