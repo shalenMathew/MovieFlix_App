@@ -39,9 +39,14 @@ class HomeInfoViewModel @Inject constructor(private val getMovieInfo: GetMovieIn
 
  fun getMovieInfoData(){
     viewModelScope.launch {
-        getMovieInfo.getMovieInfo().onEach {
+        getMovieInfo.getMovieInfo().onEach {  // onEach -> each time a data is emitted the below block will run
             _homeFeedList.value=it
-        }.launchIn(this) // ->  launches the collection of the given flow in the scope.
+        }.launchIn(this) // -> launchIn is used to launch the collection of the Flow inside a specific coroutine scope.
+    // Instead of manually calling 'collect', launchIn automatically starts collecting the Flow in the scope you specify.
+
+        // launchIn vs Collect
+        // launchIn is a non blocking in nature which mean code below launchIn will still run even when all values are not emitted
+        // whereas the code below or next line below .collect() won't run until all emitted values is being /
     }
 }
 

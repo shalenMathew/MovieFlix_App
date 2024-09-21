@@ -2,6 +2,8 @@ package com.example.movieflix.core.utils
 
 object Constants {
 
+   const val BASE_URL ="https://api.themoviedb.org/"
+
     const val POPULAR_MOVIES = "Popular Movies"
     const val POPULAR_TV_SHOWS = "Popular Tv Shows"
     const val TOP_RATED_MOVIES = "Top Rated"

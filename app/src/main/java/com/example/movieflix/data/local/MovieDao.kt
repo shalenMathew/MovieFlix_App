@@ -19,21 +19,21 @@ interface MovieDao {
     suspend fun readHomeFeedData(): HomeFeedEntity
     @Query(" DELETE FROM movie_data_table ")
     suspend fun deleteHomeFeedData()
+
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertWatchListData(watchListEntity: WatchListEntity)
     @Delete
     suspend fun deleteWatchListData(watchListEntity: WatchListEntity)
     @Query(" SELECT * FROM watch_list_news_table ORDER BY id DESC ")
- fun getAllWatchListData():LiveData<List<WatchListEntity>>
+    fun getAllWatchListData():LiveData<List<WatchListEntity>>
+
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
- suspend fun insertFavMovie(favouritesEntity: FavouritesEntity)
-
- @Delete
- suspend fun deleteFavMovie(favouritesEntity: FavouritesEntity)
-
- @Query( " SELECT * FROM favorites_table ORDER BY id DESC ")
- fun getAllFavMovies():LiveData<List<FavouritesEntity>>
-
+    suspend fun insertFavMovie(favouritesEntity: FavouritesEntity)
+    @Delete
+    suspend fun deleteFavMovie(favouritesEntity: FavouritesEntity)
+    @Query( " SELECT * FROM favorites_table ORDER BY id DESC ")
+    fun getAllFavMovies():LiveData<List<FavouritesEntity>>
 
 }

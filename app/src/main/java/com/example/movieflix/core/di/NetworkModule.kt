@@ -2,15 +2,12 @@ package com.example.movieflix.core.di
 
 import android.app.Application
 import android.content.Context
-import androidx.room.Room
 import com.example.movieflix.BuildConfig
-import com.example.movieflix.data.local.MovieDatabase
+import com.example.movieflix.core.utils.Constants
 import com.example.movieflix.data.network.ApiClient
 import com.example.movieflix.data.remote.RemoteDataSource
-import com.example.movieflix.data.repository.MovieInfoRepositoryImpl
 import com.example.movieflix.data.repository.RecommendationRepositoryImpl
 import com.example.movieflix.data.repository.SearchMovieMovieRepositoryImpl
-import com.example.movieflix.domain.repository.MovieInfoRepository
 import com.example.movieflix.domain.repository.RecommendationRepository
 import com.example.movieflix.domain.repository.SearchMovieRepository
 import com.example.movieflix.domain.usecases.SearchMovie
@@ -82,7 +79,7 @@ object NetworkModule {
 @Singleton
 fun providesRetrofitInstance(okHttpClient: OkHttpClient,gsonConverterFactory: GsonConverterFactory):Retrofit{
     return Retrofit.Builder()
-        .baseUrl(BuildConfig.BASE_URL)
+        .baseUrl(Constants.BASE_URL)
         .client(okHttpClient)
         .addConverterFactory(gsonConverterFactory)
         .build()

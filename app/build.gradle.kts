@@ -14,10 +14,9 @@ plugins {
 android {
 
     val properties = Properties().apply {
-        load(project.rootProject.file("gradle.properties").inputStream())
+        load(project.rootProject.file("local.properties").inputStream())
     }
 
-    val baseUrl = properties.getProperty("baseUrl")
     val movieApiKey = properties.getProperty("movieApiKey")
 
     namespace = "com.example.movieflix"
@@ -34,14 +33,13 @@ android {
 
     buildTypes {
         release {
-            buildConfigField("String", "BASE_URL", baseUrl)
             buildConfigField("String", "MOVIE_API_KEY", movieApiKey)
             isMinifyEnabled = false
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
 
         debug {
-            buildConfigField("String", "BASE_URL", baseUrl)
+
             buildConfigField("String", "MOVIE_API_KEY", movieApiKey)
             applicationIdSuffix=".debug"
             isDebuggable = true
