@@ -1,3 +1,5 @@
+
+
 # MovieFlix 🍿🎞️🥤
 ![MoviFlix](https://github.com/user-attachments/assets/eb9ff6f1-4f4e-4c52-915b-fef088601a63)
 
@@ -14,6 +16,9 @@ The app usese latest android development tools and principles.
 
 [![Static Badge](https://img.shields.io/badge/MovieFlix-APK-red?logo=android)](https://github.com/shalenMathew/MovieFlix_App/releases)
 
+
+## App demo 📽️
+https://github.com/user-attachments/assets/a571a1e4-8701-4da5-98c6-670079e87ebc
 
 ## Built With 🛠
 - Kotlin
