@@ -11,6 +11,8 @@ import retrofit2.http.Query
 
 interface ApiClient {
 
+    // https://api.themoviedb.org/3/movie/upcoming?language=en-US&page=1&region=US&api_key=edc78b0442bb6d9f5edd90eb623fa9c0
+
     @GET("3/movie/upcoming")
     suspend fun getUpcomingMoviesApiCall(
         @Query("language") language:String? ="en-US",

@@ -9,8 +9,6 @@ plugins {
     id ("com.google.dagger.hilt.android")
 }
 
-
-
 android {
 
     val properties = Properties().apply {
@@ -110,7 +108,7 @@ dependencies {
     // ScrollingPagerIndicator
     implementation ("ru.tinkoff.scrollingpagerindicator:scrollingpagerindicator:1.2.4")
 
-    //Retrofit2
+    //Retrofit2 + okhttp
     implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
     implementation ("com.squareup.retrofit2:retrofit:2.9.0")
     implementation ("com.squareup.okhttp3:okhttp:5.0.0-alpha.3")

@@ -47,9 +47,10 @@ class MovieInfoRepositoryImpl(
                     val bollywoodMovieListDef =  async { remoteDataSource.getBollywoodMovies() }
                     val nowPlayingMoviesListDef = async { remoteDataSource.getNowPlayingMovies() }
 
-//                    val wholeMovieList = mutableListOf<HomeFeed>() can't directly Fetch HomeFeed as its in domain layer which will break the rule of
-                    // clean architecture so instead we have to make HomeResponse class in data layer which has the responsibility to convert the
-                    // data to HomeFeed
+//                    val wholeMovieList = mutableListOf<HomeFeed>() can't directly Fetch HomeFeed as its in domain layer which will
+//                    break the rule of clean architecture so instead we have to make HomeResponse class in data layer which has the
+//                    responsibility to
+                    // convert the data to HomeFeed
 
                     // If a data layer class or function is directly using a domain layer class (like HomeFeed), it could be seen as a violation of
                 // the principles of Clean Architecture. This is because it creates a direct dependency from the data layer to the domain layer,
@@ -89,7 +90,7 @@ class MovieInfoRepositoryImpl(
                         bannerMovies = nowPlayingMoviesList.body()?.results!!,
                         homeFeedResponseList = wholeMoviesList))
                 }
-//                val data = homeFeedResponse.toHomeFeedData()
+
             }
 
             val data = localDataSource.readHomeFeedData().toHomeFeedData()

@@ -32,4 +32,5 @@ class FavMovieViewModel @Inject constructor(private val favMovie: FavMovie):View
             favMovie.deleteFavMovie(favMovieEntity)
         }
     }
+
 }

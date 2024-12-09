@@ -56,7 +56,7 @@
     </fragment>
     <dialog
         android:id="@+id/movieDetailsFragment"
-        android:name="com.example.movieflix.presentation.details.MovieDetailsFragment"
+        android:name="com.example.movieflix.presentation.movie_details.MovieDetailsFragment"
         android:label="fragment_movie_details"
         tools:layout="@layout/fragment_movie_details" >
         <action

@@ -34,12 +34,12 @@ object NetworkModule {
    fun providesNetworkClient(@ApplicationContext context: Context):OkHttpClient
    {
        return OkHttpClient().newBuilder()
-           .cache(Cache(context.cacheDir,(5 * 1024 * 1024).toLong())) // this will save the response from request in cache, so the client
-           // dont have to send request everytime
+           .cache(Cache(context.cacheDir,(5 * 1024 * 1024).toLong())) // this will save the response from request in cache,
+           // so the client dont have to send request everytime
            .addInterceptor(
                HttpLoggingInterceptor().apply {
-                   level = HttpLoggingInterceptor.Level.BODY // this is used to get the debug information when request is sent and the also
-                   // provides the data of the response
+                   level = HttpLoggingInterceptor.Level.BODY // this is used to get the debug information when request is sent
+               // and the also provides the data of the response
                }
            )
            .addInterceptor{chain ->  
@@ -51,22 +51,16 @@ object NetworkModule {
                    .build()
                request.url(url)
                return@addInterceptor chain.proceed(request.build())
-
            }.addInterceptor{chain ->
-
                var request = chain.request()
-
                request = request.newBuilder().header("Cache-Control", "public, max-age=" + 60 * 5)
                    .build()
                chain.proceed(request)
-
            }
            .connectTimeout(10,TimeUnit.SECONDS)
            .retryOnConnectionFailure(true)
            .readTimeout(10,TimeUnit.SECONDS)
            .build()
-
-
 }
 
     @Provides
@@ -91,9 +85,6 @@ fun providesRetrofitInstance(okHttpClient: OkHttpClient,gsonConverterFactory: Gs
         return retrofit.create(ApiClient::class.java)
     }
 
-
-
-
     @Provides
     @Singleton
     fun providesSearchMovieRepo(application: Application,remoteDataSource: RemoteDataSource):SearchMovieRepository{
@@ -112,8 +103,5 @@ fun providesRetrofitInstance(okHttpClient: OkHttpClient,gsonConverterFactory: Gs
     fun providesRecommendationRepo(application: Application,remoteDataSource: RemoteDataSource):RecommendationRepository {
         return RecommendationRepositoryImpl(application,remoteDataSource)
     }
-
-
-
 
 }

@@ -105,7 +105,8 @@ binding.apply {
         findNavController().navigate(R.id.action_homeFragment_to_movieDetailsFragment,bundle)
     }
     private fun observer() {
-        homeInfoViewModel.homeFeedList.observe(viewLifecycleOwner){
+        homeInfoViewModel.homeFeedList.observe(viewLifecycleOwner){ it
+
             when(it){
                 is NetworkResults.Success-> binding.apply{
                     shimmerLoading.gone()
@@ -116,6 +117,7 @@ binding.apply {
                         homeAdapter.submitList(homeFeedData.homeFeedResponseList)
                     }
                 }
+
                 is NetworkResults.Error->binding.apply{
                     Toast.makeText(context, it.message, Toast.LENGTH_SHORT).show()
                     shimmerLoading.gone()
