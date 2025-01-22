@@ -14,14 +14,15 @@ import com.example.movieflix.core.utils.loadImage
 import com.example.movieflix.data.local.entity.FavouritesEntity
 import com.example.movieflix.data.local.entity.WatchListEntity
 import com.example.movieflix.databinding.ItemListBinding
+import com.example.movieflix.databinding.ItemSmallListBinding
 import com.example.movieflix.domain.model.MovieResult
 
 class FavAdapters(private var onPosterClick: ((movieResult: MovieResult) -> Unit)):
     ListAdapter<FavouritesEntity,FavAdapters.ViewHolder >(DiffUtilCallback()) {
     inner class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
-        var binding: ItemListBinding
+        var binding: ItemSmallListBinding
         init {
-            binding = ItemListBinding.bind(itemView)
+            binding = ItemSmallListBinding.bind(itemView)
         }
         fun bind(favouritesEntity: FavouritesEntity)=binding.apply{
 
@@ -58,7 +59,7 @@ class FavAdapters(private var onPosterClick: ((movieResult: MovieResult) -> Unit
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_list,parent,false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_small_list,parent,false)
         return ViewHolder(view)
     }
 

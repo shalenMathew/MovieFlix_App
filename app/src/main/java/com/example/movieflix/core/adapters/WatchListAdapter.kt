@@ -14,15 +14,16 @@ import com.example.movieflix.core.utils.isNetworkAvailable
 import com.example.movieflix.core.utils.loadImage
 import com.example.movieflix.data.local.entity.WatchListEntity
 import com.example.movieflix.databinding.ItemListBinding
+import com.example.movieflix.databinding.ItemSmallListBinding
 import com.example.movieflix.domain.model.MovieResult
 import com.example.movieflix.domain.usecases.WatchList
 
 class WatchListAdapter(private var onPosterClick: ((movieResult: MovieResult) -> Unit)):
         ListAdapter<WatchListEntity, WatchListAdapter.ViewHolder>(DiffUtilCallback()) {
     inner class ViewHolder(itemView:View):RecyclerView.ViewHolder(itemView) {
-       var binding:ItemListBinding
+       var binding: ItemSmallListBinding
         init {
-            binding = ItemListBinding.bind(itemView)
+            binding = ItemSmallListBinding.bind(itemView)
         }
 fun bind(watchListEntity: WatchListEntity)=binding.apply{
 
@@ -40,7 +41,7 @@ fun bind(watchListEntity: WatchListEntity)=binding.apply{
 }
     }
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_list,parent,false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_small_list,parent,false)
         return ViewHolder(view)
     }
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
