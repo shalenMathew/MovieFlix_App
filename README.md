@@ -1,5 +1,8 @@
+
+
 # MovieFlix 🍿🎞️🥤
-![App Screenshot](https://github.com/shalenMathew/MovieFlix_App/blob/master/images/MoviFlix%20Banner%202.png)
+![MoviFlix](https://github.com/user-attachments/assets/eb9ff6f1-4f4e-4c52-915b-fef088601a63)
+
 
 **MovieFlix is a sample Android app used to refine my knowledge in Android development and for fellow Android developers who are looking for projects to learn about Android development.**
 
@@ -13,6 +16,9 @@ The app usese latest android development tools and principles.
 
 [![Static Badge](https://img.shields.io/badge/MovieFlix-APK-red?logo=android)](https://github.com/shalenMathew/MovieFlix_App/releases)
 
+
+## App demo 📽️
+https://github.com/user-attachments/assets/a571a1e4-8701-4da5-98c6-670079e87ebc
 
 ## Built With 🛠
 - Kotlin
