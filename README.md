@@ -18,6 +18,10 @@ The app usese latest android development tools and principles.
 
 
 ## App demo 📽️
+
+
+https://github.com/user-attachments/assets/3d517a73-3b3d-4c7d-84a9-36d8e3626cd3
+
 https://github.com/user-attachments/assets/a571a1e4-8701-4da5-98c6-670079e87ebc
 
 ## Built With 🛠
