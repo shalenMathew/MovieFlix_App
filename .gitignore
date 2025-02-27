@@ -13,3 +13,38 @@
 .externalNativeBuild
 .cxx
 local.properties
+
+# Android Studio and IntelliJ IDEA project files
+.idea/
+
+# Gradle caches and build directories
+.gradle/
+build/
+
+# Kotlin/Compose cache and temporary files
+.kotlin/
+.kotlinc/
+
+
+# Dependency resolution files
+gradle.lockfile
+
+# APK, AAB, and signed APKs
+*.apk
+*.aab
+output.json
+
+# Lint reports
+lint/reports/
+
+# Logs and debugging files
+*.log
+crashlytics/
+
+# Emulator snapshots (large files)
+*.snap
+*.lock
+
+
+
+
