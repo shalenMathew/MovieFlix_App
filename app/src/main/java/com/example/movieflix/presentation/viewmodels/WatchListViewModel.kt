@@ -19,7 +19,9 @@ class WatchListViewModel @Inject constructor(private  val watchList: WatchList):
 //    val allWatchListData:LiveData<List<WatchListEntity>> = _allWatchListData
 
     fun insertWatchListData(movieResult: MovieResult){
+
         val watchListEntity = WatchListEntity(movieResult.id!!,movieResult)
+
         viewModelScope.launch {
             watchList.insertWatchListData(watchListEntity)
         }
