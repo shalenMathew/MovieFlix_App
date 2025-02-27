@@ -20,10 +20,11 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.5"
-        android:text="No movie in ur Watch List Yet!!!"
+        android:text="no movies in ur watchlist yet"
         android:textColor="@color/white"
         android:gravity="center"
-        android:textSize="@dimen/_20sdp"
+        android:textSize="@dimen/_16sdp"
+        android:fontFamily="@font/montserrat_light"
         android:visibility="gone"
         />
 

@@ -22,10 +22,10 @@
 
         <ImageView
             android:id="@+id/item_list_poster"
-            android:layout_width="@dimen/_95sdp"
+            android:layout_width="@dimen/_100sdp"
             android:layout_height="@dimen/_140sdp"
             android:background="@color/dark_gray"
-            android:scaleType="fitXY"
+            android:scaleType="centerCrop"
             tools:src="@tools:sample/backgrounds/scenic" />
 
         <TextView
