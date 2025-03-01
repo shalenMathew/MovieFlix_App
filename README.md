@@ -28,7 +28,7 @@ https://github.com/user-attachments/assets/a571a1e4-8701-4da5-98c6-670079e87ebc
 - Flow
 - Coroutines
 - LiveData
-- Clean Architecture + MVVM
+- Clean Architecture(MVVM)
 - DataBinding
 - Hilt
 - XML
