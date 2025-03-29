@@ -10,7 +10,8 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import java.io.IOException
 
-class RecommendationRepositoryImpl(private val appContext: Application, private val remoteDataSource: RemoteDataSource):RecommendationRepository {
+class RecommendationRepositoryImpl(private val appContext: Application,
+                                   private val remoteDataSource: RemoteDataSource):RecommendationRepository {
     override fun searchMovie(query: String): Flow<NetworkResults<MovieList>> = flow{
         emit(NetworkResults.Loading())
 

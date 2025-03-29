@@ -11,6 +11,7 @@ import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class  GetMovieInfo @Inject constructor(private val movieInfoRepository: MovieInfoRepository) {
+
     fun getMovieInfo(): Flow<NetworkResults<HomeFeedData>> {
       return  movieInfoRepository.getHomeFeedData()
     }

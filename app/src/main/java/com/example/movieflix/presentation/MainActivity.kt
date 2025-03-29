@@ -9,11 +9,9 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
-
-
-
     private val navController by lazy{
-        (supportFragmentManager.findFragmentById(R.id.fragmentContainerView) as NavHostFragment).navController
+        (supportFragmentManager.findFragmentById(R.id.fragmentContainerView)
+                as NavHostFragment).navController
     }
 
 
