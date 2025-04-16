@@ -13,6 +13,7 @@
 .externalNativeBuild
 .cxx
 local.properties
+google-services.json
 
 # Android Studio and IntelliJ IDEA project files
 .idea/
