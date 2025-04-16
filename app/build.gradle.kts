@@ -1,4 +1,3 @@
-import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
 import java.util.Properties
 
 plugins {
@@ -8,6 +7,8 @@ plugins {
     id("com.google.devtools.ksp")
     id ("kotlin-parcelize")
     id ("com.google.dagger.hilt.android")
+    id("com.google.gms.google-services")
+    id("com.google.firebase.crashlytics")
 }
 
 android {
@@ -117,7 +118,6 @@ dependencies {
     implementation ("com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.3")
 
 
-
     //Dagger - Hilt
     implementation ("com.google.dagger:hilt-android:2.54")
     kapt ("com.google.dagger:hilt-compiler:2.54")
@@ -135,5 +135,12 @@ dependencies {
     implementation ("androidx.room:room-runtime:2.6.1")
     ksp ("androidx.room:room-compiler:2.6.1")
     implementation ("androidx.room:room-ktx:2.6.1")
+
+    //firebase
+    implementation(platform("com.google.firebase:firebase-bom:33.11.0"))
+    implementation ("com.google.firebase:firebase-analytics-ktx") // analytics
+    implementation("com.google.firebase:firebase-crashlytics-ktx:18.6.4") // crashanalytics
+    implementation("com.google.firebase:firebase-messaging") // fcm
+
 
 }
