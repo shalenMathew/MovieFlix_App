@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     >
 
-<androidx.coordinatorlayout.widget.CoordinatorLayout
+<androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/gradient_background"
@@ -14,10 +14,18 @@
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="@dimen/_55sdp"
+        android:layout_height="@dimen/_190sdp"
         android:background="@drawable/gradient_bottom"
-        android:layout_gravity="bottom"
+
+        app:layout_constraintBottom_toBottomOf="parent"
         />
+
+<!--    <View-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="@dimen/_65sdp"-->
+<!--        android:background="@drawable/gradient_bottom"-->
+<!--        android:layout_gravity="bottom"-->
+<!--        />-->
 
     <include
         layout="@layout/shimmer_layout"
@@ -27,11 +35,14 @@
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
         android:fillViewport="true"
         android:fitsSystemWindows="false"
         android:focusable="true"
-        android:focusableInTouchMode="true">
+        android:focusableInTouchMode="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        >
 
         <LinearLayout
             android:id="@+id/fragment_home_homeFeed_layout"
@@ -202,13 +213,18 @@
 
     </androidx.core.widget.NestedScrollView>
 
+
+
     <include
         android:id="@+id/fragment_home_network_check"
         layout="@layout/layout_network"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom" />
+       app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        />
 
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>

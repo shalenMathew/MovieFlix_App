@@ -53,14 +53,14 @@ private  var _binding:FragmentSplashBinding?=null
 
         binding.lottieAnimation.addAnimatorListener(object: Animator.AnimatorListener{
             override fun onAnimationStart(p0: Animator) {
-//                    lifecycleScope.launch {
-//                        delay(3000)
-//                        findNavController().navigate(id)
-//                    }
+                    lifecycleScope.launch {
+                        delay(3000)
+                        findNavController().navigate(id)
+                    }
             }
             override fun onAnimationEnd(p0: Animator) {
                 lifecycleScope.launch {
-                    findNavController().navigate(id)
+//                    findNavController().navigate(id)
                 }
             }
 

@@ -9,10 +9,10 @@
             <InsightsFilterSettings>
               <option name="connection">
                 <ConnectionSetting>
-                  <option name="appId" value="com.example.movieflix.debug" />
-                  <option name="mobileSdkAppId" value="1:186511620926:android:95c946e478d79056b4ca6f" />
-                  <option name="projectId" value="movieflix-f0a43" />
-                  <option name="projectNumber" value="186511620926" />
+                  <option name="appId" value="PLACEHOLDER" />
+                  <option name="mobileSdkAppId" value="" />
+                  <option name="projectId" value="" />
+                  <option name="projectNumber" value="" />
                 </ConnectionSetting>
               </option>
               <option name="signal" value="SIGNAL_UNSPECIFIED" />

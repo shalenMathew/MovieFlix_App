@@ -20,7 +20,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.5"
-        android:text="no fav movies yet"
+        android:text="All your Fav movies show up here — try adding some!"
         android:textColor="@color/white"
         android:gravity="center"
         android:textSize="@dimen/_16sdp"

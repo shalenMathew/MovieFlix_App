@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.widget.PopupMenu
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -28,6 +29,7 @@ import com.example.movieflix.presentation.base.BaseFragment
 import com.example.movieflix.presentation.viewmodels.HomeInfoViewModel
 import com.google.gson.Gson
 import dagger.hilt.android.AndroidEntryPoint
+
 
 @AndroidEntryPoint
 class HomeFragment : BaseFragment() {
@@ -55,6 +57,7 @@ class HomeFragment : BaseFragment() {
         handleClickListeners()
         observer()
     }
+
     private fun handleClickListeners() {
 binding.apply {
 
@@ -83,6 +86,8 @@ binding.apply {
         val firstVisibleItem = layoutManger.findFirstVisibleItemPosition()
         openDetailFragment(bannerList[firstVisibleItem])
     }
+
+
 }
     }
     private fun initView() {
@@ -90,6 +95,7 @@ binding.apply {
         homeAdapter= HomeAdapter{
             openDetailFragment(it)
         }
+
         binding.apply {
             fragmentHomeBannerImgRv.adapter = bannerAdapter
             fragmentHomeHomeFeedRv.adapter=homeAdapter
@@ -109,7 +115,7 @@ binding.apply {
 
             when(it){
                 is NetworkResults.Success-> binding.apply{
-                    shimmerLoading.gone()
+                    shimmerLoading.root.gone()
                     it.data?.let { homeFeedData: HomeFeedData ->
                        fragmentHomeHomeFeedLayout.visible()
                         bannerList = homeFeedData.bannerMovie
@@ -120,21 +126,24 @@ binding.apply {
 
                 is NetworkResults.Error->binding.apply{
                     Toast.makeText(context, it.message, Toast.LENGTH_SHORT).show()
-                    shimmerLoading.gone()
+                    shimmerLoading.root.gone()
                     fragmentHomeHomeFeedLayout.gone()
                 }
 
                 is NetworkResults.Loading->binding.apply{
-                    shimmerLoading.visible()
+                    shimmerLoading.root.visible()
                     fragmentHomeHomeFeedLayout.gone()
                 }
             }
         }
     }
+
     override fun onResume() {
         super.onResume()
         checkNetworkAvailability()
     }
+
+
     private fun checkNetworkAvailability() {
         if(isNetworkAvailable(requireContext())){
             binding.fragmentHomeNetworkCheck.layoutNtwContainer.gone()
@@ -148,6 +157,7 @@ binding.apply {
             binding.fragmentHomeNetworkCheck.layoutNtwContainer.visible()
         }
     }
+
     override fun onNetworkAvailable(network: Network) {
         super.onNetworkAvailable(network)
         requireActivity().runOnUiThread {

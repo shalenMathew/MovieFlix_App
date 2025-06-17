@@ -19,6 +19,7 @@ import dagger.hilt.components.SingletonComponent
 import okhttp3.Cache
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
+import okhttp3.logging.HttpLoggingInterceptor.Level
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
@@ -38,11 +39,14 @@ object NetworkModule {
            // so the client dont have to send request everytime
            .addInterceptor(
                HttpLoggingInterceptor().apply {
-                   level = HttpLoggingInterceptor.Level.BODY // this is used to get the debug information when request is sent
+                   level = if (BuildConfig.DEBUG) Level.BODY else Level.NONE // this is used to get the debug information
+               // when request is sent
                // and the also provides the data of the response
                }
            )
-           .addInterceptor{chain ->  
+           .addInterceptor{chain ->
+
+               // adding api key before sending request to the server
                val request = chain.request().newBuilder()
                val  originalHttpUrl = chain.request().url
 

@@ -124,8 +124,6 @@
                         android:scaleType="centerCrop"
                         />
 
-
-
                 </com.google.android.material.card.MaterialCardView>
 
                 <View
