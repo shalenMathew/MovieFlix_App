@@ -57,8 +57,6 @@ class RemoteDataSource @Inject constructor(private val apiClient: ApiClient) {
         return apiClient.fetchMovieSearchedResultsApiCall(searchQuery = query)
     }
 
-    suspend fun getRandomMovie(query: String):Response<MovieResponseList>{
-        return apiClient.fetchRandomMovies(searchQuery = query)
-    }
+
 
 }

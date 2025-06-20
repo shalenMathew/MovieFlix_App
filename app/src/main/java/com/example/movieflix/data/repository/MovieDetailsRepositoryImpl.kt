@@ -21,7 +21,7 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.withContext
 import java.io.IOException
 
-class MovieInfoRepositoryImpl(
+class MovieDetailsRepositoryImpl(
     private val remoteDataSource: RemoteDataSource,
     private val localDataSource: LocalDataSource,
     private val appContext:Application
@@ -41,13 +41,14 @@ class MovieInfoRepositoryImpl(
                     // but will be at some point in the future
 
                     val upcomingMovieListDef = async { remoteDataSource.getUpcomingMovies() }
-                    val popularMovieListDef =  async { remoteDataSource.getPopularMovies() }
                     val trendingMovieListDef =  async { remoteDataSource.getTrendingMovies() }
+                    val popularMovieListDef =  async { remoteDataSource.getPopularMovies() }
                     val topRatedTVListDef =  async { remoteDataSource.getTopRatedTV()}
                     val netflixShowListDef =  async { remoteDataSource.getNetflixShows()}
                     val amazonPrimeShowListDef = async { remoteDataSource.getAmazonPrimeShows() }
                     val bollywoodMovieListDef =  async { remoteDataSource.getBollywoodMovies() }
-                    val nowPlayingMoviesListDef = async { remoteDataSource.getNowPlayingMovies() }
+                    val movieBannerOnHomeListDef = async { remoteDataSource.getNowPlayingMovies() }
+
 
 //                    val wholeMovieList = mutableListOf<HomeFeed>() can't directly Fetch HomeFeed as its in domain layer which will
 //                    break the rule of clean architecture so instead we have to make HomeResponse class in data layer which has the
@@ -73,23 +74,23 @@ class MovieInfoRepositoryImpl(
                     val netflixShowList = netflixShowListDef.await()
                     val amazonPrimeShowList = amazonPrimeShowListDef.await()
                     val bollywoodMoviesList = bollywoodMovieListDef.await()
-                    val nowPlayingMoviesList = nowPlayingMoviesListDef.await()
+                    val movieBannerOnHomeList = movieBannerOnHomeListDef.await()
 
-                    wholeMoviesList.add(HomeFeedResponse(
-                        Constants.UPCOMING_MOVIES,
-                        upcomingMovieList.body()?.results!!))
-                    wholeMoviesList.add(HomeFeedResponse(Constants.POPULAR_MOVIES,popularMovieList.body()?.results!!))
+                    wholeMoviesList.add(HomeFeedResponse(Constants.UPCOMING_MOVIES, upcomingMovieList.body()?.results!!))
                     wholeMoviesList.add(HomeFeedResponse(Constants.TRENDING_MOVIES,trendingMovieList.body()?.results!!))
+                    wholeMoviesList.add(HomeFeedResponse(Constants.POPULAR_MOVIES,popularMovieList.body()?.results!!))
                     wholeMoviesList.add(HomeFeedResponse(Constants.TOP_RATED_MOVIES,topRatedMovieList.body()?.results!!))
                     wholeMoviesList.add(HomeFeedResponse(Constants.NETFLIX_SHOWS,netflixShowList.body()?.results!!))
                     wholeMoviesList.add(HomeFeedResponse(Constants.PRIME_SHOWS,amazonPrimeShowList.body()?.results!!))
                     wholeMoviesList.add(HomeFeedResponse(Constants.BOLLYWOOD_MOVIES,bollywoodMoviesList.body()?.results!!))
 
-//                     homeFeedResponse = HomeFeedDataResponse(nowPlayingMoviesList.body()?.results!!,wholeMoviesList) // this is for just on line support
+//                     homeFeedResponse = HomeFeedDataResponse(nowPlayingMoviesList.body()?.results!!,wholeMoviesList) // this line of code only makes the
+//                     response from api to work only if there is an internet connection, so below we using local data storage to make
+//                     life little easier
 
                     localDataSource.deleteAllHomeFeedData() // this for offline support
                     localDataSource.insertHomeFeedData(HomeFeedEntity( // here we r storing whatever data fetched from  online in database
-                        bannerMovies = nowPlayingMoviesList.body()?.results!!,
+                        bannerMovies = movieBannerOnHomeList.body()?.results!!,
                         homeFeedResponseList = wholeMoviesList))
                 }
 
@@ -111,6 +112,7 @@ class MovieInfoRepositoryImpl(
             }
         }
     }
+
     override fun getMovieTrailer(movieId:Int): Flow<NetworkResults<MovieVideoResultList>> = flow {
 
         emit(NetworkResults.Loading())
@@ -131,6 +133,7 @@ class MovieInfoRepositoryImpl(
             }
         }
     }
+
     override fun getRecommendation(movieId: Int): Flow<NetworkResults<MovieList>> = flow {
         emit(NetworkResults.Loading())
         try {
@@ -152,6 +155,7 @@ class MovieInfoRepositoryImpl(
         }
 
     }
+
     override fun getWhereToWatchProvider(movieId: Int): Flow<NetworkResults<WatchProviders>> =flow{
 
       try {

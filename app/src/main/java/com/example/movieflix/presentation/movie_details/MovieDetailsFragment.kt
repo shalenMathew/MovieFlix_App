@@ -6,7 +6,10 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
+import android.widget.FrameLayout
 import androidx.browser.customtabs.CustomTabsIntent
+import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -28,6 +31,8 @@ import com.example.movieflix.domain.model.MovieVideoResult
 import com.example.movieflix.presentation.viewmodels.FavMovieViewModel
 import com.example.movieflix.presentation.viewmodels.HomeInfoViewModel
 import com.example.movieflix.presentation.viewmodels.WatchListViewModel
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.gson.Gson
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
@@ -57,13 +62,44 @@ class MovieDetailsFragment : BottomSheetDialogFragment(){
 
     private var isInWatchList:Boolean = false
     private var isFav:Boolean=false
-    var isTrailerPlaying = false
 
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         setStyle(STYLE_NO_FRAME, R.style.SheetDialog)
         return super.onCreateDialog(savedInstanceState)
     }
+
+    override fun onStart() {
+        super.onStart()
+
+        val dialog = dialog as? BottomSheetDialog ?: return
+
+        val bottomSheet = dialog.findViewById<FrameLayout>(
+            com.google.android.material.R.id.design_bottom_sheet
+        ) ?: return
+
+        val behavior = BottomSheetBehavior.from(bottomSheet)
+
+        // Customize the behavior
+        behavior.isHideable = true
+        behavior.skipCollapsed = true
+        behavior.state = BottomSheetBehavior.STATE_EXPANDED
+
+
+        // Optional: dismiss on slight swipe down
+        behavior.addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
+            override fun onStateChanged(bottomSheet: View, newState: Int) {
+                if (newState == BottomSheetBehavior.STATE_HIDDEN) dismiss()
+            }
+
+            override fun onSlide(bottomSheet: View, slideOffset: Float) {
+                if (slideOffset < 0.1f && behavior.state == BottomSheetBehavior.STATE_DRAGGING) {
+                    behavior.state = BottomSheetBehavior.STATE_HIDDEN
+                }
+            }
+        })
+    }
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -76,10 +112,13 @@ class MovieDetailsFragment : BottomSheetDialogFragment(){
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+
         setUpDetailFragment()
         setUpObservers()
         iniIt()
         handleClickListeners()
+
     }
 
     private fun handleClickListeners() {
@@ -133,6 +172,7 @@ class MovieDetailsFragment : BottomSheetDialogFragment(){
             openDetailFragment(it)
         })
         binding.fragmentMovieDetailsRecommendList.adapter=recommendationAdapter
+
     }
 
     private fun openDetailFragment(it: MovieResult) {
@@ -261,7 +301,6 @@ class MovieDetailsFragment : BottomSheetDialogFragment(){
         binding.apply {
 
             posterImage.gone()
-            fragmentMovieDetailsPlayBtn.text = "Pause The Trailer"
 
                 // initialise the player if player is null
 
@@ -355,3 +394,4 @@ class MovieDetailsFragment : BottomSheetDialogFragment(){
     }
 
 }
+

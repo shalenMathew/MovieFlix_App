@@ -4,11 +4,15 @@ import android.content.Context
 import android.content.Intent
 import android.net.ConnectivityManager
 import android.provider.Settings
+import android.util.AttributeSet
 import android.view.View
 import android.widget.Toast
+import androidx.coordinatorlayout.widget.CoordinatorLayout
+import androidx.core.widget.NestedScrollView
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.example.movieflix.domain.model.Genre
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -117,8 +121,34 @@ fun getRandomChar():String{
     return alphabet.random().toString()
 }
 
- val MIGRATION_2_3 = object : Migration(2, 3) {
+ val MIGRATION = object : Migration(3,4) {
     override fun migrate(db: SupportSQLiteDatabase) {
-        db.execSQL("CREATE TABLE IF NOT EXISTS `${Constants.FAVOURITES_TABLE_NAME}` (`id` INTEGER NOT NULL, `movieResult` TEXT NOT NULL, PRIMARY KEY(`id`))")
+
+        db.execSQL("ALTER TABLE watch_list_news_table RENAME TO watch_list_table")
+        db.execSQL("ALTER TABLE favorites_table RENAME TO favorites_movies_table")
+
     }
 }
+
+
+class CustomNestedScrollView @JvmOverloads constructor(
+    ctx: Context, attrs: AttributeSet? = null
+) : NestedScrollView(ctx, attrs) {
+
+    override fun onNestedPreScroll(
+        target: View, dx: Int, dy: Int, consumed: IntArray
+    ) {
+        if (dy < 0 && !canScrollVertically(-1)) {
+            // At top & swiping down
+            val behavior = (layoutParams as? CoordinatorLayout.LayoutParams)
+                ?.behavior as? BottomSheetBehavior<*>
+            behavior?.let {
+                it.state = BottomSheetBehavior.STATE_HIDDEN
+                consumed[1] = dy
+                return
+            }
+        }
+        super.onNestedPreScroll(target, dx, dy, consumed)
+    }
+}
+

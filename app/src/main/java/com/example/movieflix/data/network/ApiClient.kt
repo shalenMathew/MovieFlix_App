@@ -100,11 +100,11 @@ interface ApiClient {
         @Query("query") searchQuery:String
     ): Response<MovieResponseList>
 
-    @GET("3/search/movie")
-    suspend fun fetchRandomMovies(
-        @Query("language") lang: String? = "en-US",
-        @Query("include_adult") includeAdult: Boolean=false,
-        @Query("query") searchQuery:String
-    ): Response<MovieResponseList>
+//    @GET("3/search/movie")
+//    suspend fun fetchRandomMovies(
+//        @Query("language") lang: String? = "en-US",
+//        @Query("include_adult") includeAdult: Boolean=false,
+//        @Query("query") searchQuery:String
+//    ): Response<MovieResponseList>
 
 }

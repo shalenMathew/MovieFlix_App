@@ -30,7 +30,7 @@ object Constants {
 
     const val DATABASE_NAME = "movie_data_database"
     const val TABLE_NAME = "movie_data_table"
-    const val WATCHLIST_TABLE_NAME = "watch_list_news_table"
-    const val FAVOURITES_TABLE_NAME="favorites_table"
+    const val WATCHLIST_TABLE_NAME = "watch_list_table"
+    const val FAVOURITES_TABLE_NAME="favorites_movies_table"
 
 }

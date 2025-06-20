@@ -47,9 +47,7 @@
         <action
             android:id="@+id/action_homeFragment_to_searchFragment"
             app:destination="@id/searchFragment" />
-        <action
-            android:id="@+id/action_homeFragment_to_randomRecommendationFragment"
-            app:destination="@id/randomRecommendationFragment" />
+
         <action
             android:id="@+id/action_homeFragment_to_favFragment"
             app:destination="@id/favFragment" />
@@ -81,11 +79,7 @@
             android:id="@+id/action_watchListFragment_to_movieDetailsFragment"
             app:destination="@id/movieDetailsFragment" />
     </fragment>
-    <fragment
-        android:id="@+id/randomRecommendationFragment"
-        android:name="com.example.movieflix.presentation.randomRecomm.RandomRecommendationFragment"
-        android:label="fragment_random_recommendation"
-        tools:layout="@layout/fragment_random_recommendation" />
+
     <fragment
         android:id="@+id/favFragment"
         android:name="com.example.movieflix.presentation.favorites.FavFragment"
