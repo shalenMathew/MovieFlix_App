@@ -8,7 +8,7 @@
         android:layout_height="match_parent"
         tools:context=".presentation.movie_details.MovieDetailsFragment"
         android:id="@+id/main_frag"
-    android:paddingTop="@dimen/_60sdp"
+
         >
 
         <LinearLayout
@@ -39,7 +39,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/fragment_movie_details_title"
-
                     android:layout_centerHorizontal="true"
                     android:padding="@dimen/_4sdp"
                     >
@@ -323,6 +322,43 @@
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             tools:itemCount="2"
             tools:listitem="@layout/item_list" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="text"
+            android:textSize="@dimen/_20sdp"
+            android:background="@color/black"
+            android:textColor="@color/white"
+            />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="text"
+            android:textSize="@dimen/_20sdp"
+            android:background="@color/black"
+            android:textColor="@color/white"
+            />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="text"
+            android:textSize="@dimen/_20sdp"
+            android:background="@color/black"
+            android:textColor="@color/white"
+            />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="text"
+            android:textSize="@dimen/_20sdp"
+            android:background="@color/black"
+            android:textColor="@color/white"
+            />
+
 
     </LinearLayout>
 

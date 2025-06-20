@@ -69,38 +69,6 @@ class MovieDetailsFragment : BottomSheetDialogFragment(){
         return super.onCreateDialog(savedInstanceState)
     }
 
-    override fun onStart() {
-        super.onStart()
-
-        val dialog = dialog as? BottomSheetDialog ?: return
-
-        val bottomSheet = dialog.findViewById<FrameLayout>(
-            com.google.android.material.R.id.design_bottom_sheet
-        ) ?: return
-
-        val behavior = BottomSheetBehavior.from(bottomSheet)
-
-        // Customize the behavior
-        behavior.isHideable = true
-        behavior.skipCollapsed = true
-        behavior.state = BottomSheetBehavior.STATE_EXPANDED
-
-
-        // Optional: dismiss on slight swipe down
-        behavior.addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
-            override fun onStateChanged(bottomSheet: View, newState: Int) {
-                if (newState == BottomSheetBehavior.STATE_HIDDEN) dismiss()
-            }
-
-            override fun onSlide(bottomSheet: View, slideOffset: Float) {
-                if (slideOffset < 0.1f && behavior.state == BottomSheetBehavior.STATE_DRAGGING) {
-                    behavior.state = BottomSheetBehavior.STATE_HIDDEN
-                }
-            }
-        })
-    }
-
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -369,6 +337,38 @@ class MovieDetailsFragment : BottomSheetDialogFragment(){
             }
         }
 
+    }
+
+    override fun onStart() {
+
+        super.onStart()
+
+        val dialog = dialog as? BottomSheetDialog ?: return
+
+        val bottomSheet = dialog.findViewById<FrameLayout>(
+            com.google.android.material.R.id.design_bottom_sheet
+        ) ?: return
+
+        val behavior = BottomSheetBehavior.from(bottomSheet)
+
+        // Customize the behavior
+        behavior.isHideable = true
+        behavior.skipCollapsed = true
+        behavior.state = BottomSheetBehavior.STATE_EXPANDED
+
+
+        // Optional: dismiss on slight swipe down
+        behavior.addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
+            override fun onStateChanged(bottomSheet: View, newState: Int) {
+                if (newState == BottomSheetBehavior.STATE_HIDDEN) dismiss()
+            }
+
+            override fun onSlide(bottomSheet: View, slideOffset: Float) {
+                if (slideOffset < 0.1f && behavior.state == BottomSheetBehavior.STATE_DRAGGING) {
+                    behavior.state = BottomSheetBehavior.STATE_HIDDEN
+                }
+            }
+        })
     }
 
     override fun onPause() {

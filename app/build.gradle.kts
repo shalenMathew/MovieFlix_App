@@ -96,8 +96,6 @@ dependencies {
     implementation ("androidx.lifecycle:lifecycle-viewmodel-savedstate:2.8.7")
     implementation ("androidx.lifecycle:lifecycle-extensions:2.2.0")
 
-    //Shimmer
-    implementation ("com.facebook.shimmer:shimmer:0.5.0")
 
     // Airbnb lottie animation
     implementation("com.airbnb.android:lottie:6.3.0")
