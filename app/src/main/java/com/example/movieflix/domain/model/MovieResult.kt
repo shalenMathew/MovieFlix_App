@@ -16,4 +16,5 @@ data class MovieResult(
     val releaseDate: String?=null,
     val title: String?=null,
     val voteAverage: Double?=null,
+    val mediaType: String?=null
 ): Parcelable  // parcelable is used to send data across activities

@@ -3,7 +3,7 @@ package com.example.movieflix.domain.repository
 import com.example.movieflix.core.utils.NetworkResults
 import com.example.movieflix.domain.model.HomeFeedData
 import com.example.movieflix.domain.model.MovieList
-import com.example.movieflix.domain.model.MovieVideoResultList
+import com.example.movieflix.domain.model.MediaVideoResultList
 import com.example.movieflix.domain.model.WatchProviders
 import kotlinx.coroutines.flow.Flow
 
@@ -16,7 +16,9 @@ fun getHomeFeedData():Flow<NetworkResults<HomeFeedData>>
 // i mean both do the same thing right, remember the reason we declared same model class in different layer coz that the each layer dont have to
 // be dependent on model class from other layers so every class should use model class from their own layers
 
-fun getMovieTrailer(movieId:Int):Flow<NetworkResults<MovieVideoResultList>>
+fun getMovieTrailer(movieId:Int):Flow<NetworkResults<MediaVideoResultList>>
+
+fun getTVTrailer(tvId:Int):Flow<NetworkResults<MediaVideoResultList>>
 
 fun getRecommendation(movieId:Int):Flow<NetworkResults<MovieList>>
 

@@ -11,7 +11,7 @@
     tools:context=".presentation.favorites.FavFragment">
 
     <TextView
-        android:id="@+id/fragment_fav_noMovie"
+        android:id="@+id/fragment_fav_placeholder"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -25,6 +25,18 @@
         android:gravity="center"
         android:textSize="@dimen/_16sdp"
         android:fontFamily="@font/montserrat_light"
+        android:visibility="gone"
+        />
+
+    <ImageView
+        android:id="@+id/randomEmoji"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:src="@drawable/lustful_emoji"
+        app:layout_constraintTop_toBottomOf="@id/fragment_fav_placeholder"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="18dp"
         android:visibility="gone"
         />
 

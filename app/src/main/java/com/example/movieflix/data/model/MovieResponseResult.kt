@@ -2,8 +2,6 @@ package com.example.movieflix.data.model
 
 import com.example.movieflix.domain.model.MovieResult
 
-
-
 data class MovieResponseResult(
     val adult: Boolean,
     val backdrop_path: String,
@@ -18,7 +16,8 @@ data class MovieResponseResult(
     val title: String,
     val video: Boolean,
     val vote_average: Double,
-    val vote_count: Int
+    val vote_count: Int,
+    val media_type: String
 ){
     // imagine this as a rough raw data we would get from api e would now filter this response by converting it to our Model class in domain
     // domain consist of  business logic so now we are molding the raw data according to our business logic
@@ -34,6 +33,8 @@ data class MovieResponseResult(
             posterPath = poster_path,
             releaseDate = release_date,
             title = title,
-            voteAverage = vote_average)
+            voteAverage = vote_average,
+            mediaType = media_type)
     }
+
 }

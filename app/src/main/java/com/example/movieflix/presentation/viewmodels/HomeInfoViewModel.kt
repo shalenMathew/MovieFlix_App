@@ -7,12 +7,10 @@ import androidx.lifecycle.viewModelScope
 import com.example.movieflix.core.utils.NetworkResults
 import com.example.movieflix.domain.model.HomeFeedData
 import com.example.movieflix.domain.model.MovieList
-import com.example.movieflix.domain.model.MovieVideoResultList
+import com.example.movieflix.domain.model.MediaVideoResultList
 import com.example.movieflix.domain.model.WatchProviders
 import com.example.movieflix.domain.usecases.GetMovieInfo
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -24,8 +22,8 @@ class HomeInfoViewModel @Inject constructor(private val getMovieInfo: GetMovieIn
     private var _homeFeedList:MutableLiveData<NetworkResults<HomeFeedData>> = MutableLiveData()
     var homeFeedList:LiveData<NetworkResults<HomeFeedData>> = _homeFeedList
 
-    private var _movieTrailerList = MutableLiveData<NetworkResults<MovieVideoResultList>>()
-    val movieTrailerList:LiveData<NetworkResults<MovieVideoResultList>> = _movieTrailerList
+    private var _mediaTrailerList = MutableLiveData<NetworkResults<MediaVideoResultList>>()
+    val mediaTrailerList:LiveData<NetworkResults<MediaVideoResultList>> = _mediaTrailerList
 
     private var _recommendationList=MutableLiveData<NetworkResults<MovieList>>()
     val recommendationLiveData:LiveData<NetworkResults<MovieList>> = _recommendationList
@@ -53,7 +51,16 @@ class HomeInfoViewModel @Inject constructor(private val getMovieInfo: GetMovieIn
     fun getMovieTrailer(movieId:Int){
         viewModelScope.launch {
             getMovieInfo.getMovieTrailer(movieId).onEach {
-                _movieTrailerList.value = it
+                _mediaTrailerList.value = it
+            }.launchIn(this)
+        }
+    }
+
+
+    fun getTVTrailer(tvId:Int){
+        viewModelScope.launch {
+            getMovieInfo.getTVTrailer(tvId).onEach {
+                _mediaTrailerList.value = it
             }.launchIn(this)
         }
     }

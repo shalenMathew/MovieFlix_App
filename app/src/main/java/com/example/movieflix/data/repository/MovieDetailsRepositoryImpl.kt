@@ -11,7 +11,7 @@ import com.example.movieflix.data.model.HomeFeedResponse
 import com.example.movieflix.data.remote.RemoteDataSource
 import com.example.movieflix.domain.model.HomeFeedData
 import com.example.movieflix.domain.model.MovieList
-import com.example.movieflix.domain.model.MovieVideoResultList
+import com.example.movieflix.domain.model.MediaVideoResultList
 import com.example.movieflix.domain.model.WatchProviders
 import com.example.movieflix.domain.repository.MovieInfoRepository
 import kotlinx.coroutines.Dispatchers
@@ -113,13 +113,34 @@ class MovieDetailsRepositoryImpl(
         }
     }
 
-    override fun getMovieTrailer(movieId:Int): Flow<NetworkResults<MovieVideoResultList>> = flow {
+    override fun getMovieTrailer(movieId:Int): Flow<NetworkResults<MediaVideoResultList>> = flow {
 
         emit(NetworkResults.Loading())
 
         try{
             if(isNetworkAvailable(appContext)){
                 val apiResponse = remoteDataSource.getMovieTrailer(movieId)
+                emit(NetworkResults.Success(apiResponse.body()?.toMovieVideoResultList()))
+            }
+        }catch (e:Throwable){
+
+            when(e){
+                is IOException -> emit(NetworkResults.Error("Please check ur internet"))
+
+                else -> {
+                    emit(NetworkResults.Error(e.message?:"Something went wrong"))
+                }
+            }
+        }
+    }
+
+    override fun getTVTrailer(tvId: Int): Flow<NetworkResults<MediaVideoResultList>> = flow {
+
+        emit(NetworkResults.Loading())
+
+        try{
+            if(isNetworkAvailable(appContext)){
+                val apiResponse = remoteDataSource.getTVTrailer(tvId)
                 emit(NetworkResults.Success(apiResponse.body()?.toMovieVideoResultList()))
             }
         }catch (e:Throwable){

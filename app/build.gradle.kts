@@ -126,7 +126,7 @@ dependencies {
     implementation ("com.facebook.shimmer:shimmer:0.5.0")
 
     // VideoPlayer
-    implementation ("com.pierfrancescosoffritti.androidyoutubeplayer:core:12.1.1")
+    implementation ("com.pierfrancescosoffritti.androidyoutubeplayer:core:12.1.2")
 
     // Chrome Custom Tab
     implementation ("androidx.browser:browser:1.8.0")

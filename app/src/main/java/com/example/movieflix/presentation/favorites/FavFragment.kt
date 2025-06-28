@@ -35,7 +35,7 @@ class FavFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        _binding = DataBindingUtil.inflate(inflater,R.layout.fragment_fav,container,false)
+        _binding = FragmentFavBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -62,10 +62,13 @@ class FavFragment : Fragment() {
 
             if (it.isNotEmpty()){
                 adapter.submitList(it)
-                binding.fragmentFavNoMovie.gone()
+                binding.fragmentFavPlaceholder.gone()
+                binding.randomEmoji.gone()
+
             }else{
                 binding.fragmentFavRv.gone()
-                binding.fragmentFavNoMovie.visible()
+                binding.fragmentFavPlaceholder.visible()
+                binding.randomEmoji.gone()
             }
         }
     }

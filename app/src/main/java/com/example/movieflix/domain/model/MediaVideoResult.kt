@@ -1,6 +1,6 @@
 package com.example.movieflix.domain.model
 
-data class MovieVideoResult(
+data class MediaVideoResult(
     val id: String?=null,
     val key: String?=null,
     val name: String?=null,

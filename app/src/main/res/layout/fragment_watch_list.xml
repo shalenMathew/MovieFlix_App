@@ -11,7 +11,7 @@
       tools:context=".presentation.watchlist.WatchListFragment">
 
     <TextView
-        android:id="@+id/fragment_watch_list_noMovie"
+        android:id="@+id/fragment_watch_list_placeholder"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -27,6 +27,19 @@
         android:fontFamily="@font/montserrat_light"
         android:visibility="gone"
         />
+
+    <ImageView
+        android:id="@+id/randomEmoji"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:src="@drawable/lustful_emoji"
+       app:layout_constraintTop_toBottomOf="@id/fragment_watch_list_placeholder"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="18dp"
+        android:visibility="gone"
+
+      />
 
 
     <LinearLayout

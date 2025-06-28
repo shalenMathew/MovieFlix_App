@@ -6,10 +6,8 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.WindowManager
 import android.widget.FrameLayout
 import androidx.browser.customtabs.CustomTabsIntent
-import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -27,7 +25,7 @@ import com.example.movieflix.core.utils.shareMovie
 import com.example.movieflix.core.utils.showToast
 import com.example.movieflix.databinding.FragmentMovieDetailsBinding
 import com.example.movieflix.domain.model.MovieResult
-import com.example.movieflix.domain.model.MovieVideoResult
+import com.example.movieflix.domain.model.MediaVideoResult
 import com.example.movieflix.presentation.viewmodels.FavMovieViewModel
 import com.example.movieflix.presentation.viewmodels.HomeInfoViewModel
 import com.example.movieflix.presentation.viewmodels.WatchListViewModel
@@ -152,13 +150,13 @@ class MovieDetailsFragment : BottomSheetDialogFragment(){
 
     private fun setUpObservers() {
 
-        homeInfoViewModel.movieTrailerList.observe(viewLifecycleOwner){
+        homeInfoViewModel.mediaTrailerList.observe(viewLifecycleOwner){
             when(it){
                 is NetworkResults.Success->binding.apply{
                     it.data?.let {result->
                         result.results?.let {videosList->
                             val videosArrayList = videosList as ArrayList
-                            val trailerList:List<MovieVideoResult> = videosArrayList.filter {toFilter->
+                            val trailerList:List<MediaVideoResult> = videosArrayList.filter { toFilter->
                                 // video arraylist response will give us all type of video we only want trailer or teaser from type youtube
                                 (toFilter.type==Constants.TRAILER || toFilter.type==Constants.TEASER)&&toFilter.site==Constants.YOUTUBE
                             }
@@ -167,7 +165,9 @@ class MovieDetailsFragment : BottomSheetDialogFragment(){
                                youtubeUrl="$BASE_YOUTUBE_URL${movieTrailer.key}"
 
                                binding.fragmentMovieDetailsPlayBtn.setOnClickListener {
+                                   showToast(requireContext(),"click")
                                        initializePlayer(movieTrailer.key)
+
                                }
 
                            }catch (e:Exception){
@@ -177,8 +177,15 @@ class MovieDetailsFragment : BottomSheetDialogFragment(){
 
                     }
                 }
-                is NetworkResults.Loading->{}
-                is NetworkResults.Error->{}
+                is NetworkResults.Loading->{
+
+                    showToast(requireContext(),""+it.message)
+                    Log.d("YTPlayerBug",""+it.message)
+                }
+                is NetworkResults.Error->{
+                    showToast(requireContext(),""+it.message)
+                    Log.d("YTPlayerBug",""+it.message)
+                }
             }
         }
 
@@ -272,10 +279,12 @@ class MovieDetailsFragment : BottomSheetDialogFragment(){
 
                 // initialise the player if player is null
 
+            showToast(requireContext(),"inside initialize")
+
                 fragmentMovieDetailsYt.getYouTubePlayerWhenReady(object: YouTubePlayerCallback {
                     override fun onYouTubePlayer(youTubePlayer: YouTubePlayer) {
 
-//                    showToast(requireContext(),"inside on ready")
+                    showToast(requireContext(),"inside on ready")
                         Log.d("YTPlayerBug","inside on ready")
 
                         key?.let {
@@ -283,14 +292,14 @@ class MovieDetailsFragment : BottomSheetDialogFragment(){
                             this@MovieDetailsFragment.youTubePlayer?.loadVideo(it,0f)
 
 
-//                        showToast(requireContext(),"key inside = "+key)
+                        showToast(requireContext(),"key inside = "+key)
                             Log.d("YTPlayerBug","key inside = "+key)
 
-//                        showToast(requireContext(),"yt player inside = " + youTubePlayer)
+                        showToast(requireContext(),"yt player inside = " + youTubePlayer)
                             Log.d("YTPlayerBug","yt player inside = "+ youTubePlayer)
 
                         } ?: run {
-//                        showToast(requireContext(),"key inside run = "+key)
+                        showToast(requireContext(),"key inside run = "+key)
                             Log.d("YTPlayerBug","key inside run = "+key)
                         }
                     }
@@ -331,7 +340,18 @@ class MovieDetailsFragment : BottomSheetDialogFragment(){
             }
 
             mediaId?.let {id->
-                homeInfoViewModel.getMovieTrailer(id)
+
+                if (it.mediaType=="movie"){
+                    homeInfoViewModel.getMovieTrailer(id)
+                }else if(it.mediaType=="tv"){
+                    homeInfoViewModel.getTVTrailer(id)
+                }else{
+
+//                    THIS MEANS WE DONT THE MEDIA TYPE , WE WILL FETCH THE MEDIA TYPE FROM THE API FROM HERE
+
+                }
+                showToast(requireContext(),"mediaType = "+it.mediaType)
+//                homeInfoViewModel.getMovieTrailer(id)
                 homeInfoViewModel.getRecommendation(id)
                 homeInfoViewModel.getWhereToWatchProvider(id)
             }
