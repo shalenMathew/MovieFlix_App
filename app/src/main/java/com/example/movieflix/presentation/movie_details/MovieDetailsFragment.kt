@@ -28,6 +28,7 @@ import com.example.movieflix.domain.model.MovieResult
 import com.example.movieflix.domain.model.MediaVideoResult
 import com.example.movieflix.presentation.viewmodels.FavMovieViewModel
 import com.example.movieflix.presentation.viewmodels.HomeInfoViewModel
+import com.example.movieflix.presentation.viewmodels.SearchMovieViewModel
 import com.example.movieflix.presentation.viewmodels.WatchListViewModel
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -45,6 +46,8 @@ class MovieDetailsFragment : BottomSheetDialogFragment(){
     private var _binding:FragmentMovieDetailsBinding?=null
     val binding get() = _binding!!
     private val homeInfoViewModel: HomeInfoViewModel by viewModels()
+    private val searchMovieViewModel:SearchMovieViewModel by viewModels()
+
     private var mediaId:Int? = null
     private lateinit var movieResult: MovieResult
     private var youtubeUrl:String = ""
@@ -60,6 +63,10 @@ class MovieDetailsFragment : BottomSheetDialogFragment(){
 
     private var isInWatchList:Boolean = false
     private var isFav:Boolean=false
+
+    private var mediaType:String? = null
+
+//    private var isPlaying:Boolean = true
 
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -165,9 +172,18 @@ class MovieDetailsFragment : BottomSheetDialogFragment(){
                                youtubeUrl="$BASE_YOUTUBE_URL${movieTrailer.key}"
 
                                binding.fragmentMovieDetailsPlayBtn.setOnClickListener {
-                                   showToast(requireContext(),"click")
-                                       initializePlayer(movieTrailer.key)
 
+                                   initializePlayer(movieTrailer.key)
+
+//                                   isPlaying = !isPlaying
+//
+//                                   if (isPlaying){
+//                                       youTubePlayer?.pause()
+//                                       binding.fragmentMovieDetailsPlayBtn.text = "Play Trailer"
+//                                   }else{
+//                                       initializePlayer(movieTrailer.key)
+//                                       binding.fragmentMovieDetailsPlayBtn.text = "Pause Trailer"
+//                                   }
                                }
 
                            }catch (e:Exception){
@@ -179,8 +195,7 @@ class MovieDetailsFragment : BottomSheetDialogFragment(){
                 }
                 is NetworkResults.Loading->{
 
-                    showToast(requireContext(),""+it.message)
-                    Log.d("YTPlayerBug",""+it.message)
+                    Log.d("YTPlayerBug","LoDING - "+it.message)
                 }
                 is NetworkResults.Error->{
                     showToast(requireContext(),""+it.message)
@@ -255,6 +270,48 @@ class MovieDetailsFragment : BottomSheetDialogFragment(){
             }
 
         }
+
+        searchMovieViewModel.searchMovieLiveData.observe(viewLifecycleOwner) {
+            when (it) {
+                is NetworkResults.Success -> {
+
+                    it.data?.let { movieList ->
+
+                        if(movieList.results.isNotEmpty()){
+                            mediaType = movieList.results[0].mediaType
+                            val id = movieList.results[0].id
+
+                            when(mediaType){
+                                "movie" -> {
+
+                                    if (id!=null){
+                                        homeInfoViewModel.getMovieTrailer(id)
+                                    }else{
+                                        showToast(requireContext(),"media id is null")
+                                    }
+                                }
+                                "tv" -> {
+                                    if (id!=null){
+                                        homeInfoViewModel.getTVTrailer(id)
+                                    }else{
+                                        showToast(requireContext(),"media id is null")
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+
+                is NetworkResults.Error -> {
+                    showToast(requireContext(),""+it.message)
+                }
+                is NetworkResults.Loading -> {
+                    Log.d("YTPlayerBug","LoDING - "+it.message)
+                }
+            }
+
+        }
     }
 
     private fun changeAddToWatchListIcon() {
@@ -279,12 +336,9 @@ class MovieDetailsFragment : BottomSheetDialogFragment(){
 
                 // initialise the player if player is null
 
-            showToast(requireContext(),"inside initialize")
-
                 fragmentMovieDetailsYt.getYouTubePlayerWhenReady(object: YouTubePlayerCallback {
                     override fun onYouTubePlayer(youTubePlayer: YouTubePlayer) {
 
-                    showToast(requireContext(),"inside on ready")
                         Log.d("YTPlayerBug","inside on ready")
 
                         key?.let {
@@ -292,14 +346,12 @@ class MovieDetailsFragment : BottomSheetDialogFragment(){
                             this@MovieDetailsFragment.youTubePlayer?.loadVideo(it,0f)
 
 
-                        showToast(requireContext(),"key inside = "+key)
                             Log.d("YTPlayerBug","key inside = "+key)
 
-                        showToast(requireContext(),"yt player inside = " + youTubePlayer)
                             Log.d("YTPlayerBug","yt player inside = "+ youTubePlayer)
 
                         } ?: run {
-                        showToast(requireContext(),"key inside run = "+key)
+
                             Log.d("YTPlayerBug","key inside run = "+key)
                         }
                     }
@@ -313,51 +365,61 @@ class MovieDetailsFragment : BottomSheetDialogFragment(){
     }
 
     private fun setUpDetailFragment() {
-        val result = Gson().fromJson(arguments?.getString(Constants.MEDIA_SEND_REQUEST_KEY),MovieResult::class.java)
+        val result = Gson().fromJson(
+            arguments?.getString(Constants.MEDIA_SEND_REQUEST_KEY),
+            MovieResult::class.java
+        )
 
         result?.let {
-            mediaId=it.id
-            movieResult=it
+            mediaId = it.id
+            movieResult = it
 
-            val genreList:List<Int>? = it.genreIds
+            val genreList: List<Int>? = it.genreIds
             val title = if (!it.title.isNullOrEmpty()) it.title else it.name
 
             val overView = it.overview
             val language = it.originalLanguage
-            val rating=it.voteAverage
+            val rating = it.voteAverage
             val year = it.releaseDate
             val img = it.backdropPath
 
+
             binding.apply {
-                fragmentMovieDetailsTitle.text=title
-                fragmentMovieDetailsGenre.text= getGenreListById(genreList).joinToString {genre->
+                fragmentMovieDetailsTitle.text = title
+                fragmentMovieDetailsGenre.text = getGenreListById(genreList).joinToString { genre ->
                     genre.name
                 }
                 posterImage.loadImage(TMDB_IMAGE_BASE_URL_W780.plus(img))
-                fragmentMovieDetailsLang.text=language
-                fragmentMovieDetailsOverview.text=overView
-                fragmentMovieDetailsRating.text= String.format("%.1f", rating)
-                fragmentMovieDetailsYear.text=formatDate(year)
+                fragmentMovieDetailsLang.text = language
+                fragmentMovieDetailsOverview.text = overView
+                fragmentMovieDetailsRating.text = String.format("%.1f", rating)
+                fragmentMovieDetailsYear.text = formatDate(year)
             }
 
-            mediaId?.let {id->
+            mediaId?.let { id ->
 
-                if (it.mediaType=="movie"){
-                    homeInfoViewModel.getMovieTrailer(id)
-                }else if(it.mediaType=="tv"){
-                    homeInfoViewModel.getTVTrailer(id)
-                }else{
 
-//                    THIS MEANS WE DONT THE MEDIA TYPE , WE WILL FETCH THE MEDIA TYPE FROM THE API FROM HERE
+                when (it.mediaType) {
+                    "movie" -> {
+                        homeInfoViewModel.getMovieTrailer(id)
+                    }
+                    "tv" -> {
+                        homeInfoViewModel.getTVTrailer(id)
+                    }
+                    else -> {
 
+                        if (!title.isNullOrEmpty()) {
+                            searchMovieViewModel.fetchSearchMovie(title)
+                        }
+
+                    }
                 }
-                showToast(requireContext(),"mediaType = "+it.mediaType)
-//                homeInfoViewModel.getMovieTrailer(id)
+
                 homeInfoViewModel.getRecommendation(id)
                 homeInfoViewModel.getWhereToWatchProvider(id)
             }
-        }
 
+        }
     }
 
     override fun onStart() {
