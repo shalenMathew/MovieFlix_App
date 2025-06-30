@@ -1,13 +1,11 @@
-package com.example.movieflix.data.local
+package com.example.movieflix.data.local_storage
 
-import androidx.room.AutoMigration
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import androidx.room.migration.AutoMigrationSpec
-import com.example.movieflix.data.local.entity.FavouritesEntity
-import com.example.movieflix.data.local.entity.HomeFeedEntity
-import com.example.movieflix.data.local.entity.WatchListEntity
+import com.example.movieflix.data.local_storage.entity.FavouritesEntity
+import com.example.movieflix.data.local_storage.entity.HomeFeedEntity
+import com.example.movieflix.data.local_storage.entity.WatchListEntity
 
 @Database(entities = [HomeFeedEntity::class,WatchListEntity::class,FavouritesEntity::class],
  version = 4)

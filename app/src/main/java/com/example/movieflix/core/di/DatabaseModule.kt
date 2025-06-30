@@ -6,10 +6,10 @@ import androidx.room.Room
 import com.example.movieflix.core.utils.Constants
 import com.example.movieflix.core.utils.GsonParser
 import com.example.movieflix.core.utils.MIGRATION
-import com.example.movieflix.data.local.LocalDataSource
-import com.example.movieflix.data.local.MovieDao
-import com.example.movieflix.data.local.MovieDataTypeConverter
-import com.example.movieflix.data.local.MovieDatabase
+import com.example.movieflix.data.local_storage.LocalDataSource
+import com.example.movieflix.data.local_storage.MovieDao
+import com.example.movieflix.data.local_storage.MovieDataTypeConverter
+import com.example.movieflix.data.local_storage.MovieDatabase
 import com.example.movieflix.data.remote.RemoteDataSource
 import com.example.movieflix.data.repository.FavMovieRepositoryImpl
 import com.example.movieflix.data.repository.MovieDetailsRepositoryImpl

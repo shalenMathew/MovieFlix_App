@@ -11,7 +11,7 @@ object Constants {
     const val BOLLYWOOD_MOVIES = "Bollywood"
     const val NETFLIX_SHOWS = "Netflix Shows"
     const val UPCOMING_MOVIES = "Upcoming Movies"
-    const val TRENDING_MOVIES = "Trending Movies"
+    const val TRENDING_MOVIES = "Whats Trending ?"
     const val PRIME_SHOWS = "Amazon Prime Shows"
     const val NOW_PLAYING_MOVIES = "Now Playing Movies"
 

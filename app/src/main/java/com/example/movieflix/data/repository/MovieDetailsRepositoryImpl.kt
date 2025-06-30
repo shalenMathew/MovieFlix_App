@@ -4,8 +4,8 @@ import android.app.Application
 import com.example.movieflix.core.utils.Constants
 import com.example.movieflix.core.utils.NetworkResults
 import com.example.movieflix.core.utils.isNetworkAvailable
-import com.example.movieflix.data.local.LocalDataSource
-import com.example.movieflix.data.local.entity.HomeFeedEntity
+import com.example.movieflix.data.local_storage.LocalDataSource
+import com.example.movieflix.data.local_storage.entity.HomeFeedEntity
 import com.example.movieflix.data.model.HomeFeedDataResponse
 import com.example.movieflix.data.model.HomeFeedResponse
 import com.example.movieflix.data.remote.RemoteDataSource

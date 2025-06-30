@@ -320,7 +320,8 @@ class MovieDetailsFragment : BottomSheetDialogFragment(){
             movieResult=it
 
             val genreList:List<Int>? = it.genreIds
-            val title = it.title
+            val title = if (!it.title.isNullOrEmpty()) it.title else it.name
+
             val overView = it.overview
             val language = it.originalLanguage
             val rating=it.voteAverage

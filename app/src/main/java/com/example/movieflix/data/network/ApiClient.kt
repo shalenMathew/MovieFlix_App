@@ -26,7 +26,7 @@ interface ApiClient {
     // this for search
     @GET("3/trending/{media_type}/{time_window}")
     suspend fun getTrendingApiCall(
-        @Path("media_type") mediaType: String = "movie",
+        @Path("media_type") mediaType: String = "all",
         @Path("time_window") timeWindow: String = "day",
         @Query("language") lang: String? = "en-US",
         @Query("page") page: Int = 1
