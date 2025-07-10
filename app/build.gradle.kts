@@ -19,12 +19,12 @@ android {
     val movieApiKey = properties.getProperty("movieApiKey")
 
     namespace = "com.example.movieflix"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.example.movieflix"
         minSdk = 24
-        targetSdk = 35
+        targetSdk = 36
         versionCode = 1
         versionName = "1.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
