@@ -3,6 +3,8 @@
 # MovieFlix 🍿🎞️🥤
 ![MoviFlix banner](https://github.com/user-attachments/assets/6246bb5c-b05e-46b2-ae6a-31747c177921)
 
+## 🏗️⚡...Build in progress... 🏗️⚡
+
 **MovieFlix is a sample Android app used to refine my knowledge in Android development and for fellow Android developers who are looking for projects to learn about Android development.**
 
 This project will be best for you if ur someone who are looking to learn more about android development or 
