@@ -6,7 +6,7 @@
 
 
 
-## 🏗️⚡...Build in progress... 🏗️⚡
+## 🏗️...Build in progress... 🏗️
 
 **MovieFlix is a sample Android app used to refine my knowledge in Android development and for fellow Android developers who are looking for projects to learn about Android development.**
 
