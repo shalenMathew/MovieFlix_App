@@ -1,7 +1,10 @@
 
 
 # MovieFlix 🍿🎞️🥤
-![MoviFlix banner](https://github.com/user-attachments/assets/6246bb5c-b05e-46b2-ae6a-31747c177921)
+
+![Adobe Express - rec (1)](https://github.com/user-attachments/assets/f7c5b24e-4606-49f3-a809-e9a39c7e6f1b)
+
+
 
 ## 🏗️⚡...Build in progress... 🏗️⚡
 
