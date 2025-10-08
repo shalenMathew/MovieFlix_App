@@ -23,7 +23,6 @@ The app usese latest android development tools and principles.
 
 ## App demo 📽️
 
-![Uploading Adobe Express - ORBIT-5-01-LITE.gif…]()
 
 
 https://github.com/user-attachments/assets/a571a1e4-8701-4da5-98c6-670079e87ebc
