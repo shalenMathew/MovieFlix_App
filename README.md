@@ -1,5 +1,4 @@
 
-
 # MovieFlix 🍿🎞️🥤
 
 ![Adobe Express - rec (1)](https://github.com/user-attachments/assets/f7c5b24e-4606-49f3-a809-e9a39c7e6f1b)
@@ -16,17 +15,32 @@ Who are trying to find simpler projects to start contribution
 
 The app usese latest android development tools and principles.
 
-***Install the apk from here 👇***
+### Get From
+> [<img src="https://gitlab.com/IzzyOnDroid/repo/-/raw/master/assets/IzzyOnDroid.png" height="80">]()
+> [<img src="https://github.com/vishal2376/snaptick/assets/38159691/f502e2ec-dbf4-4ed6-b23f-a47b74080fea" height="80">](https://github.com/shalenMathew/MovieFlix_App/releases)
 
-[![Static Badge](https://img.shields.io/badge/MovieFlix-APK-red?logo=android)](https://github.com/shalenMathew/MovieFlix_App/releases)
+## Built with
+> [<img src="https://ziadoua.github.io/m3-Markdown-Badges/badges/Android/android2.svg">]()
+> [<img src="https://ziadoua.github.io/m3-Markdown-Badges/badges/Kotlin/kotlin2.svg">]()
+
+## Socials
+> [<img src="https://ziadoua.github.io/m3-Markdown-Badges/badges/Discord/discord2.svg">](https://discord.gg/QpDJh3rT4q)
+> [<img src="https://ziadoua.github.io/m3-Markdown-Badges/badges/Twitter/twitter1.svg">](https://x.com/shalenmathew)
 
 
-## App demo 📽️
+## Trailer 📽️
 
 ![Adobe Express - ORBIT-5-01-LITE](https://github.com/user-attachments/assets/59777f5b-0e67-4dde-9a13-a4c4bb860153)
 
 
 https://github.com/user-attachments/assets/a571a1e4-8701-4da5-98c6-670079e87ebc
+
+## Screenshots 📱
+
+| ![ps1](https://github.com/user-attachments/assets/89ba6c26-0af7-4afc-b7ed-8487051d2747) | ![ps2](https://github.com/user-attachments/assets/4675976f-9d32-4c33-8f3c-d2e42f591b96) |
+|:-----------------------------------------------------------------------------------------|:---------------------------------------------------------------------------------------:|
+| ![ps3](https://github.com/user-attachments/assets/fd008344-126a-49ae-9699-da5092f9d291)  | ![ps4](https://github.com/user-attachments/assets/d667ee51-0e1e-481b-b66f-0f970506a335)  |
+ 
 
 ## Built With 🛠
 - Kotlin
