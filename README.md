@@ -32,9 +32,6 @@ The app usese latest android development tools and principles.
 
 ![Adobe Express - ORBIT-5-01-LITE](https://github.com/user-attachments/assets/59777f5b-0e67-4dde-9a13-a4c4bb860153)
 
-
-https://github.com/user-attachments/assets/a571a1e4-8701-4da5-98c6-670079e87ebc
-
 ## Screenshots 📱
 
 | ![ps1](https://github.com/user-attachments/assets/89ba6c26-0af7-4afc-b7ed-8487051d2747) | ![ps2](https://github.com/user-attachments/assets/4675976f-9d32-4c33-8f3c-d2e42f591b96) |
