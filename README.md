@@ -58,9 +58,18 @@ Create aesthetic movie cards to share like Spotify songs, manage your watchlist,
 - Watch Movie Trailer
 - Can Search for your favourite movies and shows
 
-## Contribution 🤝
-If your new to contribution and want to practice contribution you can do it here or u can raise issue if you want to make any improvements
-[contribution guidelines](CONTRIBUTING.md)
+## Contribution/Issues 🤝
+- If your new to open source and want to play around with contribution you can do it here or u can raise issue if you want to make any improvements or fix any bugs
+
+  ### Contribution Guide 🚀:
+ - Check open issues labeled "good first issue", or "help wanted". If your idea’s not there, open a new issue and let’s chat about it first.
+ - Fork the repo and get it running on your setup.
+ - Once you’ve made changes, commit and raise a Pull Request against the development branch (we test stuff here before it hits master 🤓).
+ - Add a clear title and description: Explain what you changed, why, and how to test it.
+
+  That’s it! Appreciate the help big time… let’s goooo!! 🎉
+  
+- Tip for beginners : Try to fix small bugs and dont get overwhelmed by the source code , take your time... Start by making small fixes or making small changes 👍
 
 
 ## Contact 📧
