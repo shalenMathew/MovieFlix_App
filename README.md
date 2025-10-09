@@ -7,13 +7,9 @@
 
 ## 🏗️...Build in progress... 🏗️
 
-**MovieFlix is a sample Android app used to refine my knowledge in Android development and for fellow Android developers who are looking for projects to learn about Android development.**
+### MovieFlix is a cinepil's wet dream for tracking every movie and TV show you watch.
 
-This project will be best for you if ur someone who are looking to learn more about android development or 
-
-Who are trying to find simpler projects to start contribution
-
-The app usese latest android development tools and principles.
+Create aesthetic movie cards to share like Spotify songs, manage your watchlist, track episode-by-episode progress, dive deep into cast filmographies, and maintain your personal movie diary—all in one beautifully designed Android app powered by TMDB API.
 
 ### Get From
 > [<img src="https://gitlab.com/IzzyOnDroid/repo/-/raw/master/assets/IzzyOnDroid.png" height="80">]()
