@@ -34,7 +34,7 @@ The app usese latest android development tools and principles.
 
 ## Screenshots 📱
 
-| ![ps1](https://github.com/user-attachments/assets/89ba6c26-0af7-4afc-b7ed-8487051d2747) | ![ps2](https://github.com/user-attachments/assets/4675976f-9d32-4c33-8f3c-d2e42f591b96) |
+| ![ps1](https://github.com/user-attachments/assets/fbda1306-fe35-46ad-a38d-c8e164ec6a94) | ![ps2](https://github.com/user-attachments/assets/4675976f-9d32-4c33-8f3c-d2e42f591b96) |
 |:-----------------------------------------------------------------------------------------|:---------------------------------------------------------------------------------------:|
 | ![ps3](https://github.com/user-attachments/assets/fd008344-126a-49ae-9699-da5092f9d291)  | ![ps4](https://github.com/user-attachments/assets/d667ee51-0e1e-481b-b66f-0f970506a335)  |
  
