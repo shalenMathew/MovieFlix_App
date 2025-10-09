@@ -7,7 +7,7 @@
 
 ## 🏗️...Build in progress... 🏗️
 
-### MovieFlix is a cinepil's wet dream for tracking every movie and TV show you watch.
+### MovieFlix is a cinephile's wet dream for tracking every movie and TV show you watch.
 
 Create aesthetic movie cards to share like Spotify songs, manage your watchlist, track episode-by-episode progress, dive deep into cast filmographies, and maintain your personal movie diary—all in one beautifully designed Android app powered by TMDB API.
 
@@ -35,6 +35,29 @@ Create aesthetic movie cards to share like Spotify songs, manage your watchlist,
 | ![ps3](https://github.com/user-attachments/assets/fd008344-126a-49ae-9699-da5092f9d291)  | ![ps4](https://github.com/user-attachments/assets/d667ee51-0e1e-481b-b66f-0f970506a335)  |
  
 
+## Features ⚙️
+
+- Discover new upcoming movies and show
+- Offline support
+- Get Random Movie Recommendation
+- Can save movie in your watchlist
+- Share with your family & friends
+- Watch Movie Trailer
+- Can Search for your favourite movies and shows
+
+## 🚀 Roadmap
+
+MovieFlix is actively under development. Here's what's coming next:
+
+- [ ] Bring watchlist and favorites under one screen 
+- [ ] Add pagination feature on list of movies on HomeFeed
+- [ ] Add episodes list in the app and the ability to strike them once completed
+- [ ] Feature to add personal notes under movies
+- [ ] Notify when to watch movie by allowing users to schedule time
+- [ ] Add a progress tracker to track movies or series
+- [ ] Add bottom nav
+- [ ] Show whole cast working in a movie with their socials
+
 ## Built With 🛠
 - Kotlin
 - Flow
@@ -47,16 +70,6 @@ Create aesthetic movie cards to share like Spotify songs, manage your watchlist,
 - Glide
 - Room
 - Retrofit
-
-## Features ⚙️
-
-- Discover new upcoming movies and show
-- Offline support
-- Get Random Movie Recommendation
-- Can save movie in your watchlist
-- Share with your family & friends
-- Watch Movie Trailer
-- Can Search for your favourite movies and shows
 
 ## Contribution/Issues 🤝
 - If your new to open source and want to play around with contribution you can do it here or u can raise issue if you want to make any improvements or fix any bugs
