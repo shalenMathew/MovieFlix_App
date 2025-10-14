@@ -173,7 +173,7 @@
                 android:layout_marginHorizontal="@dimen/_18sdp"
                 android:layout_marginVertical="@dimen/_8sdp"
                 android:backgroundTint="@color/app_color"
-                android:text="Play The Trailer"
+                android:text="Play Trailer"
                 android:textAllCaps="false"
                 android:textColor="@color/white"
                 app:icon="@drawable/ic_play_arrow"
