@@ -1,8 +1,8 @@
 package com.example.movieflix.data.repository
 
 import androidx.lifecycle.LiveData
-import com.example.movieflix.data.local.LocalDataSource
-import com.example.movieflix.data.local.entity.WatchListEntity
+import com.example.movieflix.data.local_storage.LocalDataSource
+import com.example.movieflix.data.local_storage.entity.WatchListEntity
 import com.example.movieflix.domain.repository.WatchListRepository
 
 class WatchListRepositoryImpl(private val localDataSource: LocalDataSource):WatchListRepository {

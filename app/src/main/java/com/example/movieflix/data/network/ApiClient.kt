@@ -1,7 +1,6 @@
 package com.example.movieflix.data.network
 
 import com.example.movieflix.data.model.MovieResponseList
-import com.example.movieflix.data.model.MovieResponseVideoResult
 import com.example.movieflix.data.model.MovieResponseVideoResultList
 import com.example.movieflix.data.model.WhereToWatchProviderResponse
 import retrofit2.Response
@@ -10,8 +9,6 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface ApiClient {
-
-    // https://api.themoviedb.org/3/movie/upcoming?language=en-US&page=1&region=US&api_key=edc78b0442bb6d9f5edd90eb623fa9c0
 
     @GET("3/movie/upcoming")
     suspend fun getUpcomingMoviesApiCall(
@@ -26,11 +23,10 @@ interface ApiClient {
         @Query("page") page: Int = 1
     ):Response<MovieResponseList>
 
-
     // this for search
     @GET("3/trending/{media_type}/{time_window}")
     suspend fun getTrendingApiCall(
-        @Path("media_type") mediaType: String = "movie",
+        @Path("media_type") mediaType: String = "all",
         @Path("time_window") timeWindow: String = "day",
         @Query("language") lang: String? = "en-US",
         @Query("page") page: Int = 1
@@ -73,8 +69,15 @@ interface ApiClient {
     ): Response<MovieResponseList>
 
     @GET("3/movie/{movie_id}/videos")
-    suspend fun fetchMovieVideoApiCall(
+    suspend fun fetchMovieTrailerApiCall(
         @Path("movie_id") movieId: Int,
+        @Query("language") lang: String? = "en-US",
+        @Query("page") page: Int = 1
+    ): Response<MovieResponseVideoResultList>
+
+    @GET("3/tv/{tv_id}/videos")
+    suspend fun fetchTVTrailerApiCall(
+        @Path("tv_id") tvId: Int,
         @Query("language") lang: String? = "en-US",
         @Query("page") page: Int = 1
     ): Response<MovieResponseVideoResultList>
@@ -100,11 +103,6 @@ interface ApiClient {
         @Query("query") searchQuery:String
     ): Response<MovieResponseList>
 
-    @GET("3/search/movie")
-    suspend fun fetchRandomMovies(
-        @Query("language") lang: String? = "en-US",
-        @Query("include_adult") includeAdult: Boolean=false,
-        @Query("query") searchQuery:String
-    ): Response<MovieResponseList>
+
 
 }

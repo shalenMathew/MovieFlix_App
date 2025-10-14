@@ -69,11 +69,7 @@ binding.apply {
         findNavController().navigate(R.id.action_homeFragment_to_searchFragment)
     }
 
-    fragmentHomeDice.setOnClickListener(){
-        findNavController().navigate(R.id.action_homeFragment_to_randomRecommendationFragment)
-    }
-
-    fragmentHomeWatchList.setOnClickListener(){
+    fragmentHomeLibrary.setOnClickListener(){
         findNavController().navigate(R.id.action_homeFragment_to_watchListFragment)
     }
 
@@ -90,6 +86,7 @@ binding.apply {
 
 }
     }
+
     private fun initView() {
         bannerAdapter= BannerAdapter()
         homeAdapter= HomeAdapter{
@@ -110,6 +107,7 @@ binding.apply {
 
         findNavController().navigate(R.id.action_homeFragment_to_movieDetailsFragment,bundle)
     }
+
     private fun observer() {
         homeInfoViewModel.homeFeedList.observe(viewLifecycleOwner){ it
 
@@ -151,6 +149,7 @@ binding.apply {
             binding.fragmentHomeNetworkCheck.layoutNtwContainer.visible()
         }
     }
+
     override fun onNetworkLost(network: Network?) {
         super.onNetworkLost(network)
         requireActivity().runOnUiThread {

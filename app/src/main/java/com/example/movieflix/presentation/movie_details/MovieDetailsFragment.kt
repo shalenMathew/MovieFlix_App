@@ -2,14 +2,13 @@ package com.example.movieflix.presentation.movie_details
 
 import android.app.Dialog
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.FrameLayout
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.content.ContextCompat
-import androidx.core.net.toUri
-
-import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.movieflix.R
@@ -26,14 +25,18 @@ import com.example.movieflix.core.utils.shareMovie
 import com.example.movieflix.core.utils.showToast
 import com.example.movieflix.databinding.FragmentMovieDetailsBinding
 import com.example.movieflix.domain.model.MovieResult
-import com.example.movieflix.domain.model.MovieVideoResult
+import com.example.movieflix.domain.model.MediaVideoResult
 import com.example.movieflix.presentation.viewmodels.FavMovieViewModel
 import com.example.movieflix.presentation.viewmodels.HomeInfoViewModel
+import com.example.movieflix.presentation.viewmodels.SearchMovieViewModel
 import com.example.movieflix.presentation.viewmodels.WatchListViewModel
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.gson.Gson
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.YouTubePlayerCallback
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -43,6 +46,8 @@ class MovieDetailsFragment : BottomSheetDialogFragment(){
     private var _binding:FragmentMovieDetailsBinding?=null
     val binding get() = _binding!!
     private val homeInfoViewModel: HomeInfoViewModel by viewModels()
+    private val searchMovieViewModel:SearchMovieViewModel by viewModels()
+
     private var mediaId:Int? = null
     private lateinit var movieResult: MovieResult
     private var youtubeUrl:String = ""
@@ -59,6 +64,10 @@ class MovieDetailsFragment : BottomSheetDialogFragment(){
     private var isInWatchList:Boolean = false
     private var isFav:Boolean=false
 
+    private var mediaType:String? = null
+
+//    private var isPlaying:Boolean = true
+
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         setStyle(STYLE_NO_FRAME, R.style.SheetDialog)
@@ -70,26 +79,29 @@ class MovieDetailsFragment : BottomSheetDialogFragment(){
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding= DataBindingUtil.inflate(inflater,R.layout.fragment_movie_details,container,false)
+        _binding = FragmentMovieDetailsBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+
         setUpDetailFragment()
         setUpObservers()
         iniIt()
         handleClickListeners()
+
     }
 
     private fun handleClickListeners() {
         binding.apply {
 
-            fragmentMovieDetailsWatchBtn.setOnClickListener(){
-                whereToWatchLink?.let {
-                    customTabsIntent.launchUrl(requireContext(),it.toUri())
-                }?: showToast(requireContext(),"No information available")
-            }
+//            fragmentMovieDetailsWatchBtn.setOnClickListener(){
+//                whereToWatchLink?.let {
+//                    customTabsIntent.launchUrl(requireContext(),it.toUri())
+//                }?: showToast(requireContext(),"No information available")
+//            }
 
             fragmentMovieDetailsWatchlistBtn.setOnClickListener(){
                 if (!isInWatchList) {
@@ -133,6 +145,7 @@ class MovieDetailsFragment : BottomSheetDialogFragment(){
             openDetailFragment(it)
         })
         binding.fragmentMovieDetailsRecommendList.adapter=recommendationAdapter
+
     }
 
     private fun openDetailFragment(it: MovieResult) {
@@ -144,22 +157,35 @@ class MovieDetailsFragment : BottomSheetDialogFragment(){
 
     private fun setUpObservers() {
 
-        homeInfoViewModel.movieTrailerList.observe(viewLifecycleOwner){
+        homeInfoViewModel.mediaTrailerList.observe(viewLifecycleOwner){
             when(it){
                 is NetworkResults.Success->binding.apply{
                     it.data?.let {result->
                         result.results?.let {videosList->
                             val videosArrayList = videosList as ArrayList
-                            val trailerList:List<MovieVideoResult> = videosArrayList.filter {toFilter->
+                            val trailerList:List<MediaVideoResult> = videosArrayList.filter { toFilter->
                                 // video arraylist response will give us all type of video we only want trailer or teaser from type youtube
                                 (toFilter.type==Constants.TRAILER || toFilter.type==Constants.TEASER)&&toFilter.site==Constants.YOUTUBE
                             }
                            try {
                                val movieTrailer = if(trailerList.isEmpty()) videosArrayList[0] else trailerList[0]
                                youtubeUrl="$BASE_YOUTUBE_URL${movieTrailer.key}"
-                               binding.ytIcon.setOnClickListener(){
+
+                               binding.fragmentMovieDetailsPlayBtn.setOnClickListener {
+
                                    initializePlayer(movieTrailer.key)
+
+//                                   isPlaying = !isPlaying
+//
+//                                   if (isPlaying){
+//                                       youTubePlayer?.pause()
+//                                       binding.fragmentMovieDetailsPlayBtn.text = "Play Trailer"
+//                                   }else{
+//                                       initializePlayer(movieTrailer.key)
+//                                       binding.fragmentMovieDetailsPlayBtn.text = "Pause Trailer"
+//                                   }
                                }
+
                            }catch (e:Exception){
                                e.printStackTrace()
                            }
@@ -167,8 +193,14 @@ class MovieDetailsFragment : BottomSheetDialogFragment(){
 
                     }
                 }
-                is NetworkResults.Loading->{}
-                is NetworkResults.Error->{}
+                is NetworkResults.Loading->{
+
+                    Log.d("YTPlayerBug","LoDING - "+it.message)
+                }
+                is NetworkResults.Error->{
+                    showToast(requireContext(),""+it.message)
+                    Log.d("YTPlayerBug",""+it.message)
+                }
             }
         }
 
@@ -238,6 +270,48 @@ class MovieDetailsFragment : BottomSheetDialogFragment(){
             }
 
         }
+
+        searchMovieViewModel.searchMovieLiveData.observe(viewLifecycleOwner) {
+            when (it) {
+                is NetworkResults.Success -> {
+
+                    it.data?.let { movieList ->
+
+                        if(movieList.results.isNotEmpty()){
+                            mediaType = movieList.results[0].mediaType
+                            val id = movieList.results[0].id
+
+                            when(mediaType){
+                                "movie" -> {
+
+                                    if (id!=null){
+                                        homeInfoViewModel.getMovieTrailer(id)
+                                    }else{
+                                        showToast(requireContext(),"media id is null")
+                                    }
+                                }
+                                "tv" -> {
+                                    if (id!=null){
+                                        homeInfoViewModel.getTVTrailer(id)
+                                    }else{
+                                        showToast(requireContext(),"media id is null")
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+
+                is NetworkResults.Error -> {
+                    showToast(requireContext(),""+it.message)
+                }
+                is NetworkResults.Loading -> {
+                    Log.d("YTPlayerBug","LoDING - "+it.message)
+                }
+            }
+
+        }
     }
 
     private fun changeAddToWatchListIcon() {
@@ -255,63 +329,129 @@ class MovieDetailsFragment : BottomSheetDialogFragment(){
    }
 
     private fun initializePlayer(key: String?) {
-        binding.posterImage.gone()
-        binding.ytIcon.gone()
+
         binding.apply {
 
-            if (youTubePlayerListener!=null){
-                if (key!=null){
-                    youTubePlayer?.loadVideo(key,0f)
-                }
-            }
+            posterImage.gone()
 
-            youTubePlayerListener=object:AbstractYouTubePlayerListener(){
-                override fun onReady(youTubePlayer: YouTubePlayer) {
-                    super.onReady(youTubePlayer)
-                    key?.let {
-                        this@MovieDetailsFragment.youTubePlayer=youTubePlayer
-                        this@MovieDetailsFragment.youTubePlayer?.loadVideo(key,0f)
+                // initialise the player if player is null
+
+                fragmentMovieDetailsYt.getYouTubePlayerWhenReady(object: YouTubePlayerCallback {
+                    override fun onYouTubePlayer(youTubePlayer: YouTubePlayer) {
+
+                        Log.d("YTPlayerBug","inside on ready")
+
+                        key?.let {
+                            this@MovieDetailsFragment.youTubePlayer=youTubePlayer
+                            this@MovieDetailsFragment.youTubePlayer?.loadVideo(it,0f)
+
+
+                            Log.d("YTPlayerBug","key inside = "+key)
+
+                            Log.d("YTPlayerBug","yt player inside = "+ youTubePlayer)
+
+                        } ?: run {
+
+                            Log.d("YTPlayerBug","key inside run = "+key)
+                        }
                     }
-                }
-            }
-            fragmentMovieDetailsYt.addYouTubePlayerListener(youTubePlayerListener!!)
+
+                })
+
+            Log.d("YTPlayerBug","yt player listener " + youTubePlayerListener)
+            Log.d("YTPlayerBug","yt player : " + youTubePlayer)
+
         }
     }
 
     private fun setUpDetailFragment() {
-        val result = Gson().fromJson(arguments?.getString(Constants.MEDIA_SEND_REQUEST_KEY),MovieResult::class.java)
+        val result = Gson().fromJson(
+            arguments?.getString(Constants.MEDIA_SEND_REQUEST_KEY),
+            MovieResult::class.java
+        )
 
         result?.let {
-            mediaId=it.id
-            movieResult=it
+            mediaId = it.id
+            movieResult = it
 
-            val genreList:List<Int>? = it.genreIds
-            val title = it.title
+            val genreList: List<Int>? = it.genreIds
+            val title = if (!it.title.isNullOrEmpty()) it.title else it.name
+
             val overView = it.overview
             val language = it.originalLanguage
-            val rating=it.voteAverage
+            val rating = it.voteAverage
             val year = it.releaseDate
             val img = it.backdropPath
 
+
             binding.apply {
-                fragmentMovieDetailsTitle.text=title
-                fragmentMovieDetailsGenre.text= getGenreListById(genreList).joinToString {genre->
+                fragmentMovieDetailsTitle.text = title
+                fragmentMovieDetailsGenre.text = getGenreListById(genreList).joinToString { genre ->
                     genre.name
                 }
                 posterImage.loadImage(TMDB_IMAGE_BASE_URL_W780.plus(img))
-                fragmentMovieDetailsLang.text=language
-                fragmentMovieDetailsOverview.text=overView
-                fragmentMovieDetailsRating.text= String.format("%.1f", rating)
-                fragmentMovieDetailsYear.text=formatDate(year)
+                fragmentMovieDetailsLang.text = language
+                fragmentMovieDetailsOverview.text = overView
+                fragmentMovieDetailsRating.text = String.format("%.1f", rating)
+                fragmentMovieDetailsYear.text = formatDate(year)
             }
 
-            mediaId?.let {id->
-                homeInfoViewModel.getMovieTrailer(id)
+            mediaId?.let { id ->
+
+
+                when (it.mediaType) {
+                    "movie" -> {
+                        homeInfoViewModel.getMovieTrailer(id)
+                    }
+                    "tv" -> {
+                        homeInfoViewModel.getTVTrailer(id)
+                    }
+                    else -> {
+
+                        if (!title.isNullOrEmpty()) {
+                            searchMovieViewModel.fetchSearchMovie(title)
+                        }
+
+                    }
+                }
+
                 homeInfoViewModel.getRecommendation(id)
                 homeInfoViewModel.getWhereToWatchProvider(id)
             }
-        }
 
+        }
+    }
+
+    override fun onStart() {
+
+        super.onStart()
+
+        val dialog = dialog as? BottomSheetDialog ?: return
+
+        val bottomSheet = dialog.findViewById<FrameLayout>(
+            com.google.android.material.R.id.design_bottom_sheet
+        ) ?: return
+
+        val behavior = BottomSheetBehavior.from(bottomSheet)
+
+        // Customize the behavior
+        behavior.isHideable = true
+        behavior.skipCollapsed = true
+        behavior.state = BottomSheetBehavior.STATE_EXPANDED
+
+
+        // Optional: dismiss on slight swipe down
+        behavior.addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
+            override fun onStateChanged(bottomSheet: View, newState: Int) {
+                if (newState == BottomSheetBehavior.STATE_HIDDEN) dismiss()
+            }
+
+            override fun onSlide(bottomSheet: View, slideOffset: Float) {
+                if (slideOffset < 0.1f && behavior.state == BottomSheetBehavior.STATE_DRAGGING) {
+                    behavior.state = BottomSheetBehavior.STATE_HIDDEN
+                }
+            }
+        })
     }
 
     override fun onPause() {
@@ -332,7 +472,9 @@ class MovieDetailsFragment : BottomSheetDialogFragment(){
     override fun onDestroy() {
         super.onDestroy()
         binding.fragmentMovieDetailsYt.release()
+        youTubePlayerListener=null
         _binding=null
     }
 
 }
+

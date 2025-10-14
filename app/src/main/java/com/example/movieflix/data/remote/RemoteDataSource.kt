@@ -42,7 +42,11 @@ class RemoteDataSource @Inject constructor(private val apiClient: ApiClient) {
     }
 
     suspend fun getMovieTrailer(movieId:Int):Response<MovieResponseVideoResultList>{
-        return apiClient.fetchMovieVideoApiCall(movieId)
+        return apiClient.fetchMovieTrailerApiCall(movieId)
+    }
+
+    suspend fun getTVTrailer(tvId:Int):Response<MovieResponseVideoResultList>{
+        return apiClient.fetchTVTrailerApiCall(tvId)
     }
 
     suspend fun getRecommendation(movieId:Int):Response<MovieResponseList>{
@@ -57,8 +61,6 @@ class RemoteDataSource @Inject constructor(private val apiClient: ApiClient) {
         return apiClient.fetchMovieSearchedResultsApiCall(searchQuery = query)
     }
 
-    suspend fun getRandomMovie(query: String):Response<MovieResponseList>{
-        return apiClient.fetchRandomMovies(searchQuery = query)
-    }
+
 
 }

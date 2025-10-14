@@ -1,9 +1,8 @@
 package com.example.movieflix.domain.usecases
 
 import androidx.lifecycle.LiveData
-import com.example.movieflix.data.local.entity.FavouritesEntity
+import com.example.movieflix.data.local_storage.entity.FavouritesEntity
 import com.example.movieflix.domain.repository.FavMovieRepository
-import com.example.movieflix.domain.repository.WatchListRepository
 import javax.inject.Inject
 
 class FavMovie @Inject constructor(private val favMovieRepository: FavMovieRepository) {

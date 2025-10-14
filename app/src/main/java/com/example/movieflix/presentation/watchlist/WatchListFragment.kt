@@ -32,7 +32,7 @@ private val watchListViewModel:WatchListViewModel by viewModels()
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        _binding = DataBindingUtil.inflate(inflater,R.layout.fragment_watch_list,container,false)
+        _binding = FragmentWatchListBinding.inflate(inflater,container,false)
         return binding.root
     }
 
@@ -58,10 +58,12 @@ private val watchListViewModel:WatchListViewModel by viewModels()
 
             if (it.isNotEmpty()){
                 adapter.submitList(it)
-                binding.fragmentWatchListNoMovie.gone()
+                binding.fragmentWatchListPlaceholder.gone()
+                binding.randomEmoji.gone()
             }else{
                 binding.fragmentWatchListRv.gone()
-                binding.fragmentWatchListNoMovie.visible()
+                binding.fragmentWatchListPlaceholder.gone()
+                binding.randomEmoji.gone()
             }
         }
     }

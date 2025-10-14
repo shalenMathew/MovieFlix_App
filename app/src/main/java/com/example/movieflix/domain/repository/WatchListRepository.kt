@@ -1,7 +1,7 @@
 package com.example.movieflix.domain.repository
 
 import androidx.lifecycle.LiveData
-import com.example.movieflix.data.local.entity.WatchListEntity
+import com.example.movieflix.data.local_storage.entity.WatchListEntity
 
 interface WatchListRepository {
 

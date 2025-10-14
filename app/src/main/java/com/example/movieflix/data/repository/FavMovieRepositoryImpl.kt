@@ -1,8 +1,8 @@
 package com.example.movieflix.data.repository
 
 import androidx.lifecycle.LiveData
-import com.example.movieflix.data.local.LocalDataSource
-import com.example.movieflix.data.local.entity.FavouritesEntity
+import com.example.movieflix.data.local_storage.LocalDataSource
+import com.example.movieflix.data.local_storage.entity.FavouritesEntity
 import com.example.movieflix.domain.repository.FavMovieRepository
 
 class FavMovieRepositoryImpl(private val localDataSource: LocalDataSource):FavMovieRepository {

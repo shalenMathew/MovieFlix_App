@@ -5,14 +5,14 @@ import android.content.Context
 import androidx.room.Room
 import com.example.movieflix.core.utils.Constants
 import com.example.movieflix.core.utils.GsonParser
-import com.example.movieflix.core.utils.MIGRATION_2_3
-import com.example.movieflix.data.local.LocalDataSource
-import com.example.movieflix.data.local.MovieDao
-import com.example.movieflix.data.local.MovieDataTypeConverter
-import com.example.movieflix.data.local.MovieDatabase
+import com.example.movieflix.core.utils.MIGRATION
+import com.example.movieflix.data.local_storage.LocalDataSource
+import com.example.movieflix.data.local_storage.MovieDao
+import com.example.movieflix.data.local_storage.MovieDataTypeConverter
+import com.example.movieflix.data.local_storage.MovieDatabase
 import com.example.movieflix.data.remote.RemoteDataSource
 import com.example.movieflix.data.repository.FavMovieRepositoryImpl
-import com.example.movieflix.data.repository.MovieInfoRepositoryImpl
+import com.example.movieflix.data.repository.MovieDetailsRepositoryImpl
 import com.example.movieflix.data.repository.WatchListRepositoryImpl
 import com.example.movieflix.domain.repository.FavMovieRepository
 import com.example.movieflix.domain.repository.MovieInfoRepository
@@ -34,7 +34,7 @@ object DatabaseModule {
     fun providesMovieDataBase(@ApplicationContext context: Context): MovieDatabase {
         return Room.databaseBuilder(context,MovieDatabase::class.java,Constants.DATABASE_NAME)
 //            .fallbackToDestructiveMigration()
-            .addMigrations(MIGRATION_2_3)
+            .addMigrations(MIGRATION)
             .addTypeConverter(MovieDataTypeConverter(GsonParser(Gson())))
             .build()
     }
@@ -52,7 +52,7 @@ object DatabaseModule {
         localDataSource: LocalDataSource,
         application: Application
     ): MovieInfoRepository {
-        return MovieInfoRepositoryImpl(remoteDataSource,localDataSource,application)
+        return MovieDetailsRepositoryImpl(remoteDataSource,localDataSource,application)
     }
 
     @Provides

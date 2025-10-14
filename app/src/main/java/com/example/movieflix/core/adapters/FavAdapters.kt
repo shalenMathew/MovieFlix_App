@@ -11,9 +11,7 @@ import com.example.movieflix.R
 import com.example.movieflix.core.utils.Constants
 import com.example.movieflix.core.utils.isNetworkAvailable
 import com.example.movieflix.core.utils.loadImage
-import com.example.movieflix.data.local.entity.FavouritesEntity
-import com.example.movieflix.data.local.entity.WatchListEntity
-import com.example.movieflix.databinding.ItemListBinding
+import com.example.movieflix.data.local_storage.entity.FavouritesEntity
 import com.example.movieflix.databinding.ItemSmallListBinding
 import com.example.movieflix.domain.model.MovieResult
 

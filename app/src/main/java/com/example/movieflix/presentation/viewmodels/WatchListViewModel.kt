@@ -1,10 +1,9 @@
 package com.example.movieflix.presentation.viewmodels
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.movieflix.data.local.entity.WatchListEntity
+import com.example.movieflix.data.local_storage.entity.WatchListEntity
 import com.example.movieflix.domain.model.MovieResult
 import com.example.movieflix.domain.usecases.WatchList
 import dagger.hilt.android.lifecycle.HiltViewModel

@@ -15,10 +15,7 @@ import com.example.movieflix.domain.model.MovieResult
 class RecommendationAdapter(private val posterClick:(movieResult:MovieResult)->Unit):ListAdapter<MovieResult, RecommendationAdapter.ViewHolder>(DiffUtilCallback()) {
 
   inner  class ViewHolder(itemView: View):RecyclerView.ViewHolder(itemView) {
-      var binding:ItemListBinding
-      init {
-          binding=ItemListBinding.bind(itemView)
-      }
+      var binding:ItemListBinding = ItemListBinding.bind(itemView)
       fun bind(movieResult: MovieResult){
           binding.apply {
               itemListRatingTxt.text = String.format("%.1f",movieResult.voteAverage)

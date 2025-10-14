@@ -16,13 +16,9 @@ class HomeAdapter(private val onPosterClick:(movieResult:MovieResult)->Unit):Lis
 )
 {
    inner class ViewHolder(itemView:View):RecyclerView.ViewHolder(itemView) {
-        private var binding:HorizontalFeedItemListBinding
+        private var binding:HorizontalFeedItemListBinding = HorizontalFeedItemListBinding.bind(itemView)
 
-        init {
-            binding=HorizontalFeedItemListBinding.bind(itemView)
-        }
-
-        fun bind(homeFeed: HomeFeed){
+       fun bind(homeFeed: HomeFeed){
             binding.apply {
                 horizontalFeedListItemTitle.text=homeFeed.title
 
@@ -40,7 +36,7 @@ class HomeAdapter(private val onPosterClick:(movieResult:MovieResult)->Unit):Lis
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-holder.bind(getItem(position))
+      holder.bind(getItem(position))
     }
 
     class DiffUtilCallback : DiffUtil.ItemCallback<HomeFeed>() {

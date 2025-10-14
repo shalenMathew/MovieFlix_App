@@ -9,14 +9,11 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.movieflix.R
 import com.example.movieflix.core.utils.Constants
-import com.example.movieflix.core.utils.DiffUtilCallback
 import com.example.movieflix.core.utils.isNetworkAvailable
 import com.example.movieflix.core.utils.loadImage
-import com.example.movieflix.data.local.entity.WatchListEntity
-import com.example.movieflix.databinding.ItemListBinding
+import com.example.movieflix.data.local_storage.entity.WatchListEntity
 import com.example.movieflix.databinding.ItemSmallListBinding
 import com.example.movieflix.domain.model.MovieResult
-import com.example.movieflix.domain.usecases.WatchList
 
 class WatchListAdapter(private var onPosterClick: ((movieResult: MovieResult) -> Unit)):
         ListAdapter<WatchListEntity, WatchListAdapter.ViewHolder>(DiffUtilCallback()) {

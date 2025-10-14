@@ -28,7 +28,7 @@ private  var _binding:FragmentSplashBinding?=null
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding=DataBindingUtil.inflate(inflater, R.layout.fragment_splash,container,false)
+        _binding=FragmentSplashBinding.inflate(inflater,container,false)
         return binding.root
     }
 
@@ -74,9 +74,7 @@ private  var _binding:FragmentSplashBinding?=null
 
     override fun onDestroy() {
         super.onDestroy()
-        _binding = null // its is necessary to put null here ,when we navigate to intro layout this splash layout is not destroyed it remains in the
-    // backstack until popUpTo, when its pop out of backstack thats when onDestroy is called and its important to put the binding null
-        // or it will still have the reference even when the fragment is destroyed which can cause memory leak
+        _binding = null
     }
 
 }

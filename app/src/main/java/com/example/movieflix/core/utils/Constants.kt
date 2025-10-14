@@ -11,7 +11,7 @@ object Constants {
     const val BOLLYWOOD_MOVIES = "Bollywood"
     const val NETFLIX_SHOWS = "Netflix Shows"
     const val UPCOMING_MOVIES = "Upcoming Movies"
-    const val TRENDING_MOVIES = "Trending Movies"
+    const val TRENDING_MOVIES = "Whats Trending ?"
     const val PRIME_SHOWS = "Amazon Prime Shows"
     const val NOW_PLAYING_MOVIES = "Now Playing Movies"
 
@@ -30,7 +30,7 @@ object Constants {
 
     const val DATABASE_NAME = "movie_data_database"
     const val TABLE_NAME = "movie_data_table"
-    const val WATCHLIST_TABLE_NAME = "watch_list_news_table"
-    const val FAVOURITES_TABLE_NAME="favorites_table"
+    const val WATCHLIST_TABLE_NAME = "watch_list_table"
+    const val FAVOURITES_TABLE_NAME="favorites_movies_table"
 
 }

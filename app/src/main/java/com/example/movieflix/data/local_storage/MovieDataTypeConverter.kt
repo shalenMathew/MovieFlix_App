@@ -1,12 +1,10 @@
-package com.example.movieflix.data.local
+package com.example.movieflix.data.local_storage
 
 import androidx.room.ProvidedTypeConverter
 import androidx.room.TypeConverter
 import com.example.movieflix.core.utils.JsonParser
 import com.example.movieflix.data.model.HomeFeedResponse
 import com.example.movieflix.data.model.MovieResponseResult
-import com.example.movieflix.domain.model.HomeFeed
-import com.example.movieflix.domain.model.HomeFeedData
 import com.example.movieflix.domain.model.MovieResult
 import com.google.gson.reflect.TypeToken
 

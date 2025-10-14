@@ -1,10 +1,9 @@
-package com.example.movieflix.data.local
+package com.example.movieflix.data.local_storage
 
 import androidx.lifecycle.LiveData
-import com.example.movieflix.data.local.entity.FavouritesEntity
-import com.example.movieflix.data.local.entity.HomeFeedEntity
-import com.example.movieflix.data.local.entity.WatchListEntity
-import com.example.movieflix.domain.model.MovieResult
+import com.example.movieflix.data.local_storage.entity.FavouritesEntity
+import com.example.movieflix.data.local_storage.entity.HomeFeedEntity
+import com.example.movieflix.data.local_storage.entity.WatchListEntity
 import javax.inject.Inject
 
 class LocalDataSource @Inject constructor(private val movieDao: MovieDao) {

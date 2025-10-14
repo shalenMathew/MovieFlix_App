@@ -1,4 +1,4 @@
-package com.example.movieflix.data.local.entity
+package com.example.movieflix.data.local_storage.entity
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

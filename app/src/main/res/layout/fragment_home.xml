@@ -78,30 +78,17 @@
                     android:layout_centerVertical="true"
                     android:layout_marginEnd="@dimen/_15sdp"
                     android:src="@drawable/ic_nav_search_24"
-                    android:layout_toStartOf="@+id/fragment_home_dice"
+                    android:layout_toStartOf="@+id/fragment_home_library"
                     />
 
-
                 <ImageView
-                    android:id="@+id/fragment_home_dice"
-                    android:layout_width="@dimen/_18sdp"
-                    android:layout_height="@dimen/_18sdp"
-                    android:layout_centerVertical="true"
-                    android:src="@drawable/dice"
-                    app:tint="@color/white"
-                    android:layout_toStartOf="@id/fragment_home_watchList"
-                    android:layout_marginEnd="@dimen/_15sdp"
-                    />
-
-
-                <ImageView
-                    android:id="@+id/fragment_home_watchList"
+                    android:id="@+id/fragment_home_library"
                     android:layout_width="@dimen/_25sdp"
                     android:layout_height="@dimen/_25sdp"
                     android:layout_centerVertical="true"
-                    android:src="@drawable/baseline_playlist_add_check_24"
+                    android:src="@drawable/icon_library"
                     app:tint="@color/white"
-                    android:layout_marginEnd="@dimen/_8sdp"
+                    android:layout_marginEnd="@dimen/_15sdp"
                     android:layout_toStartOf="@id/fragment_home_favorite"
                     />
 
@@ -113,7 +100,7 @@
                     android:layout_centerVertical="true"
                     android:src="@drawable/fav_outline"
                     app:tint="@color/white"
-                    android:layout_marginEnd="@dimen/_10sdp"
+                    android:layout_marginEnd="@dimen/_15sdp"
                     />
 
             </RelativeLayout>
@@ -130,17 +117,17 @@
                     android:background="@drawable/gradient_top"
                     android:translationZ="@dimen/_50sdp"
                     />
+
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/fragment_home_banner_img_rv"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:nestedScrollingEnabled="false"
                     android:orientation="horizontal"
+                    android:paddingBottom="@dimen/_28sdp"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                     tools:itemCount="1"
-                    tools:listitem="@layout/banner_item"
-                    android:paddingBottom="@dimen/_28sdp"
-                    />
+                    tools:listitem="@layout/banner_item" />
 
                 <LinearLayout
                     android:id="@+id/fragment_home_watchNow_btn_ll"

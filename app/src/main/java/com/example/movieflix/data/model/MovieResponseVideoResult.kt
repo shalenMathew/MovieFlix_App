@@ -1,6 +1,6 @@
 package com.example.movieflix.data.model
 
-import com.example.movieflix.domain.model.MovieVideoResult
+import com.example.movieflix.domain.model.MediaVideoResult
 
 data class MovieResponseVideoResult(
     val id: String?,
@@ -14,8 +14,8 @@ data class MovieResponseVideoResult(
     val size: Int?,
     val type: String?
 ){
-    fun toMovieVideoResult():MovieVideoResult{
-        return MovieVideoResult(id=id,
+    fun toMovieVideoResult():MediaVideoResult{
+        return MediaVideoResult(id=id,
             key = key,
             name=name,
             site=site,

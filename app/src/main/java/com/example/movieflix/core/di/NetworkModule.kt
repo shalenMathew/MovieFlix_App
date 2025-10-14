@@ -6,9 +6,7 @@ import com.example.movieflix.BuildConfig
 import com.example.movieflix.core.utils.Constants
 import com.example.movieflix.data.network.ApiClient
 import com.example.movieflix.data.remote.RemoteDataSource
-import com.example.movieflix.data.repository.RecommendationRepositoryImpl
 import com.example.movieflix.data.repository.SearchMovieMovieRepositoryImpl
-import com.example.movieflix.domain.repository.RecommendationRepository
 import com.example.movieflix.domain.repository.SearchMovieRepository
 import com.example.movieflix.domain.usecases.SearchMovie
 import dagger.Module
@@ -102,10 +100,5 @@ fun providesRetrofitInstance(okHttpClient: OkHttpClient,gsonConverterFactory: Gs
     }
 
 
-    @Provides
-    @Singleton
-    fun providesRecommendationRepo(application: Application,remoteDataSource: RemoteDataSource):RecommendationRepository {
-        return RecommendationRepositoryImpl(application,remoteDataSource)
-    }
 
 }

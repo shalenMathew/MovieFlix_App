@@ -1,4 +1,4 @@
-package com.example.movieflix.data.local
+package com.example.movieflix.data.local_storage
 
 import androidx.lifecycle.LiveData
 import androidx.room.Dao
@@ -6,10 +6,9 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.example.movieflix.data.local.entity.FavouritesEntity
-import com.example.movieflix.data.local.entity.HomeFeedEntity
-import com.example.movieflix.data.local.entity.WatchListEntity
-import com.example.movieflix.domain.model.MovieResult
+import com.example.movieflix.data.local_storage.entity.FavouritesEntity
+import com.example.movieflix.data.local_storage.entity.HomeFeedEntity
+import com.example.movieflix.data.local_storage.entity.WatchListEntity
 
 @Dao
 interface MovieDao {
@@ -25,7 +24,7 @@ interface MovieDao {
     suspend fun insertWatchListData(watchListEntity: WatchListEntity)
     @Delete
     suspend fun deleteWatchListData(watchListEntity: WatchListEntity)
-    @Query(" SELECT * FROM watch_list_news_table ORDER BY id DESC ")
+    @Query(" SELECT * FROM watch_list_table ORDER BY id DESC ")
     fun getAllWatchListData():LiveData<List<WatchListEntity>>
 
 
@@ -33,7 +32,7 @@ interface MovieDao {
     suspend fun insertFavMovie(favouritesEntity: FavouritesEntity)
     @Delete
     suspend fun deleteFavMovie(favouritesEntity: FavouritesEntity)
-    @Query( " SELECT * FROM favorites_table ORDER BY id DESC ")
+    @Query( " SELECT * FROM favorites_movies_table ORDER BY id DESC ")
     fun getAllFavMovies():LiveData<List<FavouritesEntity>>
 
 }
