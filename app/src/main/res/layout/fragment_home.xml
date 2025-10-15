@@ -52,10 +52,11 @@
             android:orientation="vertical">
 
             <RelativeLayout
-                android:background="@color/black"
+                android:background="@color/transparent"
                 android:id="@+id/app_bar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:paddingTop="@dimen/_25sdp"
                 >
 
                 <TextView
@@ -69,38 +70,6 @@
                     android:fontFamily="@font/montserrat_semibold"
                     android:layout_marginTop="@dimen/_5sdp"
                     android:layout_marginBottom="@dimen/_10sdp"
-                    />
-
-                <ImageView
-                    android:id="@+id/fragment_home_search"
-                    android:layout_width="@dimen/_23sdp"
-                    android:layout_height="@dimen/_23sdp"
-                    android:layout_centerVertical="true"
-                    android:layout_marginEnd="@dimen/_15sdp"
-                    android:src="@drawable/ic_nav_search_24"
-                    android:layout_toStartOf="@+id/fragment_home_library"
-                    />
-
-                <ImageView
-                    android:id="@+id/fragment_home_library"
-                    android:layout_width="@dimen/_25sdp"
-                    android:layout_height="@dimen/_25sdp"
-                    android:layout_centerVertical="true"
-                    android:src="@drawable/icon_library"
-                    app:tint="@color/white"
-                    android:layout_marginEnd="@dimen/_15sdp"
-                    android:layout_toStartOf="@id/fragment_home_favorite"
-                    />
-
-                <ImageView
-                    android:id="@+id/fragment_home_favorite"
-                    android:layout_width="@dimen/_20sdp"
-                    android:layout_height="@dimen/_20sdp"
-                    android:layout_alignParentEnd="true"
-                    android:layout_centerVertical="true"
-                    android:src="@drawable/fav_outline"
-                    app:tint="@color/white"
-                    android:layout_marginEnd="@dimen/_15sdp"
                     />
 
             </RelativeLayout>

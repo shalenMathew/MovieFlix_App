@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">MovieFlix</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+
     <string name="app_terms">By proceeding you confirm that you are above 18 years of age and agree to the Privacy Policy and Terms of Use</string>
+    <string name="library_tab_watchlist">Watchlist</string>
+    <string name="library_tab_favorites">Favourites</string>
 </resources>

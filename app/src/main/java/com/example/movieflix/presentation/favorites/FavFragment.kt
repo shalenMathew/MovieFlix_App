@@ -4,20 +4,16 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.movieflix.R
 import com.example.movieflix.core.adapters.FavAdapters
-import com.example.movieflix.core.adapters.WatchListAdapter
 import com.example.movieflix.core.utils.Constants
 import com.example.movieflix.core.utils.gone
 import com.example.movieflix.core.utils.visible
 import com.example.movieflix.databinding.FragmentFavBinding
-import com.example.movieflix.databinding.FragmentWatchListBinding
 import com.example.movieflix.presentation.viewmodels.FavMovieViewModel
-import com.example.movieflix.presentation.viewmodels.WatchListViewModel
 import com.google.gson.Gson
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -48,26 +44,27 @@ class FavFragment : Fragment() {
 
     private fun inIt() {
         favMovieViewModel.getAllMovieData()
-        adapter=FavAdapters   (onPosterClick = {
-            val bundle = Bundle()
-            bundle.putString(Constants.MEDIA_SEND_REQUEST_KEY, Gson().toJson(it))
-            findNavController().navigate(R.id.action_favFragment_to_movieDetailsFragment,bundle)
+        adapter = FavAdapters(onPosterClick = { selectedItem ->
+            val bundle = Bundle().apply {
+                putString(Constants.MEDIA_SEND_REQUEST_KEY, Gson().toJson(selectedItem))
+            }
+            findNavController().navigate(R.id.action_libraryFragment_to_movieDetailsFragment, bundle)
         })
 
-        binding.fragmentFavRv.adapter=adapter
+        binding.fragmentFavRv.adapter = adapter
     }
 
     private fun observer() {
-        favMovieViewModel.getAllMovieData().observe(viewLifecycleOwner){
+        favMovieViewModel.getAllMovieData().observe(viewLifecycleOwner) { favouriteItems ->
+            adapter.submitList(favouriteItems)
 
-            if (it.isNotEmpty()){
-                adapter.submitList(it)
-                binding.fragmentFavPlaceholder.gone()
-                binding.randomEmoji.gone()
-
-            }else{
+            if (favouriteItems.isNullOrEmpty()) {
                 binding.fragmentFavRv.gone()
                 binding.fragmentFavPlaceholder.visible()
+                binding.randomEmoji.visible()
+            } else {
+                binding.fragmentFavRv.visible()
+                binding.fragmentFavPlaceholder.gone()
                 binding.randomEmoji.gone()
             }
         }
