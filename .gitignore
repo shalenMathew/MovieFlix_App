@@ -46,6 +46,8 @@ crashlytics/
 *.snap
 *.lock
 
+.idea/misc.xml
+
 
 
 
