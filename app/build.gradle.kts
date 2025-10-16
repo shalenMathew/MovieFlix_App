@@ -40,7 +40,6 @@ android {
         }
 
         debug {
-
             buildConfigField("String", "MOVIE_API_KEY", movieApiKey)
             applicationIdSuffix=".debug"
             isDebuggable = true

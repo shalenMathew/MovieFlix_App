@@ -5,10 +5,18 @@
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
     </style>
 
-    <style name="Theme.MovieFlix" parent="Base.Theme.MovieFlix" >
+    <style name="Theme.MovieFlix" parent="Base.Theme.MovieFlix">
+        <!-- App base colors -->
         <item name="colorPrimary">@color/black</item>
 
+        <!-- Make system bars transparent -->
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+
+        <!-- Ensure layout extends behind system bars -->
+        <item name="android:fitsSystemWindows">true</item>
     </style>
+
 
     <style name="SheetDialog" parent="Theme.Design.Light.BottomSheetDialog">
         <item name="android:windowIsTranslucent">true</item>
