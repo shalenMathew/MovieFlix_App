@@ -1,51 +1,47 @@
-*.iml
-.gradle
-/local.properties
-/.idea/caches
-/.idea/libraries
-/.idea/modules.xml
-/.idea/workspace.xml
-/.idea/navEditor.xml
-/.idea/assetWizardSettings.xml
-.DS_Store
-/build
-/captures
-.externalNativeBuild
-.cxx
-local.properties
-google-services.json
-
-# Android Studio and IntelliJ IDEA project files
+# Android Studio / IntelliJ
 .idea/
-
-# Gradle caches and build directories
+*.iml
 .gradle/
-build/
+local.properties
+.DS_Store
 
-# Kotlin/Compose cache and temporary files
-.kotlin/
-.kotlinc/
-
-
-# Dependency resolution files
-gradle.lockfile
-
-# APK, AAB, and signed APKs
+# Build files
+/build/
+.cxx/
+.externalNativeBuild/
+captures/
 *.apk
 *.aab
 output.json
 
-# Lint reports
-lint/reports/
+# Jetpack Compose
+.compose-cache/
+.kotlinc/
 
-# Logs and debugging files
-*.log
+# Crashlytics, logs, lint
 crashlytics/
-
-# Emulator snapshots (large files)
+*.log
 *.snap
 *.lock
+lint/reports/
+hs_err_pid*
+replay_pid*
 
 
+# Kotlin/Java
+*.class
+*.jar
+*.war
+*.nar
+*.ear
+*.zip
+*.tar.gz
+*.rar
 
+# Gradle
+gradle-app.setting
+gradle.lockfile
 
+# Other IDE junk
+*.ctxt
+.mtj.tmp/
