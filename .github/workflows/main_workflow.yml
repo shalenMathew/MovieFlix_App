@@ -31,7 +31,11 @@ jobs:
       - name: Create local.properties
         run: |
           echo "sdk.dir=$ANDROID_HOME" > local.properties
-          echo "movieApiKey=\"${{ secrets.MOVIE_API_KEY }}\"" >> local.properties    
+          echo "movieApiKey=\"${{ secrets.MOVIE_API_KEY }}\" >> local.properties    
+          
+
+      - name: Verify local.properties (Debug)
+        run: cat local.properties
 
       - name: Give gradlew execute permission
         run: chmod +x ./gradlew
