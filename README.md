@@ -74,9 +74,14 @@ MovieFlix is actively under development. Here's what's coming next:
 ## Contribution/Issues 🤝
 - If your new to open source and want to play around with contribution you can do it here or u can raise issue if you want to make any improvements or fix any bugs
 
+  
+  ### How to build the project :
+  - Clone the project
+  - Get your api key from TMDb website
+  - in the project folder in locoal.properties save ur api key in movieApiKey field , just like this movieApiKey="your_actual_api_key_here"
+
   ### Contribution Guide 🚀:
  - Check open issues labeled "good first issue", or "help wanted". If your idea’s not there, open a new issue and let’s chat about it first.
- - Fork the repo and get it running on your setup.
  - Once you’ve made changes, commit and raise a Pull Request against the development branch (we test stuff here before it hits master 🤓).
  - Add a clear title and description: Explain what you changed, why, and how to test it.
 
