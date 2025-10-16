@@ -28,6 +28,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Create local.properties
+        run: |
+          echo "sdk.dir=$ANDROID_HOME" > local.properties
+          echo "movieApiKey=\"${{ secrets.MOVIE_API_KEY }}\"" >> local.properties    
+
       - name: Give gradlew execute permission
         run: chmod +x ./gradlew
 
