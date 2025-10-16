@@ -1,12 +1,20 @@
 package com.example.movieflix.presentation.movie_details
 
 import android.app.Dialog
+import android.graphics.Typeface
 import android.os.Bundle
+import android.text.SpannableString
+import android.text.Spanned
+import android.text.TextPaint
+import android.text.method.LinkMovementMethod
+import android.text.style.ClickableSpan
+import android.text.style.StyleSpan
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
+import android.widget.TextView
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
@@ -65,6 +73,8 @@ class MovieDetailsFragment : BottomSheetDialogFragment(){
     private var isFav:Boolean=false
 
     private var mediaType:String? = null
+    private var isOverviewExpanded = false
+    private var fullOverviewText = ""
 
 //    private var isPlaying:Boolean = true
 
@@ -322,11 +332,140 @@ class MovieDetailsFragment : BottomSheetDialogFragment(){
     }
 
    private fun changeFavIcon(){
-       binding.apply {
-           isFav=true
-           favIcon.setImageDrawable(ContextCompat.getDrawable(requireContext(),R.drawable.fav))
-       }
+   binding.apply {
+   isFav=true
+   favIcon.setImageDrawable(ContextCompat.getDrawable(requireContext(),R.drawable.fav))
    }
+   }
+
+   private fun setExpandableText(textView: TextView, fullText: String) {
+        val maxLines = 4
+        fullOverviewText = fullText
+
+        // Set initial text with maxLines constraint
+        textView.maxLines = maxLines
+        textView.text = fullText
+
+        // Wait for TextView to be laid out before calculating truncation
+        textView.viewTreeObserver.addOnGlobalLayoutListener(object : android.view.ViewTreeObserver.OnGlobalLayoutListener {
+            override fun onGlobalLayout() {
+                textView.viewTreeObserver.removeOnGlobalLayoutListener(this)
+                
+                if (textView.lineCount >= maxLines && !isOverviewExpanded) {
+                    // Text is truncated, add "More" button
+                    val truncatedText = getTruncatedText(fullText, textView, maxLines)
+                    val moreText = " ...More"
+                    val spannableString = SpannableString(truncatedText + moreText)
+
+                    // Make "More" bold and clickable
+                    val moreStart = truncatedText.length + 4 // after "..."
+                    val moreEnd = spannableString.length
+                    spannableString.setSpan(
+                        StyleSpan(Typeface.BOLD),
+                        moreStart,
+                        moreEnd,
+                        Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                    )
+                    spannableString.setSpan(
+                        object : ClickableSpan() {
+                            override fun onClick(widget: View) {
+                                expandText(textView)
+                            }
+
+                            override fun updateDrawState(ds: TextPaint) {
+                                super.updateDrawState(ds)
+                                ds.isUnderlineText = false
+                                ds.color = ContextCompat.getColor(requireContext(), R.color.app_color)
+                                ds.isFakeBoldText = true
+                            }
+                        },
+                        moreStart,
+                        moreEnd,
+                        Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                    )
+
+                    textView.maxLines = maxLines
+                    textView.text = spannableString
+                    textView.movementMethod = LinkMovementMethod.getInstance()
+                }
+            }
+        })
+    }
+
+    private fun getTruncatedText(text: String, textView: TextView, maxLines: Int): String {
+        val layout = textView.layout ?: return text
+        
+        if (layout.lineCount <= maxLines) {
+            return text
+        }
+
+        // Get the end character index of the line before the last visible line
+        val lastVisibleLineIndex = maxLines - 1
+        var endIndex = layout.getLineEnd(lastVisibleLineIndex)
+        
+        // Reserve space for " ...More" (approximately 8 characters worth of space)
+        val moreText = " ...More"
+        val paint = textView.paint
+        val availableWidth = (textView.width - textView.paddingLeft - textView.paddingRight).toFloat()
+        val moreWidth = paint.measureText(moreText)
+        
+        // Reduce text until "...More" fits
+        while (endIndex > 0) {
+            val truncated = text.substring(0, endIndex).trimEnd()
+            val lineWidth = paint.measureText(truncated.substring(truncated.lastIndexOf('\n').let { if (it == -1) 0 else it + 1 }))
+            
+            if (lineWidth + moreWidth <= availableWidth) {
+                return truncated
+            }
+            
+            endIndex -= 1
+        }
+        
+        return text.substring(0, endIndex.coerceAtLeast(0))
+    }
+
+    private fun expandText(textView: TextView) {
+        isOverviewExpanded = true
+        textView.maxLines = Integer.MAX_VALUE // Remove line limit
+        
+        val lessText = "\n\nLess"
+        val spannableString = SpannableString(fullOverviewText + lessText)
+
+        // Make "Less" bold and clickable
+        val lessStart = fullOverviewText.length
+        val lessEnd = spannableString.length
+        spannableString.setSpan(
+            StyleSpan(Typeface.BOLD),
+            lessStart,
+            lessEnd,
+            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+        )
+        spannableString.setSpan(
+            object : ClickableSpan() {
+                override fun onClick(widget: View) {
+                    collapseText(textView)
+                }
+
+                override fun updateDrawState(ds: TextPaint) {
+                    super.updateDrawState(ds)
+                    ds.isUnderlineText = false
+                    ds.color = ContextCompat.getColor(requireContext(), R.color.app_color)
+                    ds.isFakeBoldText = true
+                }
+            },
+            lessStart,
+            lessEnd,
+            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+        )
+
+        textView.text = spannableString
+        textView.movementMethod = LinkMovementMethod.getInstance()
+    }
+
+    private fun collapseText(textView: TextView) {
+        isOverviewExpanded = false
+        setExpandableText(textView, fullOverviewText)
+    }
 
     private fun initializePlayer(key: String?) {
 
@@ -391,7 +530,7 @@ class MovieDetailsFragment : BottomSheetDialogFragment(){
                 }
                 posterImage.loadImage(TMDB_IMAGE_BASE_URL_W780.plus(img))
                 fragmentMovieDetailsLang.text = language
-                fragmentMovieDetailsOverview.text = overView
+                overView?.let { setExpandableText(fragmentMovieDetailsOverview, it) }
                 fragmentMovieDetailsRating.text = String.format("%.1f", rating)
                 fragmentMovieDetailsYear.text = formatDate(year)
             }
