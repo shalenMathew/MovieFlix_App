@@ -17,6 +17,7 @@ output.json
 # Jetpack Compose
 .compose-cache/
 .kotlinc/
+.kotlin/
 
 # Crashlytics, logs, lint
 crashlytics/
@@ -27,6 +28,8 @@ lint/reports/
 hs_err_pid*
 replay_pid*
 
+# Agent guidelines (local development only)
+AGENTS.md
 
 # Kotlin/Java
 *.class
