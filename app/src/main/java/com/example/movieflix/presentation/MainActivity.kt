@@ -1,5 +1,6 @@
 package com.example.movieflix.presentation
 
+import android.content.res.Configuration
 import android.graphics.Color
 import android.os.Bundle
 import android.view.Menu
@@ -7,7 +8,9 @@ import android.view.MenuItem
 import android.widget.PopupMenu
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.navigation.fragment.NavHostFragment
 import com.example.movieflix.R
@@ -29,17 +32,29 @@ class MainActivity : AppCompatActivity() {
 
         WindowCompat.setDecorFitsSystemWindows(window, false)
 
-        window.statusBarColor = Color.TRANSPARENT
-        window.navigationBarColor = Color.TRANSPARENT
+        // Pick color based on current theme (dark/light)
+        val nightModeFlags = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
+        val isDarkTheme = nightModeFlags == Configuration.UI_MODE_NIGHT_YES
+
+        val barColor = if (isDarkTheme) Color.BLACK else Color.WHITE
+        window.statusBarColor = barColor
+        window.navigationBarColor = barColor
+
+        // Set icon contrast dynamically
+        WindowInsetsControllerCompat(window, window.decorView).apply {
+            isAppearanceLightStatusBars = !isDarkTheme
+            isAppearanceLightNavigationBars = !isDarkTheme
+        }
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.root.setOnApplyWindowInsetsListener { _, insets ->
+        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { view, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            view.setPadding(0, systemBars.top, 0, systemBars.bottom)
             insets
         }
 
-        WindowInsetsControllerCompat(window, binding.root).isAppearanceLightStatusBars = false
     }
 
     @Deprecated("Deprecated in Java")
