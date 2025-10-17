@@ -5,10 +5,10 @@
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
     </style>
 
-    <style name="Theme.MovieFlix" parent="Base.Theme.MovieFlix" >
-        <item name="colorPrimary">@color/black</item>
-
+    <style name="Theme.MovieFlix" parent="Base.Theme.MovieFlix">
+        <item name="android:fitsSystemWindows">false</item>
     </style>
+
 
     <style name="SheetDialog" parent="Theme.Design.Light.BottomSheetDialog">
         <item name="android:windowIsTranslucent">true</item>
