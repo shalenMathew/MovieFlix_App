@@ -339,26 +339,28 @@ class MovieDetailsFragment : BottomSheetDialogFragment(){
    }
 
    private fun setExpandableText(textView: TextView, fullText: String) {
-        val maxLines = 4
+        val maxLines = 3
         fullOverviewText = fullText
 
+        // Reset expanded state
+        isOverviewExpanded = false
+        
         // Set initial text with maxLines constraint
         textView.maxLines = maxLines
         textView.text = fullText
 
-        // Wait for TextView to be laid out before calculating truncation
-        textView.viewTreeObserver.addOnGlobalLayoutListener(object : android.view.ViewTreeObserver.OnGlobalLayoutListener {
-            override fun onGlobalLayout() {
-                textView.viewTreeObserver.removeOnGlobalLayoutListener(this)
-                
-                if (textView.lineCount >= maxLines && !isOverviewExpanded) {
-                    // Text is truncated, add "More" button
+        // Use post to ensure TextView is properly laid out
+        textView.post {
+            if (textView.lineCount > maxLines) {
+                // Text needs truncation, add "More" button
+                val layout = textView.layout
+                if (layout != null) {
                     val truncatedText = getTruncatedText(fullText, textView, maxLines)
-                    val moreText = " ...More"
+                    val moreText = " (More)"
                     val spannableString = SpannableString(truncatedText + moreText)
 
                     // Make "More" bold and clickable
-                    val moreStart = truncatedText.length + 4 // after "..."
+                    val moreStart = truncatedText.length + 1 // after space
                     val moreEnd = spannableString.length
                     spannableString.setSpan(
                         StyleSpan(Typeface.BOLD),
@@ -389,7 +391,7 @@ class MovieDetailsFragment : BottomSheetDialogFragment(){
                     textView.movementMethod = LinkMovementMethod.getInstance()
                 }
             }
-        })
+        }
     }
 
     private fun getTruncatedText(text: String, textView: TextView, maxLines: Int): String {
@@ -403,8 +405,8 @@ class MovieDetailsFragment : BottomSheetDialogFragment(){
         val lastVisibleLineIndex = maxLines - 1
         var endIndex = layout.getLineEnd(lastVisibleLineIndex)
         
-        // Reserve space for " ...More" (approximately 8 characters worth of space)
-        val moreText = " ...More"
+        // Reserve space for " (More)" (approximately 7 characters worth of space)
+        val moreText = " (More)"
         val paint = textView.paint
         val availableWidth = (textView.width - textView.paddingLeft - textView.paddingRight).toFloat()
         val moreWidth = paint.measureText(moreText)
@@ -428,7 +430,7 @@ class MovieDetailsFragment : BottomSheetDialogFragment(){
         isOverviewExpanded = true
         textView.maxLines = Integer.MAX_VALUE // Remove line limit
         
-        val lessText = "\n\nLess"
+        val lessText = "\n\n(Less)"
         val spannableString = SpannableString(fullOverviewText + lessText)
 
         // Make "Less" bold and clickable
