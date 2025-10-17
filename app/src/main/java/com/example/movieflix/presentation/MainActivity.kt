@@ -1,7 +1,9 @@
 package com.example.movieflix.presentation
 
+import android.content.res.ColorStateList
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.example.movieflix.R
@@ -25,6 +27,17 @@ class MainActivity : AppCompatActivity() {
 
         // Setup bottom navigation with nav controller
         binding.bottomNavigationView.setupWithNavController(navController)
+
+        binding.bottomNavigationView.isItemActiveIndicatorEnabled = true
+
+        val csl = ColorStateList(
+            arrayOf(intArrayOf(android.R.attr.state_checked), intArrayOf()),
+            intArrayOf(
+                ContextCompat.getColor(this, R.color.black),
+                ContextCompat.getColor(this, R.color.bottom_nav_grey),
+            )
+        )
+        binding.bottomNavigationView.setItemActiveIndicatorColor(csl)
         
         // Handle bottom navigation visibility
         navController.addOnDestinationChangedListener { _, destination, _ ->
