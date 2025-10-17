@@ -52,10 +52,11 @@
             android:orientation="vertical">
 
             <RelativeLayout
-                android:background="@color/black"
+                android:background="@color/transparent"
                 android:id="@+id/app_bar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:paddingTop="@dimen/_25sdp"
                 >
 
                 <TextView

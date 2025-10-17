@@ -15,23 +15,25 @@ import com.example.movieflix.data.local_storage.entity.FavouritesEntity
 import com.example.movieflix.databinding.ItemSmallListBinding
 import com.example.movieflix.domain.model.MovieResult
 
-class FavAdapters(private var onPosterClick: ((movieResult: MovieResult) -> Unit)):
-    ListAdapter<FavouritesEntity,FavAdapters.ViewHolder >(DiffUtilCallback()) {
-    inner class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
+class FavAdapters(private var onPosterClick: ((movieResult: MovieResult) -> Unit)) :
+    ListAdapter<FavouritesEntity, FavAdapters.ViewHolder>(DiffUtilCallback()) {
+    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var binding: ItemSmallListBinding
+
         init {
             binding = ItemSmallListBinding.bind(itemView)
         }
-        fun bind(favouritesEntity: FavouritesEntity)=binding.apply{
+
+        fun bind(favouritesEntity: FavouritesEntity) = binding.apply {
 
             val item = favouritesEntity.movieResult
             itemListPoster.loadImage(Constants.TMDB_POSTER_IMAGE_BASE_URL_W342.plus(item.posterPath))
             itemListRatingTxt.text = String.format("%.1f", item.voteAverage)
 
-            root.setOnClickListener(){
-                if (isNetworkAvailable(root.context)){
+            root.setOnClickListener {
+                if (isNetworkAvailable(root.context)) {
                     onPosterClick(item)
-                }else{
+                } else {
                     Toast.makeText(root.context, "Internet req", Toast.LENGTH_SHORT).show()
                 }
             }
@@ -44,20 +46,20 @@ class FavAdapters(private var onPosterClick: ((movieResult: MovieResult) -> Unit
             oldItem: FavouritesEntity,
             newItem: FavouritesEntity
         ): Boolean {
-         return  oldItem == newItem
+            return oldItem == newItem
         }
 
         override fun areContentsTheSame(
             oldItem: FavouritesEntity,
             newItem: FavouritesEntity
         ): Boolean {
-          return   oldItem == newItem
+            return oldItem == newItem
         }
 
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_small_list,parent,false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_small_list, parent, false)
         return ViewHolder(view)
     }
 

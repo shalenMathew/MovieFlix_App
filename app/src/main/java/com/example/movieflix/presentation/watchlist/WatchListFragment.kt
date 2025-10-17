@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -14,7 +13,6 @@ import com.example.movieflix.core.utils.Constants
 import com.example.movieflix.core.utils.gone
 import com.example.movieflix.core.utils.visible
 import com.example.movieflix.databinding.FragmentWatchListBinding
-import com.example.movieflix.presentation.viewmodels.FavMovieViewModel
 import com.example.movieflix.presentation.viewmodels.WatchListViewModel
 import com.google.gson.Gson
 import dagger.hilt.android.AndroidEntryPoint
@@ -44,24 +42,26 @@ private val watchListViewModel:WatchListViewModel by viewModels()
 
     private fun inIt() {
         watchListViewModel.getAllWatchListData()
-        adapter=WatchListAdapter (onPosterClick = {
-            val bundle = Bundle()
-            bundle.putString(Constants.MEDIA_SEND_REQUEST_KEY,Gson().toJson(it))
-            findNavController().navigate(R.id.action_watchListFragment_to_movieDetailsFragment,bundle)
+        adapter = WatchListAdapter(onPosterClick = { selectedItem ->
+            val bundle = Bundle().apply {
+                putString(Constants.MEDIA_SEND_REQUEST_KEY, Gson().toJson(selectedItem))
+            }
+            findNavController().navigate(R.id.action_libraryFragment_to_movieDetailsFragment, bundle)
         })
 
-        binding.fragmentWatchListRv.adapter=adapter
+        binding.fragmentWatchListRv.adapter = adapter
     }
 
     private fun observer() {
-        watchListViewModel.getAllWatchListData().observe(viewLifecycleOwner){
+        watchListViewModel.getAllWatchListData().observe(viewLifecycleOwner) { watchListItems ->
+            adapter.submitList(watchListItems)
 
-            if (it.isNotEmpty()){
-                adapter.submitList(it)
-                binding.fragmentWatchListPlaceholder.gone()
-                binding.randomEmoji.gone()
-            }else{
+            if (watchListItems.isNullOrEmpty()) {
                 binding.fragmentWatchListRv.gone()
+                binding.fragmentWatchListPlaceholder.visible()
+                binding.randomEmoji.visible()
+            } else {
+                binding.fragmentWatchListRv.visible()
                 binding.fragmentWatchListPlaceholder.gone()
                 binding.randomEmoji.gone()
             }

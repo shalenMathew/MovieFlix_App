@@ -71,7 +71,6 @@ binding.apply {
         openDetailFragment(bannerList[firstVisibleItem])
     }
 
-
 }
     }
 
