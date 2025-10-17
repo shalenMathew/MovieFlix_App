@@ -196,6 +196,40 @@ class MovieDetailsRepositoryImpl(
       }
     }
 
+    override fun loadMoreMoviesForCategory(categoryTitle: String, page: Int): Flow<NetworkResults<MovieList>> = flow {
+        emit(NetworkResults.Loading())
+
+        try {
+            if (isNetworkAvailable(appContext)) {
+                val response = when (categoryTitle) {
+                    Constants.UPCOMING_MOVIES -> remoteDataSource.getUpcomingMovies(page)
+                    Constants.TRENDING_MOVIES -> remoteDataSource.getTrendingMovies(page)
+                    Constants.POPULAR_MOVIES -> remoteDataSource.getPopularMovies(page)
+                    Constants.TOP_RATED_MOVIES -> remoteDataSource.getTopRatedTV(page)
+                    Constants.BOLLYWOOD_MOVIES -> remoteDataSource.getBollywoodMovies(page)
+                    Constants.NOW_PLAYING_MOVIES -> remoteDataSource.getNowPlayingMovies(page)
+                    Constants.NETFLIX_SHOWS -> remoteDataSource.getNetflixShows(page)
+                    Constants.PRIME_SHOWS -> remoteDataSource.getAmazonPrimeShows(page)
+                    else -> null
+                }
+
+                response?.let {
+                    emit(NetworkResults.Success(it.body()?.toMovieList()))
+                } ?: emit(NetworkResults.Error("Unknown category"))
+            } else {
+                emit(NetworkResults.Error("No internet connection"))
+            }
+        } catch (e: Exception) {
+            when (e) {
+                is IOException -> {
+                    emit(NetworkResults.Error("Check ur internet connection"))
+                }
+                else -> {
+                    emit(NetworkResults.Error(e.message ?: "Unknown error"))
+                }
+            }
+        }
+    }
 
 }
 

@@ -14,15 +14,29 @@ import com.example.movieflix.core.utils.showToast
 import com.example.movieflix.databinding.ItemListBinding
 import com.example.movieflix.domain.model.MovieResult
 
-class HorizontalAdapter(private var onPosterClick: ((movieResult: MovieResult) -> Unit)? = null)
-    :ListAdapter<MovieResult, HorizontalAdapter.ViewHolder>(DiffUtilCallback()) {
+class HorizontalAdapter(
+    private var onPosterClick: ((movieResult: MovieResult) -> Unit)? = null,
+    private var onLoadMore: (() -> Unit)? = null
+) : ListAdapter<MovieResult, HorizontalAdapter.ViewHolder>(DiffUtilCallback()) {
+
+    private var isLoading = false
+
+    fun setLoadingState(loading: Boolean) {
+        isLoading = loading
+    }
+
+    fun addMoreItems(newItems: List<MovieResult>) {
+        val currentList = currentList.toMutableList()
+        currentList.addAll(newItems)
+        submitList(currentList)
+    }
 
     inner class ViewHolder(itemView:View):RecyclerView.ViewHolder(itemView) {
 
-   private val binding:ItemListBinding
-    init {
-        binding=ItemListBinding.bind(itemView)
-    }
+        private val binding:ItemListBinding
+        init {
+            binding=ItemListBinding.bind(itemView)
+        }
 
         fun bind(item:MovieResult){
             binding.apply {
@@ -49,5 +63,10 @@ class HorizontalAdapter(private var onPosterClick: ((movieResult: MovieResult) -
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(getItem(position))
+        
+        // Load more when reaching near the end
+        if (position >= itemCount - 3 && !isLoading) {
+            onLoadMore?.invoke()
+        }
     }
 }
