@@ -33,6 +33,7 @@
             app:destination="@id/homeFragment"
             />
     </fragment>
+    
     <fragment
         android:id="@+id/homeFragment"
         android:name="com.example.movieflix.presentation.home.HomeFragment"
@@ -41,17 +42,8 @@
         <action
             android:id="@+id/action_homeFragment_to_movieDetailsFragment"
             app:destination="@id/movieDetailsFragment" />
-        <action
-            android:id="@+id/action_homeFragment_to_watchListFragment"
-            app:destination="@id/watchListFragment" />
-        <action
-            android:id="@+id/action_homeFragment_to_searchFragment"
-            app:destination="@id/searchFragment" />
-
-        <action
-            android:id="@+id/action_homeFragment_to_favFragment"
-            app:destination="@id/favFragment" />
     </fragment>
+    
     <dialog
         android:id="@+id/movieDetailsFragment"
         android:name="com.example.movieflix.presentation.movie_details.MovieDetailsFragment"
@@ -61,6 +53,7 @@
             android:id="@+id/action_movieDetailsFragment_self"
             app:destination="@id/movieDetailsFragment" />
     </dialog>
+    
     <fragment
         android:id="@+id/searchFragment"
         android:name="com.example.movieflix.presentation.search.SearchFragment"
@@ -70,6 +63,7 @@
             android:id="@+id/action_searchFragment_to_movieDetailsFragment"
             app:destination="@id/movieDetailsFragment" />
     </fragment>
+    
     <fragment
         android:id="@+id/watchListFragment"
         android:name="com.example.movieflix.presentation.watchlist.WatchListFragment"

@@ -1,12 +1,9 @@
 package com.example.movieflix.presentation
 
 import android.os.Bundle
-import android.view.Menu
-import android.view.MenuItem
-import android.widget.PopupMenu
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.setupWithNavController
 import com.example.movieflix.R
 import com.example.movieflix.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -26,7 +23,20 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-
+        // Setup bottom navigation with nav controller
+        binding.bottomNavigationView.setupWithNavController(navController)
+        
+        // Handle bottom navigation visibility
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            when (destination.id) {
+                R.id.homeFragment, R.id.searchFragment, R.id.watchListFragment, R.id.favFragment -> {
+                    binding.bottomNavigationView.visibility = android.view.View.VISIBLE
+                }
+                else -> {
+                    binding.bottomNavigationView.visibility = android.view.View.GONE
+                }
+            }
+        }
     }
 
     @Deprecated("Deprecated in Java")
