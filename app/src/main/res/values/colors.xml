@@ -11,5 +11,8 @@
     <color name="shimmer_bg">#dddddd</color>
     <color name="gray_shade_1">#222227</color>
     <color name="transparent">#00000000</color>
+
+    <color name="bottom_nav_grey">#454545</color>
+
 <!--    <color name="dark_blue">#15003F</color>-->
 </resources>
