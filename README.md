@@ -90,6 +90,17 @@ MovieFlix is actively under development. Here's what's coming next:
 - Tip for beginners : Try to fix small bugs and dont get overwhelmed by the source code , take your time... Start by making small fixes or making small changes 👍
 
 
+  ## Star History
+
+<a href="https://www.star-history.com/#shalenMathew/MovieFlix_App&type=date&legend=top-left">
+ <picture>
+   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=shalenMathew/MovieFlix_App&type=date&theme=dark&legend=top-left" />
+   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=shalenMathew/MovieFlix_App&type=date&legend=top-left" />
+   <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=shalenMathew/MovieFlix_App&type=date&legend=top-left" />
+ </picture>
+</a>
+
+
 ## Contact 📧
 Connect me using shalenmj@gmail.com
 
