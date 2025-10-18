@@ -41,7 +41,8 @@ interface ApiClient {
     @GET("3/discover/tv")
     suspend fun getNetflixShowsApiCall(
         @Query("language") lang: String? = "en-US",
-        @Query("with_networks") page: String = "213" // network code for Netflix
+        @Query("with_networks") networkId: String = "213", // network code for Netflix
+        @Query("page") page: Int = 1
     ):Response<MovieResponseList>
 
     @GET("3/movie/now_playing")
@@ -53,7 +54,8 @@ interface ApiClient {
     @GET("3/discover/tv")
     suspend fun getAmazonPrimeShowsApi(
         @Query("language") lang: String? = "en-US",
-        @Query("with_networks") page: String = "1024"
+        @Query("with_networks") networkId: String = "1024", // network code for Amazon Prime
+        @Query("page") page: Int = 1
     ):Response<MovieResponseList>
 
     @GET("3/discover/movie")

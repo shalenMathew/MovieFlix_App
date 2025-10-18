@@ -30,4 +30,8 @@ class  GetMovieInfo @Inject constructor(private val movieInfoRepository: MovieIn
     fun getWhereToWatchProviders(movieId:Int):Flow<NetworkResults<WatchProviders>>{
         return movieInfoRepository.getWhereToWatchProvider(movieId)
     }
+
+    fun loadMoreMoviesForCategory(categoryTitle: String, page: Int): Flow<NetworkResults<MovieList>> {
+        return movieInfoRepository.loadMoreMoviesForCategory(categoryTitle, page)
+    }
 }
