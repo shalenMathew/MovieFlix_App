@@ -65,18 +65,6 @@ class HomeFragment : BaseFragment() {
                 openNetworkSettings(requireContext())
             }
 
-            fragmentHomeSearch.setOnClickListener() {
-                findNavController().navigate(R.id.action_homeFragment_to_searchFragment)
-            }
-
-            fragmentHomeLibrary.setOnClickListener() {
-                findNavController().navigate(R.id.action_homeFragment_to_watchListFragment)
-            }
-
-            fragmentHomeFavorite.setOnClickListener() {
-                findNavController().navigate(R.id.action_homeFragment_to_favFragment)
-            }
-
             fragmentHomeWatchNowBtn.setOnClickListener() {
                 val layoutManger =
                     binding.fragmentHomeBannerImgRv.layoutManager as LinearLayoutManager
