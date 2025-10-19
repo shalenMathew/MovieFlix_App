@@ -9,6 +9,7 @@ import com.example.movieflix.data.local_storage.entity.HomeFeedEntity
 import com.example.movieflix.data.model.HomeFeedDataResponse
 import com.example.movieflix.data.model.HomeFeedResponse
 import com.example.movieflix.data.remote.RemoteDataSource
+import com.example.movieflix.domain.model.CastMember
 import com.example.movieflix.domain.model.HomeFeedData
 import com.example.movieflix.domain.model.MovieList
 import com.example.movieflix.domain.model.MediaVideoResultList
@@ -16,6 +17,7 @@ import com.example.movieflix.domain.model.WatchProviders
 import com.example.movieflix.domain.repository.MovieInfoRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.withContext
@@ -227,6 +229,112 @@ class MovieDetailsRepositoryImpl(
                 else -> {
                     emit(NetworkResults.Error(e.message ?: "Unknown error"))
                 }
+            }
+        }
+    }
+
+    override fun getMovieCast(movieId: Int): Flow<NetworkResults<List<CastMember>>> = flow {
+        emit(NetworkResults.Loading())
+        try {
+            if (isNetworkAvailable(appContext)) {
+                val castResponse = remoteDataSource.getMovieCast(movieId)
+                castResponse.body()?.let { response ->
+                    val castList = response.cast?.take(10) ?: emptyList()
+                    
+                    // Fetch all social IDs in parallel for faster loading
+                    val castWithSocials = withContext(Dispatchers.IO) {
+                        coroutineScope {
+                            castList.mapNotNull { cast ->
+                                cast.id?.let { personId ->
+                                    async {
+                                        try {
+                                            val socialResponse = remoteDataSource.getPersonExternalIds(personId)
+                                            val socials = socialResponse.body()
+                                            CastMember(
+                                                id = personId,
+                                                name = cast.name ?: "",
+                                                character = cast.character ?: "",
+                                                profilePath = cast.profilePath,
+                                                instagramId = socials?.instagramId,
+                                                twitterId = socials?.twitterId,
+                                                facebookId = socials?.facebookId
+                                            )
+                                        } catch (e: Exception) {
+                                            CastMember(
+                                                id = personId,
+                                                name = cast.name ?: "",
+                                                character = cast.character ?: "",
+                                                profilePath = cast.profilePath
+                                            )
+                                        }
+                                    }
+                                }
+                            }.mapNotNull { it?.await() }
+                        }
+                    }
+                    
+                    emit(NetworkResults.Success(castWithSocials))
+                } ?: emit(NetworkResults.Error("No cast data available"))
+            } else {
+                emit(NetworkResults.Error("No internet connection"))
+            }
+        } catch (e: Exception) {
+            when (e) {
+                is IOException -> emit(NetworkResults.Error("Check ur internet connection"))
+                else -> emit(NetworkResults.Error(e.message ?: "Unknown error"))
+            }
+        }
+    }
+
+    override fun getTVCast(tvId: Int): Flow<NetworkResults<List<CastMember>>> = flow {
+        emit(NetworkResults.Loading())
+        try {
+            if (isNetworkAvailable(appContext)) {
+                val castResponse = remoteDataSource.getTVCast(tvId)
+                castResponse.body()?.let { response ->
+                    val castList = response.cast?.take(10) ?: emptyList()
+                    
+                    // Fetch all social IDs in parallel for faster loading
+                    val castWithSocials = withContext(Dispatchers.IO) {
+                        coroutineScope {
+                            castList.mapNotNull { cast ->
+                                cast.id?.let { personId ->
+                                    async {
+                                        try {
+                                            val socialResponse = remoteDataSource.getPersonExternalIds(personId)
+                                            val socials = socialResponse.body()
+                                            CastMember(
+                                                id = personId,
+                                                name = cast.name ?: "",
+                                                character = cast.character ?: "",
+                                                profilePath = cast.profilePath,
+                                                instagramId = socials?.instagramId,
+                                                twitterId = socials?.twitterId,
+                                                facebookId = socials?.facebookId
+                                            )
+                                        } catch (e: Exception) {
+                                            CastMember(
+                                                id = personId,
+                                                name = cast.name ?: "",
+                                                character = cast.character ?: "",
+                                                profilePath = cast.profilePath
+                                            )
+                                        }
+                                    }
+                                }
+                            }.mapNotNull { it?.await() }
+                        }
+                    }
+                    
+                    emit(NetworkResults.Success(castWithSocials))
+                } ?: emit(NetworkResults.Error("No cast data available"))
+            } else {
+                emit(NetworkResults.Error("No internet connection"))
+            }
+        } catch (e: Exception) {
+            when (e) {
+                is IOException -> emit(NetworkResults.Error("Check ur internet connection"))
+                else -> emit(NetworkResults.Error(e.message ?: "Unknown error"))
             }
         }
     }

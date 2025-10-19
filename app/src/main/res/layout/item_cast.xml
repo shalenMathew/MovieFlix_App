@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+    </data>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginStart="@dimen/_8sdp"
+        android:layout_marginVertical="@dimen/_4sdp"
+        android:gravity="center">
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/item_cast_profile_card"
+            style="@style/Widget.Material3.CardView.Filled"
+            android:layout_width="@dimen/_70sdp"
+            android:layout_height="@dimen/_70sdp"
+            app:cardBackgroundColor="@color/dark_gray"
+            app:cardCornerRadius="@dimen/_35sdp"
+            app:strokeColor="@color/app_color"
+            app:strokeWidth="2dp">
+
+            <ImageView
+                android:id="@+id/item_cast_profile_image"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:background="@color/dark_gray"
+                tools:src="@tools:sample/avatars" />
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <TextView
+            android:id="@+id/item_cast_name"
+            android:layout_width="@dimen/_70sdp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_4sdp"
+            android:fontFamily="@font/montserrat_semibold"
+            android:gravity="center"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:textColor="@color/white"
+            android:textSize="@dimen/_9ssp"
+            tools:text="Robert Downey Jr." />
+
+        <TextView
+            android:id="@+id/item_cast_character"
+            android:layout_width="@dimen/_70sdp"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/montserrat_light"
+            android:gravity="center"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:textColor="@color/text_secondary"
+            android:textSize="@dimen/_7ssp"
+            tools:text="Tony Stark" />
+
+        <LinearLayout
+            android:id="@+id/item_cast_socials_container"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_2sdp"
+            android:orientation="horizontal"
+            android:gravity="center">
+
+            <ImageView
+                android:id="@+id/item_cast_instagram"
+                android:layout_width="@dimen/_12sdp"
+                android:layout_height="@dimen/_12sdp"
+                android:layout_margin="@dimen/_2sdp"
+                android:src="@drawable/ic_instagram"
+                android:visibility="gone"
+                app:tint="@color/app_color" />
+
+            <ImageView
+                android:id="@+id/item_cast_twitter"
+                android:layout_width="@dimen/_12sdp"
+                android:layout_height="@dimen/_12sdp"
+                android:layout_margin="@dimen/_2sdp"
+                android:src="@drawable/ic_twitter"
+                android:visibility="gone"
+                app:tint="@color/app_color" />
+
+            <ImageView
+                android:id="@+id/item_cast_facebook"
+                android:layout_width="@dimen/_12sdp"
+                android:layout_height="@dimen/_12sdp"
+                android:layout_margin="@dimen/_2sdp"
+                android:src="@drawable/ic_facebook"
+                android:visibility="gone"
+                app:tint="@color/app_color" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+</layout>

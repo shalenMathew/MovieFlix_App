@@ -1,6 +1,7 @@
 package com.example.movieflix.domain.usecases
 
 import com.example.movieflix.core.utils.NetworkResults
+import com.example.movieflix.domain.model.CastMember
 import com.example.movieflix.domain.model.HomeFeedData
 import com.example.movieflix.domain.model.MovieList
 import com.example.movieflix.domain.model.MediaVideoResultList
@@ -33,5 +34,13 @@ class  GetMovieInfo @Inject constructor(private val movieInfoRepository: MovieIn
 
     fun loadMoreMoviesForCategory(categoryTitle: String, page: Int): Flow<NetworkResults<MovieList>> {
         return movieInfoRepository.loadMoreMoviesForCategory(categoryTitle, page)
+    }
+
+    fun getMovieCast(movieId: Int): Flow<NetworkResults<List<CastMember>>> {
+        return movieInfoRepository.getMovieCast(movieId)
+    }
+
+    fun getTVCast(tvId: Int): Flow<NetworkResults<List<CastMember>>> {
+        return movieInfoRepository.getTVCast(tvId)
     }
 }

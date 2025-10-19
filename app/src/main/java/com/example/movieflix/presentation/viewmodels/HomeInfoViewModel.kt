@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.movieflix.core.utils.NetworkResults
+import com.example.movieflix.domain.model.CastMember
 import com.example.movieflix.domain.model.HomeFeedData
 import com.example.movieflix.domain.model.MovieList
 import com.example.movieflix.domain.model.MediaVideoResultList
@@ -30,6 +31,9 @@ class HomeInfoViewModel @Inject constructor(private val getMovieInfo: GetMovieIn
 
     private var _whereToWatchProvider=MutableLiveData<NetworkResults<WatchProviders>>()
     val whereToWatchProviders:LiveData<NetworkResults<WatchProviders>> = _whereToWatchProvider
+
+    private var _castList = MutableLiveData<NetworkResults<List<CastMember>>>()
+    val castList: LiveData<NetworkResults<List<CastMember>>> = _castList
 
     // Pagination support
     private var _loadMoreMovies = MutableLiveData<NetworkResults<Pair<String, MovieList>>>()
@@ -121,6 +125,22 @@ class HomeInfoViewModel @Inject constructor(private val getMovieInfo: GetMovieIn
 
     fun isLoadingCategory(categoryTitle: String): Boolean {
         return isLoadingMore[categoryTitle] == true
+    }
+
+    fun getMovieCast(movieId: Int) {
+        viewModelScope.launch {
+            getMovieInfo.getMovieCast(movieId).onEach {
+                _castList.value = it
+            }.launchIn(this)
+        }
+    }
+
+    fun getTVCast(tvId: Int) {
+        viewModelScope.launch {
+            getMovieInfo.getTVCast(tvId).onEach {
+                _castList.value = it
+            }.launchIn(this)
+        }
     }
 
 }
