@@ -1,0 +1,70 @@
+name: "Feature Request"
+description: "Suggest a new feature or enhancement for the project"
+title: "Feature: "
+labels: ["enhancement"]
+assignees:
+  - ""
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for suggesting a new feature! Please provide as much detail as possible so we can evaluate it effectively.
+
+  - type: input
+    id: summary
+    attributes:
+      label: Summary
+      description: A concise one-line description of the feature.
+      placeholder: "Add dark mode support for the dashboard"
+    validations:
+      required: true
+
+  - type: textarea
+    id: motivation
+    attributes:
+      label: Motivation / User Problem
+      description: Explain why this feature is needed and who benefits.
+      placeholder: "Users struggle to use the app in low-light conditions."
+    validations:
+      required: true
+
+  - type: textarea
+    id: user_stories
+    attributes:
+      label: User Stories
+      description: Use the format "As a [user], I want [goal] so that [benefit]."
+      placeholder: |
+        - As a user, I want dark mode so that I can use the app comfortably at night.
+    validations:
+      required: false
+
+  - type: textarea
+    id: proposed_solution
+    attributes:
+      label: Proposed Solution / Design Notes
+      description: Describe how this feature could be implemented. Include UI, API, or data considerations if applicable.
+      placeholder: "Add a theme toggle button and store preference in local storage."
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives Considered
+      description: List any alternatives you considered and why they were rejected.
+      placeholder: "Using system theme detection only — rejected due to limited browser support."
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Priority
+      options:
+        - Low
+        - Medium
+        - High
+
+  - type: textarea
+    id: additional_context
+    attributes:
+      label: Additional Context
+      description: Add any extra context, links, or screenshots that might help.
+      placeholder: "Related issues, mockups, or diagrams."
