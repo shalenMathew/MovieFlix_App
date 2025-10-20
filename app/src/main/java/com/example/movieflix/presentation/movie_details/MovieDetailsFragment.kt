@@ -35,6 +35,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.gson.Gson
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.PlayerConstants
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.YouTubePlayerCallback
 import dagger.hilt.android.AndroidEntryPoint
@@ -66,7 +67,7 @@ class MovieDetailsFragment : BottomSheetDialogFragment(){
 
     private var mediaType:String? = null
 
-//    private var isPlaying:Boolean = true
+    private var isPlaying:Boolean = false
 
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -173,17 +174,19 @@ class MovieDetailsFragment : BottomSheetDialogFragment(){
 
                                binding.fragmentMovieDetailsPlayBtn.setOnClickListener {
 
-                                   initializePlayer(movieTrailer.key)
-
-//                                   isPlaying = !isPlaying
-//
-//                                   if (isPlaying){
-//                                       youTubePlayer?.pause()
-//                                       binding.fragmentMovieDetailsPlayBtn.text = "Play Trailer"
-//                                   }else{
-//                                       initializePlayer(movieTrailer.key)
-//                                       binding.fragmentMovieDetailsPlayBtn.text = "Pause Trailer"
-//                                   }
+                                   if (!isPlaying) {
+                                       // Start or resume playing
+                                       if (youTubePlayer == null) {
+                                           // First time playing - initialize player
+                                           initializePlayer(movieTrailer.key)
+                                       } else {
+                                           // Resume paused video
+                                           youTubePlayer?.play()
+                                       }
+                                   } else {
+                                       // Pause the video
+                                       youTubePlayer?.pause()
+                                   }
                                }
 
                            }catch (e:Exception){
@@ -343,6 +346,31 @@ class MovieDetailsFragment : BottomSheetDialogFragment(){
 
                         key?.let {
                             this@MovieDetailsFragment.youTubePlayer=youTubePlayer
+                            
+                            // Add listener to track player state changes
+                            youTubePlayer.addListener(object : AbstractYouTubePlayerListener() {
+                                override fun onStateChange(youTubePlayer: YouTubePlayer, state: PlayerConstants.PlayerState) {
+                                    when (state) {
+                                        PlayerConstants.PlayerState.PLAYING -> {
+                                            isPlaying = true
+                                            binding.fragmentMovieDetailsPlayBtn.text = "Pause Trailer"
+                                            binding.fragmentMovieDetailsPlayBtn.icon = ContextCompat.getDrawable(requireContext(), R.drawable.ic_pause)
+                                        }
+                                        PlayerConstants.PlayerState.PAUSED -> {
+                                            isPlaying = false
+                                            binding.fragmentMovieDetailsPlayBtn.text = "Play Trailer"
+                                            binding.fragmentMovieDetailsPlayBtn.icon = ContextCompat.getDrawable(requireContext(), R.drawable.ic_play_arrow)
+                                        }
+                                        PlayerConstants.PlayerState.ENDED -> {
+                                            isPlaying = false
+                                            binding.fragmentMovieDetailsPlayBtn.text = "Play Trailer"
+                                            binding.fragmentMovieDetailsPlayBtn.icon = ContextCompat.getDrawable(requireContext(), R.drawable.ic_play_arrow)
+                                        }
+                                        else -> {}
+                                    }
+                                }
+                            })
+                            
                             this@MovieDetailsFragment.youTubePlayer?.loadVideo(it,0f)
 
 
