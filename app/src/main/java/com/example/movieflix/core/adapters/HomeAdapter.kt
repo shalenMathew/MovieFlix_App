@@ -11,18 +11,36 @@ import com.example.movieflix.databinding.HorizontalFeedItemListBinding
 import com.example.movieflix.domain.model.HomeFeed
 import com.example.movieflix.domain.model.MovieResult
 
-class HomeAdapter(private val onPosterClick:(movieResult:MovieResult)->Unit):ListAdapter<HomeFeed, HomeAdapter.ViewHolder>(
+class HomeAdapter(
+    private val onPosterClick:(movieResult:MovieResult)->Unit,
+    private val onLoadMore:(categoryTitle:String)->Unit
+):ListAdapter<HomeFeed, HomeAdapter.ViewHolder>(
     DiffUtilCallback()
 )
 {
-   inner class ViewHolder(itemView:View):RecyclerView.ViewHolder(itemView) {
+    private val adapterMap = mutableMapOf<String, HorizontalAdapter>()
+
+    fun addMoreItemsToCategory(categoryTitle: String, newItems: List<MovieResult>) {
+        adapterMap[categoryTitle]?.addMoreItems(newItems)
+    }
+
+    fun setLoadingForCategory(categoryTitle: String, isLoading: Boolean) {
+        adapterMap[categoryTitle]?.setLoadingState(isLoading)
+    }
+
+    inner class ViewHolder(itemView:View):RecyclerView.ViewHolder(itemView) {
         private var binding:HorizontalFeedItemListBinding = HorizontalFeedItemListBinding.bind(itemView)
 
        fun bind(homeFeed: HomeFeed){
             binding.apply {
                 horizontalFeedListItemTitle.text=homeFeed.title
 
-                val horizontalAdapter= HorizontalAdapter(onPosterClick = onPosterClick)
+                val horizontalAdapter = adapterMap.getOrPut(homeFeed.title) {
+                    HorizontalAdapter(
+                        onPosterClick = onPosterClick,
+                        onLoadMore = { onLoadMore(homeFeed.title) }
+                    )
+                }
                 horizontalFeedListItemRv.adapter=horizontalAdapter
                 horizontalAdapter.submitList(homeFeed.list)
             }

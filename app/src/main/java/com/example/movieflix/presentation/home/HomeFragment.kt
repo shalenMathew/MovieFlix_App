@@ -34,12 +34,12 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class HomeFragment : BaseFragment() {
 
-    private var _binding:FragmentHomeBinding?=null
-    private val binding get() =_binding!!
+    private var _binding: FragmentHomeBinding? = null
+    private val binding get() = _binding!!
     private val homeInfoViewModel: HomeInfoViewModel by viewModels() // initializing viewmodel
-    private lateinit var  bannerAdapter: BannerAdapter
+    private lateinit var bannerAdapter: BannerAdapter
     private lateinit var homeAdapter: HomeAdapter
-    private var bannerList:List<MovieResult> = arrayListOf()
+    private var bannerList: List<MovieResult> = arrayListOf()
     private var snapHelper: SnapHelper = PagerSnapHelper()
 
     override fun onCreateView(
@@ -47,7 +47,7 @@ class HomeFragment : BaseFragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        _binding=DataBindingUtil.inflate(inflater,R.layout.fragment_home,container,false)
+        _binding = DataBindingUtil.inflate(inflater, R.layout.fragment_home, container, false)
         return binding.root
     }
 
@@ -59,30 +59,33 @@ class HomeFragment : BaseFragment() {
     }
 
     private fun handleClickListeners() {
-binding.apply {
+        binding.apply {
 
-    fragmentHomeNetworkCheck.layoutNetworkBtn.setOnClickListener(){
-        openNetworkSettings(requireContext())
-    }
+            fragmentHomeNetworkCheck.layoutNetworkBtn.setOnClickListener() {
+                openNetworkSettings(requireContext())
+            }
 
-    fragmentHomeWatchNowBtn.setOnClickListener(){
-        val layoutManger=binding.fragmentHomeBannerImgRv.layoutManager as LinearLayoutManager
-        val firstVisibleItem = layoutManger.findFirstVisibleItemPosition()
-        openDetailFragment(bannerList[firstVisibleItem])
-    }
-
-}
+            fragmentHomeWatchNowBtn.setOnClickListener() {
+                val layoutManger =
+                    binding.fragmentHomeBannerImgRv.layoutManager as LinearLayoutManager
+                val firstVisibleItem = layoutManger.findFirstVisibleItemPosition()
+                openDetailFragment(bannerList[firstVisibleItem])
+            }
+        }
     }
 
     private fun initView() {
-        bannerAdapter= BannerAdapter()
-        homeAdapter= HomeAdapter{
-            openDetailFragment(it)
-        }
+        bannerAdapter = BannerAdapter()
+        homeAdapter = HomeAdapter(
+            onPosterClick = { openDetailFragment(it) },
+            onLoadMore = { categoryTitle ->
+                homeInfoViewModel.loadMoreMoviesForCategory(categoryTitle)
+            }
+        )
 
         binding.apply {
             fragmentHomeBannerImgRv.adapter = bannerAdapter
-            fragmentHomeHomeFeedRv.adapter=homeAdapter
+            fragmentHomeHomeFeedRv.adapter = homeAdapter
             snapHelper.attachToRecyclerView(fragmentHomeBannerImgRv)
             fragmentHomeIndicator.attachToRecyclerView(fragmentHomeBannerImgRv)
         }
@@ -90,34 +93,55 @@ binding.apply {
 
     private fun openDetailFragment(it: MovieResult) {
         val bundle = Bundle()
-        bundle.putString(Constants.MEDIA_SEND_REQUEST_KEY,Gson().toJson(it))
+        bundle.putString(Constants.MEDIA_SEND_REQUEST_KEY, Gson().toJson(it))
 
-        findNavController().navigate(R.id.action_homeFragment_to_movieDetailsFragment,bundle)
+        findNavController().navigate(R.id.action_homeFragment_to_movieDetailsFragment, bundle)
     }
 
     private fun observer() {
-        homeInfoViewModel.homeFeedList.observe(viewLifecycleOwner){ it
+        homeInfoViewModel.homeFeedList.observe(viewLifecycleOwner) {
+            it
 
-            when(it){
-                is NetworkResults.Success-> binding.apply{
+            when (it) {
+                is NetworkResults.Success -> binding.apply {
                     shimmerLoading.root.gone()
                     it.data?.let { homeFeedData: HomeFeedData ->
-                       fragmentHomeHomeFeedLayout.visible()
+                        fragmentHomeHomeFeedLayout.visible()
                         bannerList = homeFeedData.bannerMovie
                         bannerAdapter.submitList(homeFeedData.bannerMovie)
                         homeAdapter.submitList(homeFeedData.homeFeedResponseList)
                     }
                 }
 
-                is NetworkResults.Error->binding.apply{
+                is NetworkResults.Error -> binding.apply {
                     Toast.makeText(context, it.message, Toast.LENGTH_SHORT).show()
                     shimmerLoading.root.gone()
                     fragmentHomeHomeFeedLayout.gone()
                 }
 
-                is NetworkResults.Loading->binding.apply{
+                is NetworkResults.Loading -> binding.apply {
                     shimmerLoading.root.visible()
                     fragmentHomeHomeFeedLayout.gone()
+                }
+            }
+        }
+
+        // Observe pagination results
+        homeInfoViewModel.loadMoreMovies.observe(viewLifecycleOwner) { result ->
+            when (result) {
+                is NetworkResults.Success -> {
+                    result.data?.let { (categoryTitle, movieList) ->
+                        homeAdapter.addMoreItemsToCategory(categoryTitle, movieList.results)
+                        homeAdapter.setLoadingForCategory(categoryTitle, false)
+                    }
+                }
+
+                is NetworkResults.Error -> {
+                    Toast.makeText(context, result.message, Toast.LENGTH_SHORT).show()
+                }
+
+                is NetworkResults.Loading -> {
+                    // Loading state is handled by adapter
                 }
             }
         }
@@ -130,9 +154,9 @@ binding.apply {
 
 
     private fun checkNetworkAvailability() {
-        if(isNetworkAvailable(requireContext())){
+        if (isNetworkAvailable(requireContext())) {
             binding.fragmentHomeNetworkCheck.layoutNtwContainer.gone()
-        }else{
+        } else {
             binding.fragmentHomeNetworkCheck.layoutNtwContainer.visible()
         }
     }
@@ -148,12 +172,12 @@ binding.apply {
         super.onNetworkAvailable(network)
         requireActivity().runOnUiThread {
             binding.fragmentHomeNetworkCheck.layoutNtwContainer.gone()
-           homeInfoViewModel.getMovieInfoData()
+            homeInfoViewModel.getMovieInfoData()
         }
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        _binding=null
+        _binding = null
     }
-}
+}   

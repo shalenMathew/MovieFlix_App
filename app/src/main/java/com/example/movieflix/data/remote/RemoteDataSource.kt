@@ -9,36 +9,36 @@ import javax.inject.Inject
 
 class RemoteDataSource @Inject constructor(private val apiClient: ApiClient) {
 
-    suspend fun getUpcomingMovies():Response<MovieResponseList>{
-      return  apiClient.getUpcomingMoviesApiCall()
+    suspend fun getUpcomingMovies(page: Int = 1):Response<MovieResponseList>{
+      return  apiClient.getUpcomingMoviesApiCall(page = page)
     }
 
-    suspend fun getPopularMovies():Response<MovieResponseList>{
-        return   apiClient.getPopularMoviesApiCall()
+    suspend fun getPopularMovies(page: Int = 1):Response<MovieResponseList>{
+        return   apiClient.getPopularMoviesApiCall(page = page)
     }
 
-    suspend fun getTrendingMovies():Response<MovieResponseList>{
-        return apiClient.getTrendingApiCall()
+    suspend fun getTrendingMovies(page: Int = 1):Response<MovieResponseList>{
+        return apiClient.getTrendingApiCall(page = page)
     }
 
-    suspend fun getTopRatedTV():Response<MovieResponseList>{
-        return apiClient.getTopRatedTVApiCall()
+    suspend fun getTopRatedTV(page: Int = 1):Response<MovieResponseList>{
+        return apiClient.getTopRatedTVApiCall(page = page)
     }
 
-    suspend fun getNetflixShows():Response<MovieResponseList>{
-        return   apiClient.getNetflixShowsApiCall()
+    suspend fun getNetflixShows(page: Int = 1):Response<MovieResponseList>{
+        return   apiClient.getNetflixShowsApiCall(page = page)
     }
 
-    suspend fun getNowPlayingMovies():Response<MovieResponseList>{
-        return   apiClient.getNowPlayingMoviesApiCall()
+    suspend fun getNowPlayingMovies(page: Int = 1):Response<MovieResponseList>{
+        return   apiClient.getNowPlayingMoviesApiCall(page = page)
     }
 
-    suspend fun getAmazonPrimeShows():Response<MovieResponseList>{
-        return   apiClient.getAmazonPrimeShowsApi()
+    suspend fun getAmazonPrimeShows(page: Int = 1):Response<MovieResponseList>{
+        return   apiClient.getAmazonPrimeShowsApi(page = page)
     }
 
-    suspend fun getBollywoodMovies():Response<MovieResponseList>{
-        return apiClient.getBollywoodMoviesApiCall()
+    suspend fun getBollywoodMovies(page: Int = 1):Response<MovieResponseList>{
+        return apiClient.getBollywoodMoviesApiCall(page = page)
     }
 
     suspend fun getMovieTrailer(movieId:Int):Response<MovieResponseVideoResultList>{

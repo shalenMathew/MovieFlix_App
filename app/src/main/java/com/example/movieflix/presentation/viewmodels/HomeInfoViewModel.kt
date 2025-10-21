@@ -31,6 +31,13 @@ class HomeInfoViewModel @Inject constructor(private val getMovieInfo: GetMovieIn
     private var _whereToWatchProvider=MutableLiveData<NetworkResults<WatchProviders>>()
     val whereToWatchProviders:LiveData<NetworkResults<WatchProviders>> = _whereToWatchProvider
 
+    // Pagination support
+    private var _loadMoreMovies = MutableLiveData<NetworkResults<Pair<String, MovieList>>>()
+    val loadMoreMovies: LiveData<NetworkResults<Pair<String, MovieList>>> = _loadMoreMovies
+
+    private val categoryPages = mutableMapOf<String, Int>()
+    private val isLoadingMore = mutableMapOf<String, Boolean>()
+
     init {
         getMovieInfoData() // call the function as soon the viewmodel is initialized
     }
@@ -79,6 +86,41 @@ class HomeInfoViewModel @Inject constructor(private val getMovieInfo: GetMovieIn
                 _whereToWatchProvider.value=it
             }.launchIn(this)
         }
+    }
+
+    fun loadMoreMoviesForCategory(categoryTitle: String) {
+        // Check if already loading for this category
+        if (isLoadingMore[categoryTitle] == true) return
+
+        // Get next page number (starts from 2 since initial load is page 1)
+        val nextPage = categoryPages.getOrDefault(categoryTitle, 1) + 1
+
+        isLoadingMore[categoryTitle] = true
+
+        viewModelScope.launch {
+            getMovieInfo.loadMoreMoviesForCategory(categoryTitle, nextPage).onEach { result ->
+                when (result) {
+                    is NetworkResults.Success -> {
+                        result.data?.let { movieList ->
+                            categoryPages[categoryTitle] = nextPage
+                            _loadMoreMovies.value = NetworkResults.Success(Pair(categoryTitle, movieList))
+                        }
+                        isLoadingMore[categoryTitle] = false
+                    }
+                    is NetworkResults.Error -> {
+                        _loadMoreMovies.value = NetworkResults.Error(result.message ?: "Error loading more")
+                        isLoadingMore[categoryTitle] = false
+                    }
+                    is NetworkResults.Loading -> {
+                        // Keep loading state
+                    }
+                }
+            }.launchIn(this)
+        }
+    }
+
+    fun isLoadingCategory(categoryTitle: String): Boolean {
+        return isLoadingMore[categoryTitle] == true
     }
 
 }
