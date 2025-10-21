@@ -7,7 +7,6 @@
 
     <style name="Theme.MovieFlix" parent="Base.Theme.MovieFlix" >
         <item name="colorPrimary">@color/black</item>
-
     </style>
 
     <style name="SheetDialog" parent="Theme.Design.Light.BottomSheetDialog">

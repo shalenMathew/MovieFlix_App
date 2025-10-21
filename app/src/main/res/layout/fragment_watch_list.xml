@@ -7,7 +7,7 @@
   <androidx.constraintlayout.widget.ConstraintLayout
       android:layout_width="match_parent"
       android:layout_height="match_parent"
-      android:background="@drawable/gradient_background"
+      android:background="@android:color/transparent"
       tools:context=".presentation.watchlist.WatchListFragment">
 
     <TextView
@@ -74,7 +74,7 @@
             android:paddingStart="@dimen/_15sdp"
             android:paddingTop="@dimen/_12sdp"
             android:paddingBottom="@dimen/_18sdp"
-            android:text="Watch-List"
+            android:text="@string/library_tab_watchlist"
             android:textColor="@color/white"
             android:textSize="@dimen/_20ssp" />
 

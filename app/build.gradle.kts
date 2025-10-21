@@ -34,14 +34,14 @@ android {
 
     buildTypes {
         release {
-            buildConfigField("String", "MOVIE_API_KEY", movieApiKey)
+            buildConfigField("String", "MOVIE_API_KEY", "\"$movieApiKey\"")
             isMinifyEnabled = false
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
 
         debug {
 
-            buildConfigField("String", "MOVIE_API_KEY", movieApiKey)
+            buildConfigField("String", "MOVIE_API_KEY", "\"$movieApiKey\"")
             applicationIdSuffix=".debug"
             isDebuggable = true
         }
@@ -84,6 +84,9 @@ dependencies {
     //Navigation Components
     implementation("androidx.navigation:navigation-fragment-ktx:2.8.9")
     implementation("androidx.navigation:navigation-ui-ktx:2.8.9")
+
+    // ViewPager2
+    implementation("androidx.viewpager2:viewpager2:1.1.0")
 
     //Image Loading
     implementation ("com.github.bumptech.glide:glide:4.16.0")
