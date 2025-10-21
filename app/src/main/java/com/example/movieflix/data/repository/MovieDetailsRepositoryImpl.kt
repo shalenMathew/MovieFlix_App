@@ -239,41 +239,18 @@ class MovieDetailsRepositoryImpl(
             if (isNetworkAvailable(appContext)) {
                 val castResponse = remoteDataSource.getMovieCast(movieId)
                 castResponse.body()?.let { response ->
-                    val castList = response.cast?.take(10) ?: emptyList()
-                    
-                    // Fetch all social IDs in parallel for faster loading
-                    val castWithSocials = withContext(Dispatchers.IO) {
-                        coroutineScope {
-                            castList.mapNotNull { cast ->
-                                cast.id?.let { personId ->
-                                    async {
-                                        try {
-                                            val socialResponse = remoteDataSource.getPersonExternalIds(personId)
-                                            val socials = socialResponse.body()
-                                            CastMember(
-                                                id = personId,
-                                                name = cast.name ?: "",
-                                                character = cast.character ?: "",
-                                                profilePath = cast.profilePath,
-                                                instagramId = socials?.instagramId,
-                                                twitterId = socials?.twitterId,
-                                                facebookId = socials?.facebookId
-                                            )
-                                        } catch (e: Exception) {
-                                            CastMember(
-                                                id = personId,
-                                                name = cast.name ?: "",
-                                                character = cast.character ?: "",
-                                                profilePath = cast.profilePath
-                                            )
-                                        }
-                                    }
-                                }
-                            }.mapNotNull { it?.await() }
+                    val castList = response.cast?.take(10)?.mapNotNull { cast ->
+                        cast.id?.let { personId ->
+                            CastMember(
+                                id = personId,
+                                name = cast.name ?: "",
+                                character = cast.character ?: "",
+                                profilePath = cast.profilePath
+                            )
                         }
-                    }
+                    } ?: emptyList()
                     
-                    emit(NetworkResults.Success(castWithSocials))
+                    emit(NetworkResults.Success(castList))
                 } ?: emit(NetworkResults.Error("No cast data available"))
             } else {
                 emit(NetworkResults.Error("No internet connection"))
@@ -292,41 +269,18 @@ class MovieDetailsRepositoryImpl(
             if (isNetworkAvailable(appContext)) {
                 val castResponse = remoteDataSource.getTVCast(tvId)
                 castResponse.body()?.let { response ->
-                    val castList = response.cast?.take(10) ?: emptyList()
-                    
-                    // Fetch all social IDs in parallel for faster loading
-                    val castWithSocials = withContext(Dispatchers.IO) {
-                        coroutineScope {
-                            castList.mapNotNull { cast ->
-                                cast.id?.let { personId ->
-                                    async {
-                                        try {
-                                            val socialResponse = remoteDataSource.getPersonExternalIds(personId)
-                                            val socials = socialResponse.body()
-                                            CastMember(
-                                                id = personId,
-                                                name = cast.name ?: "",
-                                                character = cast.character ?: "",
-                                                profilePath = cast.profilePath,
-                                                instagramId = socials?.instagramId,
-                                                twitterId = socials?.twitterId,
-                                                facebookId = socials?.facebookId
-                                            )
-                                        } catch (e: Exception) {
-                                            CastMember(
-                                                id = personId,
-                                                name = cast.name ?: "",
-                                                character = cast.character ?: "",
-                                                profilePath = cast.profilePath
-                                            )
-                                        }
-                                    }
-                                }
-                            }.mapNotNull { it?.await() }
+                    val castList = response.cast?.take(10)?.mapNotNull { cast ->
+                        cast.id?.let { personId ->
+                            CastMember(
+                                id = personId,
+                                name = cast.name ?: "",
+                                character = cast.character ?: "",
+                                profilePath = cast.profilePath
+                            )
                         }
-                    }
+                    } ?: emptyList()
                     
-                    emit(NetworkResults.Success(castWithSocials))
+                    emit(NetworkResults.Success(castList))
                 } ?: emit(NetworkResults.Error("No cast data available"))
             } else {
                 emit(NetworkResults.Error("No internet connection"))

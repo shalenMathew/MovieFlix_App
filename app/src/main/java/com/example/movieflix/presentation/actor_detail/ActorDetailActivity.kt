@@ -1,5 +1,6 @@
 package com.example.movieflix.presentation.actor_detail
 
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.view.View
@@ -174,7 +175,10 @@ class ActorDetailActivity : AppCompatActivity() {
             if (!actor.instagramId.isNullOrEmpty()) {
                 actorInstagram.visibility = View.VISIBLE
                 actorInstagram.setOnClickListener {
-                    openUrl("https://www.instagram.com/${actor.instagramId}")
+                    openSocialMedia(
+                        nativeUrl = "instagram://user?username=${actor.instagramId}",
+                        webUrl = "https://www.instagram.com/${actor.instagramId}"
+                    )
                 }
                 hasSocials = true
             } else {
@@ -185,7 +189,10 @@ class ActorDetailActivity : AppCompatActivity() {
             if (!actor.twitterId.isNullOrEmpty()) {
                 actorTwitter.visibility = View.VISIBLE
                 actorTwitter.setOnClickListener {
-                    openUrl("https://twitter.com/${actor.twitterId}")
+                    openSocialMedia(
+                        nativeUrl = "twitter://user?screen_name=${actor.twitterId}",
+                        webUrl = "https://twitter.com/${actor.twitterId}"
+                    )
                 }
                 hasSocials = true
             } else {
@@ -196,7 +203,10 @@ class ActorDetailActivity : AppCompatActivity() {
             if (!actor.facebookId.isNullOrEmpty()) {
                 actorFacebook.visibility = View.VISIBLE
                 actorFacebook.setOnClickListener {
-                    openUrl("https://www.facebook.com/${actor.facebookId}")
+                    openSocialMedia(
+                        nativeUrl = "fb://profile/${actor.facebookId}",
+                        webUrl = "https://www.facebook.com/${actor.facebookId}"
+                    )
                 }
                 hasSocials = true
             } else {
@@ -207,14 +217,41 @@ class ActorDetailActivity : AppCompatActivity() {
         }
     }
 
-    private fun openUrl(url: String) {
+    private fun openSocialMedia(nativeUrl: String, webUrl: String) {
         try {
-            val customTabsIntent = androidx.browser.customtabs.CustomTabsIntent.Builder()
-                .setShowTitle(true)
-                .build()
-            customTabsIntent.launchUrl(this, android.net.Uri.parse(url))
+            // Try to open native app first
+            val nativeIntent = Intent(Intent.ACTION_VIEW, android.net.Uri.parse(nativeUrl))
+            nativeIntent.setPackage(getNativeAppPackage(nativeUrl))
+            
+            if (nativeIntent.resolveActivity(packageManager) != null) {
+                // Native app is installed, open it
+                startActivity(nativeIntent)
+            } else {
+                // Native app not installed, open in Chrome Custom Tab
+                val customTabsIntent = androidx.browser.customtabs.CustomTabsIntent.Builder()
+                    .setShowTitle(true)
+                    .build()
+                customTabsIntent.launchUrl(this, android.net.Uri.parse(webUrl))
+            }
         } catch (e: Exception) {
-            e.printStackTrace()
+            // Fallback to web URL if anything goes wrong
+            try {
+                val customTabsIntent = androidx.browser.customtabs.CustomTabsIntent.Builder()
+                    .setShowTitle(true)
+                    .build()
+                customTabsIntent.launchUrl(this, android.net.Uri.parse(webUrl))
+            } catch (ex: Exception) {
+                ex.printStackTrace()
+            }
+        }
+    }
+    
+    private fun getNativeAppPackage(nativeUrl: String): String {
+        return when {
+            nativeUrl.startsWith("instagram://") -> "com.instagram.android"
+            nativeUrl.startsWith("twitter://") -> "com.twitter.android"
+            nativeUrl.startsWith("fb://") -> "com.facebook.katana"
+            else -> ""
         }
     }
 
