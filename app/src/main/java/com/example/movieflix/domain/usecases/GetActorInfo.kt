@@ -1,0 +1,12 @@
+package com.example.movieflix.domain.usecases
+
+import com.example.movieflix.domain.repository.ActorRepository
+import javax.inject.Inject
+
+class GetActorInfo @Inject constructor(
+    private val actorRepository: ActorRepository
+) {
+    fun getActorDetail(personId: Int) = actorRepository.getActorDetail(personId)
+    
+    fun getActorMovies(personId: Int) = actorRepository.getActorMovies(personId)
+}

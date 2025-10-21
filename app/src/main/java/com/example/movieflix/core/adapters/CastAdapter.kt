@@ -1,11 +1,9 @@
 package com.example.movieflix.core.adapters
 
 import android.content.Intent
-import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -39,64 +37,19 @@ class CastAdapter : ListAdapter<CastMember, CastAdapter.ViewHolder>(CastDiffCall
                     )
                 }
                 
-                // Setup social media icons
-                setupSocialMedia(castMember)
-            }
-        }
-        
-        private fun setupSocialMedia(castMember: CastMember) {
-            val customTabsIntent = CustomTabsIntent.Builder()
-                .setShowTitle(true)
-                .build()
-            
-            binding.apply {
-                // Instagram
-                if (!castMember.instagramId.isNullOrEmpty()) {
-                    itemCastInstagram.visibility = View.VISIBLE
-                    itemCastInstagram.setOnClickListener {
-                        openUrl("https://www.instagram.com/${castMember.instagramId}", customTabsIntent)
-                    }
-                } else {
-                    itemCastInstagram.visibility = View.GONE
-                }
-                
-                // Twitter
-                if (!castMember.twitterId.isNullOrEmpty()) {
-                    itemCastTwitter.visibility = View.VISIBLE
-                    itemCastTwitter.setOnClickListener {
-                        openUrl("https://twitter.com/${castMember.twitterId}", customTabsIntent)
-                    }
-                } else {
-                    itemCastTwitter.visibility = View.GONE
-                }
-                
-                // Facebook
-                if (!castMember.facebookId.isNullOrEmpty()) {
-                    itemCastFacebook.visibility = View.VISIBLE
-                    itemCastFacebook.setOnClickListener {
-                        openUrl("https://www.facebook.com/${castMember.facebookId}", customTabsIntent)
-                    }
-                } else {
-                    itemCastFacebook.visibility = View.GONE
-                }
-                
-                // Hide container if no social media
-                if (castMember.instagramId.isNullOrEmpty() &&
-                    castMember.twitterId.isNullOrEmpty() &&
-                    castMember.facebookId.isNullOrEmpty()) {
-                    itemCastSocialsContainer.visibility = View.GONE
-                } else {
-                    itemCastSocialsContainer.visibility = View.VISIBLE
+                // Navigate to actor detail on click
+                root.setOnClickListener {
+                    navigateToActorDetail(castMember)
                 }
             }
         }
         
-        private fun openUrl(url: String, customTabsIntent: CustomTabsIntent) {
-            try {
-                customTabsIntent.launchUrl(itemView.context, Uri.parse(url))
-            } catch (e: Exception) {
-                e.printStackTrace()
+        private fun navigateToActorDetail(castMember: CastMember) {
+            val intent = Intent(itemView.context, com.example.movieflix.presentation.actor_detail.ActorDetailActivity::class.java).apply {
+                putExtra(com.example.movieflix.presentation.actor_detail.ActorDetailActivity.EXTRA_PERSON_ID, castMember.id)
+                putExtra(com.example.movieflix.presentation.actor_detail.ActorDetailActivity.EXTRA_PERSON_NAME, castMember.name)
             }
+            itemView.context.startActivity(intent)
         }
     }
 
