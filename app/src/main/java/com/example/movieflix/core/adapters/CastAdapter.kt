@@ -22,7 +22,12 @@ class CastAdapter : ListAdapter<CastMember, CastAdapter.ViewHolder>(CastDiffCall
         fun bind(castMember: CastMember) {
             binding.apply {
                 itemCastName.text = castMember.name
-                itemCastCharacter.text = castMember.character
+                // Handle missing character name
+                itemCastCharacter.text = if (castMember.character.isNullOrBlank()) {
+                    "Cast Member"
+                } else {
+                    castMember.character
+                }
                 
                 // Clear previous image and load new one to prevent recycling issues
                 if (castMember.profilePath != null) {

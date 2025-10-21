@@ -7,5 +7,5 @@ import kotlinx.coroutines.flow.Flow
 
 interface ActorRepository {
     fun getActorDetail(personId: Int): Flow<NetworkResults<ActorDetail>>
-    fun getActorMovies(personId: Int): Flow<NetworkResults<List<MovieResult>>>
+    fun getActorMoviesAndShows(personId: Int): Flow<NetworkResults<List<MovieResult>>>
 }

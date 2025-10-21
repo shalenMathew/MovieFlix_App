@@ -27,20 +27,31 @@ class ActorRepositoryImpl @Inject constructor(
                     remoteDataSource.getActorDetail(personId)
                 }
                 
-                val externalIdsResponse = withContext(Dispatchers.IO) {
-                    remoteDataSource.getPersonExternalIds(personId)
+                // Fetch external IDs with error handling
+                val externalIds = try {
+                    withContext(Dispatchers.IO) {
+                        val response = remoteDataSource.getPersonExternalIds(personId)
+                        if (response.isSuccessful) response.body() else null
+                    }
+                } catch (e: Exception) {
+                    null // Continue even if external IDs fetch fails
                 }
 
-                val actorImagesResponse = withContext(Dispatchers.IO) {
-                    remoteDataSource.getActorImages(personId)
+                // Fetch actor images with error handling
+                val actorImages = try {
+                    withContext(Dispatchers.IO) {
+                        val response = remoteDataSource.getActorImages(personId)
+                        if (response.isSuccessful) response.body() else null
+                    }
+                } catch (e: Exception) {
+                    null // Continue even if images fetch fails
                 }
 
                 if (actorDetailResponse.isSuccessful && actorDetailResponse.body() != null) {
                     val actorData = actorDetailResponse.body()!!
-                    val externalIds = externalIdsResponse.body()
                     
                     // Get a different image for backdrop (second image if available)
-                    val backdropImage = actorImagesResponse.body()?.profiles?.let { profiles ->
+                    val backdropImage = actorImages?.profiles?.let { profiles ->
                         if (profiles.size > 1) profiles[1].filePath else profiles.firstOrNull()?.filePath
                     }
 
@@ -70,17 +81,35 @@ class ActorRepositoryImpl @Inject constructor(
         }
     }
 
-    override fun getActorMovies(personId: Int): Flow<NetworkResults<List<MovieResult>>> = flow {
+    override fun getActorMoviesAndShows(personId: Int): Flow<NetworkResults<List<MovieResult>>> = flow {
         emit(NetworkResults.Loading())
 
         try {
             if (isNetworkAvailable(appContext)) {
-                val moviesResponse = withContext(Dispatchers.IO) {
-                    remoteDataSource.getActorMovieCredits(personId)
+                // Fetch both movie and TV credits with error handling
+                val movies = try {
+                    withContext(Dispatchers.IO) {
+                        val response = remoteDataSource.getActorMovieCredits(personId)
+                        if (response.isSuccessful) response.body()?.cast else null
+                    }
+                } catch (e: Exception) {
+                    null
                 }
 
-                if (moviesResponse.isSuccessful && moviesResponse.body() != null) {
-                    val movies = moviesResponse.body()!!.cast?.map { movie ->
+                val tvShows = try {
+                    withContext(Dispatchers.IO) {
+                        val response = remoteDataSource.getActorTVCredits(personId)
+                        if (response.isSuccessful) response.body()?.cast else null
+                    }
+                } catch (e: Exception) {
+                    null
+                }
+
+                val allContent = mutableListOf<MovieResult>()
+
+                // Add movies
+                movies?.forEach { movie ->
+                    allContent.add(
                         MovieResult(
                             backdropPath = movie.backdropPath,
                             genreIds = movie.genreIds,
@@ -95,12 +124,33 @@ class ActorRepositoryImpl @Inject constructor(
                             voteAverage = movie.voteAverage,
                             mediaType = "movie"
                         )
-                    }?.sortedByDescending { it.voteAverage } ?: emptyList()
-
-                    emit(NetworkResults.Success(movies))
-                } else {
-                    emit(NetworkResults.Error("Failed to load actor movies"))
+                    )
                 }
+
+                // Add TV shows
+                tvShows?.forEach { show ->
+                    allContent.add(
+                        MovieResult(
+                            backdropPath = show.backdropPath,
+                            genreIds = show.genreIds,
+                            id = show.id,
+                            originalLanguage = show.originalLanguage,
+                            originalTitle = show.originalName,
+                            name = show.name,
+                            overview = show.overview,
+                            posterPath = show.posterPath,
+                            releaseDate = show.firstAirDate,
+                            title = show.name,
+                            voteAverage = show.voteAverage,
+                            mediaType = "tv"
+                        )
+                    )
+                }
+
+                // Sort by vote average
+                val sortedContent = allContent.sortedByDescending { it.voteAverage }
+
+                emit(NetworkResults.Success(sortedContent))
             } else {
                 emit(NetworkResults.Error("No internet connection"))
             }

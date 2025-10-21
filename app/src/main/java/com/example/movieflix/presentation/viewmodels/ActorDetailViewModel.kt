@@ -22,8 +22,8 @@ class ActorDetailViewModel @Inject constructor(
     private val _actorDetail = MutableLiveData<NetworkResults<ActorDetail>>()
     val actorDetail: LiveData<NetworkResults<ActorDetail>> = _actorDetail
 
-    private val _actorMovies = MutableLiveData<NetworkResults<List<MovieResult>>>()
-    val actorMovies: LiveData<NetworkResults<List<MovieResult>>> = _actorMovies
+    private val _actorMoviesAndShows = MutableLiveData<NetworkResults<List<MovieResult>>>()
+    val actorMoviesAndShows: LiveData<NetworkResults<List<MovieResult>>> = _actorMoviesAndShows
 
     fun loadActorDetail(personId: Int) {
         viewModelScope.launch {
@@ -33,10 +33,10 @@ class ActorDetailViewModel @Inject constructor(
         }
     }
 
-    fun loadActorMovies(personId: Int) {
+    fun loadActorMoviesAndShows(personId: Int) {
         viewModelScope.launch {
-            getActorInfo.getActorMovies(personId).onEach {
-                _actorMovies.value = it
+            getActorInfo.getActorMoviesAndShows(personId).onEach {
+                _actorMoviesAndShows.value = it
             }.launchIn(this)
         }
     }

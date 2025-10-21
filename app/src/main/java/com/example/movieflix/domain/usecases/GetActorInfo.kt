@@ -8,5 +8,5 @@ class GetActorInfo @Inject constructor(
 ) {
     fun getActorDetail(personId: Int) = actorRepository.getActorDetail(personId)
     
-    fun getActorMovies(personId: Int) = actorRepository.getActorMovies(personId)
+    fun getActorMoviesAndShows(personId: Int) = actorRepository.getActorMoviesAndShows(personId)
 }

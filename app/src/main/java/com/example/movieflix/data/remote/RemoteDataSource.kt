@@ -3,6 +3,7 @@ package com.example.movieflix.data.remote
 import com.example.movieflix.data.model.ActorDetailResponse
 import com.example.movieflix.data.model.ActorImagesResponse
 import com.example.movieflix.data.model.ActorMovieCreditsResponse
+import com.example.movieflix.data.model.ActorTVCreditsResponse
 import com.example.movieflix.data.model.CastResponse
 import com.example.movieflix.data.model.MovieResponseList
 import com.example.movieflix.data.model.MovieResponseVideoResultList
@@ -88,6 +89,10 @@ class RemoteDataSource @Inject constructor(private val apiClient: ApiClient) {
 
     suspend fun getActorImages(personId: Int): Response<ActorImagesResponse> {
         return apiClient.fetchActorImagesApiCall(personId)
+    }
+
+    suspend fun getActorTVCredits(personId: Int): Response<ActorTVCreditsResponse> {
+        return apiClient.fetchActorTVCreditsApiCall(personId)
     }
 
 }

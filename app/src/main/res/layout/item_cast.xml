@@ -53,13 +53,12 @@
             android:layout_width="@dimen/_90sdp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_2sdp"
-            android:fontFamily="@font/montserrat_light"
+            android:fontFamily="@font/montserrat_medium"
             android:gravity="center"
             android:maxLines="1"
             android:ellipsize="end"
-            android:textColor="@color/text_secondary"
-            android:textSize="@dimen/_8ssp"
-            android:textAllCaps="true"
+            android:textColor="@color/character_name_color"
+            android:textSize="@dimen/_10ssp"
             tools:text="Tony Stark" />
 
     </LinearLayout>

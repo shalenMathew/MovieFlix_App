@@ -3,6 +3,7 @@ package com.example.movieflix.data.network
 import com.example.movieflix.data.model.ActorDetailResponse
 import com.example.movieflix.data.model.ActorImagesResponse
 import com.example.movieflix.data.model.ActorMovieCreditsResponse
+import com.example.movieflix.data.model.ActorTVCreditsResponse
 import com.example.movieflix.data.model.CastResponse
 import com.example.movieflix.data.model.MovieResponseList
 import com.example.movieflix.data.model.MovieResponseVideoResultList
@@ -143,5 +144,11 @@ interface ApiClient {
     suspend fun fetchActorImagesApiCall(
         @Path("person_id") personId: Int
     ): Response<ActorImagesResponse>
+
+    @GET("3/person/{person_id}/tv_credits")
+    suspend fun fetchActorTVCreditsApiCall(
+        @Path("person_id") personId: Int,
+        @Query("language") lang: String? = "en-US"
+    ): Response<ActorTVCreditsResponse>
 
 }
