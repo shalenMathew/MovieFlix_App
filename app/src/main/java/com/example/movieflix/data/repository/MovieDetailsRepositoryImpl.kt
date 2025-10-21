@@ -241,13 +241,16 @@ class MovieDetailsRepositoryImpl(
                 val castResponse = remoteDataSource.getMovieCast(movieId)
                 castResponse.body()?.let { response ->
                     val castList = response.cast?.take(10)?.mapNotNull { cast ->
-                        cast.id?.let { personId ->
+                        // Only include cast with valid ID and name
+                        if (cast.id != null && cast.id > 0 && !cast.name.isNullOrBlank()) {
                             CastMember(
-                                id = personId,
-                                name = cast.name ?: "",
-                                character = cast.character ?: "",
-                                profilePath = cast.profilePath
+                                id = cast.id,
+                                name = cast.name,
+                                character = cast.character?.takeIf { it.isNotBlank() } ?: "",
+                                profilePath = cast.profilePath?.takeIf { it.isNotBlank() }
                             )
+                        } else {
+                            null
                         }
                     } ?: emptyList()
                     
@@ -271,13 +274,16 @@ class MovieDetailsRepositoryImpl(
                 val castResponse = remoteDataSource.getTVCast(tvId)
                 castResponse.body()?.let { response ->
                     val castList = response.cast?.take(10)?.mapNotNull { cast ->
-                        cast.id?.let { personId ->
+                        // Only include cast with valid ID and name
+                        if (cast.id != null && cast.id > 0 && !cast.name.isNullOrBlank()) {
                             CastMember(
-                                id = personId,
-                                name = cast.name ?: "",
-                                character = cast.character ?: "",
-                                profilePath = cast.profilePath
+                                id = cast.id,
+                                name = cast.name,
+                                character = cast.character?.takeIf { it.isNotBlank() } ?: "",
+                                profilePath = cast.profilePath?.takeIf { it.isNotBlank() }
                             )
+                        } else {
+                            null
                         }
                     } ?: emptyList()
                     
@@ -304,13 +310,16 @@ class MovieDetailsRepositoryImpl(
                     val crewList = response.crew?.filter { crew ->
                         crew.job in listOf("Director", "Writer", "Screenplay", "Producer", "Executive Producer")
                     }?.distinctBy { it.id }?.mapNotNull { crew ->
-                        crew.id?.let { personId ->
+                        // Only include crew with valid ID and name
+                        if (crew.id != null && crew.id > 0 && !crew.name.isNullOrBlank()) {
                             CrewMember(
-                                id = personId,
-                                name = crew.name ?: "",
+                                id = crew.id,
+                                name = crew.name,
                                 job = crew.job ?: "",
-                                profilePath = crew.profilePath
+                                profilePath = crew.profilePath?.takeIf { it.isNotBlank() }
                             )
+                        } else {
+                            null
                         }
                     } ?: emptyList()
                     
@@ -337,13 +346,16 @@ class MovieDetailsRepositoryImpl(
                     val crewList = response.crew?.filter { crew ->
                         crew.job in listOf("Director", "Writer", "Screenplay", "Producer", "Executive Producer")
                     }?.distinctBy { it.id }?.mapNotNull { crew ->
-                        crew.id?.let { personId ->
+                        // Only include crew with valid ID and name
+                        if (crew.id != null && crew.id > 0 && !crew.name.isNullOrBlank()) {
                             CrewMember(
-                                id = personId,
-                                name = crew.name ?: "",
+                                id = crew.id,
+                                name = crew.name,
                                 job = crew.job ?: "",
-                                profilePath = crew.profilePath
+                                profilePath = crew.profilePath?.takeIf { it.isNotBlank() }
                             )
+                        } else {
+                            null
                         }
                     } ?: emptyList()
                     

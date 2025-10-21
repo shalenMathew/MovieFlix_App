@@ -57,16 +57,16 @@ class ActorRepositoryImpl @Inject constructor(
 
                     val actorDetail = ActorDetail(
                         id = actorData.id ?: 0,
-                        name = actorData.name ?: "",
-                        biography = actorData.biography,
-                        birthday = actorData.birthday,
-                        placeOfBirth = actorData.placeOfBirth,
-                        profilePath = actorData.profilePath,
-                        backdropImagePath = backdropImage,
-                        knownForDepartment = actorData.knownForDepartment,
-                        instagramId = externalIds?.instagramId,
-                        twitterId = externalIds?.twitterId,
-                        facebookId = externalIds?.facebookId
+                        name = actorData.name ?: "Unknown",
+                        biography = actorData.biography?.takeIf { it.isNotBlank() },
+                        birthday = actorData.birthday?.takeIf { it.isNotBlank() },
+                        placeOfBirth = actorData.placeOfBirth?.takeIf { it.isNotBlank() },
+                        profilePath = actorData.profilePath?.takeIf { it.isNotBlank() },
+                        backdropImagePath = backdropImage?.takeIf { it.isNotBlank() },
+                        knownForDepartment = actorData.knownForDepartment?.takeIf { it.isNotBlank() },
+                        instagramId = externalIds?.instagramId?.takeIf { it.isNotBlank() },
+                        twitterId = externalIds?.twitterId?.takeIf { it.isNotBlank() },
+                        facebookId = externalIds?.facebookId?.takeIf { it.isNotBlank() }
                     )
 
                     emit(NetworkResults.Success(actorDetail))

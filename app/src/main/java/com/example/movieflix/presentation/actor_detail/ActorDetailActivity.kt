@@ -119,31 +119,43 @@ class ActorDetailActivity : AppCompatActivity() {
             // Set actor name
             actorName.text = actor.name
 
-            // Set profile image
-            if (actor.profilePath != null) {
+            // Set profile image - always set an image (placeholder if no profile)
+            if (!actor.profilePath.isNullOrEmpty()) {
                 actorProfileImage.loadImage(
                     Constants.TMDB_IMAGE_BASE_URL_W500.plus(actor.profilePath),
                     placeholder = ContextCompat.getDrawable(this@ActorDetailActivity, R.drawable.poster_bg)
                 )
+            } else {
+                // Set placeholder when no profile image
+                actorProfileImage.setImageDrawable(
+                    ContextCompat.getDrawable(this@ActorDetailActivity, R.drawable.poster_bg)
+                )
             }
 
-            // Set backdrop image (use different image if available)
+            // Set backdrop image (use different image if available) - always set an image
             val backdropPath = actor.backdropImagePath ?: actor.profilePath
-            if (backdropPath != null) {
+            if (!backdropPath.isNullOrEmpty()) {
                 actorBackdrop.loadImage(
                     Constants.TMDB_IMAGE_BASE_URL_W500.plus(backdropPath),
                     placeholder = ContextCompat.getDrawable(this@ActorDetailActivity, R.drawable.poster_bg)
                 )
+            } else {
+                // Set placeholder when no backdrop image
+                actorBackdrop.setImageDrawable(
+                    ContextCompat.getDrawable(this@ActorDetailActivity, R.drawable.poster_bg)
+                )
             }
 
             // Set known for department
-            actorKnownFor.text = actor.knownForDepartment?.let { "Known for $it" } ?: ""
+            actorKnownFor.text = actor.knownForDepartment?.let { "Known for $it" } ?: "Actor"
 
             // Set biography
             if (!actor.biography.isNullOrEmpty()) {
                 actorBiography.text = actor.biography
+                actorBiography.visibility = View.VISIBLE
             } else {
-                actorBiography.text = "No biography available."
+                actorBiography.text = "No biography available for this person."
+                actorBiography.visibility = View.VISIBLE
             }
 
             // Set birthday
