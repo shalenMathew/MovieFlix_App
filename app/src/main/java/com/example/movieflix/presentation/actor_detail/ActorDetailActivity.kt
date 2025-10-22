@@ -18,7 +18,9 @@ import com.example.movieflix.core.utils.loadImage
 import com.example.movieflix.databinding.ActivityActorDetailBinding
 import com.example.movieflix.domain.model.ActorDetail
 import com.example.movieflix.domain.model.MovieResult
+import com.example.movieflix.presentation.movie_details.MovieDetailsFragment
 import com.example.movieflix.presentation.viewmodels.ActorDetailViewModel
+import com.google.gson.Gson
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -64,8 +66,7 @@ class ActorDetailActivity : AppCompatActivity() {
 
     private fun setupRecyclerView() {
         moviesAdapter = ActorMoviesAdapter { movie ->
-            // Handle movie click - can navigate to movie details
-            // For now, just a placeholder
+            openMovieDetail(movie)
         }
 
         binding.actorMoviesRecycler.apply {
@@ -76,6 +77,14 @@ class ActorDetailActivity : AppCompatActivity() {
                 false
             )
         }
+    }
+
+    private fun openMovieDetail(movie: MovieResult) {
+        val movieDetailsFragment = MovieDetailsFragment()
+        val bundle = android.os.Bundle()
+        bundle.putString(Constants.MEDIA_SEND_REQUEST_KEY, Gson().toJson(movie))
+        movieDetailsFragment.arguments = bundle
+        movieDetailsFragment.show(supportFragmentManager, "MovieDetailsFragment")
     }
 
     private fun observeViewModel() {

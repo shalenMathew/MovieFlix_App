@@ -7,23 +7,21 @@
 
     </data>
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/item_cast_profile_card"
+        style="@style/Widget.Material3.CardView.Filled"
+        android:layout_width="@dimen/_120sdp"
+        android:layout_height="@dimen/_160sdp"
         android:layout_marginStart="@dimen/_8sdp"
         android:layout_marginVertical="@dimen/_4sdp"
-        android:gravity="center">
+        app:cardBackgroundColor="@color/dark_gray"
+        app:cardCornerRadius="@dimen/_8sdp"
+        app:strokeColor="@color/transparent"
+        app:strokeWidth="0dp">
 
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/item_cast_profile_card"
-            style="@style/Widget.Material3.CardView.Filled"
-            android:layout_width="@dimen/_90sdp"
-            android:layout_height="@dimen/_110sdp"
-            app:cardBackgroundColor="@color/dark_gray"
-            app:cardCornerRadius="@dimen/_4sdp"
-            app:strokeColor="@color/transparent"
-            app:strokeWidth="0dp">
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
             <ImageView
                 android:id="@+id/item_cast_profile_image"
@@ -33,33 +31,54 @@
                 android:background="@color/dark_gray"
                 tools:src="@tools:sample/avatars" />
 
-        </com.google.android.material.card.MaterialCardView>
+            <!-- Gradient overlay at bottom -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_60sdp"
+                android:layout_gravity="bottom"
+                android:background="@drawable/gradient_overlay_bottom" />
 
-        <TextView
-            android:id="@+id/item_cast_name"
-            android:layout_width="@dimen/_90sdp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_6sdp"
-            android:fontFamily="@font/montserrat_semibold"
-            android:gravity="center"
-            android:maxLines="2"
-            android:ellipsize="end"
-            android:textColor="@color/white"
-            android:textSize="@dimen/_10ssp"
-            tools:text="Robert Downey Jr." />
+            <!-- Text overlay at bottom -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:orientation="vertical"
+                android:padding="@dimen/_8sdp">
 
-        <TextView
-            android:id="@+id/item_cast_character"
-            android:layout_width="@dimen/_90sdp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_2sdp"
-            android:fontFamily="@font/montserrat_medium"
-            android:gravity="center"
-            android:maxLines="1"
-            android:ellipsize="end"
-            android:textColor="@color/character_name_color"
-            android:textSize="@dimen/_10ssp"
-            tools:text="Tony Stark" />
+                <TextView
+                    android:id="@+id/item_cast_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/montserrat_semibold"
+                    android:gravity="start"
+                    android:maxLines="2"
+                    android:ellipsize="end"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/_11ssp"
+                    android:shadowColor="#80000000"
+                    android:shadowDx="0"
+                    android:shadowDy="1"
+                    android:shadowRadius="2"
+                    tools:text="Rafael Vitti" />
 
-    </LinearLayout>
+                <TextView
+                    android:id="@+id/item_cast_character"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_2sdp"
+                    android:fontFamily="@font/montserrat_medium"
+                    android:gravity="start"
+                    android:maxLines="1"
+                    android:ellipsize="end"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/_9ssp"
+                    android:alpha="0.9"
+                    tools:text="PEDRO" />
+
+            </LinearLayout>
+
+        </FrameLayout>
+
+    </com.google.android.material.card.MaterialCardView>
 </layout>

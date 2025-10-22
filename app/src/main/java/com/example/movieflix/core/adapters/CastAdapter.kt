@@ -22,11 +22,11 @@ class CastAdapter : ListAdapter<CastMember, CastAdapter.ViewHolder>(CastDiffCall
         fun bind(castMember: CastMember) {
             binding.apply {
                 itemCastName.text = castMember.name
-                // Handle missing character name
+                // Handle missing character name - display in uppercase
                 itemCastCharacter.text = if (castMember.character.isNullOrBlank()) {
-                    "Cast Member"
+                    "CAST MEMBER"
                 } else {
-                    castMember.character
+                    castMember.character.uppercase()
                 }
                 
                 // Clear previous image and load new one to prevent recycling issues
