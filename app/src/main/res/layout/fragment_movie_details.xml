@@ -293,6 +293,37 @@
 
         </LinearLayout>
 
+        <!-- Cast Section -->
+        <TextView
+            android:id="@+id/cast_section_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@color/black"
+            android:fontFamily="@font/montserrat_semibold"
+            android:gravity="start"
+            android:paddingHorizontal="@dimen/_12sdp"
+            android:paddingTop="@dimen/_12sdp"
+            android:text="Cast"
+            android:textColor="@color/white"
+            android:textSize="@dimen/_12ssp"
+            android:visibility="gone" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/fragment_movie_details_cast_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/black"
+            android:nestedScrollingEnabled="false"
+            android:orientation="horizontal"
+            android:paddingHorizontal="@dimen/_6sdp"
+            android:paddingTop="@dimen/_4sdp"
+            android:paddingBottom="@dimen/_8sdp"
+            android:visibility="gone"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:itemCount="5"
+            tools:listitem="@layout/item_cast" />
+
         <TextView
             android:id="@+id/recommended_text"
             android:layout_width="match_parent"

@@ -1,7 +1,13 @@
 package com.example.movieflix.data.network
 
+import com.example.movieflix.data.model.ActorDetailResponse
+import com.example.movieflix.data.model.ActorImagesResponse
+import com.example.movieflix.data.model.ActorMovieCreditsResponse
+import com.example.movieflix.data.model.ActorTVCreditsResponse
+import com.example.movieflix.data.model.CastResponse
 import com.example.movieflix.data.model.MovieResponseList
 import com.example.movieflix.data.model.MovieResponseVideoResultList
+import com.example.movieflix.data.model.PersonExternalIdsResponse
 import com.example.movieflix.data.model.WhereToWatchProviderResponse
 import retrofit2.Response
 import retrofit2.http.GET
@@ -105,6 +111,44 @@ interface ApiClient {
         @Query("query") searchQuery:String
     ): Response<MovieResponseList>
 
+    @GET("3/movie/{movie_id}/credits")
+    suspend fun fetchMovieCastApiCall(
+        @Path("movie_id") movieId: Int,
+        @Query("language") lang: String? = "en-US"
+    ): Response<CastResponse>
 
+    @GET("3/tv/{tv_id}/credits")
+    suspend fun fetchTVCastApiCall(
+        @Path("tv_id") tvId: Int,
+        @Query("language") lang: String? = "en-US"
+    ): Response<CastResponse>
+
+    @GET("3/person/{person_id}/external_ids")
+    suspend fun fetchPersonExternalIdsApiCall(
+        @Path("person_id") personId: Int
+    ): Response<PersonExternalIdsResponse>
+
+    @GET("3/person/{person_id}")
+    suspend fun fetchActorDetailApiCall(
+        @Path("person_id") personId: Int,
+        @Query("language") lang: String? = "en-US"
+    ): Response<ActorDetailResponse>
+
+    @GET("3/person/{person_id}/movie_credits")
+    suspend fun fetchActorMovieCreditsApiCall(
+        @Path("person_id") personId: Int,
+        @Query("language") lang: String? = "en-US"
+    ): Response<ActorMovieCreditsResponse>
+
+    @GET("3/person/{person_id}/images")
+    suspend fun fetchActorImagesApiCall(
+        @Path("person_id") personId: Int
+    ): Response<ActorImagesResponse>
+
+    @GET("3/person/{person_id}/tv_credits")
+    suspend fun fetchActorTVCreditsApiCall(
+        @Path("person_id") personId: Int,
+        @Query("language") lang: String? = "en-US"
+    ): Response<ActorTVCreditsResponse>
 
 }

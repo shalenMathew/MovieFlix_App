@@ -20,6 +20,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.movieflix.R
+import com.example.movieflix.core.adapters.CastAdapter
 import com.example.movieflix.core.adapters.RecommendationAdapter
 import com.example.movieflix.core.utils.Constants
 import com.example.movieflix.core.utils.Constants.BASE_YOUTUBE_URL
@@ -63,6 +64,7 @@ class MovieDetailsFragment : BottomSheetDialogFragment(){
     private var youTubePlayerListener: AbstractYouTubePlayerListener? = null
     private var youTubePlayer: YouTubePlayer? = null
     private lateinit var recommendationAdapter:RecommendationAdapter
+    private lateinit var castAdapter:CastAdapter
     private var whereToWatchLink:String? = null
     private val customTabsIntent by lazy {
         CustomTabsIntent.Builder().setShowTitle(true).build()
@@ -157,13 +159,31 @@ class MovieDetailsFragment : BottomSheetDialogFragment(){
         })
         binding.fragmentMovieDetailsRecommendList.adapter=recommendationAdapter
 
+        castAdapter = CastAdapter()
+        binding.fragmentMovieDetailsCastList.adapter = castAdapter
+
     }
 
     private fun openDetailFragment(it: MovieResult) {
+        // Update current arguments and reload data
         val bundle = Bundle()
-        bundle.putString(Constants.MEDIA_SEND_REQUEST_KEY,Gson().toJson(it))
-
-        findNavController().navigate(R.id.action_movieDetailsFragment_self,bundle)
+        bundle.putString(Constants.MEDIA_SEND_REQUEST_KEY, Gson().toJson(it))
+        
+        // Check if we can use NavController (normal fragment flow)
+        try {
+            findNavController().navigate(R.id.action_movieDetailsFragment_self, bundle)
+        } catch (e: IllegalStateException) {
+            // NavController not available - we're shown as a standalone dialog
+            // Update arguments and reload the fragment
+            arguments = bundle
+            
+            // Reset state
+            isPlaying = false
+            youTubePlayer?.pause()
+            
+            // Reload data with new movie
+            setUpDetailFragment()
+        }
     }
 
     private fun setUpObservers() {
@@ -299,6 +319,7 @@ class MovieDetailsFragment : BottomSheetDialogFragment(){
 
                                     if (id!=null){
                                         homeInfoViewModel.getMovieTrailer(id)
+                                        homeInfoViewModel.getMovieCast(id)
                                     }else{
                                         showToast(requireContext(),"media id is null")
                                     }
@@ -306,6 +327,7 @@ class MovieDetailsFragment : BottomSheetDialogFragment(){
                                 "tv" -> {
                                     if (id!=null){
                                         homeInfoViewModel.getTVTrailer(id)
+                                        homeInfoViewModel.getTVCast(id)
                                     }else{
                                         showToast(requireContext(),"media id is null")
                                     }
@@ -324,6 +346,30 @@ class MovieDetailsFragment : BottomSheetDialogFragment(){
                 }
             }
 
+        }
+
+        homeInfoViewModel.castList.observe(viewLifecycleOwner) { result ->
+            when (result) {
+                is NetworkResults.Success -> {
+                    result.data?.let { castList ->
+                        if (castList.isNotEmpty()) {
+                            binding.castSectionTitle.visibility = View.VISIBLE
+                            binding.fragmentMovieDetailsCastList.visibility = View.VISIBLE
+                            castAdapter.submitList(castList)
+                        } else {
+                            binding.castSectionTitle.visibility = View.GONE
+                            binding.fragmentMovieDetailsCastList.visibility = View.GONE
+                        }
+                    }
+                }
+                is NetworkResults.Error -> {
+                    binding.castSectionTitle.visibility = View.GONE
+                    binding.fragmentMovieDetailsCastList.visibility = View.GONE
+                }
+                is NetworkResults.Loading -> {
+                    // Show loading state if needed
+                }
+            }
         }
     }
 
@@ -571,9 +617,11 @@ class MovieDetailsFragment : BottomSheetDialogFragment(){
                 when (it.mediaType) {
                     "movie" -> {
                         homeInfoViewModel.getMovieTrailer(id)
+                        homeInfoViewModel.getMovieCast(id)
                     }
                     "tv" -> {
                         homeInfoViewModel.getTVTrailer(id)
+                        homeInfoViewModel.getTVCast(id)
                     }
                     else -> {
 

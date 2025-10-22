@@ -1,6 +1,8 @@
 package com.example.movieflix.domain.repository
 
 import com.example.movieflix.core.utils.NetworkResults
+import com.example.movieflix.domain.model.CastMember
+import com.example.movieflix.domain.model.CrewMember
 import com.example.movieflix.domain.model.HomeFeedData
 import com.example.movieflix.domain.model.MovieList
 import com.example.movieflix.domain.model.MediaVideoResultList
@@ -26,5 +28,13 @@ fun getWhereToWatchProvider(movieId:Int):Flow<NetworkResults<WatchProviders>>
 
 // Pagination support for home feed categories
 fun loadMoreMoviesForCategory(categoryTitle: String, page: Int): Flow<NetworkResults<MovieList>>
+
+fun getMovieCast(movieId: Int): Flow<NetworkResults<List<CastMember>>>
+
+fun getTVCast(tvId: Int): Flow<NetworkResults<List<CastMember>>>
+
+fun getMovieCrew(movieId: Int): Flow<NetworkResults<List<CrewMember>>>
+
+fun getTVCrew(tvId: Int): Flow<NetworkResults<List<CrewMember>>>
 
 }
