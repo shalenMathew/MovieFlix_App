@@ -10,8 +10,8 @@
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/item_cast_profile_card"
         style="@style/Widget.Material3.CardView.Filled"
-        android:layout_width="@dimen/_120sdp"
-        android:layout_height="@dimen/_160sdp"
+        android:layout_width="@dimen/_95sdp"
+        android:layout_height="@dimen/_140sdp"
         android:layout_marginStart="@dimen/_8sdp"
         android:layout_marginVertical="@dimen/_4sdp"
         app:cardBackgroundColor="@color/dark_gray"
