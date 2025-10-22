@@ -2,6 +2,8 @@ package com.example.movieflix.presentation
 
 import android.content.res.ColorStateList
 import android.os.Bundle
+import androidx.activity.SystemBarStyle
+import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.navigation.fragment.NavHostFragment
@@ -13,6 +15,9 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
+
+
+
     private val navController by lazy{
         (supportFragmentManager.findFragmentById(R.id.fragmentContainerView)
                 as NavHostFragment).navController
@@ -22,8 +27,18 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        enableEdgeToEdge(
+            statusBarStyle = SystemBarStyle.dark(
+                scrim = android.graphics.Color.BLACK
+            ),
+            navigationBarStyle = SystemBarStyle.dark(
+                scrim = android.graphics.Color.BLACK
+            )
+        )
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+
 
         // Setup bottom navigation with nav controller
         binding.bottomNavigationView.setupWithNavController(navController)
