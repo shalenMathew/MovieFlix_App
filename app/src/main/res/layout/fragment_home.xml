@@ -14,18 +14,11 @@
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="@dimen/_190sdp"
+        android:layout_height="@dimen/_150sdp"
         android:background="@drawable/gradient_bottom"
 
         app:layout_constraintBottom_toBottomOf="parent"
         />
-
-<!--    <View-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="@dimen/_65sdp"-->
-<!--        android:background="@drawable/gradient_bottom"-->
-<!--        android:layout_gravity="bottom"-->
-<!--        />-->
 
     <include
         layout="@layout/shimmer_layout"
@@ -73,6 +66,8 @@
 
             </RelativeLayout>
 
+
+
             <RelativeLayout
                 android:id="@+id/banner_layout"
                 android:layout_width="match_parent"
@@ -92,10 +87,12 @@
                     android:layout_height="wrap_content"
                     android:nestedScrollingEnabled="false"
                     android:orientation="horizontal"
-                    android:paddingBottom="@dimen/_28sdp"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                     tools:itemCount="1"
-                    tools:listitem="@layout/banner_item" />
+                    tools:listitem="@layout/banner_item"
+
+                    />
+
 
                 <LinearLayout
                     android:id="@+id/fragment_home_watchNow_btn_ll"
@@ -147,7 +144,7 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@id/fragment_home_watchNow_btn_ll"
                     android:layout_centerHorizontal="true"
-                    android:layout_marginBottom="@dimen/_12sdp"
+
                     app:spi_dotColor="@color/divider"
                     app:spi_dotSelectedColor="@color/white"
                     />
