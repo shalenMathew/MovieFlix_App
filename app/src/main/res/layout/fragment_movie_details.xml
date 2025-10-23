@@ -210,6 +210,12 @@
                 android:layout_marginStart="@dimen/_5sdp"
                 >
 
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    >
+
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/fragment_movie_details_share_btn"
                     style="@style/Widget.Material3.CardView.Filled"
@@ -235,6 +241,15 @@
 
                 </com.google.android.material.card.MaterialCardView>
 
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginStart="@dimen/_15sdp"
+                    >
+
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/fragment_movie_details_watchlist_btn"
                     style="@style/Widget.Material3.CardView.Filled"
@@ -242,7 +257,6 @@
                     android:layout_height="@dimen/_30sdp"
                     app:cardBackgroundColor="@color/app_color"
                     app:cardCornerRadius="8dp"
-                    android:layout_marginStart="@dimen/_15sdp"
                     >
 
                     <LinearLayout
@@ -261,6 +275,14 @@
                     </LinearLayout>
 
                 </com.google.android.material.card.MaterialCardView>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginStart="@dimen/_15sdp"
+                    >
 
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/fragment_movie_details_fav_btn"
@@ -269,7 +291,6 @@
                     android:layout_height="@dimen/_30sdp"
                     app:cardBackgroundColor="@color/app_color"
                     app:cardCornerRadius="8dp"
-                    android:layout_marginStart="@dimen/_15sdp"
                     >
 
                     <LinearLayout
@@ -288,6 +309,8 @@
                     </LinearLayout>
 
                 </com.google.android.material.card.MaterialCardView>
+
+                </LinearLayout>
 
             </LinearLayout>
 

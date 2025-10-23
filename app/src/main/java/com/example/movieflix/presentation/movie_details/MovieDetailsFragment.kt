@@ -678,7 +678,7 @@ class MovieDetailsFragment : BottomSheetDialogFragment(){
 
     override fun onResume() {
         super.onResume()
-        youTubePlayer?.play()
+//        youTubePlayer?.play()
     }
 
     override fun onStop() {
