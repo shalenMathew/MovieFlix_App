@@ -56,7 +56,7 @@ MovieFlix is actively under development. Here's what's coming next:
 - [ ] Notify when to watch movie by allowing users to schedule time
 - [ ] Add a progress tracker to track movies or series
 - [x] ~~Add bottom nav~~
-- [ ] Show whole cast working in a movie with their socials
+- [x] Show whole cast working in a movie with their socials
 
 ## Built With 🛠
 - Kotlin
