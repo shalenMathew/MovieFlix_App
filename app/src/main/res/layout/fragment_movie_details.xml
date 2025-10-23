@@ -330,7 +330,7 @@
             android:text="Cast"
             android:textColor="@color/white"
             android:textSize="@dimen/_12ssp"
-            android:visibility="gone" />
+             />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/fragment_movie_details_cast_list"
@@ -342,7 +342,6 @@
             android:paddingHorizontal="@dimen/_6sdp"
             android:paddingTop="@dimen/_4sdp"
             android:paddingBottom="@dimen/_8sdp"
-            android:visibility="gone"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             tools:itemCount="5"
             tools:listitem="@layout/item_cast" />
