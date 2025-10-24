@@ -18,6 +18,7 @@ import com.example.movieflix.core.utils.loadImage
 import com.example.movieflix.databinding.ActivityActorDetailBinding
 import com.example.movieflix.domain.model.ActorDetail
 import com.example.movieflix.domain.model.MovieResult
+import com.example.movieflix.presentation.MainActivity
 import com.example.movieflix.presentation.movie_details.MovieDetailsFragment
 import com.example.movieflix.presentation.viewmodels.ActorDetailViewModel
 import com.google.gson.Gson
@@ -38,10 +39,10 @@ class ActorDetailActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        
+
         // Make status bar transparent
         WindowCompat.setDecorFitsSystemWindows(window, false)
-        
+
         binding = ActivityActorDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -60,6 +61,9 @@ class ActorDetailActivity : AppCompatActivity() {
 
     private fun setupToolbar() {
         binding.toolbar.setNavigationOnClickListener {
+            val intent = Intent(this, MainActivity::class.java)
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
+            startActivity(intent)
             finish()
         }
     }
@@ -243,7 +247,7 @@ class ActorDetailActivity : AppCompatActivity() {
             // Try to open native app first
             val nativeIntent = Intent(Intent.ACTION_VIEW, android.net.Uri.parse(nativeUrl))
             nativeIntent.setPackage(getNativeAppPackage(nativeUrl))
-            
+
             if (nativeIntent.resolveActivity(packageManager) != null) {
                 // Native app is installed, open it
                 startActivity(nativeIntent)
@@ -266,7 +270,7 @@ class ActorDetailActivity : AppCompatActivity() {
             }
         }
     }
-    
+
     private fun getNativeAppPackage(nativeUrl: String): String {
         return when {
             nativeUrl.startsWith("instagram://") -> "com.instagram.android"
