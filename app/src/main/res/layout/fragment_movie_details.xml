@@ -316,6 +316,101 @@
 
         </LinearLayout>
 
+        <!-- Tab Layout for About and Episodes (TV Shows only) -->
+        <LinearLayout
+            android:id="@+id/tabs_section"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/black"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/tab_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_12sdp"
+                android:background="@color/black"
+                app:tabIndicatorColor="@color/app_color"
+                app:tabIndicatorHeight="@dimen/_2sdp"
+                app:tabSelectedTextColor="@color/white"
+                app:tabTextColor="@color/text_secondary"
+                app:tabMode="fixed"
+                app:tabGravity="fill">
+
+                <com.google.android.material.tabs.TabItem
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="About" />
+
+                <com.google.android.material.tabs.TabItem
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Episodes" />
+
+            </com.google.android.material.tabs.TabLayout>
+
+        </LinearLayout>
+
+        <!-- Episodes Section (TV Shows only) -->
+        <LinearLayout
+            android:id="@+id/episodes_section"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/black"
+            android:orientation="vertical"
+            android:paddingHorizontal="@dimen/_12sdp"
+            android:paddingTop="@dimen/_12sdp"
+            android:visibility="gone">
+
+            <!-- Season Dropdown -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/montserrat_semibold"
+                android:text="Select Season"
+                android:textColor="@color/white"
+                android:textSize="@dimen/_10ssp"
+                android:layout_marginBottom="@dimen/_6sdp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/season_dropdown_button"
+                style="@style/Widget.Material3.Button.OutlinedButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Season 1"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:fontFamily="@font/montserrat_medium"
+                android:gravity="start|center_vertical"
+                app:icon="@drawable/baseline_keyboard_arrow_right_24"
+                app:iconGravity="end"
+                app:iconTint="@color/white"
+                app:strokeColor="@color/app_color"
+                app:strokeWidth="1dp" />
+
+            <!-- Episodes RecyclerView -->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/episodes_recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_8sdp"
+                android:nestedScrollingEnabled="false"
+                android:orientation="vertical"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:itemCount="10"
+                tools:listitem="@layout/item_episode" />
+
+        </LinearLayout>
+
+        <!-- About Section Content (visible by default, hidden when Episodes tab is active) -->
+        <LinearLayout
+            android:id="@+id/about_section"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/black"
+            android:orientation="vertical">
+
         <!-- Cast Section -->
         <TextView
             android:id="@+id/cast_section_title"
@@ -374,7 +469,8 @@
             tools:itemCount="2"
             tools:listitem="@layout/item_list" />
 
-
+        </LinearLayout>
+        <!-- End of About Section -->
 
 
     </LinearLayout>

@@ -372,5 +372,42 @@ class MovieDetailsRepositoryImpl(
         }
     }
 
-}
+    override fun getTVDetail(tvId: Int): Flow<NetworkResults<com.example.movieflix.domain.model.TVDetail>> = flow {
+        emit(NetworkResults.Loading())
+        try {
+            if (isNetworkAvailable(appContext)) {
+                val tvDetailResponse = remoteDataSource.getTVDetail(tvId)
+                tvDetailResponse.body()?.let { response ->
+                    emit(NetworkResults.Success(response.toTVDetail()))
+                } ?: emit(NetworkResults.Error("No TV show data available"))
+            } else {
+                emit(NetworkResults.Error("No internet connection"))
+            }
+        } catch (e: Exception) {
+            when (e) {
+                is IOException -> emit(NetworkResults.Error("Check ur internet connection"))
+                else -> emit(NetworkResults.Error(e.message ?: "Unknown error"))
+            }
+        }
+    }
 
+    override fun getTVSeason(tvId: Int, seasonNumber: Int): Flow<NetworkResults<com.example.movieflix.domain.model.TVSeason>> = flow {
+        emit(NetworkResults.Loading())
+        try {
+            if (isNetworkAvailable(appContext)) {
+                val seasonResponse = remoteDataSource.getTVSeason(tvId, seasonNumber)
+                seasonResponse.body()?.let { response ->
+                    emit(NetworkResults.Success(response.toTVSeason()))
+                } ?: emit(NetworkResults.Error("No season data available"))
+            } else {
+                emit(NetworkResults.Error("No internet connection"))
+            }
+        } catch (e: Exception) {
+            when (e) {
+                is IOException -> emit(NetworkResults.Error("Check ur internet connection"))
+                else -> emit(NetworkResults.Error(e.message ?: "Unknown error"))
+            }
+        }
+    }
+
+}

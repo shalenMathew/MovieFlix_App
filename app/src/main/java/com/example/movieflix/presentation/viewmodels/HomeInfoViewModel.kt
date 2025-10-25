@@ -10,6 +10,8 @@ import com.example.movieflix.domain.model.CrewMember
 import com.example.movieflix.domain.model.HomeFeedData
 import com.example.movieflix.domain.model.MovieList
 import com.example.movieflix.domain.model.MediaVideoResultList
+import com.example.movieflix.domain.model.TVDetail
+import com.example.movieflix.domain.model.TVSeason
 import com.example.movieflix.domain.model.WatchProviders
 import com.example.movieflix.domain.usecases.GetMovieInfo
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -39,6 +41,12 @@ class HomeInfoViewModel @Inject constructor(private val getMovieInfo: GetMovieIn
     private var _crewList = MutableLiveData<NetworkResults<List<CrewMember>>>()
     val crewList: LiveData<NetworkResults<List<CrewMember>>> = _crewList
 
+    private var _tvDetail = MutableLiveData<NetworkResults<TVDetail>>()
+    val tvDetail: LiveData<NetworkResults<TVDetail>> = _tvDetail
+
+    private var _tvSeason = MutableLiveData<NetworkResults<TVSeason>>()
+    val tvSeason: LiveData<NetworkResults<TVSeason>> = _tvSeason
+
     // Pagination support
     private var _loadMoreMovies = MutableLiveData<NetworkResults<Pair<String, MovieList>>>()
     val loadMoreMovies: LiveData<NetworkResults<Pair<String, MovieList>>> = _loadMoreMovies
@@ -66,7 +74,6 @@ class HomeInfoViewModel @Inject constructor(private val getMovieInfo: GetMovieIn
         // launchIn is a non blocking in nature which mean code below launchIn will still run even when all values are not emitted
         // whereas the code below or next line below .collect() won't run until all emitted values is being /
     }
-}
 
     fun getMovieTrailer(movieId:Int){
         viewModelScope.launch {
@@ -164,6 +171,22 @@ class HomeInfoViewModel @Inject constructor(private val getMovieInfo: GetMovieIn
         viewModelScope.launch {
             getMovieInfo.getTVCrew(tvId).onEach {
                 _crewList.value = it
+            }.launchIn(this)
+        }
+    }
+
+    fun getTVDetail(tvId: Int) {
+        viewModelScope.launch {
+            getMovieInfo.getTVDetail(tvId).onEach {
+                _tvDetail.value = it
+            }.launchIn(this)
+        }
+    }
+
+    fun getTVSeason(tvId: Int, seasonNumber: Int) {
+        viewModelScope.launch {
+            getMovieInfo.getTVSeason(tvId, seasonNumber).onEach {
+                _tvSeason.value = it
             }.launchIn(this)
         }
     }
