@@ -128,19 +128,6 @@ class ActorDetailActivity : AppCompatActivity() {
             // Set actor name
             actorName.text = actor.name
 
-            // Set profile image - always set an image (placeholder if no profile)
-            if (!actor.profilePath.isNullOrEmpty()) {
-                actorProfileImage.loadImage(
-                    Constants.TMDB_IMAGE_BASE_URL_W500.plus(actor.profilePath),
-                    placeholder = ContextCompat.getDrawable(this@ActorDetailActivity, R.drawable.poster_bg)
-                )
-            } else {
-                // Set placeholder when no profile image
-                actorProfileImage.setImageDrawable(
-                    ContextCompat.getDrawable(this@ActorDetailActivity, R.drawable.poster_bg)
-                )
-            }
-
             // Set backdrop image (use different image if available) - always set an image
             val backdropPath = actor.backdropImagePath ?: actor.profilePath
             if (!backdropPath.isNullOrEmpty()) {
@@ -234,7 +221,10 @@ class ActorDetailActivity : AppCompatActivity() {
                 actorFacebook.visibility = View.GONE
             }
 
-            actorSocialsContainer.visibility = if (hasSocials) View.VISIBLE else View.GONE
+            actorSocialsContainer.apply {
+                visibility = if (hasSocials) View.VISIBLE else View.GONE
+                setPadding(0, if (hasSocials) resources.getDimensionPixelSize(com.intuit.sdp.R.dimen._8sdp) else 0, 0, 0)
+            }
         }
     }
 

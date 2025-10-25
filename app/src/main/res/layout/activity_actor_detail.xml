@@ -45,7 +45,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="bottom|center_horizontal"
-                    android:layout_marginTop="350dp"
+                    android:layout_marginTop="380dp"
+                    android:paddingTop="4dp"
                     android:orientation="vertical"
                     android:padding="@dimen/_24sdp"
                     android:background="@android:color/transparent">
@@ -123,6 +124,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:layout_marginTop="-30dp"
+                android:background="@drawable/bio_fade_background"
                 android:padding="@dimen/_16sdp">
 
                 <!-- Biography Section -->
@@ -132,7 +134,6 @@
                     android:layout_marginTop="@dimen/_24sdp"
                     android:fontFamily="@font/montserrat_semibold"
                     android:text="Biography"
-                    android:background="@drawable/bio_fade_background"
                     android:textColor="@color/white"
                     android:textSize="@dimen/_14ssp" />
 
