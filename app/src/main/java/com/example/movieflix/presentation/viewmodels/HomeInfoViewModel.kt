@@ -74,6 +74,7 @@ class HomeInfoViewModel @Inject constructor(private val getMovieInfo: GetMovieIn
         // launchIn is a non blocking in nature which mean code below launchIn will still run even when all values are not emitted
         // whereas the code below or next line below .collect() won't run until all emitted values is being /
     }
+ }
 
     fun getMovieTrailer(movieId:Int){
         viewModelScope.launch {
