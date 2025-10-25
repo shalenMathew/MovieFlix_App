@@ -38,10 +38,10 @@ class EpisodeAdapter(
                     ""
                 }
                 
-                // Episode thumbnail
+                // Episode thumbnail - use W300 instead of W780 for better performance
                 if (episode.stillPath != null) {
                     itemEpisodeThumbnail.loadImage(
-                        Constants.TMDB_IMAGE_BASE_URL_W780.plus(episode.stillPath),
+                        "https://image.tmdb.org/t/p/w300${episode.stillPath}",
                         placeholder = ContextCompat.getDrawable(root.context, R.drawable.poster_bg)
                     )
                 } else {

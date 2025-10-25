@@ -31,6 +31,11 @@
             android:name=".presentation.actor_detail.ActorDetailActivity"
             android:exported="false"
             android:theme="@style/Theme.MovieFlix" />
+        
+        <activity
+            android:name=".presentation.episode_details.EpisodeDetailsActivity"
+            android:exported="false"
+            android:theme="@style/Theme.MovieFlix" />
     </application>
 
 </manifest>

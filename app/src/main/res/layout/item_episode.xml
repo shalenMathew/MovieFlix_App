@@ -15,21 +15,14 @@
     android:background="@android:color/transparent">
 
         <!-- Episode Thumbnail -->
-        <com.google.android.material.card.MaterialCardView
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/item_episode_thumbnail"
             android:layout_width="@dimen/_120sdp"
             android:layout_height="@dimen/_68sdp"
-            app:cardCornerRadius="@dimen/_6sdp"
-            app:cardElevation="0dp">
-
-            <ImageView
-                android:id="@+id/item_episode_thumbnail"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:scaleType="centerCrop"
-                android:background="@color/black"
-                tools:src="@tools:sample/backgrounds/scenic" />
-
-        </com.google.android.material.card.MaterialCardView>
+            android:scaleType="centerCrop"
+            android:background="@color/black"
+            app:shapeAppearanceOverlay="@style/RoundedCornerImage"
+            tools:src="@tools:sample/backgrounds/scenic" />
 
         <!-- Episode Info -->
         <LinearLayout

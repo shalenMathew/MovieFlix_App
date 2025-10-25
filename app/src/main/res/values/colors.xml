@@ -15,6 +15,7 @@
     <color name="background">#0C0025</color>
 
     <color name="bottom_nav_grey">#454545</color>
+    <color name="yellow">#FFD700</color>
 
 <!--    <color name="dark_blue">#15003F</color>-->
 </resources>

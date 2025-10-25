@@ -85,7 +85,9 @@ class MovieDetailsFragment : BottomSheetDialogFragment(){
     
     private var currentSeasonNumber = 1
     private var availableSeasons = mutableListOf<com.example.movieflix.domain.model.TVSeasonBasic>()
+    private var currentEpisodes = listOf<com.example.movieflix.domain.model.TVEpisode>()
     private var isTVShow = false
+    private var tvDetailsLoaded = false
 
     private var isPlaying:Boolean = false
 
@@ -170,7 +172,9 @@ class MovieDetailsFragment : BottomSheetDialogFragment(){
         castAdapter = CastAdapter()
         binding.fragmentMovieDetailsCastList.adapter = castAdapter
 
-        episodeAdapter = EpisodeAdapter()
+        episodeAdapter = EpisodeAdapter { episode ->
+            openEpisodeDetails(episode)
+        }
         binding.episodesRecyclerView.adapter = episodeAdapter
 
         setupTabLayout()
@@ -193,6 +197,7 @@ class MovieDetailsFragment : BottomSheetDialogFragment(){
             // Reset state
             isPlaying = false
             youTubePlayer?.pause()
+            tvDetailsLoaded = false
             
             // Reload data with new movie
             setUpDetailFragment()
@@ -336,7 +341,8 @@ class MovieDetailsFragment : BottomSheetDialogFragment(){
 
                                     if (id!=null){
                                         homeInfoViewModel.getMovieTrailer(id)
-                                        homeInfoViewModel.getMovieCast(id)
+                                        // Load secondary data with delay
+                                        loadSecondaryData(id)
                                     }else{
                                         showToast(requireContext(),"media id is null")
                                     }
@@ -349,8 +355,8 @@ class MovieDetailsFragment : BottomSheetDialogFragment(){
                                     
                                     if (id!=null){
                                         homeInfoViewModel.getTVTrailer(id)
-                                        homeInfoViewModel.getTVCast(id)
-                                        homeInfoViewModel.getTVDetail(id)
+                                        // Load secondary data with delay
+                                        loadSecondaryData(id)
                                     }else{
                                         showToast(requireContext(),"media id is null")
                                     }
@@ -427,6 +433,7 @@ class MovieDetailsFragment : BottomSheetDialogFragment(){
             when (result) {
                 is NetworkResults.Success -> {
                     result.data?.let { season ->
+                        currentEpisodes = season.episodes
                         episodeAdapter.submitList(season.episodes)
                     }
                 }
@@ -438,6 +445,67 @@ class MovieDetailsFragment : BottomSheetDialogFragment(){
                 }
             }
         }
+    }
+
+    private fun openEpisodeDetails(episode: com.example.movieflix.domain.model.TVEpisode) {
+        val episodeIndex = currentEpisodes.indexOfFirst { it.id == episode.id }
+        if (episodeIndex == -1) return
+
+        // Store data in holder to avoid TransactionTooLargeException
+        com.example.movieflix.presentation.episode_details.EpisodeDataHolder.setData(
+            episodeList = currentEpisodes,
+            season = currentSeasonNumber,
+            showName = movieResult.name ?: movieResult.title,
+            totalSeasons = availableSeasons.size,
+            tvShowId = mediaId,
+            onSeasonChange = { targetSeason ->
+                // Switch to the target season when user navigates between seasons
+                loadSeason(targetSeason)
+            }
+        )
+
+        val intent = com.example.movieflix.presentation.episode_details.EpisodeDetailsActivity.newIntent(
+            requireContext(),
+            episodeIndex
+        )
+        
+        startActivity(intent)
+    }
+
+    private fun loadSeason(seasonNumber: Int) {
+        // Update current season number
+        currentSeasonNumber = seasonNumber
+        
+        // Update dropdown text
+        binding.seasonDropdownButton.text = "Season $seasonNumber"
+        
+        // Load episodes for the new season
+        mediaId?.let { tvId ->
+            homeInfoViewModel.getTVSeason(tvId, seasonNumber)
+        }
+        
+        // Switch to Episodes tab if not already there
+        if (binding.tabLayout.selectedTabPosition != 1) {
+            binding.tabLayout.getTabAt(1)?.select()
+        }
+    }
+
+    private fun loadSecondaryData(id: Int) {
+        // Delay secondary data loading to improve initial page load
+        // This allows the main content (title, overview, trailer) to appear instantly
+        view?.postDelayed({
+            if (isTVShow) {
+                homeInfoViewModel.getTVCast(id)
+            } else {
+                homeInfoViewModel.getMovieCast(id)
+            }
+            
+            // Load recommendations and watch providers with additional delay
+            view?.postDelayed({
+                homeInfoViewModel.getRecommendation(id)
+                homeInfoViewModel.getWhereToWatchProvider(id)
+            }, 200)
+        }, 300)
     }
 
     private fun changeAddToWatchListIcon() {
@@ -595,9 +663,17 @@ class MovieDetailsFragment : BottomSheetDialogFragment(){
                         binding.episodesSection.visibility = View.GONE
                     }
                     1 -> {
-                        // Episodes tab selected
+                        // Episodes tab selected - load TV details if not already loaded
                         binding.aboutSection.visibility = View.GONE
                         binding.episodesSection.visibility = View.VISIBLE
+                        
+                        // Lazy load TV details only when Episodes tab is clicked
+                        if (isTVShow && !tvDetailsLoaded) {
+                            tvDetailsLoaded = true
+                            mediaId?.let { id ->
+                                homeInfoViewModel.getTVDetail(id)
+                            }
+                        }
                     }
                 }
             }
@@ -782,7 +858,8 @@ class MovieDetailsFragment : BottomSheetDialogFragment(){
                         binding.aboutSection.visibility = View.VISIBLE
                         
                         homeInfoViewModel.getMovieTrailer(id)
-                        homeInfoViewModel.getMovieCast(id)
+                        // Load cast, recommendations, and watch providers lazily
+                        loadSecondaryData(id)
                     }
                     "tv" -> {
                         isTVShow = true
@@ -791,8 +868,8 @@ class MovieDetailsFragment : BottomSheetDialogFragment(){
                         binding.episodesSection.visibility = View.GONE
                         
                         homeInfoViewModel.getTVTrailer(id)
-                        homeInfoViewModel.getTVCast(id)
-                        homeInfoViewModel.getTVDetail(id)
+                        // Load cast, recommendations, watch providers, and TV details lazily
+                        loadSecondaryData(id)
                     }
                     else -> {
                         isTVShow = false
@@ -806,9 +883,7 @@ class MovieDetailsFragment : BottomSheetDialogFragment(){
 
                     }
                 }
-
-                homeInfoViewModel.getRecommendation(id)
-                homeInfoViewModel.getWhereToWatchProvider(id)
+                // Removed immediate loading of recommendations and watch providers
             }
 
         }
