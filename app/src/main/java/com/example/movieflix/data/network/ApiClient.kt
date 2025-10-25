@@ -8,6 +8,8 @@ import com.example.movieflix.data.model.CastResponse
 import com.example.movieflix.data.model.MovieResponseList
 import com.example.movieflix.data.model.MovieResponseVideoResultList
 import com.example.movieflix.data.model.PersonExternalIdsResponse
+import com.example.movieflix.data.model.TVDetailResponse
+import com.example.movieflix.data.model.TVSeasonResponse
 import com.example.movieflix.data.model.WhereToWatchProviderResponse
 import retrofit2.Response
 import retrofit2.http.GET
@@ -150,5 +152,18 @@ interface ApiClient {
         @Path("person_id") personId: Int,
         @Query("language") lang: String? = "en-US"
     ): Response<ActorTVCreditsResponse>
+
+    @GET("3/tv/{tv_id}")
+    suspend fun fetchTVDetailApiCall(
+        @Path("tv_id") tvId: Int,
+        @Query("language") lang: String? = "en-US"
+    ): Response<TVDetailResponse>
+
+    @GET("3/tv/{tv_id}/season/{season_number}")
+    suspend fun fetchTVSeasonApiCall(
+        @Path("tv_id") tvId: Int,
+        @Path("season_number") seasonNumber: Int,
+        @Query("language") lang: String? = "en-US"
+    ): Response<TVSeasonResponse>
 
 }

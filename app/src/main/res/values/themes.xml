@@ -25,4 +25,9 @@
         <item name="behavior_peekHeight">550dp</item>
     </style>
 
+    <style name="RoundedCornerImage">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">6dp</item>
+    </style>
+
 </resources>

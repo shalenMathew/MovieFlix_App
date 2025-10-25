@@ -6,6 +6,8 @@ import com.example.movieflix.domain.model.CrewMember
 import com.example.movieflix.domain.model.HomeFeedData
 import com.example.movieflix.domain.model.MovieList
 import com.example.movieflix.domain.model.MediaVideoResultList
+import com.example.movieflix.domain.model.TVDetail
+import com.example.movieflix.domain.model.TVSeason
 import com.example.movieflix.domain.model.WatchProviders
 import kotlinx.coroutines.flow.Flow
 
@@ -36,5 +38,9 @@ fun getTVCast(tvId: Int): Flow<NetworkResults<List<CastMember>>>
 fun getMovieCrew(movieId: Int): Flow<NetworkResults<List<CrewMember>>>
 
 fun getTVCrew(tvId: Int): Flow<NetworkResults<List<CrewMember>>>
+
+fun getTVDetail(tvId: Int): Flow<NetworkResults<TVDetail>>
+
+fun getTVSeason(tvId: Int, seasonNumber: Int): Flow<NetworkResults<TVSeason>>
 
 }
