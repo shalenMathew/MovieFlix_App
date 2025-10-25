@@ -67,7 +67,7 @@ class SearchFragment : BaseFragment() {
     }
 
     private fun intit() {
-        searchMovieViewModel.fetchTrendingMovies()
+//        searchMovieViewModel.fetchTrendingMovies()
 
         trendingMovieAdapter=TrendingMovieAdapter(onClick = {
             val bundle = Bundle()
@@ -159,33 +159,25 @@ class SearchFragment : BaseFragment() {
             }
         }
     }
-    override fun onResume() {
-        super.onResume()
-        checkNetworkAvailability()
-    }
 
-    private fun checkNetworkAvailability() {
-        if(isNetworkAvailable(requireContext())){
-            binding.fragmentHomeNetworkCheck.layoutNtwContainer.gone()
-        }else{
+    override fun onNetworkLost() {
+        super.onNetworkLost()
+        requireActivity().runOnUiThread {
             binding.fragmentHomeNetworkCheck.layoutNtwContainer.visible()
         }
     }
 
-    override fun onNetworkAvailable(network: Network) {
-        super.onNetworkAvailable(network)
-        requireActivity().runOnUiThread{
-
+    override fun onNetworkAvailable() {
+        super.onNetworkAvailable()
+        requireActivity().runOnUiThread {
             binding.fragmentHomeNetworkCheck.layoutNtwContainer.gone()
+            if (binding.fragmentSearchEt.text.isNullOrEmpty()) {
+                searchMovieViewModel.fetchTrendingMovies()
+            }
         }
     }
 
-    override fun onNetworkLost(network: Network?) {
-        super.onNetworkLost(network)
-        requireActivity().runOnUiThread{
-            binding.fragmentHomeNetworkCheck.layoutNtwContainer.visible()
-        }
-    }
+
 
     override fun onDestroy() {
         super.onDestroy()

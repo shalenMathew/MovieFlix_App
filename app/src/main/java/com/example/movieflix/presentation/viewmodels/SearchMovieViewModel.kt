@@ -22,6 +22,11 @@ class SearchMovieViewModel @Inject constructor (private val searchMovie: SearchM
     private var _trendingMovies=MutableLiveData<NetworkResults<MovieList>>()
     val trendingMovies:LiveData<NetworkResults<MovieList>> = _trendingMovies
 
+
+    init {
+        fetchTrendingMovies()
+    }
+
     fun fetchSearchMovie(query:String){
         viewModelScope.launch {
             searchMovie.searchMovie(query).onEach {
@@ -31,6 +36,10 @@ class SearchMovieViewModel @Inject constructor (private val searchMovie: SearchM
     }
 
     fun fetchTrendingMovies(){
+
+        if (_trendingMovies.value is NetworkResults.Loading || _trendingMovies.value is NetworkResults.Success) {
+            return
+        }
         viewModelScope.launch {
             searchMovie.trendingMovies().onEach {
                _trendingMovies.value=it

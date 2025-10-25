@@ -51,6 +51,11 @@ class HomeInfoViewModel @Inject constructor(private val getMovieInfo: GetMovieIn
     }
 
  fun getMovieInfoData(){
+
+     if (_homeFeedList.value is NetworkResults.Loading || _homeFeedList.value is NetworkResults.Success) {
+         return
+     }
+
     viewModelScope.launch {
         getMovieInfo.getMovieInfo().onEach {  // onEach -> each time a data is emitted the below block will run
             _homeFeedList.value=it

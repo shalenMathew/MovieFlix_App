@@ -147,37 +147,24 @@ class HomeFragment : BaseFragment() {
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-        checkNetworkAvailability()
-    }
-
-
-    private fun checkNetworkAvailability() {
-        if (isNetworkAvailable(requireContext())) {
-            binding.fragmentHomeNetworkCheck.layoutNtwContainer.gone()
-        } else {
-            binding.fragmentHomeNetworkCheck.layoutNtwContainer.visible()
-        }
-    }
-
-    override fun onNetworkLost(network: Network?) {
-        super.onNetworkLost(network)
-        requireActivity().runOnUiThread {
-            binding.fragmentHomeNetworkCheck.layoutNtwContainer.visible()
-        }
-    }
-
-    override fun onNetworkAvailable(network: Network) {
-        super.onNetworkAvailable(network)
-        requireActivity().runOnUiThread {
-            binding.fragmentHomeNetworkCheck.layoutNtwContainer.gone()
-            homeInfoViewModel.getMovieInfoData()
-        }
-    }
-
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
+    }
+
+    override fun onNetworkLost() {
+        super.onNetworkLost()
+        requireActivity().runOnUiThread {
+            binding.fragmentHomeNetworkCheck.layoutNtwContainer.visible()
+        }
+    }
+
+    override fun onNetworkAvailable() {
+        super.onNetworkAvailable()
+        requireActivity().runOnUiThread {
+            binding.fragmentHomeNetworkCheck.layoutNtwContainer.gone()
+            // This logic is still correct.
+            homeInfoViewModel.getMovieInfoData()
+        }
     }
 }   
