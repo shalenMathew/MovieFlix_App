@@ -21,7 +21,9 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.movieflix.R
 import com.example.movieflix.core.adapters.CastAdapter
+import com.example.movieflix.core.adapters.EpisodeAdapter
 import com.example.movieflix.core.adapters.RecommendationAdapter
+import com.example.movieflix.core.adapters.SeasonSelectorAdapter
 import com.example.movieflix.core.utils.Constants
 import com.example.movieflix.core.utils.Constants.BASE_YOUTUBE_URL
 import com.example.movieflix.core.utils.Constants.TMDB_IMAGE_BASE_URL_W780
@@ -42,6 +44,7 @@ import com.example.movieflix.presentation.viewmodels.WatchListViewModel
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.google.android.material.tabs.TabLayout
 import com.google.gson.Gson
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.PlayerConstants
@@ -65,6 +68,7 @@ class MovieDetailsFragment : BottomSheetDialogFragment(){
     private var youTubePlayer: YouTubePlayer? = null
     private lateinit var recommendationAdapter:RecommendationAdapter
     private lateinit var castAdapter:CastAdapter
+    private lateinit var episodeAdapter:EpisodeAdapter
     private var whereToWatchLink:String? = null
     private val customTabsIntent by lazy {
         CustomTabsIntent.Builder().setShowTitle(true).build()
@@ -78,6 +82,10 @@ class MovieDetailsFragment : BottomSheetDialogFragment(){
     private var mediaType:String? = null
     private var isOverviewExpanded = false
     private var fullOverviewText = ""
+    
+    private var currentSeasonNumber = 1
+    private var availableSeasons = mutableListOf<com.example.movieflix.domain.model.TVSeasonBasic>()
+    private var isTVShow = false
 
     private var isPlaying:Boolean = false
 
@@ -162,6 +170,11 @@ class MovieDetailsFragment : BottomSheetDialogFragment(){
         castAdapter = CastAdapter()
         binding.fragmentMovieDetailsCastList.adapter = castAdapter
 
+        episodeAdapter = EpisodeAdapter()
+        binding.episodesRecyclerView.adapter = episodeAdapter
+
+        setupTabLayout()
+        setupSeasonDropdown()
     }
 
     private fun openDetailFragment(it: MovieResult) {
@@ -316,6 +329,10 @@ class MovieDetailsFragment : BottomSheetDialogFragment(){
 
                             when(mediaType){
                                 "movie" -> {
+                                    isTVShow = false
+                                    binding.tabsSection.visibility = View.GONE
+                                    binding.episodesSection.visibility = View.GONE
+                                    binding.aboutSection.visibility = View.VISIBLE
 
                                     if (id!=null){
                                         homeInfoViewModel.getMovieTrailer(id)
@@ -325,9 +342,15 @@ class MovieDetailsFragment : BottomSheetDialogFragment(){
                                     }
                                 }
                                 "tv" -> {
+                                    isTVShow = true
+                                    binding.tabsSection.visibility = View.VISIBLE
+                                    binding.aboutSection.visibility = View.VISIBLE
+                                    binding.episodesSection.visibility = View.GONE
+                                    
                                     if (id!=null){
                                         homeInfoViewModel.getTVTrailer(id)
                                         homeInfoViewModel.getTVCast(id)
+                                        homeInfoViewModel.getTVDetail(id)
                                     }else{
                                         showToast(requireContext(),"media id is null")
                                     }
@@ -365,6 +388,50 @@ class MovieDetailsFragment : BottomSheetDialogFragment(){
                 is NetworkResults.Error -> {
                     binding.castSectionTitle.visibility = View.GONE
                     binding.fragmentMovieDetailsCastList.visibility = View.GONE
+                }
+                is NetworkResults.Loading -> {
+                    // Show loading state if needed
+                }
+            }
+        }
+
+        // Observer for TV show details (for episodes feature)
+        homeInfoViewModel.tvDetail.observe(viewLifecycleOwner) { result ->
+            when (result) {
+                is NetworkResults.Success -> {
+                    result.data?.let { tvDetail ->
+                        availableSeasons.clear()
+                        availableSeasons.addAll(tvDetail.seasons.filter { it.seasonNumber != null && it.seasonNumber > 0 })
+                        
+                        if (availableSeasons.isNotEmpty()) {
+                            // Load first season by default
+                            currentSeasonNumber = availableSeasons[0].seasonNumber ?: 1
+                            binding.seasonDropdownButton.text = "Season $currentSeasonNumber"
+                            mediaId?.let { tvId ->
+                                homeInfoViewModel.getTVSeason(tvId, currentSeasonNumber)
+                            }
+                        }
+                    }
+                }
+                is NetworkResults.Error -> {
+                    // Handle error
+                }
+                is NetworkResults.Loading -> {
+                    // Show loading state if needed
+                }
+            }
+        }
+
+        // Observer for TV season episodes
+        homeInfoViewModel.tvSeason.observe(viewLifecycleOwner) { result ->
+            when (result) {
+                is NetworkResults.Success -> {
+                    result.data?.let { season ->
+                        episodeAdapter.submitList(season.episodes)
+                    }
+                }
+                is NetworkResults.Error -> {
+                    showToast(requireContext(), "Error loading episodes: ${result.message}")
                 }
                 is NetworkResults.Loading -> {
                     // Show loading state if needed
@@ -518,6 +585,99 @@ class MovieDetailsFragment : BottomSheetDialogFragment(){
         setExpandableText(textView, fullOverviewText)
     }
 
+    private fun setupTabLayout() {
+        binding.tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+            override fun onTabSelected(tab: TabLayout.Tab?) {
+                when (tab?.position) {
+                    0 -> {
+                        // About tab selected
+                        binding.aboutSection.visibility = View.VISIBLE
+                        binding.episodesSection.visibility = View.GONE
+                    }
+                    1 -> {
+                        // Episodes tab selected
+                        binding.aboutSection.visibility = View.GONE
+                        binding.episodesSection.visibility = View.VISIBLE
+                    }
+                }
+            }
+
+            override fun onTabUnselected(tab: TabLayout.Tab?) {}
+            override fun onTabReselected(tab: TabLayout.Tab?) {}
+        })
+    }
+
+    private fun setupSeasonDropdown() {
+        binding.seasonDropdownButton.setOnClickListener {
+            if (availableSeasons.isEmpty()) {
+                showToast(requireContext(), "No seasons available")
+                return@setOnClickListener
+            }
+
+            // Change arrow to down when opening
+            rotateDropdownArrow(true)
+            
+            showSeasonSelectorBottomSheet()
+        }
+    }
+
+    private fun rotateDropdownArrow(toDown: Boolean) {
+        // Simple icon swap with smooth transition
+        val newIcon = if (toDown) {
+            ContextCompat.getDrawable(requireContext(), R.drawable.baseline_keyboard_arrow_down_24)
+        } else {
+            ContextCompat.getDrawable(requireContext(), R.drawable.baseline_keyboard_arrow_right_24)
+        }
+        
+        // Apply smooth alpha transition
+        binding.seasonDropdownButton.animate()
+            .alpha(0.5f)
+            .setDuration(125)
+            .withEndAction {
+                binding.seasonDropdownButton.icon = newIcon
+                binding.seasonDropdownButton.animate()
+                    .alpha(1f)
+                    .setDuration(125)
+                    .start()
+            }
+            .start()
+    }
+
+    private fun showSeasonSelectorBottomSheet() {
+        val bottomSheetDialog = BottomSheetDialog(requireContext(), R.style.SheetDialog)
+        val bottomSheetView = layoutInflater.inflate(
+            R.layout.bottom_sheet_season_selector, 
+            null
+        )
+        
+        val recyclerView = bottomSheetView.findViewById<androidx.recyclerview.widget.RecyclerView>(
+            R.id.seasons_recycler_view
+        )
+        
+        val adapter = SeasonSelectorAdapter(availableSeasons) { selectedSeason ->
+            currentSeasonNumber = selectedSeason.seasonNumber ?: 1
+            binding.seasonDropdownButton.text = selectedSeason.name ?: "Season $currentSeasonNumber"
+            
+            // Load episodes for selected season
+            mediaId?.let { tvId ->
+                homeInfoViewModel.getTVSeason(tvId, currentSeasonNumber)
+            }
+            
+            bottomSheetDialog.dismiss()
+        }
+        
+        recyclerView.adapter = adapter
+        
+        bottomSheetDialog.setContentView(bottomSheetView)
+        
+        // Change arrow back to right when dismissed
+        bottomSheetDialog.setOnDismissListener {
+            rotateDropdownArrow(false)
+        }
+        
+        bottomSheetDialog.show()
+    }
+
     private fun initializePlayer(key: String?) {
 
         binding.apply {
@@ -616,14 +776,29 @@ class MovieDetailsFragment : BottomSheetDialogFragment(){
 
                 when (it.mediaType) {
                     "movie" -> {
+                        isTVShow = false
+                        binding.tabsSection.visibility = View.GONE
+                        binding.episodesSection.visibility = View.GONE
+                        binding.aboutSection.visibility = View.VISIBLE
+                        
                         homeInfoViewModel.getMovieTrailer(id)
                         homeInfoViewModel.getMovieCast(id)
                     }
                     "tv" -> {
+                        isTVShow = true
+                        binding.tabsSection.visibility = View.VISIBLE
+                        binding.aboutSection.visibility = View.VISIBLE
+                        binding.episodesSection.visibility = View.GONE
+                        
                         homeInfoViewModel.getTVTrailer(id)
                         homeInfoViewModel.getTVCast(id)
+                        homeInfoViewModel.getTVDetail(id)
                     }
                     else -> {
+                        isTVShow = false
+                        binding.tabsSection.visibility = View.GONE
+                        binding.episodesSection.visibility = View.GONE
+                        binding.aboutSection.visibility = View.VISIBLE
 
                         if (!title.isNullOrEmpty()) {
                             searchMovieViewModel.fetchSearchMovie(title)

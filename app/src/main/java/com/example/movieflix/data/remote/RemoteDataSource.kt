@@ -8,6 +8,8 @@ import com.example.movieflix.data.model.CastResponse
 import com.example.movieflix.data.model.MovieResponseList
 import com.example.movieflix.data.model.MovieResponseVideoResultList
 import com.example.movieflix.data.model.PersonExternalIdsResponse
+import com.example.movieflix.data.model.TVDetailResponse
+import com.example.movieflix.data.model.TVSeasonResponse
 import com.example.movieflix.data.model.WhereToWatchProviderResponse
 import com.example.movieflix.data.network.ApiClient
 import retrofit2.Response
@@ -93,6 +95,14 @@ class RemoteDataSource @Inject constructor(private val apiClient: ApiClient) {
 
     suspend fun getActorTVCredits(personId: Int): Response<ActorTVCreditsResponse> {
         return apiClient.fetchActorTVCreditsApiCall(personId)
+    }
+
+    suspend fun getTVDetail(tvId: Int): Response<TVDetailResponse> {
+        return apiClient.fetchTVDetailApiCall(tvId)
+    }
+
+    suspend fun getTVSeason(tvId: Int, seasonNumber: Int): Response<TVSeasonResponse> {
+        return apiClient.fetchTVSeasonApiCall(tvId, seasonNumber)
     }
 
 }
