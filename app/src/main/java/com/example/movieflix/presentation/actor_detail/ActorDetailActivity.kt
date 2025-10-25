@@ -3,8 +3,10 @@ package com.example.movieflix.presentation.actor_detail
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.os.Trace.isEnabled
 import android.view.View
 import android.view.WindowManager
+import androidx.activity.addCallback
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -45,6 +47,18 @@ class ActorDetailActivity : AppCompatActivity() {
 
         binding = ActivityActorDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        onBackPressedDispatcher.addCallback(this) {
+            if (isTaskRoot) {
+                val intent = Intent(this@ActorDetailActivity, MainActivity::class.java)
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
+                startActivity(intent)
+                finish()
+            } else {
+                isEnabled = false
+                onBackPressedDispatcher.onBackPressed()
+            }
+        }
 
         personId = intent.getIntExtra(EXTRA_PERSON_ID, 0)
         val personName = intent.getStringExtra(EXTRA_PERSON_NAME)
