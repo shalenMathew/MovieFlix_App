@@ -32,7 +32,7 @@ class FavMovieViewModel @Inject constructor(private val favMovie: FavMovie):View
         }
     }
 
-    fun addPersonalNote(id: Int, personalNote: String) {
+    fun addPersonalNote(id: Int, personalNote: String?) {
         viewModelScope.launch {
             favMovie.addPersonalNote(id, personalNote)
         }

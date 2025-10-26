@@ -223,7 +223,8 @@
                         app:icon="@drawable/baseline_add_circle_24"
                         app:iconGravity="textStart"
                         app:iconTint="@color/white"
-                        tools:visibility="gone" />
+                        tools:visibility="gone"
+                        tools:targetApi="26" />
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/fragment_movie_details_personal_note_text_input_layout"
@@ -232,7 +233,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_5sdp"
                         android:layout_marginBottom="@dimen/_12sdp"
-                        android:hint="Enter your note..."
+                        android:hint="@string/enter_your_note"
                         android:textColorHint="@color/white"
                         android:visibility="gone"
                         app:boxCornerRadiusBottomEnd="@dimen/_5sdp"
@@ -259,21 +260,38 @@
 
                     </com.google.android.material.textfield.TextInputLayout>
 
-
-                    <TextView
-                        android:id="@+id/fragment_movie_details_personal_note"
+                    <LinearLayout
+                        android:id="@+id/personal_note_text_ll"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginEnd="@dimen/_15sdp"
                         android:layout_marginStart="@dimen/_5sdp"
                         android:layout_marginTop="@dimen/_8sdp"
                         android:layout_marginBottom="@dimen/_12sdp"
-                        android:fontFamily="@font/montserrat_medium"
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/_13ssp"
-                        android:visibility="gone"
-                        tools:text="beautiful movie another twisted tale by fujimoto sensei 😭😭"
-                        tools:visibility="visible" />
+                        android:gravity="center_vertical"
+                        tools:ignore="UseCompoundDrawables">
+
+                        <TextView
+                            android:id="@+id/fragment_movie_details_personal_note"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="@dimen/_12sdp"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/montserrat_medium"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/_13ssp"
+                            android:visibility="gone"
+                            tools:text="beautiful movie another twisted tale by fujimoto sensei 😭😭"
+                            tools:visibility="visible" />
+
+                        <ImageView
+                            android:id="@+id/fragment_movie_details_personal_note_delete_btn"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:contentDescription="@string/delete_personal_note"
+                            android:padding="@dimen/_8sdp"
+                            android:src="@drawable/baseline_delete_24"
+                            app:tint="@color/white" />
+                    </LinearLayout>
                 </FrameLayout>
             </LinearLayout>
 

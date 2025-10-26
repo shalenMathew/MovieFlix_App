@@ -530,59 +530,92 @@ class MovieDetailsFragment : BottomSheetDialogFragment(){
     }
 
     private fun setupPersonalNoteView(favId: Int, personalNote: String?) {
+        var currentNote = personalNote
+
+        val editorActionListener = TextView.OnEditorActionListener { view, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                val newNote = view.text.toString().trim()
+                favMovieViewModel.addPersonalNote(favId, newNote.ifEmpty { null })
+                currentNote = newNote.ifEmpty { null }
+                updateNoteViewState(currentNote)
+                hideKeyboard(view)
+                return@OnEditorActionListener true
+            }
+            false
+        }
+
+        val openEditorClickListener = View.OnClickListener {
+            binding.fragmentMovieDetailsPersonalNoteEditText.setText(currentNote)
+            showEditorView()
+        }
+
+        // Initial setup
+        binding.fragmentMovieDetailsPersonalNoteEditText.apply {
+            setOnEditorActionListener(editorActionListener)
+            onFocusChangeListener =
+                View.OnFocusChangeListener { _, hasFocus ->
+                    binding.fragmentMovieDetailsPersonalNoteTextInputLayout.isHintEnabled =
+                        !hasFocus
+                }
+        }
+        binding.fragmentMovieDetailsPersonalNoteBtn.setOnClickListener(openEditorClickListener)
+        binding.fragmentMovieDetailsPersonalNote.setOnClickListener(openEditorClickListener)
+
+        binding.fragmentMovieDetailsPersonalNoteDeleteBtn.setOnClickListener {
+            favMovieViewModel.addPersonalNote(favId, null)
+            currentNote = null
+            updateNoteViewState(null)
+        }
+
+        updateNoteViewState(currentNote)
+    }
+
+    /**
+     * Updates the visibility of UI components based on whether a note exists.
+     */
+    private fun updateNoteViewState(currentNote: String?) {
+        val noteExists = !currentNote.isNullOrEmpty()
         with(binding) {
-            fun addListener() {
-                fragmentMovieDetailsPersonalNoteLl.setOnClickListener {
-                    binding.fragmentMovieDetailsPersonalNoteEditText.clearFocus()
-                }
-                fragmentMovieDetailsPersonalNoteEditText.onFocusChangeListener =
-                    View.OnFocusChangeListener { _, hasFocus ->
-                        fragmentMovieDetailsPersonalNoteTextInputLayout.isHintEnabled =
-                            !hasFocus
-                    }
-                fragmentMovieDetailsPersonalNoteEditText.setOnEditorActionListener { view, actionId, _ ->
-                    if (actionId == 1001 || actionId == EditorInfo.IME_ACTION_DONE) {
-                        val note = view.text.toString()
-                        fragmentMovieDetailsPersonalNoteTextInputLayout.isVisible = false
-                        if (note.isNotEmpty()) {
-                            favMovieViewModel.addPersonalNote(favId, note)
-                            fragmentMovieDetailsPersonalNote.apply {
-                                text = note
-                                isVisible = true
-                            }
-                        } else {
-                            fragmentMovieDetailsPersonalNoteBtn.isVisible = true
-                        }
-                        val imm =
-                            requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                        imm.hideSoftInputFromWindow(view.windowToken, 0)
-                        return@setOnEditorActionListener true
-                    }
-                    return@setOnEditorActionListener false
-                }
-            }
-            if (personalNote.isNullOrEmpty()) {
-                fragmentMovieDetailsPersonalNoteBtn.apply {
-                    isVisible = true
-                    setOnClickListener {
-                        isVisible = false
-                        binding.fragmentMovieDetailsPersonalNoteTextInputLayout.isVisible = true
-                        addListener()
-                    }
-                }
-                fragmentMovieDetailsPersonalNote.isVisible = false
-            } else {
-                fragmentMovieDetailsPersonalNoteBtn.isVisible = false
-                fragmentMovieDetailsPersonalNoteTextInputLayout.isVisible = false
+            fragmentMovieDetailsPersonalNoteBtn.isVisible = !noteExists
+
+            personalNoteTextLl.isVisible = noteExists
+            if (noteExists) {
                 fragmentMovieDetailsPersonalNote.apply {
-                    text = personalNote
+                    text = currentNote
                     isVisible = true
                 }
             }
+
+            fragmentMovieDetailsPersonalNoteTextInputLayout.isVisible = false
         }
     }
 
-   private fun setExpandableText(textView: TextView, fullText: String) {
+    /**
+     * Shows the note editor and hides other views.
+     */
+    private fun showEditorView() {
+        with(binding) {
+            personalNoteTextLl.isVisible = false
+            fragmentMovieDetailsPersonalNoteBtn.isVisible = false
+            fragmentMovieDetailsPersonalNoteTextInputLayout.isVisible = true
+            fragmentMovieDetailsPersonalNoteEditText.requestFocus()
+            showKeyboard(fragmentMovieDetailsPersonalNoteEditText)
+        }
+    }
+
+    private fun hideKeyboard(view: View) {
+        val imm = requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(view.windowToken, InputMethodManager.RESULT_UNCHANGED_SHOWN)
+    }
+
+    private fun showKeyboard(view: View) {
+        val imm = requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT)
+    }
+
+
+
+    private fun setExpandableText(textView: TextView, fullText: String) {
         val maxLines = 3
         fullOverviewText = fullText
 
