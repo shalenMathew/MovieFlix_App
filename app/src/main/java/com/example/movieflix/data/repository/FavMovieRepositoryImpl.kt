@@ -17,4 +17,8 @@ class FavMovieRepositoryImpl(private val localDataSource: LocalDataSource):FavMo
     override fun getAllFavMovie(): LiveData<List<FavouritesEntity>> {
        return localDataSource.getAllFavMovie()
     }
+
+    override suspend fun addPersonalNote(id: Int, personalNote: String) {
+        return localDataSource.addPersonalNote(id, personalNote)
+    }
 }

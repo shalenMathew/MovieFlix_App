@@ -1,14 +1,12 @@
 package com.example.movieflix.presentation.actor_detail
 
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
 import android.view.View
-import android.view.WindowManager
+import androidx.activity.addCallback
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import androidx.core.view.WindowCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.movieflix.R
 import com.example.movieflix.core.adapters.ActorMoviesAdapter
@@ -18,6 +16,7 @@ import com.example.movieflix.core.utils.loadImage
 import com.example.movieflix.databinding.ActivityActorDetailBinding
 import com.example.movieflix.domain.model.ActorDetail
 import com.example.movieflix.domain.model.MovieResult
+import com.example.movieflix.presentation.MainActivity
 import com.example.movieflix.presentation.movie_details.MovieDetailsFragment
 import com.example.movieflix.presentation.viewmodels.ActorDetailViewModel
 import com.google.gson.Gson
@@ -38,12 +37,22 @@ class ActorDetailActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        
-        // Make status bar transparent
-        WindowCompat.setDecorFitsSystemWindows(window, false)
-        
+        window.navigationBarColor = ContextCompat.getColor(this, R.color.black)
+
         binding = ActivityActorDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        onBackPressedDispatcher.addCallback(this) {
+            if (isTaskRoot) {
+                val intent = Intent(this@ActorDetailActivity, MainActivity::class.java)
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
+                startActivity(intent)
+                finish()
+            } else {
+                isEnabled = false
+                onBackPressedDispatcher.onBackPressed()
+            }
+        }
 
         personId = intent.getIntExtra(EXTRA_PERSON_ID, 0)
         val personName = intent.getStringExtra(EXTRA_PERSON_NAME)
@@ -60,6 +69,9 @@ class ActorDetailActivity : AppCompatActivity() {
 
     private fun setupToolbar() {
         binding.toolbar.setNavigationOnClickListener {
+            val intent = Intent(this, MainActivity::class.java)
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
+            startActivity(intent)
             finish()
         }
     }
@@ -233,7 +245,7 @@ class ActorDetailActivity : AppCompatActivity() {
             // Try to open native app first
             val nativeIntent = Intent(Intent.ACTION_VIEW, android.net.Uri.parse(nativeUrl))
             nativeIntent.setPackage(getNativeAppPackage(nativeUrl))
-            
+
             if (nativeIntent.resolveActivity(packageManager) != null) {
                 // Native app is installed, open it
                 startActivity(nativeIntent)
@@ -256,7 +268,7 @@ class ActorDetailActivity : AppCompatActivity() {
             }
         }
     }
-    
+
     private fun getNativeAppPackage(nativeUrl: String): String {
         return when {
             nativeUrl.startsWith("instagram://") -> "com.instagram.android"
