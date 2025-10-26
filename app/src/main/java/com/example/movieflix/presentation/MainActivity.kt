@@ -2,15 +2,14 @@ package com.example.movieflix.presentation
 
 import android.content.res.ColorStateList
 import android.os.Bundle
-import androidx.activity.SystemBarStyle
-import androidx.activity.enableEdgeToEdge
+import android.view.View
+import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import androidx.core.view.WindowCompat
+import androidx.core.content.ContextCompat
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.ui.setupWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.example.movieflix.R
 import com.example.movieflix.databinding.ActivityMainBinding
