@@ -6,6 +6,8 @@ import androidx.room.Room
 import com.example.movieflix.core.utils.Constants
 import com.example.movieflix.core.utils.GsonParser
 import com.example.movieflix.core.utils.MIGRATION
+import com.example.movieflix.core.utils.MIGRATION_3_5
+import com.example.movieflix.core.utils.MIGRATION_4_5
 import com.example.movieflix.data.local_storage.LocalDataSource
 import com.example.movieflix.data.local_storage.MovieDao
 import com.example.movieflix.data.local_storage.MovieDataTypeConverter
@@ -36,7 +38,7 @@ object DatabaseModule {
     fun providesMovieDataBase(@ApplicationContext context: Context): MovieDatabase {
         return Room.databaseBuilder(context,MovieDatabase::class.java,Constants.DATABASE_NAME)
 //            .fallbackToDestructiveMigration()
-            .addMigrations(MIGRATION)
+            .addMigrations(MIGRATION, MIGRATION_4_5, MIGRATION_3_5)
             .addTypeConverter(MovieDataTypeConverter(GsonParser(Gson())))
             .build()
     }
