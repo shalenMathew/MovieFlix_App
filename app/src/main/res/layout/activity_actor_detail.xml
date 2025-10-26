@@ -45,10 +45,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="bottom|center_horizontal"
-                    android:layout_marginTop="380dp"
-                    android:paddingTop="4dp"
+                    android:layout_marginTop="390dp"
                     android:orientation="vertical"
-                    android:padding="@dimen/_24sdp"
                     android:background="@android:color/transparent">
 
                     <TextView
