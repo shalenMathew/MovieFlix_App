@@ -1,16 +1,12 @@
 package com.example.movieflix.presentation.actor_detail
 
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
-import android.os.Trace.isEnabled
 import android.view.View
-import android.view.WindowManager
 import androidx.activity.addCallback
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import androidx.core.view.WindowCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.movieflix.R
 import com.example.movieflix.core.adapters.ActorMoviesAdapter
@@ -41,9 +37,7 @@ class ActorDetailActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        // Make status bar transparent
-        WindowCompat.setDecorFitsSystemWindows(window, false)
+        window.navigationBarColor = ContextCompat.getColor(this, R.color.black)
 
         binding = ActivityActorDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
