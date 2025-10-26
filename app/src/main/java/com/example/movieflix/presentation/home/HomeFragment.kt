@@ -65,13 +65,13 @@ binding.apply {
         openNetworkSettings(requireContext())
     }
 
-    fragmentHomeWatchNowBtn.setOnClickListener(){
-        val layoutManger=binding.fragmentHomeBannerImgRv.layoutManager as LinearLayoutManager
-        val firstVisibleItem = layoutManger.findFirstVisibleItemPosition()
-        openDetailFragment(bannerList[firstVisibleItem])
-    }
-
-}
+            fragmentHomeWatchNowBtn.setOnClickListener() {
+                val layoutManger =
+                    binding.fragmentHomeBannerImgRv.layoutManager as LinearLayoutManager
+                val firstVisibleItem = layoutManger.findFirstVisibleItemPosition()
+                openDetailFragment(bannerList[firstVisibleItem])
+            }
+        }
     }
 
     private fun initView() {
