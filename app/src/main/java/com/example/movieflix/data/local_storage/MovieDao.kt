@@ -34,5 +34,7 @@ interface MovieDao {
     suspend fun deleteFavMovie(favouritesEntity: FavouritesEntity)
     @Query( " SELECT * FROM favorites_movies_table ORDER BY id DESC ")
     fun getAllFavMovies():LiveData<List<FavouritesEntity>>
+    @Query("UPDATE favorites_movies_table SET personalNote = :personalNote WHERE id = :favoriteId")
+    suspend fun addPersonalNote(favoriteId: Int, personalNote: String?)
 
 }

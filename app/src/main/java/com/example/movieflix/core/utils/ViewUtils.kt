@@ -130,6 +130,20 @@ fun getRandomChar():String{
     }
 }
 
+val MIGRATION_4_5 = object : Migration(4, 5) {
+    override fun migrate(db: SupportSQLiteDatabase) {
+        db.execSQL("ALTER TABLE favorites_movies_table ADD COLUMN personalNote TEXT")
+    }
+}
+
+val MIGRATION_3_5 =  object : Migration(3, 5) {
+    override fun migrate(db: SupportSQLiteDatabase) {
+        db.execSQL("ALTER TABLE watch_list_news_table RENAME TO watch_list_table")
+        db.execSQL("ALTER TABLE favorites_table RENAME TO favorites_movies_table")
+        db.execSQL("ALTER TABLE favorites_movies_table ADD COLUMN personalNote TEXT")
+    }
+}
+
 
 class CustomNestedScrollView @JvmOverloads constructor(
     ctx: Context, attrs: AttributeSet? = null

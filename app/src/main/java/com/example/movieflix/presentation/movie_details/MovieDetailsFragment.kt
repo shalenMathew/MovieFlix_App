@@ -1,6 +1,7 @@
 package com.example.movieflix.presentation.movie_details
 
 import android.app.Dialog
+import android.content.Context
 import android.graphics.Typeface
 import android.os.Bundle
 import android.text.SpannableString
@@ -13,10 +14,13 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.InputMethodManager
 import android.widget.FrameLayout
 import android.widget.TextView
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.movieflix.R
@@ -315,8 +319,11 @@ class MovieDetailsFragment : BottomSheetDialogFragment(){
 
                     if(isFav){
                         changeFavIcon()
+                        setupPersonalNoteView(mediaId!!, res.personalNote)
+                        binding.fragmentMovieDetailsPersonalNoteLl.isVisible = true
                         break
                     }
+                    binding.fragmentMovieDetailsPersonalNoteLl.isVisible = false
                 }
             }
 
@@ -515,12 +522,65 @@ class MovieDetailsFragment : BottomSheetDialogFragment(){
         }
     }
 
-   private fun changeFavIcon(){
-   binding.apply {
-   isFav=true
-   favIcon.setImageDrawable(ContextCompat.getDrawable(requireContext(),R.drawable.fav))
-   }
-   }
+    private fun changeFavIcon() {
+        binding.apply {
+            isFav = true
+            favIcon.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.fav))
+        }
+    }
+
+    private fun setupPersonalNoteView(favId: Int, personalNote: String?) {
+        with(binding) {
+            fun addListener() {
+                fragmentMovieDetailsPersonalNoteLl.setOnClickListener {
+                    binding.fragmentMovieDetailsPersonalNoteEditText.clearFocus()
+                }
+                fragmentMovieDetailsPersonalNoteEditText.onFocusChangeListener =
+                    View.OnFocusChangeListener { _, hasFocus ->
+                        fragmentMovieDetailsPersonalNoteTextInputLayout.isHintEnabled =
+                            !hasFocus
+                    }
+                fragmentMovieDetailsPersonalNoteEditText.setOnEditorActionListener { view, actionId, _ ->
+                    if (actionId == 1001 || actionId == EditorInfo.IME_ACTION_DONE) {
+                        val note = view.text.toString()
+                        fragmentMovieDetailsPersonalNoteTextInputLayout.isVisible = false
+                        if (note.isNotEmpty()) {
+                            favMovieViewModel.addPersonalNote(favId, note)
+                            fragmentMovieDetailsPersonalNote.apply {
+                                text = note
+                                isVisible = true
+                            }
+                        } else {
+                            fragmentMovieDetailsPersonalNoteBtn.isVisible = true
+                        }
+                        val imm =
+                            requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                        imm.hideSoftInputFromWindow(view.windowToken, 0)
+                        return@setOnEditorActionListener true
+                    }
+                    return@setOnEditorActionListener false
+                }
+            }
+            if (personalNote.isNullOrEmpty()) {
+                fragmentMovieDetailsPersonalNoteBtn.apply {
+                    isVisible = true
+                    setOnClickListener {
+                        isVisible = false
+                        binding.fragmentMovieDetailsPersonalNoteTextInputLayout.isVisible = true
+                        addListener()
+                    }
+                }
+                fragmentMovieDetailsPersonalNote.isVisible = false
+            } else {
+                fragmentMovieDetailsPersonalNoteBtn.isVisible = false
+                fragmentMovieDetailsPersonalNoteTextInputLayout.isVisible = false
+                fragmentMovieDetailsPersonalNote.apply {
+                    text = personalNote
+                    isVisible = true
+                }
+            }
+        }
+    }
 
    private fun setExpandableText(textView: TextView, fullText: String) {
         val maxLines = 3

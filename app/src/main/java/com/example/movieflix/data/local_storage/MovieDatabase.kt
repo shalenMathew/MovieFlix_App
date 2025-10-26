@@ -7,8 +7,10 @@ import com.example.movieflix.data.local_storage.entity.FavouritesEntity
 import com.example.movieflix.data.local_storage.entity.HomeFeedEntity
 import com.example.movieflix.data.local_storage.entity.WatchListEntity
 
-@Database(entities = [HomeFeedEntity::class,WatchListEntity::class,FavouritesEntity::class],
- version = 4)
+@Database(
+    entities = [HomeFeedEntity::class, WatchListEntity::class, FavouritesEntity::class],
+    version = 5
+)
 @TypeConverters(MovieDataTypeConverter::class)
  abstract class MovieDatabase:RoomDatabase(){
 

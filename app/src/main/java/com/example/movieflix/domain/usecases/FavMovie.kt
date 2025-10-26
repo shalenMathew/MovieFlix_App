@@ -19,4 +19,8 @@ class FavMovie @Inject constructor(private val favMovieRepository: FavMovieRepos
         return favMovieRepository.getAllFavMovie()
     }
 
+    suspend fun addPersonalNote(id: Int, personalNote: String) {
+        return favMovieRepository.addPersonalNote(id, personalNote)
+    }
+
 }
