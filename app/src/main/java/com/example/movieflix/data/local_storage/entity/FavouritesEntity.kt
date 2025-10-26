@@ -9,5 +9,5 @@ import com.example.movieflix.domain.model.MovieResult
 data class FavouritesEntity(
     @PrimaryKey val id:Int,
     val movieResult: MovieResult,
-    val personalNote: String?
+    val personalNote: String? = null,
 )
