@@ -11,12 +11,12 @@ fun ImageView.loadImage(
     url: Any?,
     placeholder: Drawable? = null,
     listener: RequestListener<Drawable>? = null,
-    skipCache: Boolean = true,
+    skipCache: Boolean = false,
 ) {
     try {
         Glide.with(this.context)
             .load(url)
-            .timeout(180000)
+            .timeout(60000)
             .placeholder(placeholder)
             .error(R.drawable.poster_bg)
             .addListener(listener)

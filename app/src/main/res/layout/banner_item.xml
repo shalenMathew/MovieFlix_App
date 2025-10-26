@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+ android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+    android:orientation="vertical">
 
     <RelativeLayout
         android:id="@+id/banner_item_container"
@@ -9,12 +12,6 @@
         android:background="@color/dark_gray"
         android:orientation="vertical"
         >
-
-        <com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
-            android:id="@+id/banner_item_yt_view"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            />
 
         <ImageView
             android:id="@+id/banner_item_banner"
@@ -25,10 +22,18 @@
              />
 
         <View
+            android:id="@+id/grad_below"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_100sdp"
             android:layout_alignParentBottom="true"
             android:background="@drawable/gradient_bottom" />
+        <View
+            android:layout_below="@id/grad_below"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_30sdp"
+            android:background="@drawable/gradient_top"
+            android:translationZ="@dimen/_50sdp"
+            />
 
         <TextView
             android:id="@+id/banner_item_title"
@@ -57,7 +62,16 @@
             android:layout_marginBottom="@dimen/_30sdp"
             />
 
+
+
     </RelativeLayout>
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_60sdp"
+        android:background="@drawable/gradient_top"
+        android:translationZ="@dimen/_50sdp"
+        />
 
-</layout>
+
+</LinearLayout>

@@ -1,9 +1,13 @@
 package com.example.movieflix.domain.usecases
 
 import com.example.movieflix.core.utils.NetworkResults
+import com.example.movieflix.domain.model.CastMember
+import com.example.movieflix.domain.model.CrewMember
 import com.example.movieflix.domain.model.HomeFeedData
 import com.example.movieflix.domain.model.MovieList
 import com.example.movieflix.domain.model.MediaVideoResultList
+import com.example.movieflix.domain.model.TVDetail
+import com.example.movieflix.domain.model.TVSeason
 import com.example.movieflix.domain.model.WatchProviders
 import com.example.movieflix.domain.repository.MovieInfoRepository
 import kotlinx.coroutines.flow.Flow
@@ -33,5 +37,29 @@ class  GetMovieInfo @Inject constructor(private val movieInfoRepository: MovieIn
 
     fun loadMoreMoviesForCategory(categoryTitle: String, page: Int): Flow<NetworkResults<MovieList>> {
         return movieInfoRepository.loadMoreMoviesForCategory(categoryTitle, page)
+    }
+
+    fun getMovieCast(movieId: Int): Flow<NetworkResults<List<CastMember>>> {
+        return movieInfoRepository.getMovieCast(movieId)
+    }
+
+    fun getTVCast(tvId: Int): Flow<NetworkResults<List<CastMember>>> {
+        return movieInfoRepository.getTVCast(tvId)
+    }
+
+    fun getMovieCrew(movieId: Int): Flow<NetworkResults<List<CrewMember>>> {
+        return movieInfoRepository.getMovieCrew(movieId)
+    }
+
+    fun getTVCrew(tvId: Int): Flow<NetworkResults<List<CrewMember>>> {
+        return movieInfoRepository.getTVCrew(tvId)
+    }
+
+    fun getTVDetail(tvId: Int): Flow<NetworkResults<TVDetail>> {
+        return movieInfoRepository.getTVDetail(tvId)
+    }
+
+    fun getTVSeason(tvId: Int, seasonNumber: Int): Flow<NetworkResults<TVSeason>> {
+        return movieInfoRepository.getTVSeason(tvId, seasonNumber)
     }
 }

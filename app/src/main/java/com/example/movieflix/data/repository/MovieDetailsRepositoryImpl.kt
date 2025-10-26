@@ -9,6 +9,8 @@ import com.example.movieflix.data.local_storage.entity.HomeFeedEntity
 import com.example.movieflix.data.model.HomeFeedDataResponse
 import com.example.movieflix.data.model.HomeFeedResponse
 import com.example.movieflix.data.remote.RemoteDataSource
+import com.example.movieflix.domain.model.CastMember
+import com.example.movieflix.domain.model.CrewMember
 import com.example.movieflix.domain.model.HomeFeedData
 import com.example.movieflix.domain.model.MovieList
 import com.example.movieflix.domain.model.MediaVideoResultList
@@ -16,6 +18,7 @@ import com.example.movieflix.domain.model.WatchProviders
 import com.example.movieflix.domain.repository.MovieInfoRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.withContext
@@ -231,5 +234,180 @@ class MovieDetailsRepositoryImpl(
         }
     }
 
-}
+    override fun getMovieCast(movieId: Int): Flow<NetworkResults<List<CastMember>>> = flow {
+        emit(NetworkResults.Loading())
+        try {
+            if (isNetworkAvailable(appContext)) {
+                val castResponse = remoteDataSource.getMovieCast(movieId)
+                castResponse.body()?.let { response ->
+                    val castList = response.cast?.take(10)?.mapNotNull { cast ->
+                        // Only include cast with valid ID and name
+                        if (cast.id != null && cast.id > 0 && !cast.name.isNullOrBlank()) {
+                            CastMember(
+                                id = cast.id,
+                                name = cast.name,
+                                character = cast.character?.takeIf { it.isNotBlank() } ?: "",
+                                profilePath = cast.profilePath?.takeIf { it.isNotBlank() }
+                            )
+                        } else {
+                            null
+                        }
+                    } ?: emptyList()
+                    
+                    emit(NetworkResults.Success(castList))
+                } ?: emit(NetworkResults.Error("No cast data available"))
+            } else {
+                emit(NetworkResults.Error("No internet connection"))
+            }
+        } catch (e: Exception) {
+            when (e) {
+                is IOException -> emit(NetworkResults.Error("Check ur internet connection"))
+                else -> emit(NetworkResults.Error(e.message ?: "Unknown error"))
+            }
+        }
+    }
 
+    override fun getTVCast(tvId: Int): Flow<NetworkResults<List<CastMember>>> = flow {
+        emit(NetworkResults.Loading())
+        try {
+            if (isNetworkAvailable(appContext)) {
+                val castResponse = remoteDataSource.getTVCast(tvId)
+                castResponse.body()?.let { response ->
+                    val castList = response.cast?.take(10)?.mapNotNull { cast ->
+                        // Only include cast with valid ID and name
+                        if (cast.id != null && cast.id > 0 && !cast.name.isNullOrBlank()) {
+                            CastMember(
+                                id = cast.id,
+                                name = cast.name,
+                                character = cast.character?.takeIf { it.isNotBlank() } ?: "",
+                                profilePath = cast.profilePath?.takeIf { it.isNotBlank() }
+                            )
+                        } else {
+                            null
+                        }
+                    } ?: emptyList()
+                    
+                    emit(NetworkResults.Success(castList))
+                } ?: emit(NetworkResults.Error("No cast data available"))
+            } else {
+                emit(NetworkResults.Error("No internet connection"))
+            }
+        } catch (e: Exception) {
+            when (e) {
+                is IOException -> emit(NetworkResults.Error("Check ur internet connection"))
+                else -> emit(NetworkResults.Error(e.message ?: "Unknown error"))
+            }
+        }
+    }
+
+    override fun getMovieCrew(movieId: Int): Flow<NetworkResults<List<CrewMember>>> = flow {
+        emit(NetworkResults.Loading())
+        try {
+            if (isNetworkAvailable(appContext)) {
+                val castResponse = remoteDataSource.getMovieCast(movieId)
+                castResponse.body()?.let { response ->
+                    // Filter for Director, Writer, and Producer
+                    val crewList = response.crew?.filter { crew ->
+                        crew.job in listOf("Director", "Writer", "Screenplay", "Producer", "Executive Producer")
+                    }?.distinctBy { it.id }?.mapNotNull { crew ->
+                        // Only include crew with valid ID and name
+                        if (crew.id != null && crew.id > 0 && !crew.name.isNullOrBlank()) {
+                            CrewMember(
+                                id = crew.id,
+                                name = crew.name,
+                                job = crew.job ?: "",
+                                profilePath = crew.profilePath?.takeIf { it.isNotBlank() }
+                            )
+                        } else {
+                            null
+                        }
+                    } ?: emptyList()
+                    
+                    emit(NetworkResults.Success(crewList))
+                } ?: emit(NetworkResults.Error("No crew data available"))
+            } else {
+                emit(NetworkResults.Error("No internet connection"))
+            }
+        } catch (e: Exception) {
+            when (e) {
+                is IOException -> emit(NetworkResults.Error("Check ur internet connection"))
+                else -> emit(NetworkResults.Error(e.message ?: "Unknown error"))
+            }
+        }
+    }
+
+    override fun getTVCrew(tvId: Int): Flow<NetworkResults<List<CrewMember>>> = flow {
+        emit(NetworkResults.Loading())
+        try {
+            if (isNetworkAvailable(appContext)) {
+                val castResponse = remoteDataSource.getTVCast(tvId)
+                castResponse.body()?.let { response ->
+                    // Filter for Director, Writer, and Producer
+                    val crewList = response.crew?.filter { crew ->
+                        crew.job in listOf("Director", "Writer", "Screenplay", "Producer", "Executive Producer")
+                    }?.distinctBy { it.id }?.mapNotNull { crew ->
+                        // Only include crew with valid ID and name
+                        if (crew.id != null && crew.id > 0 && !crew.name.isNullOrBlank()) {
+                            CrewMember(
+                                id = crew.id,
+                                name = crew.name,
+                                job = crew.job ?: "",
+                                profilePath = crew.profilePath?.takeIf { it.isNotBlank() }
+                            )
+                        } else {
+                            null
+                        }
+                    } ?: emptyList()
+                    
+                    emit(NetworkResults.Success(crewList))
+                } ?: emit(NetworkResults.Error("No crew data available"))
+            } else {
+                emit(NetworkResults.Error("No internet connection"))
+            }
+        } catch (e: Exception) {
+            when (e) {
+                is IOException -> emit(NetworkResults.Error("Check ur internet connection"))
+                else -> emit(NetworkResults.Error(e.message ?: "Unknown error"))
+            }
+        }
+    }
+
+    override fun getTVDetail(tvId: Int): Flow<NetworkResults<com.example.movieflix.domain.model.TVDetail>> = flow {
+        emit(NetworkResults.Loading())
+        try {
+            if (isNetworkAvailable(appContext)) {
+                val tvDetailResponse = remoteDataSource.getTVDetail(tvId)
+                tvDetailResponse.body()?.let { response ->
+                    emit(NetworkResults.Success(response.toTVDetail()))
+                } ?: emit(NetworkResults.Error("No TV show data available"))
+            } else {
+                emit(NetworkResults.Error("No internet connection"))
+            }
+        } catch (e: Exception) {
+            when (e) {
+                is IOException -> emit(NetworkResults.Error("Check ur internet connection"))
+                else -> emit(NetworkResults.Error(e.message ?: "Unknown error"))
+            }
+        }
+    }
+
+    override fun getTVSeason(tvId: Int, seasonNumber: Int): Flow<NetworkResults<com.example.movieflix.domain.model.TVSeason>> = flow {
+        emit(NetworkResults.Loading())
+        try {
+            if (isNetworkAvailable(appContext)) {
+                val seasonResponse = remoteDataSource.getTVSeason(tvId, seasonNumber)
+                seasonResponse.body()?.let { response ->
+                    emit(NetworkResults.Success(response.toTVSeason()))
+                } ?: emit(NetworkResults.Error("No season data available"))
+            } else {
+                emit(NetworkResults.Error("No internet connection"))
+            }
+        } catch (e: Exception) {
+            when (e) {
+                is IOException -> emit(NetworkResults.Error("Check ur internet connection"))
+                else -> emit(NetworkResults.Error(e.message ?: "Unknown error"))
+            }
+        }
+    }
+
+}

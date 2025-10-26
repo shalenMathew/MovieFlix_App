@@ -210,6 +210,12 @@
                 android:layout_marginStart="@dimen/_5sdp"
                 >
 
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    >
+
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/fragment_movie_details_share_btn"
                     style="@style/Widget.Material3.CardView.Filled"
@@ -235,6 +241,15 @@
 
                 </com.google.android.material.card.MaterialCardView>
 
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginStart="@dimen/_15sdp"
+                    >
+
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/fragment_movie_details_watchlist_btn"
                     style="@style/Widget.Material3.CardView.Filled"
@@ -242,7 +257,6 @@
                     android:layout_height="@dimen/_30sdp"
                     app:cardBackgroundColor="@color/app_color"
                     app:cardCornerRadius="8dp"
-                    android:layout_marginStart="@dimen/_15sdp"
                     >
 
                     <LinearLayout
@@ -261,6 +275,14 @@
                     </LinearLayout>
 
                 </com.google.android.material.card.MaterialCardView>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginStart="@dimen/_15sdp"
+                    >
 
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/fragment_movie_details_fav_btn"
@@ -269,7 +291,6 @@
                     android:layout_height="@dimen/_30sdp"
                     app:cardBackgroundColor="@color/app_color"
                     app:cardCornerRadius="8dp"
-                    android:layout_marginStart="@dimen/_15sdp"
                     >
 
                     <LinearLayout
@@ -289,9 +310,136 @@
 
                 </com.google.android.material.card.MaterialCardView>
 
+                </LinearLayout>
+
             </LinearLayout>
 
         </LinearLayout>
+
+        <!-- Tab Layout for About and Episodes (TV Shows only) -->
+        <LinearLayout
+            android:id="@+id/tabs_section"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/black"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/tab_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_12sdp"
+                android:background="@color/black"
+                app:tabIndicatorColor="@color/app_color"
+                app:tabIndicatorHeight="@dimen/_2sdp"
+                app:tabSelectedTextColor="@color/white"
+                app:tabTextColor="@color/text_secondary"
+                app:tabMode="fixed"
+                app:tabGravity="fill">
+
+                <com.google.android.material.tabs.TabItem
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="About" />
+
+                <com.google.android.material.tabs.TabItem
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Episodes" />
+
+            </com.google.android.material.tabs.TabLayout>
+
+        </LinearLayout>
+
+        <!-- Episodes Section (TV Shows only) -->
+        <LinearLayout
+            android:id="@+id/episodes_section"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/black"
+            android:orientation="vertical"
+            android:paddingHorizontal="@dimen/_12sdp"
+            android:paddingTop="@dimen/_12sdp"
+            android:visibility="gone">
+
+            <!-- Season Dropdown -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/montserrat_semibold"
+                android:text="Select Season"
+                android:textColor="@color/white"
+                android:textSize="@dimen/_10ssp"
+                android:layout_marginBottom="@dimen/_6sdp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/season_dropdown_button"
+                style="@style/Widget.Material3.Button.OutlinedButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Season 1"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:fontFamily="@font/montserrat_medium"
+                android:gravity="start|center_vertical"
+                app:icon="@drawable/baseline_keyboard_arrow_right_24"
+                app:iconGravity="end"
+                app:iconTint="@color/white"
+                app:strokeColor="@color/app_color"
+                app:strokeWidth="1dp" />
+
+            <!-- Episodes RecyclerView -->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/episodes_recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_8sdp"
+                android:nestedScrollingEnabled="false"
+                android:orientation="vertical"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:itemCount="10"
+                tools:listitem="@layout/item_episode" />
+
+        </LinearLayout>
+
+        <!-- About Section Content (visible by default, hidden when Episodes tab is active) -->
+        <LinearLayout
+            android:id="@+id/about_section"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/black"
+            android:orientation="vertical">
+
+        <!-- Cast Section -->
+        <TextView
+            android:id="@+id/cast_section_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@color/black"
+            android:fontFamily="@font/montserrat_semibold"
+            android:gravity="start"
+            android:paddingHorizontal="@dimen/_12sdp"
+            android:paddingTop="@dimen/_12sdp"
+            android:text="Cast"
+            android:textColor="@color/white"
+            android:textSize="@dimen/_12ssp"
+             />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/fragment_movie_details_cast_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/black"
+            android:nestedScrollingEnabled="false"
+            android:orientation="horizontal"
+            android:paddingHorizontal="@dimen/_6sdp"
+            android:paddingTop="@dimen/_4sdp"
+            android:paddingBottom="@dimen/_8sdp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:itemCount="5"
+            tools:listitem="@layout/item_cast" />
 
         <TextView
             android:id="@+id/recommended_text"
@@ -321,7 +469,8 @@
             tools:itemCount="2"
             tools:listitem="@layout/item_list" />
 
-
+        </LinearLayout>
+        <!-- End of About Section -->
 
 
     </LinearLayout>

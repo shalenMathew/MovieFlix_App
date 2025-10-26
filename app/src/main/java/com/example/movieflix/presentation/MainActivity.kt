@@ -2,8 +2,8 @@ package com.example.movieflix.presentation
 
 import android.content.res.ColorStateList
 import android.os.Bundle
-import android.view.View
-import android.view.WindowManager
+import androidx.activity.SystemBarStyle
+import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.WindowCompat
@@ -17,8 +17,11 @@ import com.example.movieflix.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedListener {
-    private val navController by lazy {
+class MainActivity : AppCompatActivity() {
+
+
+
+    private val navController by lazy{
         (supportFragmentManager.findFragmentById(R.id.fragmentContainerView)
                 as NavHostFragment).navController
     }
@@ -26,8 +29,18 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        enableEdgeToEdge(
+            statusBarStyle = SystemBarStyle.dark(
+                scrim = android.graphics.Color.BLACK
+            ),
+            navigationBarStyle = SystemBarStyle.dark(
+                scrim = android.graphics.Color.BLACK
+            )
+        )
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+
 
         // Setup bottom navigation with nav controller
         binding.bottomNavigationView.setupWithNavController(navController)

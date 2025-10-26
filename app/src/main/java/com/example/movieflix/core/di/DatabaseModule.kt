@@ -11,9 +11,11 @@ import com.example.movieflix.data.local_storage.MovieDao
 import com.example.movieflix.data.local_storage.MovieDataTypeConverter
 import com.example.movieflix.data.local_storage.MovieDatabase
 import com.example.movieflix.data.remote.RemoteDataSource
+import com.example.movieflix.data.repository.ActorRepositoryImpl
 import com.example.movieflix.data.repository.FavMovieRepositoryImpl
 import com.example.movieflix.data.repository.MovieDetailsRepositoryImpl
 import com.example.movieflix.data.repository.WatchListRepositoryImpl
+import com.example.movieflix.domain.repository.ActorRepository
 import com.example.movieflix.domain.repository.FavMovieRepository
 import com.example.movieflix.domain.repository.MovieInfoRepository
 import com.example.movieflix.domain.repository.WatchListRepository
@@ -65,6 +67,15 @@ object DatabaseModule {
     @Singleton
     fun getFavMovie(localDataSource: LocalDataSource):FavMovieRepository{
         return FavMovieRepositoryImpl(localDataSource)
+    }
+
+    @Provides
+    @Singleton
+    fun providesActorRepository(
+        remoteDataSource: RemoteDataSource,
+        application: Application
+    ): ActorRepository {
+        return ActorRepositoryImpl(remoteDataSource, application)
     }
 
 }
