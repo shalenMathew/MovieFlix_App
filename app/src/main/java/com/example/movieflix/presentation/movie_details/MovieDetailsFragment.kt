@@ -17,6 +17,7 @@ import android.widget.FrameLayout
 import android.widget.TextView
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.movieflix.R
@@ -315,6 +316,7 @@ class MovieDetailsFragment : BottomSheetDialogFragment(){
 
                     if(isFav){
                         changeFavIcon()
+                        addPersonalNoteListener()
                         break
                     }
                 }
@@ -515,12 +517,23 @@ class MovieDetailsFragment : BottomSheetDialogFragment(){
         }
     }
 
-   private fun changeFavIcon(){
-   binding.apply {
-   isFav=true
-   favIcon.setImageDrawable(ContextCompat.getDrawable(requireContext(),R.drawable.fav))
-   }
-   }
+    private fun changeFavIcon() {
+        binding.apply {
+            isFav = true
+            favIcon.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.fav))
+            fragmentMovieDetailsPersonalNoteLl.isVisible = true
+        }
+    }
+
+    private fun addPersonalNoteListener() {
+        binding.fragmentMovieDetailsPersonalNoteLl.setOnClickListener {
+            binding.fragmentMovieDetailsPersonalNoteEditText.clearFocus()
+        }
+        binding.fragmentMovieDetailsPersonalNoteEditText.onFocusChangeListener =
+            View.OnFocusChangeListener { _, hasFocus ->
+                binding.fragmentMovieDetailsPersonalNoteTextInputLayout.isHintEnabled = !hasFocus
+            }
+    }
 
    private fun setExpandableText(textView: TextView, fullText: String) {
         val maxLines = 3

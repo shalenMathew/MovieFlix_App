@@ -181,6 +181,97 @@
                 app:iconTint="@color/white"
                 />
 
+            <LinearLayout
+                android:id="@+id/fragment_movie_details_personal_note_ll"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone"
+                tools:visibility="visible">
+
+                <TextView
+                    android:id="@+id/fragment_movie_details_personal_note_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_5sdp"
+                    android:fontFamily="@font/montserrat_bold"
+                    android:gravity="start"
+                    android:text="@string/personal_note"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/_15sdp" />
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/fragment_movie_details_personal_note_btn"
+                        style="@style/Widget.MaterialComponents.Button.TextButton"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="@dimen/_18sdp"
+                        android:fontFamily="@font/montserrat_medium"
+                        android:letterSpacing="0.1"
+                        android:text="@string/click_to_add_your_personal_note"
+                        android:textAllCaps="false"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/_12ssp"
+                        android:visibility="gone"
+                        app:icon="@drawable/baseline_add_circle_24"
+                        app:iconGravity="textStart"
+                        app:iconTint="@color/white" />
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/fragment_movie_details_personal_note_text_input_layout"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_5sdp"
+                        android:layout_marginBottom="@dimen/_12sdp"
+                        android:hint="Enter your note..."
+                        android:textColorHint="@color/white"
+                        android:visibility="visible"
+                        app:boxCornerRadiusBottomEnd="@dimen/_5sdp"
+                        app:boxCornerRadiusBottomStart="@dimen/_5sdp"
+                        app:boxCornerRadiusTopEnd="@dimen/_5sdp"
+                        app:boxCornerRadiusTopStart="@dimen/_5sdp"
+                        app:boxStrokeColor="@color/personal_note_box_color"
+                        app:hintTextColor="@color/white">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/fragment_movie_details_personal_note_edit_text"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:minHeight="@dimen/_52sdp"
+                            android:fontFamily="@font/montserrat_medium"
+                            android:gravity="top"
+                            android:inputType="text"
+                            android:minLines="2"
+                            android:imeActionLabel="Save"
+                            android:imeActionId="1001"
+                            android:imeOptions="actionDone"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/_13ssp" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+
+                    <TextView
+                        android:id="@+id/fragment_movie_details_personal_note"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="@dimen/_5sdp"
+                        android:layout_marginTop="@dimen/_8sdp"
+                        android:layout_marginBottom="@dimen/_12sdp"
+                        android:fontFamily="@font/montserrat_medium"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/_11ssp"
+                        android:visibility="visible"
+                        tools:text="beautiful movie another twisted tale by fujimoto sensi"
+                        tools:visibility="visible" />
+                </FrameLayout>
+            </LinearLayout>
+
             <TextView
                 android:id="@+id/fragment_movie_details_genre"
                 android:layout_width="wrap_content"
