@@ -45,15 +45,16 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         
         // Handle bottom navigation visibility
         navController.addOnDestinationChangedListener { _, destination, _ ->
-            when (destination.id) {
-                R.id.homeFragment, R.id.searchFragment, R.id.watchListFragment, R.id.favFragment -> {
-                    binding.bottomNavigationView.visibility = android.view.View.VISIBLE
-                }
-                else -> {
-                    binding.bottomNavigationView.visibility = android.view.View.GONE
-                }
-            }
+    when (destination.id) {
+        R.id.homeFragment, R.id.searchFragment -> {
+            binding.bottomNavigationView.visibility = View.VISIBLE
         }
+        else -> {
+            binding.bottomNavigationView.visibility = View.GONE
+        }
+    }
+}
+
         // Make status bar and navigation bar transparent
         setupTransparentSystemBars()
 
