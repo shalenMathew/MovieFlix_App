@@ -449,7 +449,8 @@ class MovieDetailsFragment : BottomSheetDialogFragment(){
                         if (availableSeasons.isNotEmpty()) {
                             // Load first season by default
                             currentSeasonNumber = availableSeasons[0].seasonNumber ?: 1
-                            binding.seasonDropdownButton.text = "Season $currentSeasonNumber"
+                            val epCount = availableSeasons[0].episodeCount ?: 0
+                            binding.seasonDropdownButton.text = "Season $currentSeasonNumber • Episodes ${epCount}"
                             mediaId?.let { tvId ->
                                 homeInfoViewModel.getTVSeason(tvId, currentSeasonNumber)
                             }
@@ -859,7 +860,7 @@ class MovieDetailsFragment : BottomSheetDialogFragment(){
         
         val adapter = SeasonSelectorAdapter(availableSeasons) { selectedSeason ->
             currentSeasonNumber = selectedSeason.seasonNumber ?: 1
-            binding.seasonDropdownButton.text = selectedSeason.name ?: "Season $currentSeasonNumber"
+            binding.seasonDropdownButton.text = "${selectedSeason.name} • Episodes ${selectedSeason.episodeCount}"
             
             // Load episodes for selected season
             mediaId?.let { tvId ->

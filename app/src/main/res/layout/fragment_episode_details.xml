@@ -36,7 +36,7 @@
             <!-- Gradient Overlay -->
             <View
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/_200sdp"
+                android:layout_height="@dimen/_50sdp"
                 android:background="@drawable/gradient_bg" />
 
             <!-- Back Button -->
