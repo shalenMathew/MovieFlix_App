@@ -41,7 +41,7 @@ suspend fun insertHomeFeedData(homeFeedEntity: HomeFeedEntity){
          return movieDao.getAllFavMovies()
      }
 
-    suspend fun addPersonalNote(favoriteId: Int, personalNote: String) {
+    suspend fun addPersonalNote(favoriteId: Int, personalNote: String?) {
         return movieDao.addPersonalNote(favoriteId, personalNote)
     }
 

@@ -18,7 +18,7 @@ class FavMovieRepositoryImpl(private val localDataSource: LocalDataSource):FavMo
        return localDataSource.getAllFavMovie()
     }
 
-    override suspend fun addPersonalNote(id: Int, personalNote: String) {
+    override suspend fun addPersonalNote(id: Int, personalNote: String?) {
         return localDataSource.addPersonalNote(id, personalNote)
     }
 }
