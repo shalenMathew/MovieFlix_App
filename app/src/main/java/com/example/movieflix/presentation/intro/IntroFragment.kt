@@ -35,7 +35,7 @@ class IntroFragment : Fragment() {
     }
 
     private fun handleClickListeners() {
-        binding.fragmentIntroCtnBtn.setOnClickListener(){
+        binding.fragmentIntroCtnBtn.setOnClickListener {
             lifecycleScope.launch {
                 DataStoreReference.updateIntroCompleted(requireContext(),true)
             }

@@ -143,7 +143,7 @@ class MovieDetailsFragment : BottomSheetDialogFragment(){
                isInWatchList=!isInWatchList
             }
 
-            fragmentMovieDetailsFavBtn.setOnClickListener(){
+            fragmentMovieDetailsFavBtn.setOnClickListener {
 
                 if (!isFav){
                     favMovieViewModel.insertFavMovieData(movieResult)
@@ -193,7 +193,7 @@ class MovieDetailsFragment : BottomSheetDialogFragment(){
         // Check if we can use NavController (normal fragment flow)
         try {
             findNavController().navigate(R.id.action_movieDetailsFragment_self, bundle)
-        } catch (e: IllegalStateException) {
+        } catch (_: IllegalStateException) {
             // NavController not available - we're shown as a standalone dialog
             // Update arguments and reload the fragment
             arguments = bundle
@@ -836,17 +836,17 @@ class MovieDetailsFragment : BottomSheetDialogFragment(){
                                     when (state) {
                                         PlayerConstants.PlayerState.PLAYING -> {
                                             isPlaying = true
-                                            binding.fragmentMovieDetailsPlayBtn.text = "Pause Trailer"
+                                            "Pause Trailer".also { binding.fragmentMovieDetailsPlayBtn.text = it }
                                             binding.fragmentMovieDetailsPlayBtn.icon = ContextCompat.getDrawable(requireContext(), R.drawable.ic_pause)
                                         }
                                         PlayerConstants.PlayerState.PAUSED -> {
                                             isPlaying = false
-                                            binding.fragmentMovieDetailsPlayBtn.text = "Play Trailer"
+                                            "Play Trailer".also { binding.fragmentMovieDetailsPlayBtn.text = it }
                                             binding.fragmentMovieDetailsPlayBtn.icon = ContextCompat.getDrawable(requireContext(), R.drawable.ic_play_arrow)
                                         }
                                         PlayerConstants.PlayerState.ENDED -> {
                                             isPlaying = false
-                                            binding.fragmentMovieDetailsPlayBtn.text = "Play Trailer"
+                                            "Play Trailer".also { binding.fragmentMovieDetailsPlayBtn.text = it }
                                             binding.fragmentMovieDetailsPlayBtn.icon = ContextCompat.getDrawable(requireContext(), R.drawable.ic_play_arrow)
                                         }
                                         else -> {}
@@ -857,20 +857,20 @@ class MovieDetailsFragment : BottomSheetDialogFragment(){
                             this@MovieDetailsFragment.youTubePlayer?.loadVideo(it,0f)
 
 
-                            Log.d("YTPlayerBug","key inside = "+key)
+                            Log.d("YTPlayerBug", "key inside = $key")
 
-                            Log.d("YTPlayerBug","yt player inside = "+ youTubePlayer)
+                            Log.d("YTPlayerBug", "yt player inside = $youTubePlayer")
 
                         } ?: run {
 
-                            Log.d("YTPlayerBug","key inside run = "+key)
+                            Log.d("YTPlayerBug", "key inside run = $key")
                         }
                     }
 
                 })
 
-            Log.d("YTPlayerBug","yt player listener " + youTubePlayerListener)
-            Log.d("YTPlayerBug","yt player : " + youTubePlayer)
+            Log.d("YTPlayerBug", "yt player listener $youTubePlayerListener")
+            Log.d("YTPlayerBug", "yt player : $youTubePlayer")
 
         }
     }

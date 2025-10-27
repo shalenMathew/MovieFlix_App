@@ -4,20 +4,16 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.movieflix.R
 import com.example.movieflix.core.adapters.FavAdapters
-import com.example.movieflix.core.adapters.WatchListAdapter
 import com.example.movieflix.core.utils.Constants
 import com.example.movieflix.core.utils.gone
 import com.example.movieflix.core.utils.visible
 import com.example.movieflix.databinding.FragmentFavBinding
-import com.example.movieflix.databinding.FragmentWatchListBinding
 import com.example.movieflix.presentation.viewmodels.FavMovieViewModel
-import com.example.movieflix.presentation.viewmodels.WatchListViewModel
 import com.google.gson.Gson
 import dagger.hilt.android.AndroidEntryPoint
 

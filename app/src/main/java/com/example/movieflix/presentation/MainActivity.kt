@@ -2,6 +2,7 @@ package com.example.movieflix.presentation
 
 import android.content.res.ColorStateList
 import android.os.Bundle
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.SystemBarStyle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -15,8 +16,6 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
-
-
 
     private val navController by lazy{
         (supportFragmentManager.findFragmentById(R.id.fragmentContainerView)
@@ -52,8 +51,8 @@ class MainActivity : AppCompatActivity() {
                 ContextCompat.getColor(this, R.color.bottom_nav_grey),
             )
         )
-        binding.bottomNavigationView.setItemActiveIndicatorColor(csl)
-        
+        binding.bottomNavigationView.itemActiveIndicatorColor = csl
+
         // Handle bottom navigation visibility
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
@@ -65,14 +64,19 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
-    }
 
-    @Deprecated("Deprecated in Java")
-    override fun onBackPressed() {
-if (navController.currentDestination?.id == R.id.homeFragment){
-    finish()
-}
-        super.onBackPressed()
+        val callback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                // Check if the current destination is the home fragment
+                if (navController.currentDestination?.id == R.id.homeFragment) {
+                    // If it is, finish the activity
+                    finish()
+                } else {
+                    // Otherwise, let the NavController handle the back press
+                    navController.navigateUp()
+                }
+            }
+        }
+        onBackPressedDispatcher.addCallback(this, callback)
     }
-
 }

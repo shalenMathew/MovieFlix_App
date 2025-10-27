@@ -5,17 +5,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.Animation
-import android.widget.Toast
-import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.movieflix.R
 import com.example.movieflix.core.utils.DataStoreReference
 import com.example.movieflix.databinding.FragmentSplashBinding
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 class SplashFragment: Fragment() {
@@ -53,14 +48,12 @@ private  var _binding:FragmentSplashBinding?=null
 
         binding.lottieAnimation.addAnimatorListener(object: Animator.AnimatorListener{
             override fun onAnimationStart(p0: Animator) {
-                    lifecycleScope.launch {
-                        delay(3000)
-                        findNavController().navigate(id)
-                    }
             }
             override fun onAnimationEnd(p0: Animator) {
                 lifecycleScope.launch {
-//                    findNavController().navigate(id)
+                    if (viewLifecycleOwner.lifecycle.currentState.isAtLeast(androidx.lifecycle.Lifecycle.State.RESUMED)) {
+                        findNavController().navigate(id)
+                    }
                 }
             }
 

@@ -21,6 +21,7 @@ import com.example.movieflix.presentation.movie_details.MovieDetailsFragment
 import com.example.movieflix.presentation.viewmodels.ActorDetailViewModel
 import com.google.gson.Gson
 import dagger.hilt.android.AndroidEntryPoint
+import androidx.core.net.toUri
 
 @AndroidEntryPoint
 class ActorDetailActivity : AppCompatActivity() {
@@ -93,7 +94,7 @@ class ActorDetailActivity : AppCompatActivity() {
 
     private fun openMovieDetail(movie: MovieResult) {
         val movieDetailsFragment = MovieDetailsFragment()
-        val bundle = android.os.Bundle()
+        val bundle = Bundle()
         bundle.putString(Constants.MEDIA_SEND_REQUEST_KEY, Gson().toJson(movie))
         movieDetailsFragment.arguments = bundle
         movieDetailsFragment.show(supportFragmentManager, "MovieDetailsFragment")
@@ -175,7 +176,7 @@ class ActorDetailActivity : AppCompatActivity() {
                 actorBiography.text = actor.biography
                 actorBiography.visibility = View.VISIBLE
             } else {
-                actorBiography.text = "No biography available for this person."
+                "No biography available for this person.".also { actorBiography.text = it }
                 actorBiography.visibility = View.VISIBLE
             }
 
@@ -253,7 +254,7 @@ class ActorDetailActivity : AppCompatActivity() {
     private fun openSocialMedia(nativeUrl: String, webUrl: String) {
         try {
             // Try to open native app first
-            val nativeIntent = Intent(Intent.ACTION_VIEW, android.net.Uri.parse(nativeUrl))
+            val nativeIntent = Intent(Intent.ACTION_VIEW, nativeUrl.toUri())
             nativeIntent.setPackage(getNativeAppPackage(nativeUrl))
 
             if (nativeIntent.resolveActivity(packageManager) != null) {
@@ -264,15 +265,15 @@ class ActorDetailActivity : AppCompatActivity() {
                 val customTabsIntent = androidx.browser.customtabs.CustomTabsIntent.Builder()
                     .setShowTitle(true)
                     .build()
-                customTabsIntent.launchUrl(this, android.net.Uri.parse(webUrl))
+                customTabsIntent.launchUrl(this, webUrl.toUri())
             }
-        } catch (e: Exception) {
+        } catch (_: Exception) {
             // Fallback to web URL if anything goes wrong
             try {
                 val customTabsIntent = androidx.browser.customtabs.CustomTabsIntent.Builder()
                     .setShowTitle(true)
                     .build()
-                customTabsIntent.launchUrl(this, android.net.Uri.parse(webUrl))
+                customTabsIntent.launchUrl(this, webUrl.toUri())
             } catch (ex: Exception) {
                 ex.printStackTrace()
             }

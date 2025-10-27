@@ -61,7 +61,7 @@ class SearchFragment : BaseFragment() {
     }
 
     private fun clickHandlers() {
-        binding.fragmentHomeNetworkCheck.layoutNetworkBtn.setOnClickListener(){
+        binding.fragmentHomeNetworkCheck.layoutNetworkBtn.setOnClickListener {
             openNetworkSettings(requireContext())
         }
     }
