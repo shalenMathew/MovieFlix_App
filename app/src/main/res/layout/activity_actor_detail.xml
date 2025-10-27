@@ -25,7 +25,7 @@
                 android:id="@+id/collapsing_toolbar"
                 app:toolbarId="@+id/toolbar"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/_200sdp"
+                android:layout_height="@dimen/_420sdp"
                 android:background="@color/black"
                 app:contentScrim="@color/background"
                 app:layout_scrollFlags="scroll|exitUntilCollapsed"
@@ -47,11 +47,12 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="bottom|center_horizontal"
-                    android:layout_marginTop="390dp"
                     android:orientation="vertical"
-                    android:background="@android:color/transparent">
+                    android:background="@android:color/transparent"
+                    android:layout_gravity="bottom"
+                    android:paddingBottom="@dimen/_40sdp">
 
-                    <TextView
+                <TextView
                         android:id="@+id/actor_name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
