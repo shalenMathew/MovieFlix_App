@@ -106,6 +106,11 @@ interface ApiClient {
         @Path("movie_id") movieId: Int
     ): Response<WhereToWatchProviderResponse>
 
+    @GET("3/tv/{tv_id}/watch/providers")
+    suspend fun getTVWatchProvidersApiCall(
+        @Path("tv_id") tvId: Int
+    ): Response<WhereToWatchProviderResponse>
+
     @GET("3/search/multi")
     suspend fun fetchMovieSearchedResultsApiCall(
         @Query("language") lang: String? = "en-US",

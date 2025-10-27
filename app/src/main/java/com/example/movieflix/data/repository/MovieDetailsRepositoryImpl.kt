@@ -199,6 +199,25 @@ class MovieDetailsRepositoryImpl(
       }
     }
 
+    override fun getTVWhereToWatchProvider(tvId: Int): Flow<NetworkResults<WatchProviders>> =flow{
+
+      try {
+          if (isNetworkAvailable(appContext)){
+              val whereToWatchResponse = remoteDataSource.getTVWatchProviders(tvId)
+              emit(NetworkResults.Success(whereToWatchResponse.body()?.toWatchProviders()))
+          }
+      }catch (e:Exception){
+          when(e){
+              is IOException -> {
+                  emit(NetworkResults.Error("Check ur internet connection"))
+              }
+              else -> {
+                  emit(NetworkResults.Error(e.message?:"Unknown error"))
+              }
+          }
+      }
+    }
+
     override fun loadMoreMoviesForCategory(categoryTitle: String, page: Int): Flow<NetworkResults<MovieList>> = flow {
         emit(NetworkResults.Loading())
 
