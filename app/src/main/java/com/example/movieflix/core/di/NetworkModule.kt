@@ -4,6 +4,7 @@ import android.app.Application
 import android.content.Context
 import com.example.movieflix.BuildConfig
 import com.example.movieflix.core.utils.Constants
+import com.example.movieflix.core.utils.NetworkConnectivityObserver
 import com.example.movieflix.data.network.ApiClient
 import com.example.movieflix.data.remote.RemoteDataSource
 import com.example.movieflix.data.repository.SearchMovieMovieRepositoryImpl
@@ -99,6 +100,12 @@ fun providesRetrofitInstance(okHttpClient: OkHttpClient,gsonConverterFactory: Gs
         return SearchMovie(searchMovieRepository)
     }
 
-
+    @Provides
+    @Singleton
+    fun provideNetworkConnectivityObserver(
+        @ApplicationContext context: Context
+    ): NetworkConnectivityObserver {
+        return NetworkConnectivityObserver(context)
+    }
 
 }
