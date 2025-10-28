@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.appcompat.widget.PopupMenu
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -61,11 +60,11 @@ class HomeFragment : BaseFragment() {
     private fun handleClickListeners() {
         binding.apply {
 
-            fragmentHomeNetworkCheck.layoutNetworkBtn.setOnClickListener() {
+            fragmentHomeNetworkCheck.layoutNetworkBtn.setOnClickListener {
                 openNetworkSettings(requireContext())
             }
 
-            fragmentHomeWatchNowBtn.setOnClickListener() {
+            fragmentHomeWatchNowBtn.setOnClickListener {
                 val layoutManger =
                     binding.fragmentHomeBannerImgRv.layoutManager as LinearLayoutManager
                 val firstVisibleItem = layoutManger.findFirstVisibleItemPosition()

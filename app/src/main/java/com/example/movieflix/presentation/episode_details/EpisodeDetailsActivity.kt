@@ -7,14 +7,11 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.example.movieflix.R
-import com.example.movieflix.core.utils.Constants
 import com.example.movieflix.core.utils.formatDate
 import com.example.movieflix.core.utils.loadImage
 import com.example.movieflix.databinding.FragmentEpisodeDetailsBinding
-import com.example.movieflix.domain.model.TVEpisode
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 import dagger.hilt.android.AndroidEntryPoint
+import java.util.Locale
 
 @AndroidEntryPoint
 class EpisodeDetailsActivity : AppCompatActivity() {
@@ -86,7 +83,7 @@ class EpisodeDetailsActivity : AppCompatActivity() {
                 val rating = episode.voteAverage
                 if (rating != null && rating > 0) {
                     ratingContainer.visibility = View.VISIBLE
-                    episodeRating.text = String.format("%.1f", rating)
+                    String.format(Locale.getDefault(), "%.1f", rating).also { episodeRating.text = it }
                 } else {
                     ratingContainer.visibility = View.GONE
                 }
@@ -123,19 +120,19 @@ class EpisodeDetailsActivity : AppCompatActivity() {
             when {
                 currentIndex > 0 -> {
                     // Not at first episode - show normal Previous
-                    previousButton.text = "Previous"
+                    "Previous".also { previousButton.text = it }
                     previousButton.isEnabled = true
                     previousButton.alpha = 1f
                 }
                 seasonNumber > 1 -> {
                     // First episode but not first season - show Previous Season
-                    previousButton.text = "Previous Season"
+                    "Previous Season".also { previousButton.text = it }
                     previousButton.isEnabled = true
                     previousButton.alpha = 1f
                 }
                 else -> {
                     // First episode of first season - disable
-                    previousButton.text = "Previous"
+                    "Previous".also { previousButton.text = it }
                     previousButton.isEnabled = false
                     previousButton.alpha = 0.5f
                 }
@@ -145,19 +142,19 @@ class EpisodeDetailsActivity : AppCompatActivity() {
             when {
                 currentIndex < episodes.size - 1 -> {
                     // Not at last episode - show normal Next
-                    nextButton.text = "Next"
+                    "Next".also { nextButton.text = it }
                     nextButton.isEnabled = true
                     nextButton.alpha = 1f
                 }
                 seasonNumber < totalSeasons -> {
                     // Last episode but not last season - show Next Season
-                    nextButton.text = "Next Season"
+                    "Next Season".also { nextButton.text = it }
                     nextButton.isEnabled = true
                     nextButton.alpha = 1f
                 }
                 else -> {
                     // Last episode of last season - disable
-                    nextButton.text = "Next"
+                    "Next".also { nextButton.text = it }
                     nextButton.isEnabled = false
                     nextButton.alpha = 0.5f
                 }
