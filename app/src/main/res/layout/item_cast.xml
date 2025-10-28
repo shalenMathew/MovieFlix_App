@@ -46,6 +46,7 @@
                 android:orientation="vertical"
                 android:padding="@dimen/_8sdp">
 
+
                 <TextView
                     android:id="@+id/item_cast_name"
                     android:layout_width="match_parent"

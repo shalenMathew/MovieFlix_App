@@ -109,6 +109,14 @@ class HomeInfoViewModel @Inject constructor(private val getMovieInfo: GetMovieIn
         }
     }
 
+    fun getTVWhereToWatchProvider(tvId:Int){
+        viewModelScope.launch {
+            getMovieInfo.getTVWhereToWatchProviders(tvId).onEach {
+                _whereToWatchProvider.value=it
+            }.launchIn(this)
+        }
+    }
+
     fun loadMoreMoviesForCategory(categoryTitle: String) {
         // Check if already loading for this category
         if (isLoadingMore[categoryTitle] == true) return

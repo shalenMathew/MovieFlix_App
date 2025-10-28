@@ -7,4 +7,7 @@
     <string name="click_to_add_your_personal_note">click to add your personal note</string>
     <string name="enter_your_note">Enter your note…</string>
     <string name="delete_personal_note">Delete personal note</string>
+    <string name="watch_provider_logo">Watch provider logo</string>
+    <string name="where_to_watch">Available On</string>
+    <string name="no_streaming_info">No streaming information available</string>
 </resources>

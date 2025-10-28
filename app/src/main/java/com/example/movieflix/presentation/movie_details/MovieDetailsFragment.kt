@@ -73,6 +73,7 @@ class MovieDetailsFragment : BottomSheetDialogFragment(){
     private lateinit var recommendationAdapter:RecommendationAdapter
     private lateinit var castAdapter:CastAdapter
     private lateinit var episodeAdapter:EpisodeAdapter
+    private lateinit var watchProviderAdapter:com.example.movieflix.core.adapters.WatchProviderAdapter
     private var whereToWatchLink:String? = null
     private val customTabsIntent by lazy {
         CustomTabsIntent.Builder().setShowTitle(true).build()
@@ -181,6 +182,19 @@ class MovieDetailsFragment : BottomSheetDialogFragment(){
         }
         binding.episodesRecyclerView.adapter = episodeAdapter
 
+        watchProviderAdapter = com.example.movieflix.core.adapters.WatchProviderAdapter { provider ->
+            com.example.movieflix.core.utils.StreamingAppUtils.openStreamingApp(
+                requireContext(),
+                provider,
+                whereToWatchLink
+            )
+            showToast(
+                requireContext(),
+                com.example.movieflix.core.utils.StreamingAppUtils.getAppAvailabilityMessage(requireContext(), provider)
+            )
+        }
+        binding.whereToWatchRecyclerView.adapter = watchProviderAdapter
+
         setupTabLayout()
         setupSeasonDropdown()
     }
@@ -283,12 +297,28 @@ class MovieDetailsFragment : BottomSheetDialogFragment(){
             when(it){
 
                 is NetworkResults.Loading->{}
-                is NetworkResults.Error-> {}
+                is NetworkResults.Error-> {
+                    binding.whereToWatchSection.visibility = View.GONE
+                }
                 is NetworkResults.Success-> binding.apply{
                     it.data?.let {result->
                         result.results?.let {results->
                             whereToWatchLink=results.IN?.link
+                            
+                            // Get all available providers (prioritize flatrate/streaming)
+                            val providers = results.IN?.flatrate ?: emptyList()
+                            
+                            if (providers.isNotEmpty()) {
+                                whereToWatchSection.visibility = View.VISIBLE
+                                watchProviderAdapter.submitList(providers)
+                            } else {
+                                whereToWatchSection.visibility = View.GONE
+                            }
+                        } ?: run {
+                            whereToWatchSection.visibility = View.GONE
                         }
+                    } ?: run {
+                        whereToWatchSection.visibility = View.GONE
                     }
                 }
 
@@ -511,7 +541,11 @@ class MovieDetailsFragment : BottomSheetDialogFragment(){
             // Load recommendations and watch providers with additional delay
             view?.postDelayed({
                 homeInfoViewModel.getRecommendation(id)
-                homeInfoViewModel.getWhereToWatchProvider(id)
+                if (isTVShow) {
+                    homeInfoViewModel.getTVWhereToWatchProvider(id)
+                } else {
+                    homeInfoViewModel.getWhereToWatchProvider(id)
+                }
             }, 200)
         }, 300)
     }

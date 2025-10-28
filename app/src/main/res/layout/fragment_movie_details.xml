@@ -430,6 +430,43 @@
 
         </LinearLayout>
 
+        <!-- Where to Watch Section -->
+        <LinearLayout
+            android:id="@+id/where_to_watch_section"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/black"
+            android:orientation="vertical"
+            android:visibility="gone"
+            tools:visibility="visible">
+
+            <TextView
+                android:id="@+id/where_to_watch_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_12sdp"
+                android:layout_marginTop="@dimen/_16sdp"
+                android:layout_marginBottom="@dimen/_8sdp"
+                android:fontFamily="@font/montserrat_semibold"
+                android:gravity="start"
+                android:text="@string/where_to_watch"
+                android:textColor="@color/white"
+                android:textSize="@dimen/_12ssp" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/where_to_watch_recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:nestedScrollingEnabled="false"
+                android:orientation="horizontal"
+                android:paddingHorizontal="@dimen/_12sdp"
+                android:paddingBottom="@dimen/_8sdp"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:itemCount="4"
+                tools:listitem="@layout/item_watch_provider" />
+
+        </LinearLayout>
+
         <!-- Tab Layout for About and Episodes (TV Shows only) -->
         <LinearLayout
             android:id="@+id/tabs_section"

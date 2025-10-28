@@ -28,6 +28,8 @@ fun getRecommendation(movieId:Int):Flow<NetworkResults<MovieList>>
 
 fun getWhereToWatchProvider(movieId:Int):Flow<NetworkResults<WatchProviders>>
 
+fun getTVWhereToWatchProvider(tvId:Int):Flow<NetworkResults<WatchProviders>>
+
 // Pagination support for home feed categories
 fun loadMoreMoviesForCategory(categoryTitle: String, page: Int): Flow<NetworkResults<MovieList>>
 
