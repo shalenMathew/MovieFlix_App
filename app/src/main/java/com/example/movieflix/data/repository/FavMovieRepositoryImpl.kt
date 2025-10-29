@@ -3,11 +3,12 @@ package com.example.movieflix.data.repository
 import androidx.lifecycle.LiveData
 import com.example.movieflix.data.local_storage.LocalDataSource
 import com.example.movieflix.data.local_storage.entity.FavouritesEntity
+import com.example.movieflix.data.local_storage.entity.IdAndMovieResult
 import com.example.movieflix.domain.repository.FavMovieRepository
 
 class FavMovieRepositoryImpl(private val localDataSource: LocalDataSource):FavMovieRepository {
-    override suspend fun insertFavMovie(favouritesEntity: FavouritesEntity) {
-        localDataSource.insertFavMovie(favouritesEntity)
+    override suspend fun insertFavMovie(idAndMovieResult: IdAndMovieResult) {
+        localDataSource.insertFavMovie(idAndMovieResult)
     }
 
     override suspend fun deleteFavMovie(favouritesEntity: FavouritesEntity) {

@@ -18,13 +18,13 @@ import java.util.Date
 import java.util.Locale
 
 
-fun getGenreListById(id:List<Int>?):List<Genre>{
-    if(id==null){
+fun getGenreListById(id: List<Int>?): List<Genre> {
+    if (id == null) {
         return emptyList()
     }
     val results = mutableListOf<Genre>()
 
-    id.forEach{
+    id.forEach {
         moviesGenresMap.containsKey(it) && results.add(Genre(it, moviesGenresMap.get(it)!!))
     }
     return results
@@ -52,33 +52,34 @@ private val moviesGenresMap: HashMap<Int, String> = hashMapOf(
     37 to "Western",
 )
 
-fun isNetworkAvailable(context:Context?):Boolean{
+fun isNetworkAvailable(context: Context?): Boolean {
 
-    val connectivityManger = context?.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+    val connectivityManger =
+        context?.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
 
     return run {
         val activeNetworkInfo = connectivityManger.activeNetworkInfo
-        activeNetworkInfo!=null&& activeNetworkInfo.isConnected
+        activeNetworkInfo != null && activeNetworkInfo.isConnected
     }
 }
 
-fun View.gone(){
+fun View.gone() {
     visibility = View.GONE
 }
 
-fun View.visible(){
+fun View.visible() {
     visibility = View.VISIBLE
 }
 
-fun openNetworkSettings(context: Context){
+fun openNetworkSettings(context: Context) {
     try {
-        val i=Intent(Settings.Panel.ACTION_INTERNET_CONNECTIVITY).also {
-            it.flags=Intent.FLAG_ACTIVITY_NEW_TASK
+        val i = Intent(Settings.Panel.ACTION_INTERNET_CONNECTIVITY).also {
+            it.flags = Intent.FLAG_ACTIVITY_NEW_TASK
         }
         context.startActivity(i)
-    }catch (e:Exception){
-        val i=Intent(Settings.ACTION_SETTINGS).also {
-            it.flags=Intent.FLAG_ACTIVITY_NEW_TASK
+    } catch (_: Exception) {
+        val i = Intent(Settings.ACTION_SETTINGS).also {
+            it.flags = Intent.FLAG_ACTIVITY_NEW_TASK
         }
         context.startActivity(i)
     }
@@ -88,13 +89,13 @@ fun showToast(context: Context, message: String) {
     Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
 }
 
-fun formatDate(year:String?):String{
+fun formatDate(year: String?): String {
 
-    if(!year.isNullOrEmpty()){
-        val sdf =SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-        val parsedString:Date = sdf.parse(year)
+    if (!year.isNullOrEmpty()) {
+        val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+        val parsedString: Date = sdf.parse(year) ?: Date()
 
-        val formattedString = SimpleDateFormat("yyyy",Locale.getDefault()).format(parsedString)
+        val formattedString = SimpleDateFormat("yyyy", Locale.getDefault()).format(parsedString)
 
         return formattedString
     }
@@ -103,25 +104,24 @@ fun formatDate(year:String?):String{
 }
 
 
-
-fun shareMovie(context:Context,title:String,trailer:String){
+fun shareMovie(context: Context, title: String, trailer: String) {
 
     val movieTitle = " Movie \"$title\" Trailer..."
     val textExtra = "$movieTitle\n\n$trailer"
     val i = Intent()
     i.action = Intent.ACTION_SEND
-    i.type="text/plain"
-    i.putExtra(Intent.EXTRA_TEXT,textExtra)
-    context.startActivity(Intent.createChooser(i,"Share:"))
+    i.type = "text/plain"
+    i.putExtra(Intent.EXTRA_TEXT, textExtra)
+    context.startActivity(Intent.createChooser(i, "Share:"))
 
 }
 
-fun getRandomChar():String{
+fun getRandomChar(): String {
     val alphabet = ('a'..'z')
     return alphabet.random().toString()
 }
 
- val MIGRATION = object : Migration(3,4) {
+val MIGRATION = object : Migration(3, 4) {
     override fun migrate(db: SupportSQLiteDatabase) {
 
         db.execSQL("ALTER TABLE watch_list_news_table RENAME TO watch_list_table")
@@ -136,10 +136,12 @@ val MIGRATION_4_5 = object : Migration(4, 5) {
     }
 }
 
-val MIGRATION_3_5 =  object : Migration(3, 5) {
+val MIGRATION_3_5 = object : Migration(3, 5) {
     override fun migrate(db: SupportSQLiteDatabase) {
+        // From migration 3->4
         db.execSQL("ALTER TABLE watch_list_news_table RENAME TO watch_list_table")
         db.execSQL("ALTER TABLE favorites_table RENAME TO favorites_movies_table")
+        // From migration 4->5
         db.execSQL("ALTER TABLE favorites_movies_table ADD COLUMN personalNote TEXT")
     }
 }
@@ -153,6 +155,73 @@ val MIGRATION_5_6 = object : Migration(5, 6) {
                 scheduledDate INTEGER NOT NULL
             )
         """.trimIndent())
+    }
+}
+
+val MIGRATION_5_6 = object : Migration(5, 6) {
+    override fun migrate(db: SupportSQLiteDatabase) {
+        complex5To6Migration(db)
+    }
+}
+
+private fun complex5To6Migration(db: SupportSQLiteDatabase) {
+    db.execSQL("""
+            CREATE TABLE watch_list_table_new (
+                id INTEGER PRIMARY KEY NOT NULL,
+                movieResult TEXT NOT NULL,
+                insertedAt TEXT DEFAULT CURRENT_TIMESTAMP
+            )
+        """.trimIndent())
+
+    db.execSQL("""
+            INSERT INTO watch_list_table_new (id, movieResult)
+            SELECT id, movieResult FROM watch_list_table
+        """.trimIndent())
+
+    db.execSQL("DROP TABLE watch_list_table")
+
+    db.execSQL("ALTER TABLE watch_list_table_new RENAME TO watch_list_table")
+
+    db.execSQL("""
+            CREATE TABLE favorites_movies_table_new (
+                id INTEGER PRIMARY KEY NOT NULL,
+                movieResult TEXT NOT NULL,
+                personalNote TEXT,
+                insertedAt TEXT DEFAULT CURRENT_TIMESTAMP
+            )
+        """.trimIndent())
+
+    db.execSQL("""
+            INSERT INTO favorites_movies_table_new (id, movieResult, personalNote)
+            SELECT id, movieResult, personalNote FROM favorites_movies_table
+        """.trimIndent())
+
+    db.execSQL("DROP TABLE favorites_movies_table")
+
+    db.execSQL("ALTER TABLE favorites_movies_table_new RENAME TO favorites_movies_table")
+}
+
+val MIGRATION_3_6 = object : Migration(3, 6) {
+    override fun migrate(db: SupportSQLiteDatabase) {
+        // From migration 3->4
+        db.execSQL("ALTER TABLE watch_list_news_table RENAME TO watch_list_table")
+        db.execSQL("ALTER TABLE favorites_table RENAME TO favorites_movies_table")
+
+        // From migration 4->5
+        db.execSQL("ALTER TABLE favorites_movies_table ADD COLUMN personalNote TEXT")
+
+        // From migration 5->6
+        complex5To6Migration(db)
+    }
+}
+
+val MIGRATION_4_6 = object : Migration(4, 6) {
+    override fun migrate(db: SupportSQLiteDatabase) {
+        // From migration 4->5
+        db.execSQL("ALTER TABLE favorites_movies_table ADD COLUMN personalNote TEXT")
+
+        // From migration 5->6
+        complex5To6Migration(db)
     }
 }
 

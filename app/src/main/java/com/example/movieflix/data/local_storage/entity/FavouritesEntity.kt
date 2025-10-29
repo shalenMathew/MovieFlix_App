@@ -1,5 +1,6 @@
 package com.example.movieflix.data.local_storage.entity
 
+import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.example.movieflix.core.utils.Constants
@@ -10,4 +11,5 @@ data class FavouritesEntity(
     @PrimaryKey val id:Int,
     val movieResult: MovieResult,
     val personalNote: String? = null,
+    @ColumnInfo(defaultValue = "CURRENT_TIMESTAMP") val insertedAt: String?,
 )

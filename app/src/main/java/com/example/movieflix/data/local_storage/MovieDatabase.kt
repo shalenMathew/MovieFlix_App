@@ -13,7 +13,7 @@ import com.example.movieflix.data.local_storage.entity.ScheduledEntity
     version = 6
 )
 @TypeConverters(MovieDataTypeConverter::class)
- abstract class MovieDatabase:RoomDatabase(){
+abstract class MovieDatabase : RoomDatabase() {
 
-  abstract val dao:MovieDao
+    abstract val dao: MovieDao
 }

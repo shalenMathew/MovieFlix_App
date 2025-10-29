@@ -8,6 +8,7 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.example.movieflix.data.local_storage.entity.FavouritesEntity
 import com.example.movieflix.data.local_storage.entity.HomeFeedEntity
+import com.example.movieflix.data.local_storage.entity.IdAndMovieResult
 import com.example.movieflix.data.local_storage.entity.WatchListEntity
 import com.example.movieflix.data.local_storage.entity.ScheduledEntity
 
@@ -15,26 +16,39 @@ import com.example.movieflix.data.local_storage.entity.ScheduledEntity
 interface MovieDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertHomeFeedData(homeFeedEntity: HomeFeedEntity)
+
     @Query(" SELECT * FROM movie_data_table ORDER BY id ASC ")
     suspend fun readHomeFeedData(): HomeFeedEntity
+
     @Query(" DELETE FROM movie_data_table ")
     suspend fun deleteHomeFeedData()
 
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertWatchListData(watchListEntity: WatchListEntity)
+
+    @Insert(entity = WatchListEntity::class, onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertWatchListData(idAndMovieResult: IdAndMovieResult)
+
     @Delete
     suspend fun deleteWatchListData(watchListEntity: WatchListEntity)
+
     @Query(" SELECT * FROM watch_list_table ORDER BY id DESC ")
-    fun getAllWatchListData():LiveData<List<WatchListEntity>>
+    fun getAllWatchListData(): LiveData<List<WatchListEntity>>
 
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertFavMovie(favouritesEntity: FavouritesEntity)
+
+    @Insert(entity = FavouritesEntity::class, onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertFavMovie(idAndMovieResult: IdAndMovieResult)
+
     @Delete
     suspend fun deleteFavMovie(favouritesEntity: FavouritesEntity)
-    @Query( " SELECT * FROM favorites_movies_table ORDER BY id DESC ")
-    fun getAllFavMovies():LiveData<List<FavouritesEntity>>
+
+    @Query(" SELECT * FROM favorites_movies_table ORDER BY id DESC ")
+    fun getAllFavMovies(): LiveData<List<FavouritesEntity>>
+
     @Query("UPDATE favorites_movies_table SET personalNote = :personalNote WHERE id = :favoriteId")
     suspend fun addPersonalNote(favoriteId: Int, personalNote: String?)
 
