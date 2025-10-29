@@ -11,6 +11,7 @@ import com.example.movieflix.R
 import com.example.movieflix.core.adapters.WatchListAdapter
 import com.example.movieflix.core.utils.Constants
 import com.example.movieflix.core.utils.gone
+import com.example.movieflix.core.utils.visible
 import com.example.movieflix.databinding.FragmentWatchListBinding
 import com.example.movieflix.presentation.viewmodels.WatchListViewModel
 import com.google.gson.Gson
@@ -59,7 +60,7 @@ private val watchListViewModel:WatchListViewModel by viewModels()
                 binding.randomEmoji.gone()
             }else{
                 binding.fragmentWatchListRv.gone()
-                binding.fragmentWatchListPlaceholder.gone()
+                binding.fragmentWatchListPlaceholder.visible()
                 binding.randomEmoji.gone()
             }
         }
