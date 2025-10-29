@@ -21,6 +21,12 @@
     <style name="DatePickerStyleDark" parent="android:Widget.Material.DatePicker">
         <item name="android:headerBackground">@color/app_color</item>
         <item name="android:calendarViewShown">false</item>
+        <item name="android:dateTextAppearance">@style/DateTextAppearanceDark</item>
+        <item name="android:yearListItemTextAppearance">@style/DateTextAppearanceDark</item>
+    </style>
+
+    <style name="DateTextAppearanceDark" parent="android:TextAppearance.Material">
+        <item name="android:textColor">@color/white</item>
     </style>
 
     <style name="TimePickerStyleDark" parent="android:Widget.Material.TimePicker">
