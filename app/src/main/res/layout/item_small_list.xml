@@ -30,14 +30,14 @@
 
         <ImageView
             android:id="@+id/item_list_schedule_icon"
-            android:layout_width="@dimen/_16sdp"
-            android:layout_height="@dimen/_16sdp"
+            android:layout_width="@dimen/_22sdp"
+            android:layout_height="@dimen/_22sdp"
             android:layout_gravity="start|top"
             android:layout_margin="@dimen/_4sdp"
-            android:src="@drawable/baseline_calendar_month_24"
+            android:src="@drawable/ic_calendar_check"
             android:visibility="gone"
             android:background="@drawable/rating_bg"
-            android:padding="@dimen/_2sdp"
+            android:padding="@dimen/_3sdp"
             app:tint="@color/white"
             tools:visibility="visible" />
 

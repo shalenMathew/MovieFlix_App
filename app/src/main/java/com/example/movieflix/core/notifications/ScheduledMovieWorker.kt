@@ -22,7 +22,7 @@ class ScheduledMovieWorker(
         try {
             val movieId = inputData.getInt(KEY_MOVIE_ID, -1)
             val movieTitle = inputData.getString(KEY_MOVIE_TITLE) ?: "Movie"
-            val movieOverview = inputData.getString(KEY_MOVIE_OVERVIEW)
+            val moviePosterUrl = inputData.getString(KEY_MOVIE_POSTER)
             val movieResultJson = inputData.getString(KEY_MOVIE_RESULT_JSON) ?: ""
             val scheduledDate = inputData.getLong(KEY_SCHEDULED_DATE, 0L)
 
@@ -35,7 +35,7 @@ class ScheduledMovieWorker(
                 context,
                 movieId,
                 movieTitle,
-                movieOverview,
+                moviePosterUrl,
                 movieResultJson
             )
 
@@ -75,7 +75,7 @@ class ScheduledMovieWorker(
     companion object {
         const val KEY_MOVIE_ID = "movie_id"
         const val KEY_MOVIE_TITLE = "movie_title"
-        const val KEY_MOVIE_OVERVIEW = "movie_overview"
+        const val KEY_MOVIE_POSTER = "movie_poster"
         const val KEY_MOVIE_RESULT_JSON = "movie_result_json"
         const val KEY_SCHEDULED_DATE = "scheduled_date"
         const val WORK_NAME_PREFIX = "scheduled_movie_"

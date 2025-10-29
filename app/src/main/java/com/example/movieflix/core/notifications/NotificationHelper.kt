@@ -7,12 +7,17 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.os.Build
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.example.movieflix.R
 import com.example.movieflix.presentation.MainActivity
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import java.net.URL
 
 object NotificationHelper {
 
@@ -35,11 +40,11 @@ object NotificationHelper {
         }
     }
 
-    fun showScheduledMovieNotification(
+    suspend fun showScheduledMovieNotification(
         context: Context,
         movieId: Int,
         movieTitle: String,
-        movieOverview: String?,
+        moviePosterUrl: String?,
         movieResultJson: String
     ) {
         createNotificationChannel(context)
@@ -60,19 +65,35 @@ object NotificationHelper {
             PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
         )
 
-        val notification = NotificationCompat.Builder(context, CHANNEL_ID)
-            .setSmallIcon(R.drawable.baseline_calendar_month_24)
+        // Load movie poster image
+        val posterBitmap = moviePosterUrl?.let { loadImageFromUrl(it) }
+
+        val notificationBuilder = NotificationCompat.Builder(context, CHANNEL_ID)
+            .setSmallIcon(R.drawable.ic_calendar_check)
             .setContentTitle("⏰ Time to watch: $movieTitle")
-            .setContentText(movieOverview ?: "Your scheduled movie/show is ready to watch!")
-            .setStyle(
-                NotificationCompat.BigTextStyle()
-                    .bigText(movieOverview ?: "Your scheduled movie/show is ready to watch! Open the app to start watching.")
-            )
+            .setContentText("Your scheduled movie/show is ready to watch!")
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setContentIntent(pendingIntent)
             .setAutoCancel(true)
             .setVibrate(longArrayOf(0, 500, 250, 500))
-            .build()
+
+        // Add large image if poster loaded successfully
+        if (posterBitmap != null) {
+            notificationBuilder.setStyle(
+                NotificationCompat.BigPictureStyle()
+                    .bigPicture(posterBitmap)
+                    .bigLargeIcon(null as Bitmap?) // Hide large icon when expanded
+            )
+            notificationBuilder.setLargeIcon(posterBitmap)
+        } else {
+            // Fallback to text style if image fails to load
+            notificationBuilder.setStyle(
+                NotificationCompat.BigTextStyle()
+                    .bigText("Your scheduled movie/show \"$movieTitle\" is ready to watch! Open the app to start watching.")
+            )
+        }
+
+        val notification = notificationBuilder.build()
 
         // Check notification permission (Android 13+)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
@@ -85,6 +106,21 @@ object NotificationHelper {
             }
         } else {
             NotificationManagerCompat.from(context).notify(movieId, notification)
+        }
+    }
+
+    private suspend fun loadImageFromUrl(url: String): Bitmap? {
+        return withContext(Dispatchers.IO) {
+            try {
+                val connection = URL(url).openConnection()
+                connection.doInput = true
+                connection.connect()
+                val input = connection.getInputStream()
+                BitmapFactory.decodeStream(input)
+            } catch (e: Exception) {
+                e.printStackTrace()
+                null
+            }
         }
     }
 

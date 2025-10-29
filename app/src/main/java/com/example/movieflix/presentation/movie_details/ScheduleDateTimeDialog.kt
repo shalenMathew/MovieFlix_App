@@ -3,6 +3,10 @@ package com.example.movieflix.presentation.movie_details
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.content.Context
+import android.content.res.Configuration
+import android.graphics.Color
+import android.view.ContextThemeWrapper
+import com.example.movieflix.R
 import java.util.Calendar
 
 object ScheduleDateTimeDialog {
@@ -15,13 +19,22 @@ object ScheduleDateTimeDialog {
         val currentHour = calendar.get(Calendar.HOUR_OF_DAY)
         val currentMinute = calendar.get(Calendar.MINUTE)
 
-        // Show Date Picker first
+        // Detect if dark mode is enabled
+        val isDarkMode = (context.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES
+        val themeId = if (isDarkMode) R.style.DatePickerThemeDark else R.style.DatePickerThemeLight
+
+        // Create themed context wrapper
+        val themedContext = ContextThemeWrapper(context, themeId)
+
+        // Show Date Picker first with custom theme
         val datePickerDialog = DatePickerDialog(
-            context,
+            themedContext,
+            themeId,
             { _, year, month, dayOfMonth ->
-                // After date is selected, show Time Picker
+                // After date is selected, show Time Picker with custom theme
                 val timePickerDialog = TimePickerDialog(
-                    context,
+                    themedContext,
+                    themeId,
                     { _, hourOfDay, minute ->
                         // Create calendar with selected date and time
                         val selectedCalendar = Calendar.getInstance()

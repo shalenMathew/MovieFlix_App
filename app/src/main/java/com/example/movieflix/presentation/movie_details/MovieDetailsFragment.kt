@@ -651,12 +651,60 @@ class MovieDetailsFragment : BottomSheetDialogFragment(){
     }
 
     private fun updateScheduleButtonIcon() {
-        binding.apply {
-            if (isScheduled) {
-                scheduleIcon.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.baseline_done_all_24))
-            } else {
-                scheduleIcon.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.baseline_calendar_month_24))
+        try {
+            binding.apply {
+                if (isScheduled) {
+                    scheduleIcon.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_calendar_check))
+                    // Show and update scheduled date text
+                    updateScheduledDateText()
+                } else {
+                    scheduleIcon.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.baseline_calendar_month_24))
+                    // Hide scheduled date text when not scheduled
+                    fragmentMovieDetailsScheduledDate.visibility = View.GONE
+                }
             }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            // Silently fail if view is not ready
+        }
+    }
+
+    private fun updateScheduledDateText() {
+        try {
+            if (currentScheduledDate > 0) {
+                val dateFormat = SimpleDateFormat("dd MMMM yyyy, hh:mm a", Locale.ENGLISH)
+                val formattedDate = dateFormat.format(java.util.Date(currentScheduledDate))
+                
+                // Get day suffix (st, nd, rd, th)
+                val calendar = java.util.Calendar.getInstance()
+                calendar.timeInMillis = currentScheduledDate
+                val day = calendar.get(java.util.Calendar.DAY_OF_MONTH)
+                val daySuffix = getDayOfMonthSuffix(day)
+                
+                // Format: "Scheduled on: 28th October 2025, 5:30 PM"
+                val simpleDateFormat = SimpleDateFormat("MMMM yyyy, hh:mm a", Locale.ENGLISH)
+                val dateStr = simpleDateFormat.format(java.util.Date(currentScheduledDate))
+                
+                binding.fragmentMovieDetailsScheduledDate.apply {
+                    text = "Scheduled on: $day$daySuffix $dateStr"
+                    visibility = View.VISIBLE
+                }
+            } else {
+                binding.fragmentMovieDetailsScheduledDate.visibility = View.GONE
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            // Silently fail if view is not ready
+        }
+    }
+
+    private fun getDayOfMonthSuffix(day: Int): String {
+        return when {
+            day in 11..13 -> "th"
+            day % 10 == 1 -> "st"
+            day % 10 == 2 -> "nd"
+            day % 10 == 3 -> "rd"
+            else -> "th"
         }
     }
 

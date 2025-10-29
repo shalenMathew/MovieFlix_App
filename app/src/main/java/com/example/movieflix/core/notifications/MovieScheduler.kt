@@ -5,6 +5,7 @@ import androidx.work.Data
 import androidx.work.ExistingWorkPolicy
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
+import com.example.movieflix.core.utils.Constants
 import com.example.movieflix.domain.model.MovieResult
 import com.google.gson.Gson
 import java.util.concurrent.TimeUnit
@@ -25,10 +26,15 @@ class MovieScheduler @Inject constructor(
 
         val movieResultJson = Gson().toJson(movieResult)
         
+        // Construct full poster URL for notification image
+        val posterUrl = movieResult.posterPath?.let { 
+            Constants.TMDB_IMAGE_BASE_URL_W780 + it 
+        }
+        
         val inputData = Data.Builder()
             .putInt(ScheduledMovieWorker.KEY_MOVIE_ID, movieResult.id ?: 0)
             .putString(ScheduledMovieWorker.KEY_MOVIE_TITLE, movieResult.title ?: movieResult.name ?: "Movie")
-            .putString(ScheduledMovieWorker.KEY_MOVIE_OVERVIEW, movieResult.overview)
+            .putString(ScheduledMovieWorker.KEY_MOVIE_POSTER, posterUrl)
             .putString(ScheduledMovieWorker.KEY_MOVIE_RESULT_JSON, movieResultJson)
             .putLong(ScheduledMovieWorker.KEY_SCHEDULED_DATE, scheduledTimeMillis)
             .build()
