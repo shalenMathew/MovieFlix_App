@@ -45,11 +45,23 @@ import com.example.movieflix.presentation.viewmodels.FavMovieViewModel
 import com.example.movieflix.presentation.viewmodels.HomeInfoViewModel
 import com.example.movieflix.presentation.viewmodels.SearchMovieViewModel
 import com.example.movieflix.presentation.viewmodels.WatchListViewModel
+import com.example.movieflix.presentation.viewmodels.ScheduledViewModel
+import com.example.movieflix.data.local_storage.entity.ScheduledEntity
+import com.example.movieflix.core.notifications.NotificationHelper
+import java.text.SimpleDateFormat
+import java.util.Locale
+import android.Manifest
+import android.os.Build
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.lifecycle.lifecycleScope
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.tabs.TabLayout
 import com.google.gson.Gson
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.PlayerConstants
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
@@ -80,9 +92,13 @@ class MovieDetailsFragment : BottomSheetDialogFragment(){
     }
     private val watchListViewModel:WatchListViewModel by viewModels()
     private val favMovieViewModel: FavMovieViewModel by viewModels()
+    private val scheduledViewModel: ScheduledViewModel by viewModels()
 
     private var isInWatchList:Boolean = false
     private var isFav:Boolean=false
+    private var isScheduled:Boolean = false
+    private var currentScheduledDate: Long = 0
+    private var scheduleCheckRunnable: Runnable? = null
 
     private var mediaType:String? = null
     private var isOverviewExpanded = false
@@ -96,6 +112,17 @@ class MovieDetailsFragment : BottomSheetDialogFragment(){
 
     private var isPlaying:Boolean = false
 
+    // Notification permission launcher
+    private val requestNotificationPermissionLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { isGranted: Boolean ->
+        if (isGranted) {
+            // Permission granted, proceed with scheduling
+            showScheduleDateTimePicker()
+        } else {
+            showToast(requireContext(), "Notification permission is required for scheduled reminders")
+        }
+    }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         setStyle(STYLE_NO_FRAME, R.style.SheetDialog)
@@ -142,6 +169,7 @@ class MovieDetailsFragment : BottomSheetDialogFragment(){
                     showToast(requireContext(),"Movie removed from watchList")
                 }
                isInWatchList=!isInWatchList
+               updateScheduleButtonVisibility()
             }
 
             fragmentMovieDetailsFavBtn.setOnClickListener {
@@ -158,12 +186,44 @@ class MovieDetailsFragment : BottomSheetDialogFragment(){
                 }
 
                 isFav=!isFav
+                updateScheduleButtonVisibility()
 
             }
 
 
             fragmentMovieDetailsShareBtn.setOnClickListener(){
              shareMovie(requireContext(),movieResult.title.toString(),youtubeUrl)
+            }
+
+            fragmentMovieDetailsScheduleBtn.setOnClickListener {
+                if (!isScheduled) {
+                    // Check notification permission first (Android 13+)
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                        when {
+                            NotificationHelper.hasNotificationPermission(requireContext()) -> {
+                                showScheduleDateTimePicker()
+                            }
+                            shouldShowRequestPermissionRationale(Manifest.permission.POST_NOTIFICATIONS) -> {
+                                // Show explanation
+                                showToast(requireContext(), "Allow notifications to get reminders for scheduled movies")
+                                requestNotificationPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+                            }
+                            else -> {
+                                requestNotificationPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+                            }
+                        }
+                    } else {
+                        // No permission needed for older Android versions
+                        showScheduleDateTimePicker()
+                    }
+                } else {
+                    // Remove schedule
+                    scheduledViewModel.deleteScheduledMovie(movieResult, currentScheduledDate)
+                    isScheduled = false
+                    currentScheduledDate = 0
+                    updateScheduleButtonIcon()
+                    showToast(requireContext(), "Schedule removed")
+                }
             }
         }
     }
@@ -333,6 +393,7 @@ class MovieDetailsFragment : BottomSheetDialogFragment(){
                     isInWatchList = (result.id==mediaId)
                     if(isInWatchList){
                         changeAddToWatchListIcon()
+                        updateScheduleButtonVisibility()
                         break
                     }
                 }
@@ -351,12 +412,30 @@ class MovieDetailsFragment : BottomSheetDialogFragment(){
                         changeFavIcon()
                         setupPersonalNoteView(mediaId!!, res.personalNote)
                         binding.fragmentMovieDetailsPersonalNoteLl.isVisible = true
+                        updateScheduleButtonVisibility()
                         break
                     }
                     binding.fragmentMovieDetailsPersonalNoteLl.isVisible = false
                 }
             }
 
+        }
+
+        scheduledViewModel.getAllScheduledMovies().observe(viewLifecycleOwner) { scheduledList ->
+            // Check if current movie is in the scheduled list
+            val scheduledMovie = scheduledList.find { it.id == mediaId }
+            
+            // Always sync button state with database state
+            isScheduled = scheduledMovie != null
+            currentScheduledDate = scheduledMovie?.scheduledDate ?: 0
+            updateScheduleButtonIcon()
+            
+            // Start checking if scheduled time has passed
+            if (isScheduled) {
+                startScheduleTimeCheck()
+            } else {
+                stopScheduleTimeCheck()
+            }
         }
 
         searchMovieViewModel.searchMovieLiveData.observe(viewLifecycleOwner) {
@@ -561,6 +640,38 @@ class MovieDetailsFragment : BottomSheetDialogFragment(){
         binding.apply {
             isFav = true
             favIcon.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.fav))
+        }
+    }
+
+    private fun updateScheduleButtonIcon() {
+        binding.apply {
+            if (isScheduled) {
+                scheduleIcon.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.baseline_done_all_24))
+            } else {
+                scheduleIcon.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.baseline_calendar_month_24))
+            }
+        }
+    }
+
+    private fun updateScheduleButtonVisibility() {
+        binding.fragmentMovieDetailsScheduleBtnContainer.visibility = 
+            if (isInWatchList || isFav) View.VISIBLE else View.GONE
+    }
+
+    private fun showScheduleDateTimePicker() {
+        ScheduleDateTimeDialog.show(requireContext()) { selectedDateTime ->
+            scheduledViewModel.insertScheduledMovie(movieResult, selectedDateTime)
+            currentScheduledDate = selectedDateTime
+            isScheduled = true
+            updateScheduleButtonIcon()
+            
+            // Start checking if scheduled time has passed
+            startScheduleTimeCheck()
+            
+            // Format date for toast
+            val dateFormat = SimpleDateFormat("MMM dd, yyyy 'at' hh:mm a", Locale.getDefault())
+            val formattedDate = dateFormat.format(java.util.Date(selectedDateTime))
+            showToast(requireContext(), "Scheduled for $formattedDate. You'll get a notification!")
         }
     }
 
@@ -1049,23 +1160,76 @@ class MovieDetailsFragment : BottomSheetDialogFragment(){
         })
     }
 
-    override fun onPause() {
-        super.onPause()
-        youTubePlayer?.pause()
-    }
-
     override fun onResume() {
         super.onResume()
-//        youTubePlayer?.play()
+        refreshScheduleStatus()
     }
 
-    override fun onStop() {
-        super.onStop()
-        youTubePlayer?.pause()
+    private fun refreshScheduleStatus() {
+        mediaId?.let { id ->
+            lifecycleScope.launch {
+                val scheduledEntity = scheduledViewModel.getScheduledMovieById(id)
+                isScheduled = scheduledEntity != null
+                currentScheduledDate = scheduledEntity?.scheduledDate ?: 0
+                withContext(Dispatchers.Main) {
+                    updateScheduleButtonIcon()
+                    if (isScheduled) {
+                        startScheduleTimeCheck()
+                    }
+                }
+            }
+        }
+    }
+    
+    private fun startScheduleTimeCheck() {
+        stopScheduleTimeCheck() // Clear any existing check
+        
+        scheduleCheckRunnable = object : Runnable {
+            override fun run() {
+                if (isScheduled && currentScheduledDate > 0) {
+                    val currentTime = System.currentTimeMillis()
+                    // If scheduled time has passed by more than 10 seconds, reset the button
+                    if (currentTime >= currentScheduledDate + 10000) {
+                        // Time has passed, reset the button
+                        isScheduled = false
+                        currentScheduledDate = 0
+                        updateScheduleButtonIcon()
+                        
+                        // Also delete from database to stay in sync
+                        lifecycleScope.launch {
+                            try {
+                                val entity = scheduledViewModel.getScheduledMovieById(mediaId ?: 0)
+                                entity?.let { scheduledViewModel.deleteScheduledMovie(movieResult, it.scheduledDate) }
+                            } catch (e: Exception) {
+                                e.printStackTrace()
+                            }
+                        }
+                        
+                        stopScheduleTimeCheck()
+                    } else {
+                        // Check again in 2 seconds
+                        binding.root.postDelayed(this, 2000)
+                    }
+                } else {
+                    stopScheduleTimeCheck()
+                }
+            }
+        }
+        
+        // Start checking
+        binding.root.postDelayed(scheduleCheckRunnable!!, 2000)
+    }
+    
+    private fun stopScheduleTimeCheck() {
+        scheduleCheckRunnable?.let {
+            binding.root.removeCallbacks(it)
+            scheduleCheckRunnable = null
+        }
     }
 
     override fun onDestroy() {
         super.onDestroy()
+        stopScheduleTimeCheck()
         binding.fragmentMovieDetailsYt.release()
         youTubePlayerListener=null
         _binding=null

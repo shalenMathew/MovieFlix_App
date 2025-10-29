@@ -426,6 +426,44 @@
 
                 </LinearLayout>
 
+                <LinearLayout
+                    android:id="@+id/fragment_movie_details_schedule_btn_container"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginStart="@dimen/_15sdp"
+                    android:visibility="gone"
+                    tools:visibility="visible"
+                    >
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/fragment_movie_details_schedule_btn"
+                    style="@style/Widget.Material3.CardView.Filled"
+                    android:layout_width="@dimen/_35sdp"
+                    android:layout_height="@dimen/_30sdp"
+                    app:cardBackgroundColor="@color/app_color"
+                    app:cardCornerRadius="8dp"
+                    >
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:gravity="center">
+
+                        <ImageView
+                            android:id="@+id/schedule_icon"
+                            android:layout_width="@dimen/_14sdp"
+                            android:layout_height="@dimen/_14sdp"
+                            android:src="@drawable/baseline_calendar_month_24"
+                            app:tint="@color/white" />
+
+                    </LinearLayout>
+
+                </com.google.android.material.card.MaterialCardView>
+
+                </LinearLayout>
+
             </LinearLayout>
 
         </LinearLayout>

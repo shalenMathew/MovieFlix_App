@@ -144,6 +144,18 @@ val MIGRATION_3_5 =  object : Migration(3, 5) {
     }
 }
 
+val MIGRATION_5_6 = object : Migration(5, 6) {
+    override fun migrate(db: SupportSQLiteDatabase) {
+        db.execSQL("""
+            CREATE TABLE IF NOT EXISTS scheduled_movies_table (
+                id INTEGER PRIMARY KEY NOT NULL,
+                movieResult TEXT NOT NULL,
+                scheduledDate INTEGER NOT NULL
+            )
+        """.trimIndent())
+    }
+}
+
 
 class CustomNestedScrollView @JvmOverloads constructor(
     ctx: Context, attrs: AttributeSet? = null

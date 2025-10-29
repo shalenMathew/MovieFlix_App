@@ -7,12 +7,13 @@ import androidx.activity.SystemBarStyle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.core.os.bundleOf
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.example.movieflix.R
+import com.example.movieflix.core.utils.Constants
 import com.example.movieflix.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint
-
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -78,5 +79,33 @@ class MainActivity : AppCompatActivity() {
             }
         }
         onBackPressedDispatcher.addCallback(this, callback)
+        
+        // Handle notification intent - open movie details if launched from notification
+        handleNotificationIntent()
+    }
+    
+    private fun handleNotificationIntent() {
+        if (intent?.getBooleanExtra("OPEN_MOVIE_DETAILS", false) == true) {
+            val movieData = intent.getStringExtra("MOVIE_DATA")
+            if (!movieData.isNullOrEmpty()) {
+                // Navigate to movie details with a slight delay to ensure nav controller is ready
+                binding.root.postDelayed({
+                    try {
+                        val bundle = bundleOf(Constants.MEDIA_SEND_REQUEST_KEY to movieData)
+                        navController.navigate(R.id.movieDetailsFragment, bundle)
+                        // Clear the intent flag to prevent re-navigation on config changes
+                        intent?.removeExtra("OPEN_MOVIE_DETAILS")
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                    }
+                }, 300)
+            }
+        }
+    }
+    
+    override fun onNewIntent(intent: android.content.Intent) {
+        super.onNewIntent(intent)
+        setIntent(intent)
+        handleNotificationIntent()
     }
 }
