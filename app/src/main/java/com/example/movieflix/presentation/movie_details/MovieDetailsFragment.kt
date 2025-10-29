@@ -162,6 +162,8 @@ class MovieDetailsFragment : BottomSheetDialogFragment(){
 //            }
 
             fragmentMovieDetailsWatchlistBtn.setOnClickListener(){
+                if (!::movieResult.isInitialized) return@setOnClickListener
+                
                 if (!isInWatchList) {
                     watchListViewModel.insertWatchListData(movieResult)
                     addButtonIcon.setImageDrawable(ContextCompat.getDrawable(requireContext(),R.drawable.baseline_done_all_24))
@@ -176,7 +178,8 @@ class MovieDetailsFragment : BottomSheetDialogFragment(){
             }
 
             fragmentMovieDetailsFavBtn.setOnClickListener {
-
+                if (!::movieResult.isInitialized) return@setOnClickListener
+                
                 if (!isFav){
                     favMovieViewModel.insertFavMovieData(movieResult)
                     favIcon.setImageDrawable(ContextCompat.getDrawable(requireContext(),R.drawable.fav_red))
@@ -195,7 +198,8 @@ class MovieDetailsFragment : BottomSheetDialogFragment(){
 
 
             fragmentMovieDetailsShareBtn.setOnClickListener(){
-             shareMovie(requireContext(),movieResult.title.toString(),youtubeUrl)
+                if (!::movieResult.isInitialized) return@setOnClickListener
+                shareMovie(requireContext(),movieResult.title.toString(),youtubeUrl)
             }
 
             fragmentMovieDetailsScheduleBtn.setOnClickListener {
@@ -221,6 +225,7 @@ class MovieDetailsFragment : BottomSheetDialogFragment(){
                     }
                 } else {
                     // Remove schedule
+                    if (!::movieResult.isInitialized) return@setOnClickListener
                     scheduledViewModel.deleteScheduledMovie(movieResult, currentScheduledDate)
                     isScheduled = false
                     currentScheduledDate = 0
@@ -714,7 +719,14 @@ class MovieDetailsFragment : BottomSheetDialogFragment(){
     }
 
     private fun showScheduleDateTimePicker() {
+        if (!::movieResult.isInitialized) {
+            showToast(requireContext(), "Movie data not loaded yet. Please try again.")
+            return
+        }
+        
         ScheduleDateTimeDialog.show(requireContext()) { selectedDateTime ->
+            if (!::movieResult.isInitialized) return@show
+            
             scheduledViewModel.insertScheduledMovie(movieResult, selectedDateTime)
             currentScheduledDate = selectedDateTime
             isScheduled = true
@@ -1257,12 +1269,15 @@ class MovieDetailsFragment : BottomSheetDialogFragment(){
                         updateScheduleButtonIcon()
                         
                         // Also delete from database to stay in sync
-                        lifecycleScope.launch {
-                            try {
-                                val entity = scheduledViewModel.getScheduledMovieById(mediaId ?: 0)
-                                entity?.let { scheduledViewModel.deleteScheduledMovie(movieResult, it.scheduledDate) }
-                            } catch (e: Exception) {
-                                e.printStackTrace()
+                        // Only if movieResult is initialized
+                        if (::movieResult.isInitialized) {
+                            lifecycleScope.launch {
+                                try {
+                                    val entity = scheduledViewModel.getScheduledMovieById(mediaId ?: 0)
+                                    entity?.let { scheduledViewModel.deleteScheduledMovie(movieResult, it.scheduledDate) }
+                                } catch (e: Exception) {
+                                    e.printStackTrace()
+                                }
                             }
                         }
                         
