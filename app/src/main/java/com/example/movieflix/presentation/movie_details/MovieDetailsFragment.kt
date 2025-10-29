@@ -4,6 +4,8 @@ import android.app.Dialog
 import android.content.Context
 import android.graphics.Typeface
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.text.SpannableString
 import android.text.Spanned
 import android.text.TextPaint
@@ -99,6 +101,7 @@ class MovieDetailsFragment : BottomSheetDialogFragment(){
     private var isScheduled:Boolean = false
     private var currentScheduledDate: Long = 0
     private var scheduleCheckRunnable: Runnable? = null
+    private val scheduleHandler = Handler(Looper.getMainLooper())
 
     private var mediaType:String? = null
     private var isOverviewExpanded = false
@@ -436,6 +439,10 @@ class MovieDetailsFragment : BottomSheetDialogFragment(){
             } else {
                 stopScheduleTimeCheck()
             }
+
+            // Update recommendation adapter with scheduled movie IDs
+            val ids = scheduledList.mapNotNull { entity -> entity.id }.toSet()
+            recommendationAdapter.updateScheduledMovies(ids)
         }
 
         searchMovieViewModel.searchMovieLiveData.observe(viewLifecycleOwner) {
@@ -1186,6 +1193,12 @@ class MovieDetailsFragment : BottomSheetDialogFragment(){
         
         scheduleCheckRunnable = object : Runnable {
             override fun run() {
+                // Check if fragment is still attached and binding is available
+                if (!isAdded || _binding == null) {
+                    stopScheduleTimeCheck()
+                    return
+                }
+                
                 if (isScheduled && currentScheduledDate > 0) {
                     val currentTime = System.currentTimeMillis()
                     // If scheduled time has passed by more than 10 seconds, reset the button
@@ -1208,7 +1221,7 @@ class MovieDetailsFragment : BottomSheetDialogFragment(){
                         stopScheduleTimeCheck()
                     } else {
                         // Check again in 2 seconds
-                        binding.root.postDelayed(this, 2000)
+                        scheduleHandler.postDelayed(this, 2000)
                     }
                 } else {
                     stopScheduleTimeCheck()
@@ -1217,12 +1230,12 @@ class MovieDetailsFragment : BottomSheetDialogFragment(){
         }
         
         // Start checking
-        binding.root.postDelayed(scheduleCheckRunnable!!, 2000)
+        scheduleHandler.postDelayed(scheduleCheckRunnable!!, 2000)
     }
     
     private fun stopScheduleTimeCheck() {
         scheduleCheckRunnable?.let {
-            binding.root.removeCallbacks(it)
+            scheduleHandler.removeCallbacks(it)
             scheduleCheckRunnable = null
         }
     }
