@@ -295,22 +295,38 @@
                 </FrameLayout>
             </LinearLayout>
 
-            <TextView
-                android:id="@+id/fragment_movie_details_scheduled_date"
-                android:layout_width="match_parent"
+            <LinearLayout
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:orientation="horizontal"
                 android:layout_marginStart="@dimen/_5sdp"
                 android:layout_marginEnd="@dimen/_5sdp"
                 android:layout_marginTop="@dimen/_8sdp"
-                android:fontFamily="@font/montserrat_semibold"
-                android:textColor="@color/app_color"
-                android:textSize="@dimen/_10ssp"
-                android:visibility="gone"
-                android:drawablePadding="@dimen/_4sdp"
-                app:drawableStartCompat="@drawable/ic_calendar_check"
-                app:drawableTint="@color/app_color"
-                tools:text="Scheduled on: 28th October 2025, 5:30 PM"
-                tools:visibility="visible" />
+                android:layout_marginBottom="@dimen/_12sdp"
+                >
+
+                <ImageView
+                    android:id="@+id/fragment_movie_details_scheduled_icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_calendar_check"
+                    />
+
+                <TextView
+                    android:id="@+id/fragment_movie_details_scheduled_date"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/montserrat_semibold"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/_10ssp"
+                    android:visibility="gone"
+                    app:drawableTint="@color/white"
+                    tools:text="Scheduled on: 28th October 2025, 5:30 PM"
+                    tools:visibility="visible"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="@dimen/_5sdp"
+                    />
+            </LinearLayout>
 
             <TextView
                 android:id="@+id/fragment_movie_details_genre"

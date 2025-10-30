@@ -684,6 +684,7 @@ class MovieDetailsFragment : BottomSheetDialogFragment(){
                         scheduleIcon.setImageDrawable(ContextCompat.getDrawable(ctx, R.drawable.baseline_calendar_month_24))
                         // Hide scheduled date text when not scheduled
                         fragmentMovieDetailsScheduledDate.visibility = View.GONE
+                        fragmentMovieDetailsScheduledIcon.visibility = View.GONE
                     }
                 }
             }
@@ -713,8 +714,10 @@ class MovieDetailsFragment : BottomSheetDialogFragment(){
                     text = "Scheduled on: $day$daySuffix $dateStr"
                     visibility = View.VISIBLE
                 }
+                binding.fragmentMovieDetailsScheduledIcon.visibility = View.VISIBLE
             } else {
                 binding.fragmentMovieDetailsScheduledDate.visibility = View.GONE
+                binding.fragmentMovieDetailsScheduledIcon.visibility = View.GONE
             }
         } catch (e: Exception) {
             e.printStackTrace()
