@@ -19,6 +19,7 @@ class HomeAdapter(
 )
 {
     private val adapterMap = mutableMapOf<String, HorizontalAdapter>()
+    private var scheduledMovieIds = setOf<Int>()
 
     fun addMoreItemsToCategory(categoryTitle: String, newItems: List<MovieResult>) {
         adapterMap[categoryTitle]?.addMoreItems(newItems)
@@ -26,6 +27,14 @@ class HomeAdapter(
 
     fun setLoadingForCategory(categoryTitle: String, isLoading: Boolean) {
         adapterMap[categoryTitle]?.setLoadingState(isLoading)
+    }
+
+    fun updateScheduledMovies(scheduledIds: Set<Int>) {
+        scheduledMovieIds = scheduledIds
+        // Update all existing adapters
+        adapterMap.values.forEach { adapter ->
+            adapter.updateScheduledMovies(scheduledIds)
+        }
     }
 
     inner class ViewHolder(itemView:View):RecyclerView.ViewHolder(itemView) {
@@ -39,7 +48,10 @@ class HomeAdapter(
                     HorizontalAdapter(
                         onPosterClick = onPosterClick,
                         onLoadMore = { onLoadMore(homeFeed.title) }
-                    )
+                    ).also { newAdapter ->
+                        // Apply scheduled IDs to newly created adapter
+                        newAdapter.updateScheduledMovies(scheduledMovieIds)
+                    }
                 }
                 horizontalFeedListItemRv.adapter=horizontalAdapter
                 horizontalAdapter.submitList(homeFeed.list)

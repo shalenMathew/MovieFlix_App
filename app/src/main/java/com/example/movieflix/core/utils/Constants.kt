@@ -32,5 +32,6 @@ object Constants {
     const val TABLE_NAME = "movie_data_table"
     const val WATCHLIST_TABLE_NAME = "watch_list_table"
     const val FAVOURITES_TABLE_NAME="favorites_movies_table"
+    const val SCHEDULED_TABLE_NAME="scheduled_movies_table"
 
 }

@@ -9,6 +9,7 @@ import androidx.room.Query
 import com.example.movieflix.data.local_storage.entity.FavouritesEntity
 import com.example.movieflix.data.local_storage.entity.HomeFeedEntity
 import com.example.movieflix.data.local_storage.entity.WatchListEntity
+import com.example.movieflix.data.local_storage.entity.ScheduledEntity
 
 @Dao
 interface MovieDao {
@@ -36,5 +37,15 @@ interface MovieDao {
     fun getAllFavMovies():LiveData<List<FavouritesEntity>>
     @Query("UPDATE favorites_movies_table SET personalNote = :personalNote WHERE id = :favoriteId")
     suspend fun addPersonalNote(favoriteId: Int, personalNote: String?)
+
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertScheduledMovie(scheduledEntity: ScheduledEntity)
+    @Delete
+    suspend fun deleteScheduledMovie(scheduledEntity: ScheduledEntity)
+    @Query(" SELECT * FROM scheduled_movies_table ORDER BY scheduledDate ASC ")
+    fun getAllScheduledMovies():LiveData<List<ScheduledEntity>>
+    @Query("SELECT * FROM scheduled_movies_table WHERE id = :movieId LIMIT 1")
+    suspend fun getScheduledMovieById(movieId: Int): ScheduledEntity?
 
 }

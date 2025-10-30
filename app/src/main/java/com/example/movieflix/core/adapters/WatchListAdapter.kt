@@ -17,6 +17,14 @@ import com.example.movieflix.domain.model.MovieResult
 
 class WatchListAdapter(private var onPosterClick: ((movieResult: MovieResult) -> Unit)):
         ListAdapter<WatchListEntity, WatchListAdapter.ViewHolder>(DiffUtilCallback()) {
+    
+    private var scheduledMovieIds = setOf<Int>()
+
+    fun updateScheduledMovies(scheduledIds: Set<Int>) {
+        scheduledMovieIds = scheduledIds
+        notifyDataSetChanged()
+    }
+
     inner class ViewHolder(itemView:View):RecyclerView.ViewHolder(itemView) {
        var binding: ItemSmallListBinding
         init {
@@ -27,6 +35,13 @@ fun bind(watchListEntity: WatchListEntity)=binding.apply{
     val item = watchListEntity.movieResult
     itemListPoster.loadImage(Constants.TMDB_POSTER_IMAGE_BASE_URL_W342.plus(item.posterPath))
     itemListRatingTxt.text = String.format("%.1f", item.voteAverage)
+
+    // Show schedule icon if movie is scheduled
+    itemListScheduleIcon.visibility = if (scheduledMovieIds.contains(item.id)) {
+        android.view.View.VISIBLE
+    } else {
+        android.view.View.GONE
+    }
 
     root.setOnClickListener(){
         if (isNetworkAvailable(root.context)){

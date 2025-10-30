@@ -4,4 +4,49 @@
         <!-- Customize your dark theme here. -->
         <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
     </style>
+
+    <style name="DatePickerThemeDark" parent="Theme.AppCompat.Dialog">
+        <item name="colorPrimary">@color/app_color</item>
+        <item name="colorAccent">@color/app_color</item>
+        <item name="android:windowBackground">#424242</item>
+        <item name="android:colorBackground">#424242</item>
+        <item name="android:textColorPrimary">@color/white</item>
+        <item name="android:textColorSecondary">#B0B0B0</item>
+        <item name="android:datePickerStyle">@style/DatePickerStyleDark</item>
+        <item name="android:timePickerStyle">@style/TimePickerStyleDark</item>
+        <item name="android:buttonBarPositiveButtonStyle">@style/DatePickerButtonDark</item>
+        <item name="android:buttonBarNegativeButtonStyle">@style/DatePickerButtonDark</item>
+    </style>
+
+    <style name="DatePickerStyleDark" parent="android:Widget.Material.DatePicker">
+        <item name="android:headerBackground">@color/app_color</item>
+        <item name="android:calendarViewShown">false</item>
+        <item name="android:dateTextAppearance">@style/DateTextAppearanceDark</item>
+        <item name="android:yearListItemTextAppearance">@style/DateTextAppearanceDark</item>
+    </style>
+
+    <style name="DateTextAppearanceDark" parent="android:TextAppearance.Material">
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="TimePickerStyleDark" parent="android:Widget.Material.TimePicker">
+        <item name="android:headerBackground">@color/app_color</item>
+        <item name="android:numbersTextColor">@color/white</item>
+        <item name="android:numbersSelectorColor">@color/app_color</item>
+        <item name="android:headerTimeTextAppearance">@style/TimeTextAppearanceDark</item>
+        <item name="android:headerAmPmTextAppearance">@style/AmPmTextAppearanceDark</item>
+    </style>
+
+    <style name="TimeTextAppearanceDark" parent="android:TextAppearance.Material.Display1">
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="AmPmTextAppearanceDark" parent="android:TextAppearance.Material.Body1">
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="DatePickerButtonDark" parent="Widget.AppCompat.Button.Borderless">
+        <item name="android:textColor">@color/app_color</item>
+        <item name="android:textStyle">bold</item>
+    </style>
 </resources>

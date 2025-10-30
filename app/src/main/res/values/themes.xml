@@ -30,4 +30,44 @@
         <item name="cornerSize">6dp</item>
     </style>
 
+    <style name="DatePickerThemeLight" parent="Theme.AppCompat.Light.Dialog">
+        <item name="colorPrimary">@color/app_color</item>
+        <item name="colorAccent">@color/app_color</item>
+        <item name="android:windowBackground">@color/white</item>
+        <item name="android:colorBackground">@color/white</item>
+        <item name="android:textColorPrimary">@color/black</item>
+        <item name="android:textColorSecondary">#757575</item>
+        <item name="android:datePickerStyle">@style/DatePickerStyleLight</item>
+        <item name="android:timePickerStyle">@style/TimePickerStyleLight</item>
+        <item name="android:buttonBarPositiveButtonStyle">@style/DatePickerButtonLight</item>
+        <item name="android:buttonBarNegativeButtonStyle">@style/DatePickerButtonLight</item>
+    </style>
+
+    <style name="DatePickerStyleLight" parent="android:Widget.Material.Light.DatePicker">
+        <item name="android:headerBackground">@color/app_color</item>
+        <item name="android:calendarViewShown">false</item>
+        <item name="android:background">@color/white</item>
+    </style>
+
+    <style name="TimePickerStyleLight" parent="android:Widget.Material.Light.TimePicker">
+        <item name="android:headerBackground">@color/app_color</item>
+        <item name="android:numbersTextColor">@color/black</item>
+        <item name="android:numbersSelectorColor">@color/app_color</item>
+        <item name="android:headerTimeTextAppearance">@style/TimeTextAppearanceLight</item>
+        <item name="android:headerAmPmTextAppearance">@style/AmPmTextAppearanceLight</item>
+    </style>
+
+    <style name="TimeTextAppearanceLight" parent="android:TextAppearance.Material.Display1">
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="AmPmTextAppearanceLight" parent="android:TextAppearance.Material.Body1">
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="DatePickerButtonLight" parent="Widget.AppCompat.Button.Borderless">
+        <item name="android:textColor">@color/app_color</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
 </resources>
