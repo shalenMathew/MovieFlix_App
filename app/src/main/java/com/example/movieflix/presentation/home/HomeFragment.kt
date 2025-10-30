@@ -26,6 +26,7 @@ import com.example.movieflix.domain.model.HomeFeedData
 import com.example.movieflix.domain.model.MovieResult
 import com.example.movieflix.presentation.base.BaseFragment
 import com.example.movieflix.presentation.viewmodels.HomeInfoViewModel
+import com.example.movieflix.presentation.viewmodels.ScheduledViewModel
 import com.google.gson.Gson
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -36,6 +37,7 @@ class HomeFragment : BaseFragment() {
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
     private val homeInfoViewModel: HomeInfoViewModel by viewModels() // initializing viewmodel
+    private val scheduledViewModel: ScheduledViewModel by viewModels()
     private lateinit var bannerAdapter: BannerAdapter
     private lateinit var homeAdapter: HomeAdapter
     private var bannerList: List<MovieResult> = arrayListOf()
@@ -143,6 +145,12 @@ class HomeFragment : BaseFragment() {
                     // Loading state is handled by adapter
                 }
             }
+        }
+
+        // Observe scheduled movies and update icon visibility
+        scheduledViewModel.getAllScheduledMovies().observe(viewLifecycleOwner) { scheduledList ->
+            val ids = scheduledList.mapNotNull { entity -> entity.id }.toSet()
+            homeAdapter.updateScheduledMovies(ids)
         }
     }
 

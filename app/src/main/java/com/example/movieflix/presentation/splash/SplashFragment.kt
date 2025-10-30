@@ -17,6 +17,7 @@ class SplashFragment: Fragment() {
 
 private  var _binding:FragmentSplashBinding?=null
     private val binding get()=_binding!!
+    private var hasNavigated = false
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -33,26 +34,46 @@ private  var _binding:FragmentSplashBinding?=null
     }
 
     private fun initView(){
-        lifecycleScope.launch {
+        viewLifecycleOwner.lifecycleScope.launch {
+            // Take only the first emission to prevent multiple navigations
             DataStoreReference.isIntroCompleted(requireContext()).collect{completed->
-                if(completed){
-                    navigateTo(R.id.action_splashFragment_to_homeFragment)
-                }else{
-                    navigateTo(R.id.action_splashFragment_to_introFragment)
+                if(!hasNavigated){
+                    if(completed){
+                        navigateTo(R.id.action_splashFragment_to_homeFragment)
+                    }else{
+                        navigateTo(R.id.action_splashFragment_to_introFragment)
+                    }
                 }
             }
         }
     }
 
     private fun navigateTo(id: Int) {
+        // Prevent multiple navigation attempts
+        if (hasNavigated) return
 
         binding.lottieAnimation.addAnimatorListener(object: Animator.AnimatorListener{
             override fun onAnimationStart(p0: Animator) {
             }
             override fun onAnimationEnd(p0: Animator) {
+                // Double check to prevent race conditions
+                if (hasNavigated) return
+                
                 lifecycleScope.launch {
-                    if (viewLifecycleOwner.lifecycle.currentState.isAtLeast(androidx.lifecycle.Lifecycle.State.RESUMED)) {
-                        findNavController().navigate(id)
+                    // Check if fragment is still added, lifecycle is active, and we're still on splash fragment
+                    if (isAdded && 
+                        viewLifecycleOwner.lifecycle.currentState.isAtLeast(androidx.lifecycle.Lifecycle.State.RESUMED)) {
+                        try {
+                            // Only navigate if we're still on the splash fragment
+                            val currentDestination = findNavController().currentDestination?.id
+                            if (currentDestination == R.id.splashFragment && !hasNavigated) {
+                                hasNavigated = true
+                                findNavController().navigate(id)
+                            }
+                        } catch (e: Exception) {
+                            // Silently fail if navigation controller is not available
+                            e.printStackTrace()
+                        }
                     }
                 }
             }

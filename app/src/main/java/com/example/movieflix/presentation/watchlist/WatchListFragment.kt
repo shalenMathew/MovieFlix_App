@@ -14,6 +14,7 @@ import com.example.movieflix.core.utils.gone
 import com.example.movieflix.core.utils.visible
 import com.example.movieflix.databinding.FragmentWatchListBinding
 import com.example.movieflix.presentation.viewmodels.WatchListViewModel
+import com.example.movieflix.presentation.viewmodels.ScheduledViewModel
 import com.google.gson.Gson
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -21,6 +22,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class WatchListFragment : Fragment() {
 
 private val watchListViewModel:WatchListViewModel by viewModels()
+private val scheduledViewModel: ScheduledViewModel by viewModels()
 
     private var _binding:FragmentWatchListBinding? = null
     private val binding get() =  _binding!!
@@ -63,6 +65,12 @@ private val watchListViewModel:WatchListViewModel by viewModels()
                 binding.fragmentWatchListPlaceholder.visible()
                 binding.randomEmoji.gone()
             }
+        }
+
+        // Observe scheduled movies and update icon visibility
+        scheduledViewModel.getAllScheduledMovies().observe(viewLifecycleOwner) { scheduledList ->
+            val ids = scheduledList.mapNotNull { entity -> entity.id }.toSet()
+            adapter.updateScheduledMovies(ids)
         }
     }
     override fun onDestroy() {

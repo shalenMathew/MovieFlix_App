@@ -7,12 +7,13 @@ import androidx.activity.SystemBarStyle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.core.os.bundleOf
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.example.movieflix.R
+import com.example.movieflix.core.utils.Constants
 import com.example.movieflix.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint
-
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -78,5 +79,69 @@ class MainActivity : AppCompatActivity() {
             }
         }
         onBackPressedDispatcher.addCallback(this, callback)
+        
+        // Handle notification intent - open movie details if launched from notification
+        handleNotificationIntent()
+    }
+    
+    private fun handleNotificationIntent() {
+        if (intent?.getBooleanExtra("OPEN_MOVIE_DETAILS", false) == true) {
+            val movieData = intent.getStringExtra("MOVIE_DATA")
+            if (!movieData.isNullOrEmpty()) {
+                // Navigate to movie details with a delay to ensure nav controller is ready
+                binding.root.postDelayed({
+                    try {
+                        val currentDestination = navController.currentDestination?.id
+                        val bundle = bundleOf(Constants.MEDIA_SEND_REQUEST_KEY to movieData)
+                        
+                        // Navigate from a valid destination that has an action to movieDetailsFragment
+                        when (currentDestination) {
+                            R.id.homeFragment, R.id.searchFragment, R.id.watchListFragment, R.id.favFragment -> {
+                                // We're on a valid destination, navigate directly
+                                navController.navigate(R.id.movieDetailsFragment, bundle)
+                            }
+                            R.id.splashFragment, R.id.introFragment -> {
+                                // Wait for navigation to complete to homeFragment, then navigate to details
+                                navController.addOnDestinationChangedListener(object : androidx.navigation.NavController.OnDestinationChangedListener {
+                                    override fun onDestinationChanged(
+                                        controller: androidx.navigation.NavController,
+                                        destination: androidx.navigation.NavDestination,
+                                        arguments: Bundle?
+                                    ) {
+                                        if (destination.id == R.id.homeFragment) {
+                                            // Now we can navigate to movie details
+                                            controller.navigate(R.id.movieDetailsFragment, bundle)
+                                            controller.removeOnDestinationChangedListener(this)
+                                        }
+                                    }
+                                })
+                            }
+                            else -> {
+                                // Unknown destination, navigate to home first then to details
+                                navController.navigate(R.id.homeFragment)
+                                binding.root.postDelayed({
+                                    try {
+                                        navController.navigate(R.id.movieDetailsFragment, bundle)
+                                    } catch (e: Exception) {
+                                        e.printStackTrace()
+                                    }
+                                }, 200)
+                            }
+                        }
+                        
+                        // Clear the intent flag to prevent re-navigation on config changes
+                        intent?.removeExtra("OPEN_MOVIE_DETAILS")
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                    }
+                }, 500) // Increased delay to ensure nav graph is fully initialized
+            }
+        }
+    }
+    
+    override fun onNewIntent(intent: android.content.Intent) {
+        super.onNewIntent(intent)
+        setIntent(intent)
+        handleNotificationIntent()
     }
 }

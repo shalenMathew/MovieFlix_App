@@ -1,0 +1,49 @@
+name: 📦 Send APK via Discord on Release
+on:
+#  pull_request:
+#    branches: [ "master" ]
+
+  release:
+    types: [published]
+
+  workflow_dispatch:
+
+
+jobs:
+
+  distributeApk:
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Download the latest APK asset
+        uses: robinraju/release-downloader@v1
+        with:
+          latest: true
+          fileName: '*.apk'
+          out-file-path: 'apk-download'
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+
+      - name: List downloaded files (for debugging)
+        run: |
+          echo "Files in apk-download:"
+          ls -R apk-download
+
+      - name: Determine APK file and set download URL
+        run: |
+          FILE=$(ls apk-download/*.apk | head -n1)
+          BASENAME=${FILE##*/}
+          echo "APK_FILE=$BASENAME" >> $GITHUB_ENV
+          echo "DOWNLOAD_LINK=https://github.com/${{ github.repository }}/releases/latest/download/$BASENAME" >> $GITHUB_ENV           
+
+      - name: Send release link to Discord
+        uses: tsickert/discord-webhook@v7.0.0
+        with:
+          webhook-url: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          embed-title: "✅ New release : A new version of MovieFlix App is live!"
+          embed-description: |
+              [CLICK TO DOWNLOAD THE APK](${{ env.DOWNLOAD_LINK }})
+          embed-image-url: "https://raw.githubusercontent.com/shalenMathew/MovieFlix_App/refs/heads/master/images/logo.jpg"
+          wait: true
+

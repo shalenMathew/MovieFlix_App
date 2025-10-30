@@ -14,12 +14,26 @@ import com.example.movieflix.domain.model.MovieResult
 
 class RecommendationAdapter(private val posterClick:(movieResult:MovieResult)->Unit):ListAdapter<MovieResult, RecommendationAdapter.ViewHolder>(DiffUtilCallback()) {
 
+    private var scheduledMovieIds = setOf<Int>()
+
+    fun updateScheduledMovies(scheduledIds: Set<Int>) {
+        scheduledMovieIds = scheduledIds
+        notifyDataSetChanged()
+    }
+
   inner  class ViewHolder(itemView: View):RecyclerView.ViewHolder(itemView) {
       var binding:ItemListBinding = ItemListBinding.bind(itemView)
       fun bind(movieResult: MovieResult){
           binding.apply {
               itemListRatingTxt.text = String.format("%.1f",movieResult.voteAverage)
               itemListPoster.loadImage(Constants.TMDB_POSTER_IMAGE_BASE_URL_W342.plus(movieResult.posterPath))
+
+              // Show schedule icon if movie is scheduled
+              itemListScheduleIcon.visibility = if (scheduledMovieIds.contains(movieResult.id)) {
+                  View.VISIBLE
+              } else {
+                  View.GONE
+              }
 
               root.setOnClickListener(){
                   posterClick(movieResult)

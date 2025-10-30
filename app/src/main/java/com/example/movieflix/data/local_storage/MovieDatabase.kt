@@ -6,10 +6,11 @@ import androidx.room.TypeConverters
 import com.example.movieflix.data.local_storage.entity.FavouritesEntity
 import com.example.movieflix.data.local_storage.entity.HomeFeedEntity
 import com.example.movieflix.data.local_storage.entity.WatchListEntity
+import com.example.movieflix.data.local_storage.entity.ScheduledEntity
 
 @Database(
-    entities = [HomeFeedEntity::class, WatchListEntity::class, FavouritesEntity::class],
-    version = 5
+    entities = [HomeFeedEntity::class, WatchListEntity::class, FavouritesEntity::class, ScheduledEntity::class],
+    version = 6
 )
 @TypeConverters(MovieDataTypeConverter::class)
  abstract class MovieDatabase:RoomDatabase(){

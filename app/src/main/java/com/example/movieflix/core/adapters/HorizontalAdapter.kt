@@ -20,9 +20,15 @@ class HorizontalAdapter(
 ) : ListAdapter<MovieResult, HorizontalAdapter.ViewHolder>(DiffUtilCallback()) {
 
     private var isLoading = false
+    private var scheduledMovieIds = setOf<Int>()
 
     fun setLoadingState(loading: Boolean) {
         isLoading = loading
+    }
+
+    fun updateScheduledMovies(scheduledIds: Set<Int>) {
+        scheduledMovieIds = scheduledIds
+        notifyDataSetChanged()
     }
 
     fun addMoreItems(newItems: List<MovieResult>) {
@@ -43,6 +49,13 @@ class HorizontalAdapter(
                 val context = binding.root.context
                 itemListPoster.loadImage(TMDB_POSTER_IMAGE_BASE_URL_W342.plus(item.posterPath))
                 itemListRatingTxt.text = String.format("%.1f", item.voteAverage)
+
+                // Show schedule icon if movie is scheduled
+                itemListScheduleIcon.visibility = if (scheduledMovieIds.contains(item.id)) {
+                    View.VISIBLE
+                } else {
+                    View.GONE
+                }
 
                 itemListPoster.setOnClickListener(){
                     if(isNetworkAvailable(context)){
