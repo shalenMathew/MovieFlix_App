@@ -51,8 +51,8 @@ MovieFlix is actively under development. Here's what's coming next:
 
 - [ ] Bring watchlist and favorites under one screen 
 - [ ] Add episodes list in the app and the ability to strike them once completed
-- [ ] Feature to add personal notes under movies
 - [ ] Add a progress tracker to track movies or series
+- [x] ~~Feature to add personal notes under movies~~
 - [x] ~~Add pagination feature on list of movies on HomeFeed~~
 - [x] ~~Notify when to watch movie by allowing users to schedule time~~
 - [x] ~~Add bottom nav~~
