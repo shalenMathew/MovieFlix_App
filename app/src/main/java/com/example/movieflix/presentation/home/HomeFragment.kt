@@ -92,12 +92,31 @@ class HomeFragment : BaseFragment() {
         }
     }
 
+    object ClickHandler{
+        private var lastClick = 0L;
+
+        fun isClickAllowed(): Boolean {
+            val allowUser = System.currentTimeMillis() - lastClick > 1000L
+            if(allowUser){
+                lastClick = System.currentTimeMillis()
+            }
+            return allowUser;
+
+        }
+    }
+
     private fun openDetailFragment(it: MovieResult) {
+
+        if(!ClickHandler.isClickAllowed()){
+            return
+        }
         val bundle = Bundle()
         bundle.putString(Constants.MEDIA_SEND_REQUEST_KEY, Gson().toJson(it))
 
         findNavController().navigate(R.id.action_homeFragment_to_movieDetailsFragment, bundle)
     }
+
+
 
     private fun observer() {
         homeInfoViewModel.homeFeedList.observe(viewLifecycleOwner) {
