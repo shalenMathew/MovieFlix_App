@@ -11,12 +11,7 @@
         android:title="Search" />
     
     <item
-        android:id="@+id/watchListFragment"
+        android:id="@+id/libraryFragment"
         android:icon="@drawable/icon_library"
         android:title="Library" />
-    
-    <item
-        android:id="@+id/favFragment"
-        android:icon="@drawable/fav_outline"
-        android:title="Favorites" />
 </menu>

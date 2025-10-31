@@ -49,7 +49,7 @@ class FavFragment : Fragment() {
         adapter=FavAdapters   (onPosterClick = {
             val bundle = Bundle()
             bundle.putString(Constants.MEDIA_SEND_REQUEST_KEY, Gson().toJson(it))
-            findNavController().navigate(R.id.action_favFragment_to_movieDetailsFragment,bundle)
+            findNavController().navigate(R.id.movieDetailsFragment, bundle)
         })
 
         binding.fragmentFavRv.adapter=adapter

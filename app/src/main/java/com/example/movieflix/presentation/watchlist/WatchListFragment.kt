@@ -47,7 +47,7 @@ private val scheduledViewModel: ScheduledViewModel by viewModels()
         adapter=WatchListAdapter (onPosterClick = {
             val bundle = Bundle()
             bundle.putString(Constants.MEDIA_SEND_REQUEST_KEY,Gson().toJson(it))
-            findNavController().navigate(R.id.action_watchListFragment_to_movieDetailsFragment,bundle)
+            findNavController().navigate(R.id.movieDetailsFragment,bundle)
         })
 
         binding.fragmentWatchListRv.adapter=adapter
