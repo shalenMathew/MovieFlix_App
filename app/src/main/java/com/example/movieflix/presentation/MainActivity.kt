@@ -57,7 +57,7 @@ class MainActivity : AppCompatActivity() {
         // Handle bottom navigation visibility
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
-                R.id.homeFragment, R.id.searchFragment, R.id.watchListFragment, R.id.favFragment -> {
+                R.id.homeFragment, R.id.searchFragment, R.id.libraryFragment -> {
                     binding.bottomNavigationView.visibility = android.view.View.VISIBLE
                 }
                 else -> {
@@ -96,7 +96,7 @@ class MainActivity : AppCompatActivity() {
                         
                         // Navigate from a valid destination that has an action to movieDetailsFragment
                         when (currentDestination) {
-                            R.id.homeFragment, R.id.searchFragment, R.id.watchListFragment, R.id.favFragment -> {
+                            R.id.homeFragment, R.id.searchFragment, R.id.watchListFragment -> {
                                 // We're on a valid destination, navigate directly
                                 navController.navigate(R.id.movieDetailsFragment, bundle)
                             }

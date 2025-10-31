@@ -75,12 +75,13 @@
     </fragment>
 
     <fragment
-        android:id="@+id/favFragment"
-        android:name="com.example.movieflix.presentation.favorites.FavFragment"
-        android:label="fragment_fav"
-        tools:layout="@layout/fragment_fav" >
+        android:id="@+id/libraryFragment"
+        android:name="com.example.movieflix.library.LibraryFragment"
+        android:label="fragment_library"
+        tools:layout="@layout/fragment_library">
         <action
-            android:id="@+id/action_favFragment_to_movieDetailsFragment"
+            android:id="@+id/action_libraryFragment_to_movieDetailsFragment"
             app:destination="@id/movieDetailsFragment" />
     </fragment>
+
 </navigation>
