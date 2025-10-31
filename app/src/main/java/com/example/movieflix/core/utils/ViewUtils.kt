@@ -148,23 +148,35 @@ val MIGRATION_3_5 = object : Migration(3, 5) {
 
 val MIGRATION_5_6 = object : Migration(5, 6) {
     override fun migrate(db: SupportSQLiteDatabase) {
-        db.execSQL("""
+        complex5To6Migration(db)
+    }
+}
+
+val MIGRATION_6_7 = object : Migration(6, 7) {
+    override fun migrate(db: SupportSQLiteDatabase) {
+        complex5To6Migration(db)
+        complex6To7Migration(db)
+    }
+}
+
+val MIGRATION_5_7 = object : Migration(5, 7) {
+    override fun migrate(db: SupportSQLiteDatabase) {
+        complex5To6Migration(db)
+        complex6To7Migration(db)
+    }
+}
+
+private fun complex5To6Migration(db: SupportSQLiteDatabase) {
+    db.execSQL("""
             CREATE TABLE IF NOT EXISTS scheduled_movies_table (
                 id INTEGER PRIMARY KEY NOT NULL,
                 movieResult TEXT NOT NULL,
                 scheduledDate INTEGER NOT NULL
             )
         """.trimIndent())
-    }
 }
 
-val MIGRATION_5_6 = object : Migration(5, 6) {
-    override fun migrate(db: SupportSQLiteDatabase) {
-        complex5To6Migration(db)
-    }
-}
-
-private fun complex5To6Migration(db: SupportSQLiteDatabase) {
+private fun complex6To7Migration(db: SupportSQLiteDatabase) {
     db.execSQL("""
             CREATE TABLE watch_list_table_new (
                 id INTEGER PRIMARY KEY NOT NULL,
@@ -209,7 +221,6 @@ val MIGRATION_3_6 = object : Migration(3, 6) {
 
         // From migration 4->5
         db.execSQL("ALTER TABLE favorites_movies_table ADD COLUMN personalNote TEXT")
-
         // From migration 5->6
         complex5To6Migration(db)
     }
@@ -222,6 +233,36 @@ val MIGRATION_4_6 = object : Migration(4, 6) {
 
         // From migration 5->6
         complex5To6Migration(db)
+    }
+}
+
+val MIGRATION_3_7 = object : Migration(3, 7) {
+    override fun migrate(db: SupportSQLiteDatabase) {
+        // From migration 3->4
+        db.execSQL("ALTER TABLE watch_list_news_table RENAME TO watch_list_table")
+        db.execSQL("ALTER TABLE favorites_table RENAME TO favorites_movies_table")
+
+        // From migration 4->5
+        db.execSQL("ALTER TABLE favorites_movies_table ADD COLUMN personalNote TEXT")
+
+        // From migration 5->6
+        complex5To6Migration(db)
+
+        // From migration 6->7
+        complex6To7Migration(db)
+    }
+}
+
+val MIGRATION_4_7 = object : Migration(4, 7) {
+    override fun migrate(db: SupportSQLiteDatabase) {
+        // From migration 4->5
+        db.execSQL("ALTER TABLE favorites_movies_table ADD COLUMN personalNote TEXT")
+
+        // From migration 5->6
+        complex5To6Migration(db)
+
+        // From migration 6->7
+        complex6To7Migration(db)
     }
 }
 

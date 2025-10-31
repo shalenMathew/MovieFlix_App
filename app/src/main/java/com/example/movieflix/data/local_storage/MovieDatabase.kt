@@ -10,7 +10,7 @@ import com.example.movieflix.data.local_storage.entity.ScheduledEntity
 
 @Database(
     entities = [HomeFeedEntity::class, WatchListEntity::class, FavouritesEntity::class, ScheduledEntity::class],
-    version = 6
+    version = 7
 )
 @TypeConverters(MovieDataTypeConverter::class)
 abstract class MovieDatabase : RoomDatabase() {

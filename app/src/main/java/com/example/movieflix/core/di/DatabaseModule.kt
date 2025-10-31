@@ -7,9 +7,12 @@ import com.example.movieflix.core.utils.Constants
 import com.example.movieflix.core.utils.GsonParser
 import com.example.movieflix.core.utils.MIGRATION
 import com.example.movieflix.core.utils.MIGRATION_3_5
-import com.example.movieflix.core.utils.MIGRATION_3_6
 import com.example.movieflix.core.utils.MIGRATION_4_5
 import com.example.movieflix.core.utils.MIGRATION_4_6
+import com.example.movieflix.core.utils.MIGRATION_3_6
+import com.example.movieflix.core.utils.MIGRATION_3_7
+import com.example.movieflix.core.utils.MIGRATION_4_7
+import com.example.movieflix.core.utils.MIGRATION_6_7
 import com.example.movieflix.core.utils.MIGRATION_5_6
 import com.example.movieflix.data.local_storage.LocalDataSource
 import com.example.movieflix.data.local_storage.MovieDao
@@ -27,8 +30,7 @@ import com.example.movieflix.domain.repository.MovieInfoRepository
 import com.example.movieflix.domain.repository.ScheduledRepository
 import com.example.movieflix.domain.repository.WatchListRepository
 import com.example.movieflix.core.notifications.MovieScheduler
-import com.example.movieflix.core.utils.MIGRATION_3_6
-import com.example.movieflix.core.utils.MIGRATION_4_6
+import com.example.movieflix.core.utils.MIGRATION_5_7
 import com.google.gson.Gson
 import dagger.Module
 import dagger.Provides
@@ -44,16 +46,20 @@ object DatabaseModule {
     @Provides
     @Singleton
     fun providesMovieDataBase(@ApplicationContext context: Context): MovieDatabase {
-        return Room.databaseBuilder(context,MovieDatabase::class.java,Constants.DATABASE_NAME)
+        return Room.databaseBuilder(context, MovieDatabase::class.java, Constants.DATABASE_NAME)
 //            .fallbackToDestructiveMigration()
             .fallbackToDestructiveMigrationOnDowngrade(true)
             .addMigrations(
                 MIGRATION,
-                MIGRATION_4_5,
-                MIGRATION_5_6,
                 MIGRATION_3_5,
                 MIGRATION_3_6,
+                MIGRATION_3_7,
+                MIGRATION_4_5,
                 MIGRATION_4_6,
+                MIGRATION_4_7,
+                MIGRATION_5_6,
+                MIGRATION_5_7,
+                MIGRATION_6_7,
             )
             .addTypeConverter(MovieDataTypeConverter(GsonParser(Gson())))
             .build()
