@@ -17,7 +17,7 @@
             app:tabIndicatorColor="@color/white"
             app:tabIndicatorHeight="3dp"
             app:tabIndicatorFullWidth="false"
-            android:background="@android:color/transparent"
+            android:background="@android:color/black"
             android:elevation="4dp"
             android:paddingTop="8dp"
             android:paddingBottom="8dp"/>
