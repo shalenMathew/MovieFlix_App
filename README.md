@@ -49,9 +49,9 @@ Create aesthetic movie cards to share like Spotify songs, manage your watchlist,
 
 MovieFlix is actively under development. Here's what's coming next:
 
-- [ ] Bring watchlist and favorites under one screen 
 - [ ] Add episodes list in the app and the ability to strike them once completed
 - [ ] Add a progress tracker to track movies or series
+- [x] ~~Bring watchlist and favorites under one screen~~
 - [x] ~~Feature to add personal notes under movies~~
 - [x] ~~Add pagination feature on list of movies on HomeFeed~~
 - [x] ~~Notify when to watch movie by allowing users to schedule time~~
