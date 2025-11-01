@@ -5,7 +5,7 @@
 
 
 
-### MovieFlix is movie diary for cinephile for tracking every movie and TV show you watch.
+### A movie diary for cinephile for tracking every movie and TV show you watch.
 
 Create aesthetic movie cards to share like Spotify songs, manage your watchlist, track episode-by-episode progress, dive deep into cast filmographies, and maintain your personal movie diary—all in one beautifully designed Android app powered by TMDB API.
 
