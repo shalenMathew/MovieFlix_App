@@ -3,6 +3,7 @@ package com.example.movieflix.data.local_storage
 import androidx.lifecycle.LiveData
 import com.example.movieflix.data.local_storage.entity.FavouritesEntity
 import com.example.movieflix.data.local_storage.entity.HomeFeedEntity
+import com.example.movieflix.data.local_storage.entity.IdAndMovieResult
 import com.example.movieflix.data.local_storage.entity.WatchListEntity
 import com.example.movieflix.data.local_storage.entity.ScheduledEntity
 import javax.inject.Inject
@@ -18,8 +19,8 @@ class LocalDataSource @Inject constructor(private val movieDao: MovieDao) {
         movieDao.deleteHomeFeedData()
     }
 
-    suspend fun insertWatchListData(watchListEntity: WatchListEntity){
-        movieDao.insertWatchListData(watchListEntity)
+    suspend fun insertWatchListData(idAndMovieResult: IdAndMovieResult){
+        movieDao.insertWatchListData(idAndMovieResult)
     }
 
     suspend fun deleteWatchListData(watchListEntity: WatchListEntity){
@@ -30,8 +31,8 @@ class LocalDataSource @Inject constructor(private val movieDao: MovieDao) {
         return movieDao.getAllWatchListData()
     }
 
-    suspend fun insertFavMovie(favouritesEntity: FavouritesEntity){
-        movieDao.insertFavMovie(favouritesEntity)
+    suspend fun insertFavMovie(idAndMovieResult: IdAndMovieResult){
+        movieDao.insertFavMovie(idAndMovieResult)
     }
 
     suspend fun deleteFavMovie(favouritesEntity: FavouritesEntity){

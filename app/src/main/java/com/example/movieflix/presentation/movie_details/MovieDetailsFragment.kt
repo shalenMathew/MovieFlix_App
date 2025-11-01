@@ -841,7 +841,7 @@ class MovieDetailsFragment : BottomSheetDialogFragment(){
 
     private fun hideKeyboard(view: View) {
         val imm = requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        imm.hideSoftInputFromWindow(view.windowToken, InputMethodManager.RESULT_UNCHANGED_SHOWN)
+        imm.hideSoftInputFromWindow(view.windowToken, 0)
     }
 
     private fun showKeyboard(view: View) {
