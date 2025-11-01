@@ -32,6 +32,13 @@ android {
 
     }
 
+    dependenciesInfo {
+        // Disables dependency metadata when building APKs.
+        includeInApk = false
+        // Disables dependency metadata when building Android App Bundles.
+        includeInBundle = false
+    }
+
     buildTypes {
         release {
             buildConfigField("String", "MOVIE_API_KEY", movieApiKey)
