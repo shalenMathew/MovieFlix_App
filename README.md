@@ -37,13 +37,12 @@ Create aesthetic movie cards to share like Spotify songs, manage your watchlist,
 
 ## Features ⚙️
 
-- Discover new upcoming movies and show
+- Discover movies and show
 - Offline support
-- Get Random Movie Recommendation
-- Can save movie in your watchlist
+- Save Movies in WatchList & Favourites
 - Share with your family & friends
 - Watch Movie Trailer
-- Can Search for your favourite movies and shows
+- Search for your favourite movies and shows
 
 ## 🚀 Roadmap
 
