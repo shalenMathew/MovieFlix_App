@@ -18,7 +18,7 @@ android {
 
     val movieApiKey = properties.getProperty("movieApiKey")
 
-    namespace = "com.example.movieflix"
+    namespace = "com.shalenmathew.movieflix"
     compileSdk = 36
 
     defaultConfig {

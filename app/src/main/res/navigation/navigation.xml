@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/splashFragment"
-        android:name="com.example.movieflix.presentation.splash.SplashFragment"
+        android:name="com.shalenmathew.movieflix.presentation.splash.SplashFragment"
         android:label="SplashFragment" >
         <action
             android:id="@+id/action_splashFragment_to_introFragment"
@@ -25,7 +25,7 @@
 
     <fragment
         android:id="@+id/introFragment"
-        android:name="com.example.movieflix.presentation.intro.IntroFragment"
+        android:name="com.shalenmathew.movieflix.presentation.intro.IntroFragment"
         android:label="fragment_intro"
         tools:layout="@layout/fragment_intro" >
         <action
@@ -36,7 +36,7 @@
     
     <fragment
         android:id="@+id/homeFragment"
-        android:name="com.example.movieflix.presentation.home.HomeFragment"
+        android:name="com.shalenmathew.movieflix.presentation.home.HomeFragment"
         android:label="fragment_home"
         tools:layout="@layout/fragment_home" >
         <action
@@ -46,7 +46,7 @@
     
     <dialog
         android:id="@+id/movieDetailsFragment"
-        android:name="com.example.movieflix.presentation.movie_details.MovieDetailsFragment"
+        android:name="com.shalenmathew.movieflix.presentation.movie_details.MovieDetailsFragment"
         android:label="fragment_movie_details"
         tools:layout="@layout/fragment_movie_details" >
         <action
@@ -56,7 +56,7 @@
     
     <fragment
         android:id="@+id/searchFragment"
-        android:name="com.example.movieflix.presentation.search.SearchFragment"
+        android:name="com.shalenmathew.movieflix.presentation.search.SearchFragment"
         android:label="fragment_search"
         tools:layout="@layout/fragment_search" >
         <action
@@ -66,7 +66,7 @@
     
     <fragment
         android:id="@+id/watchListFragment"
-        android:name="com.example.movieflix.presentation.watchlist.WatchListFragment"
+        android:name="com.shalenmathew.movieflix.presentation.watchlist.WatchListFragment"
         android:label="fragment_watch_list"
         tools:layout="@layout/fragment_watch_list" >
         <action
@@ -76,7 +76,7 @@
 
     <fragment
         android:id="@+id/libraryFragment"
-        android:name="com.example.movieflix.library.LibraryFragment"
+        android:name="com.shalenmathew.movieflix.library.LibraryFragment"
         android:label="fragment_library"
         tools:layout="@layout/fragment_library">
         <action
