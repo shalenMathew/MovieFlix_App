@@ -5,7 +5,7 @@ import androidx.room.Room
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.example.movieflix.core.utils.Constants
-import com.example.movieflix.core.utils.MIGRATION
+import com.example.movieflix.core.utils.MIGRATION_3_4
 import com.example.movieflix.core.utils.MIGRATION_3_5
 import com.example.movieflix.core.utils.MIGRATION_4_5
 import com.example.movieflix.core.utils.MIGRATION_5_6
@@ -51,7 +51,7 @@ class ScheduledMovieWorker(
                     MovieDatabase::class.java,
                     Constants.DATABASE_NAME
                 )
-                .addMigrations(MIGRATION, MIGRATION_3_5, MIGRATION_4_5, MIGRATION_5_6)
+                .addMigrations(MIGRATION_3_4, MIGRATION_3_5, MIGRATION_4_5, MIGRATION_5_6)
                 .build()
                 
                 val scheduledEntity = database.dao.getScheduledMovieById(movieId)

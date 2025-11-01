@@ -121,7 +121,7 @@ fun getRandomChar(): String {
     return alphabet.random().toString()
 }
 
-val MIGRATION = object : Migration(3, 4) {
+val MIGRATION_3_4 = object : Migration(3, 4) {
     override fun migrate(db: SupportSQLiteDatabase) {
 
         db.execSQL("ALTER TABLE watch_list_news_table RENAME TO watch_list_table")
