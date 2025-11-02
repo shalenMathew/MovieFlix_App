@@ -10,4 +10,5 @@
     <string name="watch_provider_logo">Watch provider logo</string>
     <string name="where_to_watch">Available On</string>
     <string name="no_streaming_info">No streaming information available</string>
+    <string name="release_date">Release Date: %1$s</string>
 </resources>

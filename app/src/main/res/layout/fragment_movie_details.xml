@@ -339,6 +339,17 @@
                 tools:text="Action • Adventure • Comedy • Scifi" />
 
             <TextView
+                android:id="@+id/fragment_movie_details_release_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_5sdp"
+                android:fontFamily="@font/montserrat_light"
+                android:textColor="@color/white"
+                android:textSize="@dimen/_8sdp"
+                android:layout_marginTop="@dimen/_2sdp"
+                tools:text="Release Date: 2025-01-05" />
+
+            <TextView
                 android:id="@+id/fragment_movie_details_overview"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

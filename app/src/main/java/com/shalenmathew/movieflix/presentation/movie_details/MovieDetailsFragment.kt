@@ -1170,7 +1170,7 @@ class MovieDetailsFragment : BottomSheetDialogFragment(){
             val rating = it.voteAverage
             val year = it.releaseDate
             val img = it.backdropPath
-
+            val releaseDate = it.releaseDate
 
             binding.apply {
                 fragmentMovieDetailsTitle.text = title
@@ -1182,6 +1182,7 @@ class MovieDetailsFragment : BottomSheetDialogFragment(){
                 overView?.let { setExpandableText(fragmentMovieDetailsOverview, it) }
                 fragmentMovieDetailsRating.text = String.format("%.1f", rating)
                 fragmentMovieDetailsYear.text = formatDate(year)
+                fragmentMovieDetailsReleaseDate.text = getString(R.string.release_date, releaseDate)
             }
 
             mediaId?.let { id ->
