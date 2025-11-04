@@ -347,6 +347,7 @@
                 android:textColor="@color/white"
                 android:textSize="@dimen/_8sdp"
                 android:layout_marginTop="@dimen/_2sdp"
+                android:visibility="gone"
                 tools:text="Release Date: 2025-01-05" />
 
             <TextView
