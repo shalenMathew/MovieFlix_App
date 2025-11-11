@@ -51,7 +51,7 @@ class ScheduledMovieWorker(
                     MovieDatabase::class.java,
                     Constants.DATABASE_NAME
                 )
-                .addMigrations(MIGRATION_3_4, MIGRATION_3_5, MIGRATION_4_5, MIGRATION_5_6)
+                .addMigrations(MIGRATION_3_4, MIGRATION_4_5, MIGRATION_5_6)
                 .build()
                 
                 val scheduledEntity = database.dao.getScheduledMovieById(movieId)
