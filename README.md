@@ -10,6 +10,7 @@
 Create aesthetic movie cards to share like Spotify songs, manage your watchlist, track episode-by-episode progress, dive deep into cast filmographies, and maintain your personal movie diary—all in one beautifully designed Android app powered by TMDB API.
 
 ### Get From
+> [<img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png" height="80">](https://f-droid.org/en/packages/com.shalenmathew.movieflix)
 > [<img src="https://gitlab.com/IzzyOnDroid/repo/-/raw/master/assets/IzzyOnDroid.png" height="80">](https://apt.izzysoft.de/packages/com.shalenmathew.movieflix)
 > [<img src="https://github.com/vishal2376/snaptick/assets/38159691/f502e2ec-dbf4-4ed6-b23f-a47b74080fea" height="80">](https://github.com/shalenMathew/MovieFlix_App/releases)
 
