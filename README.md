@@ -60,17 +60,18 @@ MovieFlix is actively under development. Here's what's coming next:
 - [x] ~~Show whole cast working in a movie with their socials~~
 
 ## Built With 🛠
-- Kotlin
-- Flow
-- Coroutines
-- LiveData
-- Clean Architecture(MVVM)
-- DataBinding
-- Hilt
-- XML
-- Glide
-- Room
-- Retrofit
+- **Kotlin**: primary language for modern Android development  
+- **Flow & Coroutines**: asynchronous and reactive programming for smooth, non-blocking operations  
+- **LiveData**: lifecycle-aware observable data holder for UI updates  
+- **Clean Architecture (MVVM)**: separation of concerns between UI, business logic, and data  
+- **DataBinding**: binding UI components directly to data sources  
+- **Hilt**: dependency injection for modular and testable code  
+- **XML**: traditional Android UI layout framework  
+- **Glide**: image loading and caching library  
+- **Room**: local database for offline-first persistence  
+- **Retrofit**: networking and API integration
+- **WorkManager**: periodic background tasks (app uses this send you notification)
+- - **Notifications**: schedule alerts for movies at the chosen time
 
 ## Contribution/Issues 🤝
 - If your new to open source and want to play around with contribution you can do it here or u can raise issue if you want to make any improvements or fix any bugs
