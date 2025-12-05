@@ -32,10 +32,23 @@ Create aesthetic movie cards to share like Spotify songs, manage your watchlist,
 | ![ps1](https://github.com/user-attachments/assets/fbda1306-fe35-46ad-a38d-c8e164ec6a94) | ![ps2](https://github.com/user-attachments/assets/4675976f-9d32-4c33-8f3c-d2e42f591b96) |
 |:-----------------------------------------------------------------------------------------|:---------------------------------------------------------------------------------------:|
 | ![ps3](https://github.com/user-attachments/assets/fd008344-126a-49ae-9699-da5092f9d291)  | ![ps4](https://github.com/user-attachments/assets/d667ee51-0e1e-481b-b66f-0f970506a335)  |
- 
+
+
+ ## Built With 🛠
+- **Kotlin**: primary language for modern Android development  
+- **Flow & Coroutines**: asynchronous and reactive programming for smooth, non-blocking operations  
+- **LiveData**: lifecycle-aware observable data holder for UI updates  
+- **Clean Architecture (MVVM)**: separation of concerns between UI, business logic, and data  
+- **DataBinding**: binding UI components directly to data sources  
+- **Hilt**: dependency injection for modular and testable code  
+- **XML**: traditional Android UI layout framework  
+- **Glide**: image loading and caching library  
+- **Room**: local database for offline-first persistence  
+- **Retrofit**: networking and API integration
+- **WorkManager**: periodic background tasks (app uses this send you notification)
+- **Notifications**: schedule alerts for movies at the chosen time
 
 ## Features ⚙️
-
 - Discover movies and show
 - Offline support
 - Save Movies in WatchList & Favourites
@@ -60,19 +73,6 @@ MovieFlix is actively under development. Here's what's coming next:
 - [x] ~~Add bottom nav~~
 - [x] ~~Show whole cast working in a movie with their socials~~
 
-## Built With 🛠
-- **Kotlin**: primary language for modern Android development  
-- **Flow & Coroutines**: asynchronous and reactive programming for smooth, non-blocking operations  
-- **LiveData**: lifecycle-aware observable data holder for UI updates  
-- **Clean Architecture (MVVM)**: separation of concerns between UI, business logic, and data  
-- **DataBinding**: binding UI components directly to data sources  
-- **Hilt**: dependency injection for modular and testable code  
-- **XML**: traditional Android UI layout framework  
-- **Glide**: image loading and caching library  
-- **Room**: local database for offline-first persistence  
-- **Retrofit**: networking and API integration
-- **WorkManager**: periodic background tasks (app uses this send you notification)
-- - **Notifications**: schedule alerts for movies at the chosen time
 
 ## Contribution/Issues 🤝
 - If your new to open source and want to play around with contribution you can do it here or u can raise issue if you want to make any improvements or fix any bugs
