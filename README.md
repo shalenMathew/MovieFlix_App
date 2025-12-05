@@ -52,6 +52,7 @@ MovieFlix is actively under development. Here's what's coming next:
 
 - [ ] Add episodes list in the app and the ability to strike them once completed
 - [ ] Add a progress tracker to track movies or series
+- [ ] share ur Fav movies & show just like Spotify-themed card or stickers
 - [x] ~~Bring watchlist and favorites under one screen~~
 - [x] ~~Feature to add personal notes under movies~~
 - [x] ~~Add pagination feature on list of movies on HomeFeed~~
