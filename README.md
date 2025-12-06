@@ -81,7 +81,7 @@ MovieFlix is actively under development. Here's what's coming next:
   ### How to build the project :
   - Clone the project
   - Get your api key from TMDb website
-  - in the project folder in locoal.properties save ur api key in movieApiKey field , just like this movieApiKey="your_actual_api_key_here"
+  - in the project folder in local.properties save your api key in movieApiKey field , just like this movieApiKey="your_actual_api_key_here"
 
   ### Contribution Guide 🚀:
  - Check open issues labeled "good first issue", or "help wanted". If your idea’s not there, open a new issue and let’s chat about it first.
