@@ -76,7 +76,7 @@
 
     <fragment
         android:id="@+id/libraryFragment"
-        android:name="com.shalenmathew.movieflix.library.LibraryFragment"
+        android:name="com.shalenmathew.movieflix.presentation.library.LibraryFragment"
         android:label="fragment_library"
         tools:layout="@layout/fragment_library">
         <action

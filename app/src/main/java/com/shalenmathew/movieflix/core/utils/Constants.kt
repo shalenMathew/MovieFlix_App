@@ -34,4 +34,7 @@ object Constants {
     const val FAVOURITES_TABLE_NAME="favorites_movies_table"
     const val SCHEDULED_TABLE_NAME="scheduled_movies_table"
 
+    // Library constants
+    const val WATCHLIST = "Watchlist"
+    const val FAVORITES = "Favorites"
 }

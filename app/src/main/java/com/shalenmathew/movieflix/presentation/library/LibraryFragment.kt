@@ -1,15 +1,20 @@
-package com.shalenmathew.movieflix.library
+package com.shalenmathew.movieflix.presentation.library
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.viewpager2.adapter.FragmentStateAdapter
+import com.google.android.material.tabs.TabLayout
+import com.google.android.material.tabs.TabLayoutMediator
+import com.shalenmathew.movieflix.core.utils.Constants.FAVORITES
+import com.shalenmathew.movieflix.core.utils.Constants.WATCHLIST
 import com.shalenmathew.movieflix.databinding.FragmentLibraryBinding
 import com.shalenmathew.movieflix.presentation.favorites.FavFragment
+import com.shalenmathew.movieflix.presentation.viewmodels.LibraryViewModel
 import com.shalenmathew.movieflix.presentation.watchlist.WatchListFragment
-import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -17,6 +22,8 @@ class LibraryFragment : Fragment() {
 
     private var _binding: FragmentLibraryBinding? = null
     private val binding get() = _binding!!
+
+    private val libraryViewModel: LibraryViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -36,11 +43,23 @@ class LibraryFragment : Fragment() {
         // Attach TabLayout
         TabLayoutMediator(binding.tabLayout, binding.viewPager) { tab, position ->
             tab.text = when (position) {
-                0 -> "Watchlist"
-                1 -> "Favorites"
+                0 -> WATCHLIST
+                1 -> FAVORITES
                 else -> ""
             }
         }.attach()
+
+        val selectedTab = libraryViewModel.selectedTab.value ?: 0
+        binding.viewPager.currentItem = selectedTab
+
+        // Listen for tab changes
+        binding.tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+            override fun onTabSelected(tab: TabLayout.Tab?) {
+                libraryViewModel.setSelectedTab(tab?.position ?: 0)
+            }
+            override fun onTabUnselected(tab: TabLayout.Tab?) {}
+            override fun onTabReselected(tab: TabLayout.Tab?) {}
+        })
     }
 
     override fun onDestroyView() {
