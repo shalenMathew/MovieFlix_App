@@ -1,4 +1,4 @@
-package com.shalenmathew.movieflix.library
+package com.shalenmathew.movieflix.presentation.library
 
 import android.os.Bundle
 import android.view.LayoutInflater
