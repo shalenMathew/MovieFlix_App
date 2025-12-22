@@ -5,6 +5,7 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import kotlinx.coroutines.flow.map
 
@@ -14,6 +15,7 @@ private val Context.userDatastore:DataStore<Preferences> by preferencesDataStore
 // in simple words making Context to extend it in this way we made createDataStore a property of Context
 
 val IS_INTRO_COMPLETED = booleanPreferencesKey("IS_INTRO_COMPLETED")
+val LAST_SELECTED_LIBRARY_TAB = intPreferencesKey("LAST_SELECTED_LIBRARY_TAB")
 
 object DataStoreReference{
 
@@ -27,5 +29,15 @@ object DataStoreReference{
   fun isIntroCompleted(context: Context)=context.userDatastore.data.map {
         it[IS_INTRO_COMPLETED]?:false
       // datastore returns flow
+    }
+
+    suspend fun setLastSelectedLibraryTab(context: Context, value: Int) {
+        context.userDatastore.edit {
+            it[LAST_SELECTED_LIBRARY_TAB] = value
+        }
+    }
+
+    fun getLastSelectedLibraryTab(context: Context) = context.userDatastore.data.map {
+        it[LAST_SELECTED_LIBRARY_TAB] ?: 0
     }
 }
