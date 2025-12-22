@@ -168,22 +168,6 @@ class HomeInfoViewModel @Inject constructor(private val getMovieInfo: GetMovieIn
         }
     }
 
-    fun getMovieCrew(movieId: Int) {
-        viewModelScope.launch {
-            getMovieInfo.getMovieCrew(movieId).onEach {
-                _crewList.value = it
-            }.launchIn(this)
-        }
-    }
-
-    fun getTVCrew(tvId: Int) {
-        viewModelScope.launch {
-            getMovieInfo.getTVCrew(tvId).onEach {
-                _crewList.value = it
-            }.launchIn(this)
-        }
-    }
-
     fun getTVDetail(tvId: Int) {
         viewModelScope.launch {
             getMovieInfo.getTVDetail(tvId).onEach {
