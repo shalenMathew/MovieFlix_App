@@ -22,9 +22,48 @@
             android:paddingTop="8dp"
             android:paddingBottom="8dp"/>
 
+        <RelativeLayout
+            android:id="@+id/fragment_search_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/gradient_top"
+           >
+
+        <EditText
+
+            android:layout_marginStart="2dp"
+            android:layout_marginEnd="2dp"
+            android:id="@+id/fragmentLibrarySearchEt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Search..."
+            android:textColorHint="@color/white"
+            android:padding="12dp"
+            android:fontFamily="@font/montserrat_medium"
+            android:imeOptions="actionSearch"
+            android:lines="1"
+            android:textSize="@dimen/_12sdp"
+            android:inputType="text"
+            android:background="@drawable/search_et_background"
+            />
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/ic_nav_search_24"
+                android:scaleType="centerCrop"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="35dp"
+                android:layout_centerVertical="true"
+                />
+    </RelativeLayout>
+
+
+
         <androidx.viewpager2.widget.ViewPager2
             android:id="@+id/viewPager"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
+
     </LinearLayout>
 </layout>
