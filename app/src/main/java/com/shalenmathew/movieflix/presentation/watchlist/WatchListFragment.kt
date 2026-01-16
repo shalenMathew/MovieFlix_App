@@ -98,15 +98,28 @@ class WatchListFragment : Fragment() {
     }
 
     private fun submitAndToggle(list: List<WatchListEntity>) {
+        val query = librarySearchVm.searchQuery.value
+
         if (list.isNotEmpty()) {
             adapter.submitList(list)
             binding.fragmentWatchListRv.visible()
             binding.fragmentWatchListPlaceholder.gone()
             binding.randomEmoji.gone()
-        } else {
+        }
+        else {
+            adapter.submitList(emptyList())
             binding.fragmentWatchListRv.gone()
-            binding.fragmentWatchListPlaceholder.visible()
-            binding.randomEmoji.gone()
+
+            if (query.isBlank()) {
+                binding.tvNoResult.gone()
+                binding.fragmentWatchListPlaceholder.visible()
+                binding.randomEmoji.visible()
+            }
+            else {
+                binding.tvNoResult.visible()
+                binding.fragmentWatchListPlaceholder.gone()
+                binding.randomEmoji.gone()
+            }
         }
     }
 

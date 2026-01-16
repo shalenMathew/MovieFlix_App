@@ -95,15 +95,27 @@ class FavFragment : Fragment() {
     }
 
     private fun submitAndToggle(list: List<FavouritesEntity>) {
+        val query = librarySearchVm.searchQuery.value
+
         if (list.isNotEmpty()) {
             adapter.submitList(list)
             binding.fragmentFavRv.visible()
             binding.fragmentFavPlaceholder.gone()
             binding.randomEmoji.gone()
         } else {
+            adapter.submitList(emptyList())
             binding.fragmentFavRv.gone()
-            binding.fragmentFavPlaceholder.visible()
-            binding.randomEmoji.gone()
+
+            if (query.isBlank()) {
+                binding.tvNoResult.gone()
+                binding.fragmentFavPlaceholder.visible()
+                binding.randomEmoji.visible()
+            }
+            else {
+                binding.tvNoResult.visible()
+                binding.fragmentFavPlaceholder.gone()
+                binding.randomEmoji.gone()
+            }
         }
     }
 

@@ -95,8 +95,20 @@
             />
       </RelativeLayout>
 
-    </LinearLayout>
+      <TextView
+          android:id="@+id/tvNoResult"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:text="No movie found"
+          android:textSize="16sp"
+          android:textStyle="bold"
+          android:textColor="@android:color/white"
+          android:gravity="center"
+          android:visibility="gone"
+          android:layout_gravity="center"/>
 
+
+    </LinearLayout>
 
   </androidx.constraintlayout.widget.ConstraintLayout>
 
