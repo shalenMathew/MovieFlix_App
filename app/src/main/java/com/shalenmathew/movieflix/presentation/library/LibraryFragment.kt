@@ -4,7 +4,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.google.android.material.tabs.TabLayout
@@ -13,8 +15,12 @@ import com.shalenmathew.movieflix.presentation.favorites.FavFragment
 import com.shalenmathew.movieflix.presentation.watchlist.WatchListFragment
 import com.google.android.material.tabs.TabLayoutMediator
 import com.shalenmathew.movieflix.core.utils.DataStoreReference
+import com.shalenmathew.movieflix.presentation.viewmodels.LibrarySearchViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
@@ -23,6 +29,8 @@ class LibraryFragment : Fragment() {
 
     private var _binding: FragmentLibraryBinding? = null
     private val binding get() = _binding!!
+    private val librarySearchVm: LibrarySearchViewModel by activityViewModels()
+    private var searchJob: Job? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -51,6 +59,21 @@ class LibraryFragment : Fragment() {
                     else -> ""
                 }
             }.attach()
+
+            binding.fragmentLibrarySearchEt.doOnTextChanged { text, _, _, _ ->
+                searchJob?.cancel()
+                searchJob = MainScope().launch {
+                    delay(500)
+                    librarySearchVm.setQuery(text?.toString()?.trim() ?: "")
+                }
+
+                if (text.isNullOrBlank()) {
+                    searchJob?.cancel()
+                    librarySearchVm.setQuery("")
+                }
+            }
+
+
         }
 
         // Listen for tab changes
