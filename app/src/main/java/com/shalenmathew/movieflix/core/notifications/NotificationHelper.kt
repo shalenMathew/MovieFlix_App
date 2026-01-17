@@ -89,7 +89,7 @@ object NotificationHelper {
             // Fallback to text style if image fails to load
             notificationBuilder.setStyle(
                 NotificationCompat.BigTextStyle()
-                    .bigText("Your scheduled movie/show \"$movieTitle\" is ready to watch! Open the app to start watching.")
+                    .bigText("Your scheduled movie/show \"$movieTitle\" is ready to watch! Open the app to start tracking.")
             )
         }
 
