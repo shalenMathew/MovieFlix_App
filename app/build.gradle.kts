@@ -77,6 +77,19 @@ android {
         abortOnError = false
     }
 
+
+    testOptions {
+        unitTests.isReturnDefaultValues = true
+    }
+
+}
+
+tasks.withType<Test> {
+    testLogging {
+        events("passed", "skipped", "failed", "standardOut", "standardError")
+        showStackTraces = true
+        exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
+    }
 }
 
 dependencies {
@@ -145,5 +158,16 @@ dependencies {
 
     // WorkManager for scheduled notifications
     implementation ("androidx.work:work-runtime-ktx:2.10.0")
+
+
+    // mockito
+    testImplementation("org.mockito:mockito-core:5.18.0")
+    testImplementation("org.mockito.kotlin:mockito-kotlin:5.4.0")
+    testImplementation("com.squareup.okhttp3:mockwebserver:5.0.0-alpha.17")
+// Coroutines test
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.10.2")
+// this below kotlin imports are necessary for the assertEquals to work
+    testImplementation ("org.jetbrains.kotlin:kotlin-test")
+    testImplementation ("org.jetbrains.kotlin:kotlin-test-junit")
 
 }

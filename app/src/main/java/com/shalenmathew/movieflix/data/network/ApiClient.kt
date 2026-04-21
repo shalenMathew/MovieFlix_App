@@ -74,7 +74,7 @@ interface ApiClient {
         @Query("region") region: String = "IN",
         @Query("with_release_type") releaseType: String = "3|2",
         @Query("watch_region") watchRegion: String = "IN",
-        @Query("language") lang: String? = "hi-IN",
+        @Query("language") lang: String? = "en-IN",
         @Query("with_original_language") origLang: String = "hi",
     ): Response<MovieResponseList>
 
