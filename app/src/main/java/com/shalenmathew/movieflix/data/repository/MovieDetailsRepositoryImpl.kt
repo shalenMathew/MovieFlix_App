@@ -1,6 +1,7 @@
 package com.shalenmathew.movieflix.data.repository
 
 import android.app.Application
+import android.content.Context
 import com.shalenmathew.movieflix.core.utils.Constants
 import com.shalenmathew.movieflix.core.utils.NetworkResults
 import com.shalenmathew.movieflix.core.utils.isNetworkAvailable
@@ -26,7 +27,8 @@ import java.io.IOException
 class MovieDetailsRepositoryImpl(
     private val remoteDataSource: RemoteDataSource,
     private val localDataSource: LocalDataSource,
-    private val appContext:Application
+    private val appContext:Application,
+    private val networkChecker: (Context?) -> Boolean = ::isNetworkAvailable
 ):MovieInfoRepository {
 
     private lateinit var  homeFeedResponse: HomeFeedDataResponse
@@ -35,7 +37,7 @@ class MovieDetailsRepositoryImpl(
         emit(NetworkResults.Loading())
 
         try {
-            if (isNetworkAvailable(appContext)){
+            if (networkChecker(appContext)){
 
                 withContext(Dispatchers.IO){
                     // async returns a Deferred object, which represents a future result12. This means the result of the async
@@ -160,7 +162,7 @@ class MovieDetailsRepositoryImpl(
     override fun getRecommendation(movieId: Int): Flow<NetworkResults<MovieList>> = flow {
         emit(NetworkResults.Loading())
         try {
-            if (isNetworkAvailable(appContext)){
+            if (networkChecker(appContext)){
 
                 val response = remoteDataSource.getRecommendation(movieId)
                 emit(NetworkResults.Success(response.body()?.toMovieList()))
@@ -182,7 +184,7 @@ class MovieDetailsRepositoryImpl(
     override fun getWhereToWatchProvider(movieId: Int): Flow<NetworkResults<WatchProviders>> =flow{
 
       try {
-          if (isNetworkAvailable(appContext)){
+          if (networkChecker(appContext)){
               val whereToWatchResponse = remoteDataSource.getWhereToWatchProviders(movieId)
               emit(NetworkResults.Success(whereToWatchResponse.body()?.toWatchProviders()))
           }
@@ -201,7 +203,7 @@ class MovieDetailsRepositoryImpl(
     override fun getTVWhereToWatchProvider(tvId: Int): Flow<NetworkResults<WatchProviders>> =flow{
 
       try {
-          if (isNetworkAvailable(appContext)){
+          if (networkChecker(appContext)){
               val whereToWatchResponse = remoteDataSource.getTVWatchProviders(tvId)
               emit(NetworkResults.Success(whereToWatchResponse.body()?.toWatchProviders()))
           }
@@ -221,7 +223,7 @@ class MovieDetailsRepositoryImpl(
         emit(NetworkResults.Loading())
 
         try {
-            if (isNetworkAvailable(appContext)) {
+            if (networkChecker(appContext)) {
                 val response = when (categoryTitle) {
                     Constants.UPCOMING_MOVIES -> remoteDataSource.getUpcomingMovies(page)
                     Constants.TRENDING_MOVIES -> remoteDataSource.getTrendingMovies(page)
@@ -255,7 +257,7 @@ class MovieDetailsRepositoryImpl(
     override fun getMovieCast(movieId: Int): Flow<NetworkResults<List<CastMember>>> = flow {
         emit(NetworkResults.Loading())
         try {
-            if (isNetworkAvailable(appContext)) {
+            if (networkChecker(appContext)) {
                 val castResponse = remoteDataSource.getMovieCast(movieId)
                 castResponse.body()?.let { response ->
                     val castList = response.cast?.take(10)?.mapNotNull { cast ->
@@ -288,7 +290,7 @@ class MovieDetailsRepositoryImpl(
     override fun getTVCast(tvId: Int): Flow<NetworkResults<List<CastMember>>> = flow {
         emit(NetworkResults.Loading())
         try {
-            if (isNetworkAvailable(appContext)) {
+            if (networkChecker(appContext)) {
                 val castResponse = remoteDataSource.getTVCast(tvId)
                 castResponse.body()?.let { response ->
                     val castList = response.cast?.take(10)?.mapNotNull { cast ->
@@ -321,7 +323,7 @@ class MovieDetailsRepositoryImpl(
     override fun getMovieCrew(movieId: Int): Flow<NetworkResults<List<CrewMember>>> = flow {
         emit(NetworkResults.Loading())
         try {
-            if (isNetworkAvailable(appContext)) {
+            if (networkChecker(appContext)) {
                 val castResponse = remoteDataSource.getMovieCast(movieId)
                 castResponse.body()?.let { response ->
                     // Filter for Director, Writer, and Producer
@@ -357,7 +359,7 @@ class MovieDetailsRepositoryImpl(
     override fun getTVCrew(tvId: Int): Flow<NetworkResults<List<CrewMember>>> = flow {
         emit(NetworkResults.Loading())
         try {
-            if (isNetworkAvailable(appContext)) {
+            if (networkChecker(appContext)) {
                 val castResponse = remoteDataSource.getTVCast(tvId)
                 castResponse.body()?.let { response ->
                     // Filter for Director, Writer, and Producer
@@ -393,7 +395,7 @@ class MovieDetailsRepositoryImpl(
     override fun getTVDetail(tvId: Int): Flow<NetworkResults<com.shalenmathew.movieflix.domain.model.TVDetail>> = flow {
         emit(NetworkResults.Loading())
         try {
-            if (isNetworkAvailable(appContext)) {
+            if (networkChecker(appContext)) {
                 val tvDetailResponse = remoteDataSource.getTVDetail(tvId)
                 tvDetailResponse.body()?.let { response ->
                     emit(NetworkResults.Success(response.toTVDetail()))
@@ -412,7 +414,7 @@ class MovieDetailsRepositoryImpl(
     override fun getTVSeason(tvId: Int, seasonNumber: Int): Flow<NetworkResults<com.shalenmathew.movieflix.domain.model.TVSeason>> = flow {
         emit(NetworkResults.Loading())
         try {
-            if (isNetworkAvailable(appContext)) {
+            if (networkChecker(appContext)) {
                 val seasonResponse = remoteDataSource.getTVSeason(tvId, seasonNumber)
                 seasonResponse.body()?.let { response ->
                     emit(NetworkResults.Success(response.toTVSeason()))
