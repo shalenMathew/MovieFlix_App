@@ -159,6 +159,7 @@ dependencies {
 
     // WorkManager for scheduled notifications
     implementation ("androidx.work:work-runtime-ktx:2.10.0")
+    androidTestImplementation("androidx.work:work-testing:2.10.0")
 
 
     // mockito

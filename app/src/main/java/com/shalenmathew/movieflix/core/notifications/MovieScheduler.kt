@@ -27,8 +27,8 @@ class MovieScheduler @Inject constructor(
         val movieResultJson = Gson().toJson(movieResult)
         
         // Construct full poster URL for notification image
-        val posterUrl = movieResult.posterPath?.let { 
-            Constants.TMDB_IMAGE_BASE_URL_W780 + it 
+        val posterUrl = movieResult.backdropPath?.let {
+            Constants.TMDB_IMAGE_BASE_URL_W500 + it
         }
         
         val inputData = Data.Builder()

@@ -4,11 +4,15 @@ import android.content.Context
 import androidx.room.Room
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
+import com.google.gson.Gson
 import com.shalenmathew.movieflix.core.utils.Constants
+import com.shalenmathew.movieflix.core.utils.GsonParser
 import com.shalenmathew.movieflix.core.utils.MIGRATION_3_4
 import com.shalenmathew.movieflix.core.utils.MIGRATION_3_5
 import com.shalenmathew.movieflix.core.utils.MIGRATION_4_5
 import com.shalenmathew.movieflix.core.utils.MIGRATION_5_6
+import com.shalenmathew.movieflix.core.utils.MIGRATION_6_7
+import com.shalenmathew.movieflix.data.local_storage.MovieDataTypeConverter
 import com.shalenmathew.movieflix.data.local_storage.MovieDatabase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -51,7 +55,8 @@ class ScheduledMovieWorker(
                     MovieDatabase::class.java,
                     Constants.DATABASE_NAME
                 )
-                .addMigrations(MIGRATION_3_4, MIGRATION_4_5, MIGRATION_5_6)
+                .addTypeConverter(MovieDataTypeConverter(GsonParser(Gson())))
+                .addMigrations(MIGRATION_3_4, MIGRATION_4_5, MIGRATION_5_6, MIGRATION_6_7)
                 .build()
                 
                 val scheduledEntity = database.dao.getScheduledMovieById(movieId)
