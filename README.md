@@ -7,7 +7,7 @@
 
 ### A movie diary for cinephile for tracking every movie and TV show you watch.
 
-Create aesthetic movie cards to share like Spotify songs, manage your watchlist, track episode-by-episode progress, dive deep into cast filmographies, and maintain your personal movie diary—all in one beautifully designed Android app powered by TMDB API.
+Create aesthetic movie cards to share like Spotify songs, manage your watchlist, get episodes list of your fav shows, dive deep into cast filmographies, and maintain your personal movie diary—all in one beautifully designed Android app powered by TMDB API.
 
 ### Get From
 > [<img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png" height="80">](https://f-droid.org/en/packages/com.shalenmathew.movieflix)
