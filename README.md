@@ -1,6 +1,18 @@
 
 # MovieFlix 🍿🎞️🥤
 
+> [!CAUTION]
+> ## [Keep Android Open](https://keepandroidopen.org/)
+> ###  Your phone is about to stop being yours.
+> Starting September 2026, a silent update, nonconsensually pushed by Google, will block every 
+> Android app whose developer hasn't registered with Google, signed their contract, paid up, and 
+> handed over government ID.
+> **Every app and every device, worldwide, with no opt-out.**
+>
+> **This mean you can no longer download your favourite apps from outside playstore**
+>
+> **Your favourite app including this app are in critical situation as their are no plans to launch in playstore soon...**
+
 ![Adobe Express - rec (1)](https://github.com/user-attachments/assets/f7c5b24e-4606-49f3-a809-e9a39c7e6f1b)
 
 
