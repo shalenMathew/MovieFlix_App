@@ -1,6 +1,6 @@
 
 
-name: CI
+name: 🚨 Main WorkFlow
 
 # Controls when the workflow will run
 on:
