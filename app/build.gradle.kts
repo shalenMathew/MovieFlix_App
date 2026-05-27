@@ -12,11 +12,22 @@ plugins {
 
 android {
 
-    val properties = Properties().apply {
-        load(project.rootProject.file("local.properties").inputStream())
-    }
+//    val properties = Properties().apply {
+//        load(project.rootProject.file("local.properties").inputStream())
+//    }
+//
+//    val movieApiKey = properties.getProperty("movieApiKey")
 
-    val movieApiKey = properties.getProperty("movieApiKey")
+    val movieApiKey = System.getenv("MOVIE_API_KEY")
+        ?: project.rootProject.file("local.properties").let { file ->
+            if (file.exists()) {
+                val properties = Properties()
+                properties.load(file.inputStream())
+                properties.getProperty("movieApiKey")
+            }else {
+                ""
+            }
+        } ?: ""
 
     namespace = "com.shalenmathew.movieflix"
     compileSdk = 36
