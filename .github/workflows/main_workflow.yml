@@ -21,6 +21,8 @@ jobs:
   lint:
     name: Lint Checks
     runs-on: ubuntu-latest
+    env:
+      MOVIE_API_KEY: ${{ secrets.MOVIE_API_KEY }} # Available to all steps in this job
 
     steps:
       - uses: actions/checkout@v4
