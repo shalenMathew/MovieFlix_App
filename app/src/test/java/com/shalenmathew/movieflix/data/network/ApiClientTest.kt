@@ -92,7 +92,7 @@ class ApiClientTest {
         val body = response.body()
         assertEquals(1,body?.results?.size)
 
-        assertEquals("Movie1", body?.results?.get(0)?.title)
+        assertEquals("Movie2", body?.results?.get(0)?.title)
 
 
         //checking url path
