@@ -91,10 +91,21 @@ jobs:
 
   instrumentation-test:
 
-    needs: [unit-test]
+    needs: [ unit-test ]
     runs-on: ubuntu-latest
     timeout-minutes: 75
 
+
+    #  matrix is used to define a set of combinations of values (like API level, architecture, device, OS version, etc.)
+    #  so the same job runs multiple times—once for each combination. So basically loops through all combination
+    strategy:
+      fail-fast: false
+      matrix:
+        api-level: [ 30 ]
+        arch: [ x86_64 ]
+        target: [ google_apis ]
+        first-boot-delay: [ 600 ]
+        iteration: [ 0 ]
 
     steps:
 
@@ -155,7 +166,7 @@ jobs:
           key: avd-${{ matrix.api-level }}-${{ matrix.arch }}-${{matrix.target}}-v1-${{ github.event.inputs.clearCaches }}
           restore-keys: |
             avd-${{ matrix.api-level }}-${{ matrix.arch }}-${{matrix.target}}-v1
-
+      
 
       #  Boots the emulator once, warms it up (e.g., first-time setup, Dalvik cache population), then takes a snapshot of that
       #  running emulator state. This snapshot makes future emulator startups much faster
@@ -177,7 +188,7 @@ jobs:
             $ANDROID_HOME/platform-tools/adb logcat '*:D' >> adb-log.txt &
             adb logcat --clear
             echo "Generated AVD snapshot for caching."
-
+      
 
       #  makes the emulator to boot up faster
 
