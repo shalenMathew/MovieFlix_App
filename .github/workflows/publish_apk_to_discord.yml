@@ -44,6 +44,9 @@ jobs:
           embed-title: "✅ New release : A new version of MovieFlix App is live!"
           embed-description: |
               [CLICK TO DOWNLOAD THE APK](${{ env.DOWNLOAD_LINK }})
+            
+              ---
+            
               [View all version in Github](https://github.com/shalenMathew/MovieFlix_App/releases)
           embed-image-url: "https://raw.githubusercontent.com/shalenMathew/MovieFlix_App/refs/heads/master/images/logo.jpg"
           wait: true
