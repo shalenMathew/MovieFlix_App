@@ -12,11 +12,7 @@ plugins {
 
 android {
 
-//    val properties = Properties().apply {
-//        load(project.rootProject.file("local.properties").inputStream())
-//    }
-//
-//    val movieApiKey = properties.getProperty("movieApiKey")
+
 
     val movieApiKey = System.getenv("MOVIE_API_KEY")
         ?: project.rootProject.file("local.properties").let { file ->
