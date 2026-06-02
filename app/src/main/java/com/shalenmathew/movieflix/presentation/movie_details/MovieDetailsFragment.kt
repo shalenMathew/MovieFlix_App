@@ -26,6 +26,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
+import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -110,6 +111,9 @@ class MovieDetailsFragment : BottomSheetDialogFragment() {
     private var availableSeasons =
         mutableListOf<com.shalenmathew.movieflix.domain.model.TVSeasonBasic>()
     private var currentEpisodes = listOf<com.shalenmathew.movieflix.domain.model.TVEpisode>()
+    private var displayedEpisodesCount = 50
+    private val EPISODES_PAGE_SIZE = 50
+    private var isLoadingMoreEpisodes = false
     private var isTVShow = false
     private var tvDetailsLoaded = false
 
@@ -296,6 +300,18 @@ class MovieDetailsFragment : BottomSheetDialogFragment() {
 
         setupTabLayout()
         setupSeasonDropdown()
+
+        binding.movieDetailsNestedScrollView.setOnScrollChangeListener(
+            NestedScrollView.OnScrollChangeListener { v, _, scrollY, _, _ ->
+                val totalScrollableHeight = v.getChildAt(0).measuredHeight
+                val visibleHeight = v.measuredHeight
+                if (scrollY + visibleHeight >= totalScrollableHeight - 300) {
+                    if (binding.episodesSection.visibility == View.VISIBLE && !isLoadingMoreEpisodes) {
+                        loadMoreEpisodes()
+                    }
+                }
+            }
+        )
     }
 
     private fun openDetailFragment(it: MovieResult) {
@@ -607,7 +623,8 @@ class MovieDetailsFragment : BottomSheetDialogFragment() {
                 is NetworkResults.Success -> {
                     result.data?.let { season ->
                         currentEpisodes = season.episodes
-                        episodeAdapter.submitList(season.episodes)
+                        displayedEpisodesCount = EPISODES_PAGE_SIZE
+                        submitEpisodeList()
                     }
                 }
 
@@ -651,6 +668,30 @@ class MovieDetailsFragment : BottomSheetDialogFragment() {
             )
 
         startActivity(intent)
+    }
+
+    private fun submitEpisodeList() {
+        val subset = currentEpisodes.take(displayedEpisodesCount)
+        if (currentEpisodes.size > displayedEpisodesCount) {
+            val listToSubmit = subset.toMutableList<com.shalenmathew.movieflix.domain.model.TVEpisode?>()
+            listToSubmit.add(null)
+            episodeAdapter.submitList(listToSubmit)
+        } else {
+            episodeAdapter.submitList(subset)
+        }
+    }
+
+    private fun loadMoreEpisodes() {
+        if (currentEpisodes.isEmpty()) return
+        if (displayedEpisodesCount >= currentEpisodes.size) return
+
+        isLoadingMoreEpisodes = true
+        view?.postDelayed({
+            if (!isAdded || _binding == null) return@postDelayed
+            displayedEpisodesCount = (displayedEpisodesCount + EPISODES_PAGE_SIZE).coerceAtMost(currentEpisodes.size)
+            submitEpisodeList()
+            isLoadingMoreEpisodes = false
+        }, 350)
     }
 
     private fun loadSeason(seasonNumber: Int) {
