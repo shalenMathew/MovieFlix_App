@@ -43,13 +43,15 @@ class LibraryFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+
+        librarySearchVm.setQuery("")
+
         // Setup ViewPager2
         val adapter = LibraryPagerAdapter(this)
         binding.viewPager.adapter = adapter
 
         lifecycleScope.launch {
             val lastTab = DataStoreReference.getLastSelectedLibraryTab(requireContext()).first()
-
             binding.viewPager.setCurrentItem(lastTab, false)
 
             TabLayoutMediator(binding.tabLayout, binding.viewPager) { tab, position ->
@@ -59,21 +61,19 @@ class LibraryFragment : Fragment() {
                     else -> ""
                 }
             }.attach()
+        }
 
-            binding.fragmentLibrarySearchEt.doOnTextChanged { text, _, _, _ ->
-                searchJob?.cancel()
-                searchJob = MainScope().launch {
-                    delay(500)
-                    librarySearchVm.setQuery(text?.toString()?.trim() ?: "")
-                }
-
-                if (text.isNullOrBlank()) {
-                    searchJob?.cancel()
-                    librarySearchVm.setQuery("")
-                }
+        binding.fragmentLibrarySearchEt.doOnTextChanged { text, _, _, _ ->
+            searchJob?.cancel()
+            searchJob = lifecycleScope.launch {
+                delay(500)
+                librarySearchVm.setQuery(text?.toString()?.trim() ?: "")
             }
 
-
+            if (text.isNullOrBlank()) {
+                searchJob?.cancel()
+                librarySearchVm.setQuery("")
+            }
         }
 
         // Listen for tab changes
