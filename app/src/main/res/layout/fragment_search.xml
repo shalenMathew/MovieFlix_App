@@ -111,9 +111,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_8sdp"
                 android:paddingHorizontal="@dimen/_15sdp"
-                app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 tools:listitem="@layout/item_top_movie"
-
                 />
 
             <androidx.recyclerview.widget.RecyclerView
@@ -125,7 +124,7 @@
                 app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
                 android:paddingStart="@dimen/_5sdp"
                 android:paddingEnd="@dimen/_5sdp"
-                app:spanCount="3"
+                app:spanCount="@integer/grid_span_count"
 
                 />
         </LinearLayout>

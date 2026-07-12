@@ -8,7 +8,7 @@
     <RelativeLayout
         android:id="@+id/banner_item_container"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/_230sdp"
+        android:layout_height="@dimen/banner_height"
         android:background="@color/dark_gray"
         android:orientation="vertical"
         >

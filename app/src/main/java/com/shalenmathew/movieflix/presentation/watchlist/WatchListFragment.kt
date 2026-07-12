@@ -57,7 +57,8 @@ class WatchListFragment : Fragment() {
             bundle.putString(Constants.MEDIA_SEND_REQUEST_KEY, Gson().toJson(it))
             findNavController().navigate(R.id.movieDetailsFragment, bundle)
         })
-        binding.fragmentWatchListRv.layoutManager = GridLayoutManager(requireContext(),3)
+        val spanCount = resources.getInteger(R.integer.grid_span_count)
+        binding.fragmentWatchListRv.layoutManager = GridLayoutManager(requireContext(), spanCount)
         binding.fragmentWatchListRv.adapter = adapter
     }
 
