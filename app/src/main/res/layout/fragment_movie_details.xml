@@ -118,7 +118,7 @@
                 android:id="@+id/fragment_movie_details_yt_card"
                 style="@style/Widget.Material3.CardView.Filled"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/_190sdp"
+                android:layout_height="@dimen/player_height"
                 android:layout_centerInParent="true"
                 app:cardCornerRadius="@dimen/_16sdp"
                 app:cardElevation="0dp">

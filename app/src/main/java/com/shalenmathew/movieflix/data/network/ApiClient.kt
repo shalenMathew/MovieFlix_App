@@ -66,16 +66,13 @@ interface ApiClient {
         @Query("page") page: Int = 1
     ):Response<MovieResponseList>
 
-    @GET("3/discover/movie")
-    suspend fun getBollywoodMoviesApiCall(
-        @Query("sort_by") sortBy: String? = "popularity.desc",
-        @Query("primary_release_date.gte") releaseDateGreaterThan: String = "2012-08-01",
-        @Query("page") page: Int = 1,
-        @Query("region") region: String = "IN",
-        @Query("with_release_type") releaseType: String = "3|2",
-        @Query("watch_region") watchRegion: String = "IN",
-        @Query("language") lang: String? = "en-IN",
-        @Query("with_original_language") origLang: String = "hi",
+    @GET("3/discover/tv")
+    suspend fun getAnimeApiCall(
+        @Query("language") lang: String? = "en-US",
+        @Query("with_genres") genreId: String = "16",
+        @Query("with_keywords") keywords: String = "210024|287501",
+        @Query("sort_by") sortBy: String = "popularity.desc",
+        @Query("page") page: Int = 1
     ): Response<MovieResponseList>
 
     @GET("3/movie/{movie_id}/videos")
