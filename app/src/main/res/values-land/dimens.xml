@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Adjust banner height for landscape so it doesn't take the whole screen -->
     <dimen name="banner_height">@dimen/_150sdp</dimen>
     <dimen name="player_height">@dimen/_140sdp</dimen>
 </resources>

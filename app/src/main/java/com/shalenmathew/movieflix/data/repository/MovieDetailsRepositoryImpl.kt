@@ -50,7 +50,7 @@ class MovieDetailsRepositoryImpl(
                     val topRatedTVListDef =  async { remoteDataSource.getTopRatedTV()}
                     val netflixShowListDef =  async { remoteDataSource.getNetflixShows()}
                     val amazonPrimeShowListDef = async { remoteDataSource.getAmazonPrimeShows() }
-                    val bollywoodMovieListDef =  async { remoteDataSource.getBollywoodMovies() }
+                    val animeListDef = async { remoteDataSource.getAnime() }
                     val movieBannerOnHomeListDef = async { remoteDataSource.getNowPlayingMovies() }
 
 
@@ -77,7 +77,7 @@ class MovieDetailsRepositoryImpl(
                     val topRatedMovieList = topRatedTVListDef.await()
                     val netflixShowList = netflixShowListDef.await()
                     val amazonPrimeShowList = amazonPrimeShowListDef.await()
-                    val bollywoodMoviesList = bollywoodMovieListDef.await()
+                    val animeList = animeListDef.await()
                     val movieBannerOnHomeList = movieBannerOnHomeListDef.await()
 
                     wholeMoviesList.add(HomeFeedResponse(Constants.UPCOMING_MOVIES, upcomingMovieList.body()?.results!!))
@@ -86,7 +86,7 @@ class MovieDetailsRepositoryImpl(
                     wholeMoviesList.add(HomeFeedResponse(Constants.TOP_RATED_MOVIES,topRatedMovieList.body()?.results!!))
                     wholeMoviesList.add(HomeFeedResponse(Constants.NETFLIX_SHOWS,netflixShowList.body()?.results!!))
                     wholeMoviesList.add(HomeFeedResponse(Constants.PRIME_SHOWS,amazonPrimeShowList.body()?.results!!))
-                    wholeMoviesList.add(HomeFeedResponse(Constants.BOLLYWOOD_MOVIES,bollywoodMoviesList.body()?.results!!))
+                    wholeMoviesList.add(HomeFeedResponse(Constants.ANIME_SERIES, animeList.body()?.results!!))
 
 //                     homeFeedResponse = HomeFeedDataResponse(nowPlayingMoviesList.body()?.results!!,wholeMoviesList) // this line of code only makes the
 //                     response from api to work only if there is an internet connection, so below we using local data storage to make
@@ -229,7 +229,7 @@ class MovieDetailsRepositoryImpl(
                     Constants.TRENDING_MOVIES -> remoteDataSource.getTrendingMovies(page)
                     Constants.POPULAR_MOVIES -> remoteDataSource.getPopularMovies(page)
                     Constants.TOP_RATED_MOVIES -> remoteDataSource.getTopRatedTV(page)
-                    Constants.BOLLYWOOD_MOVIES -> remoteDataSource.getBollywoodMovies(page)
+                    Constants.ANIME_SERIES -> remoteDataSource.getAnime(page)
                     Constants.NOW_PLAYING_MOVIES -> remoteDataSource.getNowPlayingMovies(page)
                     Constants.NETFLIX_SHOWS -> remoteDataSource.getNetflixShows(page)
                     Constants.PRIME_SHOWS -> remoteDataSource.getAmazonPrimeShows(page)

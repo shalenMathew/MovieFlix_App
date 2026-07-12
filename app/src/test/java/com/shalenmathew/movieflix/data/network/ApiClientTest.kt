@@ -156,22 +156,20 @@ class ApiClientTest {
 
     // Category C: Verifies that hardcoded complex query parameters and business filters are correct.
     @Test
-    fun `getBollywoodMoviesApiCall sends all complex query parameters`() = runTest {
+    fun `getAnimeApiCall sends all complex query parameters`() = runTest {
         // 1. Prepare
         mockWebServer.enqueue(MockResponse().setResponseCode(200).setBody("{}"))
 
         // 2. Act (Calling with defaults)
-        apiClient.getBollywoodMoviesApiCall()
+        apiClient.getAnimeApiCall()
 
         // 3. Assert (The Spine Check)
         val request = mockWebServer.takeRequest()
         val url = request.requestUrl.toString()
 
-        // Verify the "Magic Strings" that define your Bollywood section
-        assertTrue(url.contains("region=IN"), "Region should be IN")
-        assertTrue(url.contains("with_original_language=hi"), "Original language should be hi")
-        assertTrue(url.contains("language=en-IN"), "Language should be hi-IN")
-        assertTrue(url.contains("primary_release_date.gte=2012-08-01"), "Release date filter missing")
+        assertTrue(url.contains("with_genres=16"), "Genre should be 16 (Animation)")
+        assertTrue(url.contains("with_keywords=210024"), "Anime keyword missing")
+        assertTrue(url.contains("sort_by=popularity.desc"), "Sort by popularity missing")
     }
 
 

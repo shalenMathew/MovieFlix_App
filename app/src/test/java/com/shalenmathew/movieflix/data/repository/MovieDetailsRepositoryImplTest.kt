@@ -63,7 +63,7 @@ class MovieDetailsRepositoryImplTest {
         whenever(remoteDataSource.getTopRatedTV()).thenReturn(successResponse)
         whenever(remoteDataSource.getNetflixShows()).thenReturn(successResponse)
         whenever(remoteDataSource.getAmazonPrimeShows()).thenReturn(successResponse)
-        whenever(remoteDataSource.getBollywoodMovies()).thenReturn(successResponse)
+        whenever(remoteDataSource.getAnime()).thenReturn(successResponse)
         whenever(remoteDataSource.getNowPlayingMovies()).thenReturn(successResponse)
 
 

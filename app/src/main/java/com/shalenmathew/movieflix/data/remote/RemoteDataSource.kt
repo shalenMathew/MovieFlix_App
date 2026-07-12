@@ -45,8 +45,8 @@ class RemoteDataSource @Inject constructor(private val apiClient: ApiClient) {
         return   apiClient.getAmazonPrimeShowsApi(page = page)
     }
 
-    suspend fun getBollywoodMovies(page: Int = 1):Response<MovieResponseList>{
-        return apiClient.getBollywoodMoviesApiCall(page = page)
+    suspend fun getAnime(page: Int = 1): Response<MovieResponseList> {
+        return apiClient.getAnimeApiCall(page = page)
     }
 
     suspend fun getMovieTrailer(movieId:Int):Response<MovieResponseVideoResultList>{

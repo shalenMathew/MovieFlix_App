@@ -8,7 +8,6 @@ object Constants {
     const val POPULAR_TV_SHOWS = "Popular Tv Shows"
     const val TOP_RATED_MOVIES = "Top Rated"
     const val ANIME_SERIES = "Anime Series"
-    const val BOLLYWOOD_MOVIES = "Bollywood"
     const val NETFLIX_SHOWS = "Netflix Shows"
     const val UPCOMING_MOVIES = "Upcoming Movies"
     const val TRENDING_MOVIES = "Whats Trending ?"
