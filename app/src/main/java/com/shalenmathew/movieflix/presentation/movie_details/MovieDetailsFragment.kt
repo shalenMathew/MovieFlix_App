@@ -224,43 +224,8 @@ class MovieDetailsFragment : BottomSheetDialogFragment() {
                 shareMovie(ctx, movieResult.title.toString(), youtubeUrl)
             }
 
-            fragmentMovieDetailsScheduleBtn.setOnClickListener {
-                val ctx = context ?: return@setOnClickListener
-
-                if (!isScheduled) {
-                    // Check notification permission first (Android 13+)
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                        when {
-                            NotificationHelper.hasNotificationPermission(ctx) -> {
-                                showScheduleDateTimePicker()
-                            }
-
-                            shouldShowRequestPermissionRationale(Manifest.permission.POST_NOTIFICATIONS) -> {
-                                // Show explanation
-                                showToast(
-                                    ctx,
-                                    "Allow notifications to get reminders for scheduled movies"
-                                )
-                                requestNotificationPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
-                            }
-
-                            else -> {
-                                requestNotificationPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
-                            }
-                        }
-                    } else {
-                        // No permission needed for older Android versions
-                        showScheduleDateTimePicker()
-                    }
-                } else {
-                    // Remove schedule
-                    if (!::movieResult.isInitialized) return@setOnClickListener
-                    scheduledViewModel.deleteScheduledMovie(movieResult, currentScheduledDate)
-                    isScheduled = false
-                    currentScheduledDate = 0
-                    updateScheduleButtonIcon()
-                    showToast(ctx, "Schedule removed")
-                }
+            fragmentMovieDetailsMoreBtn.setOnClickListener {
+                showMoreOptionsBottomSheet()
             }
         }
     }
@@ -765,33 +730,11 @@ class MovieDetailsFragment : BottomSheetDialogFragment() {
         if (!isAdded || _binding == null) return
 
         try {
-            context?.let { ctx ->
-                binding.apply {
-                    if (isScheduled) {
-                        scheduleIcon.setImageDrawable(
-                            ContextCompat.getDrawable(
-                                ctx,
-                                R.drawable.ic_calendar_check
-                            )
-                        )
-                        // Show and update scheduled date text
-                        updateScheduledDateText()
-                    } else {
-                        scheduleIcon.setImageDrawable(
-                            ContextCompat.getDrawable(
-                                ctx,
-                                R.drawable.baseline_calendar_month_24
-                            )
-                        )
-                        // Hide scheduled date text when not scheduled
-                        fragmentMovieDetailsScheduledDate.visibility = View.GONE
-                        fragmentMovieDetailsScheduledIcon.visibility = View.GONE
-                    }
-                }
-            }
+            // Only update the main fragment's scheduled status text/icon here
+            // The bottom sheet will handle its own UI updates when opened
+            updateScheduledDateText()
         } catch (e: Exception) {
             e.printStackTrace()
-            // Silently fail if view is not ready
         }
     }
 
@@ -837,8 +780,78 @@ class MovieDetailsFragment : BottomSheetDialogFragment() {
     }
 
     private fun updateScheduleButtonVisibility() {
-        binding.fragmentMovieDetailsScheduleBtnContainer.visibility =
-            if (isInWatchList || isFav) View.VISIBLE else View.GONE
+        // More button is always visible now
+    }
+
+    private fun showMoreOptionsBottomSheet() {
+        val ctx = context ?: return
+        val bottomSheetDialog = BottomSheetDialog(ctx, R.style.SheetDialog)
+        val view = layoutInflater.inflate(R.layout.bottom_sheet_movie_more_options, null)
+
+        val header = view.findViewById<TextView>(R.id.more_options_header)
+        val scheduleItem = view.findViewById<View>(R.id.more_options_schedule_item)
+        val scheduleIcon = view.findViewById<android.widget.ImageView>(R.id.more_options_schedule_icon)
+        val scheduleText = view.findViewById<TextView>(R.id.more_options_schedule_text)
+        val scheduleSubtitle = view.findViewById<TextView>(R.id.more_options_schedule_subtitle)
+
+        header.text = "More Options"
+
+        // Update UI based on current status
+        if (isScheduled) {
+            scheduleIcon.setImageDrawable(ContextCompat.getDrawable(ctx, R.drawable.ic_calendar_check))
+            scheduleText.text = "Remove Schedule"
+            
+            // Show formatted date in subtitle
+            if (currentScheduledDate > 0) {
+                val dateFormat = SimpleDateFormat("MMM dd, hh:mm a", Locale.getDefault())
+                val dateStr = dateFormat.format(java.util.Date(currentScheduledDate))
+                scheduleSubtitle.text = "You'll be notified on $dateStr"
+            }
+        } else {
+            scheduleIcon.setImageDrawable(ContextCompat.getDrawable(ctx, R.drawable.baseline_calendar_month_24))
+            scheduleText.text = "Schedule a Reminder"
+            scheduleSubtitle.text = "Get a notification to watch this movie later"
+        }
+
+        scheduleItem.setOnClickListener {
+            bottomSheetDialog.dismiss()
+            handleScheduleClick()
+        }
+
+        bottomSheetDialog.setContentView(view)
+        bottomSheetDialog.show()
+    }
+
+    private fun handleScheduleClick() {
+        val ctx = context ?: return
+
+        if (!isScheduled) {
+            // Check notification permission first (Android 13+)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                when {
+                    NotificationHelper.hasNotificationPermission(ctx) -> {
+                        showScheduleDateTimePicker()
+                    }
+                    shouldShowRequestPermissionRationale(Manifest.permission.POST_NOTIFICATIONS) -> {
+                        showToast(ctx, "Allow notifications to get reminders for scheduled movies")
+                        requestNotificationPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+                    }
+                    else -> {
+                        requestNotificationPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+                    }
+                }
+            } else {
+                showScheduleDateTimePicker()
+            }
+        } else {
+            // Remove schedule
+            if (!::movieResult.isInitialized) return
+            scheduledViewModel.deleteScheduledMovie(movieResult, currentScheduledDate)
+            isScheduled = false
+            currentScheduledDate = 0
+            updateScheduleButtonIcon()
+            showToast(ctx, "Schedule removed")
+        }
     }
 
     private fun showScheduleDateTimePicker() {
