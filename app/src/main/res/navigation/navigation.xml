@@ -14,12 +14,16 @@
             app:destination="@id/introFragment"
             app:popUpTo="@id/splashFragment"
             app:popUpToInclusive="true"
+            app:enterAnim="@anim/fade_in_enter"
+            app:exitAnim="@anim/zoom_out_exit"
             />
         <action
             android:id="@+id/action_splashFragment_to_homeFragment"
             app:destination="@id/homeFragment"
             app:popUpTo="@id/splashFragment"
             app:popUpToInclusive="true"
+            app:enterAnim="@anim/fade_in_enter"
+            app:exitAnim="@anim/zoom_out_exit"
             />
     </fragment>
 
