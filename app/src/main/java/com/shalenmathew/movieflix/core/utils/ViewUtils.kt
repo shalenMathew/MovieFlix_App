@@ -159,6 +159,17 @@ val MIGRATION_6_7 = object : Migration(6, 7) {
     }
 }
 
+val MIGRATION_7_8 = object : Migration(7, 8) {
+    override fun migrate(db: SupportSQLiteDatabase) {
+        db.execSQL("CREATE TABLE IF NOT EXISTS `series_tracking_table` (`id` INTEGER NOT NULL, `name` TEXT NOT NULL, `posterPath` TEXT, `backdropPath` TEXT, `overview` TEXT, `lastWatchedEpisodeId` INTEGER, `lastWatchedSeasonNumber` INTEGER, `lastWatchedEpisodeNumber` INTEGER, `lastUpdated` INTEGER NOT NULL, PRIMARY KEY(`id`))")
+        db.execSQL("CREATE TABLE IF NOT EXISTS `seasons_tracking_table` (`id` INTEGER NOT NULL, `seriesId` INTEGER NOT NULL, `seasonNumber` INTEGER NOT NULL, `name` TEXT, `episodeCount` INTEGER, `posterPath` TEXT, PRIMARY KEY(`id`), FOREIGN KEY(`seriesId`) REFERENCES `series_tracking_table`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )")
+        db.execSQL("CREATE TABLE IF NOT EXISTS `episodes_tracking_table` (`id` INTEGER NOT NULL, `seriesId` INTEGER NOT NULL, `seasonId` INTEGER NOT NULL, `episodeNumber` INTEGER NOT NULL, `seasonNumber` INTEGER NOT NULL, `name` TEXT, `overview` TEXT, `stillPath` TEXT, `runtime` INTEGER, `isWatched` INTEGER NOT NULL, PRIMARY KEY(`id`), FOREIGN KEY(`seriesId`) REFERENCES `series_tracking_table`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`seasonId`) REFERENCES `seasons_tracking_table`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )")
+        db.execSQL("CREATE INDEX IF NOT EXISTS `index_seasons_tracking_table_seriesId` ON `seasons_tracking_table` (`seriesId`)")
+        db.execSQL("CREATE INDEX IF NOT EXISTS `index_episodes_tracking_table_seriesId` ON `episodes_tracking_table` (`seriesId`)")
+        db.execSQL("CREATE INDEX IF NOT EXISTS `index_episodes_tracking_table_seasonId` ON `episodes_tracking_table` (`seasonId`)")
+    }
+}
+
 private fun complex5To6Migration(db: SupportSQLiteDatabase) {
     db.execSQL("""
             CREATE TABLE IF NOT EXISTS scheduled_movies_table (

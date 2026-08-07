@@ -7,13 +7,25 @@ import com.shalenmathew.movieflix.data.local_storage.entity.FavouritesEntity
 import com.shalenmathew.movieflix.data.local_storage.entity.HomeFeedEntity
 import com.shalenmathew.movieflix.data.local_storage.entity.WatchListEntity
 import com.shalenmathew.movieflix.data.local_storage.entity.ScheduledEntity
+import com.shalenmathew.movieflix.data.local_storage.entity.SeriesTrackingEntity
+import com.shalenmathew.movieflix.data.local_storage.entity.SeasonTrackingEntity
+import com.shalenmathew.movieflix.data.local_storage.entity.EpisodeTrackingEntity
 
 @Database(
-    entities = [HomeFeedEntity::class, WatchListEntity::class, FavouritesEntity::class, ScheduledEntity::class],
-    version = 7
+    entities = [
+        HomeFeedEntity::class,
+        WatchListEntity::class,
+        FavouritesEntity::class,
+        ScheduledEntity::class,
+        SeriesTrackingEntity::class,
+        SeasonTrackingEntity::class,
+        EpisodeTrackingEntity::class
+    ],
+    version = 8
 )
 @TypeConverters(MovieDataTypeConverter::class)
 abstract class MovieDatabase : RoomDatabase() {
 
     abstract val dao: MovieDao
+    abstract val seriesTrackingDao: SeriesTrackingDao
 }

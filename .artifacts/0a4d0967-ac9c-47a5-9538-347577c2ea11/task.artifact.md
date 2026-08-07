@@ -1,0 +1,23 @@
+# Task: Series Tracking / Currently Watching
+
+- [x] Data Layer Implementation
+    - [x] Create `SeriesTrackingEntity.kt`
+    - [x] Create `SeasonTrackingEntity.kt`
+    - [x] Create `EpisodeTrackingEntity.kt`
+    - [x] Create `SeriesTrackingDao.kt`
+    - [x] Update `MovieDatabase.kt`
+- [x] Domain Layer Implementation
+    - [x] Create `SeriesTrackingRepository.kt`
+    - [x] Create `SeriesTrackingModels.kt`
+- [x] Repository Implementation
+    - [x] Create `SeriesTrackingRepositoryImpl.kt`
+- [x] Presentation Layer Implementation
+    - [x] Create `SeriesTrackingViewModel.kt`
+    - [x] Create `TrackingFragment.kt` and its layout
+    - [x] Update `LibraryFragment.kt` and `fragment_library.xml` to add the 3rd tab
+    - [x] Update `MovieDetailsFragment.kt` to add "Track Series" to the "More Options" menu
+    - [x] Add "Mark as Watched" logic to Episode Details
+- [x] Verification
+    - [x] Verify tracking/untracking works
+    - [x] Verify offline caching of seasons/episodes
+    - [x] Verify watched progress persists

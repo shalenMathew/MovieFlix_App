@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
@@ -68,6 +69,56 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Notify me to watch this movie later"
+                android:fontFamily="@font/montserrat_medium"
+                android:textColor="@color/text_secondary"
+                android:textSize="@dimen/_10ssp"
+                android:layout_marginTop="@dimen/_2sdp" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <!-- Track Series Item -->
+    <LinearLayout
+        android:id="@+id/more_options_track_item"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingVertical="@dimen/_12sdp"
+        android:paddingHorizontal="@dimen/_16sdp"
+        android:foreground="?attr/selectableItemBackground"
+        android:gravity="center_vertical"
+        android:visibility="gone"
+        tools:visibility="visible">
+
+        <ImageView
+            android:id="@+id/more_options_track_icon"
+            android:layout_width="@dimen/_20sdp"
+            android:layout_height="@dimen/_20sdp"
+            android:src="@drawable/baseline_playlist_add_check_24"
+            app:tint="@color/white" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="@dimen/_16sdp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/more_options_track_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Track Series"
+                android:fontFamily="@font/montserrat_semibold"
+                android:textColor="@color/white"
+                android:textSize="@dimen/_12ssp" />
+
+            <TextView
+                android:id="@+id/more_options_track_subtitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Cache all episodes for offline tracking"
                 android:fontFamily="@font/montserrat_medium"
                 android:textColor="@color/text_secondary"
                 android:textSize="@dimen/_10ssp"

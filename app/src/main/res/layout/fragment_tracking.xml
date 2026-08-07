@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/gradient_background"
+        tools:context=".presentation.library.TrackingFragment">
+
+        <TextView
+            android:id="@+id/fragment_tracking_placeholder"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.5"
+            android:text="No series tracked yet. Start tracking your favorite shows!"
+            android:textColor="@color/white"
+            android:gravity="center"
+            android:textSize="@dimen/_16sdp"
+            android:fontFamily="@font/montserrat_light"
+            android:visibility="gone" />
+
+        <LinearLayout
+            android:id="@+id/fragment_tracking_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_85sdp"
+                    android:background="@drawable/gradient_top" />
+
+                <TextView
+                    android:id="@+id/fragment_tracking_tv"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/montserrat_medium"
+                    android:gravity="start"
+                    android:paddingStart="@dimen/_15sdp"
+                    android:paddingTop="@dimen/_12sdp"
+                    android:paddingBottom="@dimen/_18sdp"
+                    android:text="Tracking"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/_20ssp" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/fragment_tracking_rv"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_below="@id/fragment_tracking_tv"
+                    android:layout_marginTop="6dp"
+                    app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                    app:spanCount="@integer/grid_span_count" />
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/tvNoResult"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="No series found"
+                android:textSize="16sp"
+                android:fontFamily="@font/montserrat_medium"
+                android:textColor="@android:color/white"
+                android:gravity="center"
+                android:visibility="gone"
+                android:layout_gravity="center" />
+
+        </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

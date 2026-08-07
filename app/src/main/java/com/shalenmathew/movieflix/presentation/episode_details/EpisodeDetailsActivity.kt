@@ -106,6 +106,9 @@ class EpisodeDetailsActivity : AppCompatActivity() {
 
                 // Update navigation buttons state
                 updateNavigationButtons()
+                
+                // Update navigation buttons state
+                updateNavigationButtons()
             }
         }
     }

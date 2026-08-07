@@ -13,6 +13,7 @@ object Constants {
     const val TRENDING_MOVIES = "Whats Trending ?"
     const val PRIME_SHOWS = "Amazon Prime Shows"
     const val NOW_PLAYING_MOVIES = "Now Playing Movies"
+    const val CONTINUE_WATCHING = "Continue Watching"
 
     const val TMDB_POSTER_IMAGE_BASE_URL_W342 =
         "https://image.tmdb.org/t/p/w342/"
@@ -32,5 +33,8 @@ object Constants {
     const val WATCHLIST_TABLE_NAME = "watch_list_table"
     const val FAVOURITES_TABLE_NAME="favorites_movies_table"
     const val SCHEDULED_TABLE_NAME="scheduled_movies_table"
+    const val SERIES_TRACKING_TABLE_NAME = "series_tracking_table"
+    const val SEASONS_TRACKING_TABLE_NAME = "seasons_tracking_table"
+    const val EPISODES_TRACKING_TABLE_NAME = "episodes_tracking_table"
 
 }

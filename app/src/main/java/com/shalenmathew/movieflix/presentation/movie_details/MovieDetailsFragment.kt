@@ -62,6 +62,7 @@ import com.shalenmathew.movieflix.presentation.viewmodels.FavMovieViewModel
 import com.shalenmathew.movieflix.presentation.viewmodels.HomeInfoViewModel
 import com.shalenmathew.movieflix.presentation.viewmodels.ScheduledViewModel
 import com.shalenmathew.movieflix.presentation.viewmodels.SearchMovieViewModel
+import com.shalenmathew.movieflix.presentation.viewmodels.SeriesTrackingViewModel
 import com.shalenmathew.movieflix.presentation.viewmodels.WatchListViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
@@ -95,6 +96,7 @@ class MovieDetailsFragment : BottomSheetDialogFragment() {
     private val watchListViewModel: WatchListViewModel by viewModels()
     private val favMovieViewModel: FavMovieViewModel by viewModels()
     private val scheduledViewModel: ScheduledViewModel by viewModels()
+    private val seriesTrackingViewModel: SeriesTrackingViewModel by viewModels()
 
     private var isInWatchList: Boolean = false
     private var isFav: Boolean = false
@@ -504,6 +506,7 @@ class MovieDetailsFragment : BottomSheetDialogFragment() {
                                         homeInfoViewModel.getTVTrailer(id)
                                         // Load secondary data with delay
                                         loadSecondaryData(id)
+                                        seriesTrackingViewModel.checkTrackingStatus(id)
                                     } else {
                                         context?.let { ctx -> showToast(ctx, "media id is null") }
                                     }
@@ -605,6 +608,18 @@ class MovieDetailsFragment : BottomSheetDialogFragment() {
                 is NetworkResults.Loading -> {
                     // Show loading state if needed
                 }
+            }
+        }
+
+        seriesTrackingViewModel.trackingStatus.observe(viewLifecycleOwner) { result ->
+            when (result) {
+                is NetworkResults.Success -> {
+                    context?.let { showToast(it, "Series tracked successfully!") }
+                }
+                is NetworkResults.Error -> {
+                    context?.let { showToast(it, "Tracking failed: ${result.message}") }
+                }
+                is NetworkResults.Loading -> {}
             }
         }
     }
@@ -793,6 +808,11 @@ class MovieDetailsFragment : BottomSheetDialogFragment() {
         val scheduleIcon = view.findViewById<android.widget.ImageView>(R.id.more_options_schedule_icon)
         val scheduleText = view.findViewById<TextView>(R.id.more_options_schedule_text)
         val scheduleSubtitle = view.findViewById<TextView>(R.id.more_options_schedule_subtitle)
+        
+        val trackItem = view.findViewById<View>(R.id.more_options_track_item)
+        val trackIcon = view.findViewById<android.widget.ImageView>(R.id.more_options_track_icon)
+        val trackText = view.findViewById<TextView>(R.id.more_options_track_text)
+        val trackSubtitle = view.findViewById<TextView>(R.id.more_options_track_subtitle)
 
         header.text = "More Options"
 
@@ -818,8 +838,46 @@ class MovieDetailsFragment : BottomSheetDialogFragment() {
             handleScheduleClick()
         }
 
+        // Setup Tracking Item
+        if (isTVShow) {
+            trackItem.visibility = View.VISIBLE
+            
+            // Observe tracking status to update UI dynamically
+            seriesTrackingViewModel.isCurrentSeriesTracked.observe(viewLifecycleOwner) { isTracked ->
+                if (isTracked) {
+                    trackIcon.setImageDrawable(ContextCompat.getDrawable(ctx, R.drawable.baseline_done_all_24))
+                    trackText.text = "Untrack Series"
+                    trackSubtitle.text = "Stop tracking and remove cached episodes"
+                } else {
+                    trackIcon.setImageDrawable(ContextCompat.getDrawable(ctx, R.drawable.baseline_playlist_add_check_24))
+                    trackText.text = "Track Series"
+                    trackSubtitle.text = "Cache all episodes for offline tracking"
+                }
+
+                trackItem.setOnClickListener {
+                    bottomSheetDialog.dismiss()
+                    handleTrackClick(isTracked)
+                }
+            }
+        } else {
+            trackItem.visibility = View.GONE
+        }
+
         bottomSheetDialog.setContentView(view)
         bottomSheetDialog.show()
+    }
+
+    private fun handleTrackClick(isTracked: Boolean) {
+        val ctx = context ?: return
+        if (!::movieResult.isInitialized || mediaId == null) return
+
+        if (!isTracked) {
+            seriesTrackingViewModel.trackSeries(mediaId!!)
+            showToast(ctx, "Starting to track series. Caching episodes...")
+        } else {
+            seriesTrackingViewModel.untrackSeries(mediaId!!)
+            showToast(ctx, "Series untracked")
+        }
     }
 
     private fun handleScheduleClick() {
@@ -1365,6 +1423,7 @@ class MovieDetailsFragment : BottomSheetDialogFragment() {
                         homeInfoViewModel.getTVTrailer(id)
                         // Load cast, recommendations, watch providers, and TV details lazily
                         loadSecondaryData(id)
+                        seriesTrackingViewModel.checkTrackingStatus(id)
                     }
 
                     else -> {

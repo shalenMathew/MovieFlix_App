@@ -20,6 +20,7 @@ import com.shalenmathew.movieflix.domain.repository.MovieInfoRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.withContext
 import java.io.IOException
@@ -27,6 +28,7 @@ import java.io.IOException
 class MovieDetailsRepositoryImpl(
     private val remoteDataSource: RemoteDataSource,
     private val localDataSource: LocalDataSource,
+    private val seriesTrackingDao: com.shalenmathew.movieflix.data.local_storage.SeriesTrackingDao,
     private val appContext:Application,
     private val networkChecker: (Context?) -> Boolean = ::isNetworkAvailable
 ):MovieInfoRepository {
@@ -228,6 +230,7 @@ class MovieDetailsRepositoryImpl(
                     Constants.UPCOMING_MOVIES -> remoteDataSource.getUpcomingMovies(page)
                     Constants.TRENDING_MOVIES -> remoteDataSource.getTrendingMovies(page)
                     Constants.POPULAR_MOVIES -> remoteDataSource.getPopularMovies(page)
+                    Constants.POPULAR_TV_SHOWS -> remoteDataSource.getTopRatedTV(page) // Assuming this for now or dedicated call
                     Constants.TOP_RATED_MOVIES -> remoteDataSource.getTopRatedTV(page)
                     Constants.ANIME_SERIES -> remoteDataSource.getAnime(page)
                     Constants.NOW_PLAYING_MOVIES -> remoteDataSource.getNowPlayingMovies(page)
@@ -397,9 +400,40 @@ class MovieDetailsRepositoryImpl(
         try {
             if (networkChecker(appContext)) {
                 val tvDetailResponse = remoteDataSource.getTVDetail(tvId)
-                tvDetailResponse.body()?.let { response ->
-                    emit(NetworkResults.Success(response.toTVDetail()))
-                } ?: emit(NetworkResults.Error("No TV show data available"))
+                if (tvDetailResponse.isSuccessful) {
+                    tvDetailResponse.body()?.let { response ->
+                        emit(NetworkResults.Success(response.toTVDetail()))
+                        return@flow
+                    }
+                }
+            }
+
+            // Offline or network failed
+            val trackedSeries = seriesTrackingDao.getSeriesById(tvId)
+            if (trackedSeries != null) {
+                val seasons = seriesTrackingDao.getSeasonsForSeries(tvId).first()
+                emit(NetworkResults.Success(com.shalenmathew.movieflix.domain.model.TVDetail(
+                    id = trackedSeries.id,
+                    name = trackedSeries.name,
+                    overview = trackedSeries.overview,
+                    posterPath = trackedSeries.posterPath,
+                    backdropPath = trackedSeries.backdropPath,
+                    voteAverage = null,
+                    firstAirDate = null,
+                    numberOfSeasons = seasons.size,
+                    numberOfEpisodes = seasons.sumOf { it.episodeCount ?: 0 },
+                    seasons = seasons.map { 
+                        com.shalenmathew.movieflix.domain.model.TVSeasonBasic(
+                            id = it.id,
+                            airDate = null,
+                            episodeCount = it.episodeCount,
+                            name = it.name,
+                            overview = null,
+                            posterPath = it.posterPath,
+                            seasonNumber = it.seasonNumber
+                        )
+                    }
+                )))
             } else {
                 emit(NetworkResults.Error("No internet connection"))
             }
@@ -416,9 +450,45 @@ class MovieDetailsRepositoryImpl(
         try {
             if (networkChecker(appContext)) {
                 val seasonResponse = remoteDataSource.getTVSeason(tvId, seasonNumber)
-                seasonResponse.body()?.let { response ->
-                    emit(NetworkResults.Success(response.toTVSeason()))
-                } ?: emit(NetworkResults.Error("No season data available"))
+                if (seasonResponse.isSuccessful) {
+                    seasonResponse.body()?.let { response ->
+                        val domainSeason = response.toTVSeason()
+                        
+                        // Check if show is tracked and update watched status for each episode
+                        val trackedSeries = seriesTrackingDao.getSeriesById(tvId)
+                        if (trackedSeries != null) {
+                            val episodesWithStatus = domainSeason.episodes.map { episode ->
+                                val localEpisode = seriesTrackingDao.getAllEpisodesForSeries(tvId).first().find { it.id == episode.id }
+                                episode.copy(isWatched = localEpisode?.isWatched ?: false)
+                            }
+                            emit(NetworkResults.Success(domainSeason.copy(episodes = episodesWithStatus)))
+                        } else {
+                            emit(NetworkResults.Success(domainSeason))
+                        }
+                        return@flow
+                    }
+                }
+            }
+
+            // Offline or network failed - check local tracking data
+            val trackedSeries = seriesTrackingDao.getSeriesById(tvId)
+            if (trackedSeries != null) {
+                val seasons = seriesTrackingDao.getSeasonsForSeries(tvId).first()
+                val targetSeason = seasons.find { it.seasonNumber == seasonNumber }
+                if (targetSeason != null) {
+                    val episodes = seriesTrackingDao.getEpisodesForSeason(targetSeason.id).first()
+                    emit(NetworkResults.Success(com.shalenmathew.movieflix.domain.model.TVSeason(
+                        id = targetSeason.id,
+                        airDate = null,
+                        name = targetSeason.name,
+                        overview = null,
+                        posterPath = targetSeason.posterPath,
+                        seasonNumber = targetSeason.seasonNumber,
+                        episodes = episodes.map { it.toTVEpisode() }
+                    )))
+                } else {
+                    emit(NetworkResults.Error("Season not found locally"))
+                }
             } else {
                 emit(NetworkResults.Error("No internet connection"))
             }

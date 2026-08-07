@@ -9,5 +9,6 @@ data class TVEpisode(
     val runtime: Int?,
     val seasonNumber: Int?,
     val stillPath: String?,
-    val voteAverage: Double?
+    val voteAverage: Double?,
+    val isWatched: Boolean = false
 )

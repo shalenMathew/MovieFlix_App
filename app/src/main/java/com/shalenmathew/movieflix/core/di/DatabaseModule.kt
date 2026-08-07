@@ -9,20 +9,24 @@ import com.shalenmathew.movieflix.core.utils.MIGRATION_3_4
 import com.shalenmathew.movieflix.core.utils.MIGRATION_4_5
 import com.shalenmathew.movieflix.core.utils.MIGRATION_6_7
 import com.shalenmathew.movieflix.core.utils.MIGRATION_5_6
+import com.shalenmathew.movieflix.core.utils.MIGRATION_7_8
 import com.shalenmathew.movieflix.data.local_storage.LocalDataSource
 import com.shalenmathew.movieflix.data.local_storage.MovieDao
 import com.shalenmathew.movieflix.data.local_storage.MovieDataTypeConverter
 import com.shalenmathew.movieflix.data.local_storage.MovieDatabase
+import com.shalenmathew.movieflix.data.local_storage.SeriesTrackingDao
 import com.shalenmathew.movieflix.data.remote.RemoteDataSource
 import com.shalenmathew.movieflix.data.repository.ActorRepositoryImpl
 import com.shalenmathew.movieflix.data.repository.FavMovieRepositoryImpl
 import com.shalenmathew.movieflix.data.repository.MovieDetailsRepositoryImpl
 import com.shalenmathew.movieflix.data.repository.ScheduledRepositoryImpl
+import com.shalenmathew.movieflix.data.repository.SeriesTrackingRepositoryImpl
 import com.shalenmathew.movieflix.data.repository.WatchListRepositoryImpl
 import com.shalenmathew.movieflix.domain.repository.ActorRepository
 import com.shalenmathew.movieflix.domain.repository.FavMovieRepository
 import com.shalenmathew.movieflix.domain.repository.MovieInfoRepository
 import com.shalenmathew.movieflix.domain.repository.ScheduledRepository
+import com.shalenmathew.movieflix.domain.repository.SeriesTrackingRepository
 import com.shalenmathew.movieflix.domain.repository.WatchListRepository
 import com.shalenmathew.movieflix.core.notifications.MovieScheduler
 import com.google.gson.Gson
@@ -48,6 +52,7 @@ object DatabaseModule {
                 MIGRATION_4_5,
                 MIGRATION_5_6,
                 MIGRATION_6_7,
+                MIGRATION_7_8
             )
             .addTypeConverter(MovieDataTypeConverter(GsonParser(Gson())))
             .build()
@@ -61,12 +66,19 @@ object DatabaseModule {
 
     @Provides
     @Singleton
+    fun providesSeriesTrackingDao(movieDatabase: MovieDatabase): SeriesTrackingDao {
+        return movieDatabase.seriesTrackingDao
+    }
+
+    @Provides
+    @Singleton
     fun providesMovieInfoRepositoryImpl(
         remoteDataSource: RemoteDataSource,
         localDataSource: LocalDataSource,
+        seriesTrackingDao: SeriesTrackingDao,
         application: Application
     ): MovieInfoRepository {
-        return MovieDetailsRepositoryImpl(remoteDataSource, localDataSource, application)
+        return MovieDetailsRepositoryImpl(remoteDataSource, localDataSource, seriesTrackingDao, application)
     }
 
     @Provides
@@ -94,6 +106,15 @@ object DatabaseModule {
     @Singleton
     fun getScheduled(localDataSource: LocalDataSource): ScheduledRepository {
         return ScheduledRepositoryImpl(localDataSource)
+    }
+
+    @Provides
+    @Singleton
+    fun providesSeriesTrackingRepository(
+        seriesTrackingDao: SeriesTrackingDao,
+        remoteDataSource: RemoteDataSource
+    ): SeriesTrackingRepository {
+        return SeriesTrackingRepositoryImpl(seriesTrackingDao, remoteDataSource)
     }
 
     @Provides
