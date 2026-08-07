@@ -18,6 +18,8 @@ import com.shalenmathew.movieflix.core.utils.gone
 import com.shalenmathew.movieflix.core.utils.visible
 import com.shalenmathew.movieflix.databinding.FragmentTrackingBinding
 import com.shalenmathew.movieflix.domain.model.TrackedSeries
+import com.shalenmathew.movieflix.domain.model.TrackedSeason
+import com.shalenmathew.movieflix.domain.model.TVEpisode
 import com.shalenmathew.movieflix.presentation.viewmodels.LibrarySearchViewModel
 import com.shalenmathew.movieflix.presentation.viewmodels.SeriesTrackingViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -84,6 +86,9 @@ class TrackingFragment : Fragment() {
                     }
                     .setNegativeButton("Keep Tracking", null)
                     .show()
+            },
+            onEpisodeClick = { series, season, episode ->
+                navigateToEpisodeDetails(series, season, episode)
             }
         )
         binding.fragmentTrackingRv.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(requireContext())
@@ -148,5 +153,55 @@ class TrackingFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    private fun navigateToEpisodeDetails(
+        series: TrackedSeries,
+        season: TrackedSeason,
+        episode: TVEpisode
+    ) {
+        val seriesId = series.id
+        val seasonNumber = season.seasonNumber
+
+        // Fetch all episodes of this season to populate the horizontal pager in Detail View
+        seriesTrackingViewModel.getEpisodesForSeason(season.id).observe(viewLifecycleOwner) { episodes ->
+            val domainEpisodes = episodes.map {
+                com.shalenmathew.movieflix.domain.model.TVEpisode(
+                    id = it.id,
+                    airDate = null,
+                    episodeNumber = it.episodeNumber,
+                    name = it.name,
+                    overview = it.overview,
+                    runtime = it.runtime,
+                    seasonNumber = it.seasonNumber,
+                    stillPath = it.stillPath,
+                    voteAverage = null,
+                    isWatched = it.isWatched
+                )
+            }
+
+            val episodeIndex = domainEpisodes.indexOfFirst { it.id == episode.id }
+            if (episodeIndex == -1) return@observe
+
+            // Prepare Data Holder
+            com.shalenmathew.movieflix.presentation.episode_details.EpisodeDataHolder.setData(
+                episodeList = domainEpisodes,
+                season = seasonNumber,
+                showName = series.name,
+                totalSeasons = 0, // We can fetch this if needed, or just default for now
+                tvShowId = seriesId,
+                onSeasonChange = { _ ->
+                    // For tracking tab, we'll keep season navigation internal to the accordion
+                    // so we just show a toast if they try to swap seasons inside the detail view
+                    context?.let { com.shalenmathew.movieflix.core.utils.showToast(it, "Swap seasons in the Tracking list") }
+                }
+            )
+
+            val intent = com.shalenmathew.movieflix.presentation.episode_details.EpisodeDetailsActivity.newIntent(
+                requireContext(),
+                episodeIndex
+            )
+            startActivity(intent)
+        }
     }
 }

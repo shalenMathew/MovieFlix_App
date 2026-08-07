@@ -17,13 +17,13 @@ import com.shalenmathew.movieflix.domain.model.TrackedSeries
 import com.shalenmathew.movieflix.domain.model.TVEpisode
 import androidx.transition.TransitionManager
 import androidx.transition.ChangeBounds
-import androidx.transition.Fade
 import androidx.transition.TransitionSet
 
 class TrackingAdapter(
     private val onSeriesExpand: (TrackedSeries, (List<TrackedSeason>) -> Unit) -> Unit,
     private val onSeasonExpand: (TrackedSeason, (List<TVEpisode>) -> Unit) -> Unit,
-    private val onUntrackClick: (TrackedSeries) -> Unit
+    private val onUntrackClick: (TrackedSeries) -> Unit,
+    private val onEpisodeClick: (TrackedSeries, TrackedSeason, TVEpisode) -> Unit
 ) : ListAdapter<TrackedSeries, TrackingAdapter.ViewHolder>(DiffUtilCallback()) {
 
     private var expandedSeriesId: Int? = null
@@ -37,12 +37,15 @@ class TrackingAdapter(
         val untrackIcon: ImageView = itemView.findViewById(R.id.tracking_untrack_icon)
         val seasonsRv: RecyclerView = itemView.findViewById(R.id.tracking_seasons_rv)
         
-        private val seasonAdapter = TrackingSeasonAdapter(onSeasonExpand)
+        private val seasonAdapter = TrackingSeasonAdapter(onSeasonExpand) { season, episode ->
+            onEpisodeClick(getItem(bindingAdapterPosition), season, episode)
+        }
 
         init {
             seasonsRv.layoutManager = LinearLayoutManager(itemView.context)
             seasonsRv.adapter = seasonAdapter
             seasonsRv.isNestedScrollingEnabled = false
+            seasonsRv.itemAnimator = null
         }
 
         fun bind(series: TrackedSeries) {
@@ -63,7 +66,6 @@ class TrackingAdapter(
         fun updateExpansionState(series: TrackedSeries) {
             val isExpanded = expandedSeriesId == series.id
             
-            // Sync UI state before any async loading
             seasonsRv.visibility = if (isExpanded) View.VISIBLE else View.GONE
             bannerArrow.rotation = if (isExpanded) 90f else 0f
             
@@ -103,13 +105,11 @@ class TrackingAdapter(
             (itemView.parent as? ViewGroup)?.let { parent ->
                 val transition = TransitionSet()
                     .addTransition(ChangeBounds())
-                    .addTransition(Fade(Fade.IN).addTarget(seasonsRv))
                     .setOrdering(TransitionSet.ORDERING_TOGETHER)
                     .setDuration(250)
                 TransitionManager.beginDelayedTransition(parent, transition)
             }
 
-            // Notify only expansion changes
             notifyItemChanged(position, "EXPANSION_CHANGE")
             
             if (oldExpandedId != null && oldExpandedId != series.id) {
