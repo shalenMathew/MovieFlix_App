@@ -17,6 +17,7 @@ import com.shalenmathew.movieflix.domain.model.TrackedSeries
 import com.shalenmathew.movieflix.domain.model.TVEpisode
 import androidx.transition.TransitionManager
 import androidx.transition.ChangeBounds
+import androidx.transition.Fade
 import androidx.transition.TransitionSet
 
 class TrackingAdapter(
@@ -47,64 +48,77 @@ class TrackingAdapter(
         fun bind(series: TrackedSeries) {
             bannerImage.loadImage(Constants.TMDB_IMAGE_BASE_URL_W780.plus(series.backdropPath))
             bannerTitle.text = series.name
+            
+            updateExpansionState(series)
 
+            bannerCard.setOnClickListener {
+                toggleExpansion(series)
+            }
+
+            untrackIcon.setOnClickListener {
+                onUntrackClick(series)
+            }
+        }
+
+        fun updateExpansionState(series: TrackedSeries) {
             val isExpanded = expandedSeriesId == series.id
             
             // Sync UI state before any async loading
             seasonsRv.visibility = if (isExpanded) View.VISIBLE else View.GONE
             bannerArrow.rotation = if (isExpanded) 90f else 0f
             
-            // Untrack icon is now on the banner, always visible
-            
             if (isExpanded) {
                 val cached = seasonsCache[series.id]
                 if (cached != null) {
                     seasonAdapter.submitList(cached)
                 } else {
-                    // Show empty immediately to wipe any recycled data
                     seasonAdapter.submitList(null)
                     onSeriesExpand(series) { seasons ->
                         seasonsCache[series.id] = seasons
-                        // Double check expansion state hasn't changed during async call
                         if (expandedSeriesId == series.id) {
                             seasonAdapter.submitList(seasons)
                         }
                     }
                 }
             } else {
-                // Instantly clear data to prevent recycling issues
                 seasonAdapter.submitList(null)
             }
+        }
 
-            bannerCard.setOnClickListener {
-                if (series.syncStatus == "PENDING") {
-                    com.shalenmathew.movieflix.core.utils.showToast(
-                        itemView.context, 
-                        "Syncing episodes... please wait."
-                    )
-                    return@setOnClickListener
-                }
-                
-                val position = bindingAdapterPosition
-                if (position == RecyclerView.NO_POSITION) return@setOnClickListener
+        private fun toggleExpansion(series: TrackedSeries) {
+            if (series.syncStatus == "PENDING") {
+                com.shalenmathew.movieflix.core.utils.showToast(
+                    itemView.context, 
+                    "Syncing episodes... please wait."
+                )
+                return
+            }
+            
+            val position = bindingAdapterPosition
+            if (position == RecyclerView.NO_POSITION) return
 
-                val wasExpanded = isExpanded
-                expandedSeriesId = if (wasExpanded) null else series.id
+            val oldExpandedId = expandedSeriesId
+            expandedSeriesId = if (expandedSeriesId == series.id) null else series.id
 
-                // Clean Sliding Transition (No Fade)
-                (itemView.parent as? ViewGroup)?.let { parent ->
-                    val transition = TransitionSet()
-                        .addTransition(ChangeBounds())
-                        .setOrdering(TransitionSet.ORDERING_TOGETHER)
-                        .setDuration(250)
-                    TransitionManager.beginDelayedTransition(parent, transition)
-                }
-
-                notifyItemChanged(position)
+            (itemView.parent as? ViewGroup)?.let { parent ->
+                val transition = TransitionSet()
+                    .addTransition(ChangeBounds())
+                    .addTransition(Fade(Fade.IN).addTarget(seasonsRv))
+                    .setOrdering(TransitionSet.ORDERING_TOGETHER)
+                    .setDuration(250)
+                TransitionManager.beginDelayedTransition(parent, transition)
             }
 
-            untrackIcon.setOnClickListener {
-                onUntrackClick(series)
+            // Notify only expansion changes
+            notifyItemChanged(position, "EXPANSION_CHANGE")
+            
+            if (oldExpandedId != null && oldExpandedId != series.id) {
+                for (i in 0 until itemCount) {
+                    if (getItem(i).id == oldExpandedId) {
+                        notifyItemChanged(i, "EXPANSION_CHANGE")
+                        break
+                    }
+                }
             }
         }
     }
@@ -118,10 +132,24 @@ class TrackingAdapter(
         holder.bind(getItem(position))
     }
 
+    override fun onBindViewHolder(holder: ViewHolder, position: Int, payloads: MutableList<Any>) {
+        if (payloads.isEmpty()) {
+            super.onBindViewHolder(holder, position, payloads)
+        } else {
+            holder.updateExpansionState(getItem(position))
+        }
+    }
+
     class DiffUtilCallback : DiffUtil.ItemCallback<TrackedSeries>() {
         override fun areItemsTheSame(oldItem: TrackedSeries, newItem: TrackedSeries): Boolean =
             oldItem.id == newItem.id
         override fun areContentsTheSame(oldItem: TrackedSeries, newItem: TrackedSeries): Boolean =
             oldItem == newItem
+
+        override fun getChangePayload(oldItem: TrackedSeries, newItem: TrackedSeries): Any? {
+            return if (oldItem.id == newItem.id) {
+                "EXPANSION_CHANGE"
+            } else null
+        }
     }
 }

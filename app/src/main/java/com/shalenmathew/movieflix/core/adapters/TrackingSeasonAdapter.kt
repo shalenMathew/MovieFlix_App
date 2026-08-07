@@ -14,6 +14,7 @@ import com.shalenmathew.movieflix.domain.model.TVEpisode
 import com.shalenmathew.movieflix.domain.model.TrackedSeason
 import androidx.transition.TransitionManager
 import androidx.transition.ChangeBounds
+import androidx.transition.Fade
 import androidx.transition.TransitionSet
 
 class TrackingSeasonAdapter(
@@ -73,10 +74,11 @@ class TrackingSeasonAdapter(
                 val wasExpanded = isExpanded
                 expandedSeasonId = if (wasExpanded) null else season.id
                 
-                // Clean Sliding Transition (No Fade)
+                // Clean Sliding Transition with Fade In for episodes
                 (itemView.parent as? ViewGroup)?.let { parent ->
                     val transition = TransitionSet()
                         .addTransition(ChangeBounds())
+                        .addTransition(Fade(Fade.IN).addTarget(episodesRv))
                         .setOrdering(TransitionSet.ORDERING_TOGETHER)
                         .setDuration(250)
                     TransitionManager.beginDelayedTransition(parent, transition)

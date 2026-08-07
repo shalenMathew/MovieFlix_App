@@ -88,6 +88,9 @@ class TrackingFragment : Fragment() {
         )
         binding.fragmentTrackingRv.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(requireContext())
         binding.fragmentTrackingRv.adapter = adapter
+        
+        // Disable default animator to prevent clashing with custom TransitionManager
+        binding.fragmentTrackingRv.itemAnimator = null
     }
 
     private fun observer() {
