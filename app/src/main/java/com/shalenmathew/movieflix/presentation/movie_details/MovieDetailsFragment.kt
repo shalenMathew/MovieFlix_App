@@ -851,7 +851,7 @@ class MovieDetailsFragment : BottomSheetDialogFragment() {
                 } else {
                     trackIcon.setImageDrawable(ContextCompat.getDrawable(ctx, R.drawable.baseline_playlist_add_check_24))
                     trackText.text = "Track Series"
-                    trackSubtitle.text = "Cache all episodes for offline tracking"
+                    trackSubtitle.text = "Cache all episodes to track your currently watching episodes"
                 }
 
                 trackItem.setOnClickListener {

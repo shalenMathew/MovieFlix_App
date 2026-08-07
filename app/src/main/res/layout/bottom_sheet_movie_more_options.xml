@@ -118,7 +118,7 @@
                 android:id="@+id/more_options_track_subtitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Cache all episodes for offline tracking"
+                android:text="Cache all episodes to track your currently watching episodes"
                 android:fontFamily="@font/montserrat_medium"
                 android:textColor="@color/text_secondary"
                 android:textSize="@dimen/_10ssp"
