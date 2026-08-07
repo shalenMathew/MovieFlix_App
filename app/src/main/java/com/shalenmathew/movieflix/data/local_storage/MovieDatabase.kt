@@ -21,7 +21,7 @@ import com.shalenmathew.movieflix.data.local_storage.entity.EpisodeTrackingEntit
         SeasonTrackingEntity::class,
         EpisodeTrackingEntity::class
     ],
-    version = 8
+    version = 9
 )
 @TypeConverters(MovieDataTypeConverter::class)
 abstract class MovieDatabase : RoomDatabase() {

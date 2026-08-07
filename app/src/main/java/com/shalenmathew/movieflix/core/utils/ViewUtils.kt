@@ -170,6 +170,12 @@ val MIGRATION_7_8 = object : Migration(7, 8) {
     }
 }
 
+val MIGRATION_8_9 = object : Migration(8, 9) {
+    override fun migrate(db: SupportSQLiteDatabase) {
+        db.execSQL("ALTER TABLE series_tracking_table ADD COLUMN syncStatus TEXT NOT NULL DEFAULT 'PENDING'")
+    }
+}
+
 private fun complex5To6Migration(db: SupportSQLiteDatabase) {
     db.execSQL("""
             CREATE TABLE IF NOT EXISTS scheduled_movies_table (

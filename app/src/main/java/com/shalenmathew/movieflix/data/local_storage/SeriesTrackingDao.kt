@@ -44,6 +44,9 @@ interface SeriesTrackingDao {
     @Query("UPDATE series_tracking_table SET lastWatchedEpisodeId = :episodeId, lastWatchedSeasonNumber = :seasonNumber, lastWatchedEpisodeNumber = :episodeNumber, lastUpdated = :timestamp WHERE id = :seriesId")
     suspend fun updateLastWatchedEpisode(seriesId: Int, episodeId: Int, seasonNumber: Int, episodeNumber: Int, timestamp: Long = System.currentTimeMillis())
 
+    @Query("UPDATE series_tracking_table SET syncStatus = :status WHERE id = :seriesId")
+    suspend fun updateSyncStatus(seriesId: Int, status: String)
+
     @Delete
     suspend fun deleteSeries(series: SeriesTrackingEntity)
 

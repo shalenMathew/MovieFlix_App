@@ -10,6 +10,7 @@ import com.shalenmathew.movieflix.core.utils.MIGRATION_4_5
 import com.shalenmathew.movieflix.core.utils.MIGRATION_6_7
 import com.shalenmathew.movieflix.core.utils.MIGRATION_5_6
 import com.shalenmathew.movieflix.core.utils.MIGRATION_7_8
+import com.shalenmathew.movieflix.core.utils.MIGRATION_8_9
 import com.shalenmathew.movieflix.data.local_storage.LocalDataSource
 import com.shalenmathew.movieflix.data.local_storage.MovieDao
 import com.shalenmathew.movieflix.data.local_storage.MovieDataTypeConverter
@@ -52,7 +53,8 @@ object DatabaseModule {
                 MIGRATION_4_5,
                 MIGRATION_5_6,
                 MIGRATION_6_7,
-                MIGRATION_7_8
+                MIGRATION_7_8,
+                MIGRATION_8_9
             )
             .addTypeConverter(MovieDataTypeConverter(GsonParser(Gson())))
             .build()
@@ -112,9 +114,10 @@ object DatabaseModule {
     @Singleton
     fun providesSeriesTrackingRepository(
         seriesTrackingDao: SeriesTrackingDao,
-        remoteDataSource: RemoteDataSource
+        remoteDataSource: RemoteDataSource,
+        @ApplicationContext context: Context
     ): SeriesTrackingRepository {
-        return SeriesTrackingRepositoryImpl(seriesTrackingDao, remoteDataSource)
+        return SeriesTrackingRepositoryImpl(seriesTrackingDao, remoteDataSource, context)
     }
 
     @Provides

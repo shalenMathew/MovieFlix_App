@@ -1,5 +1,10 @@
 package com.shalenmathew.movieflix.data.repository
 
+import android.content.Context
+import androidx.work.Data
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkManager
+import com.shalenmathew.movieflix.core.background.SeriesTrackingWorker
 import com.shalenmathew.movieflix.core.utils.NetworkResults
 import com.shalenmathew.movieflix.data.local_storage.SeriesTrackingDao
 import com.shalenmathew.movieflix.data.local_storage.entity.EpisodeTrackingEntity
@@ -17,8 +22,11 @@ import javax.inject.Inject
 
 class SeriesTrackingRepositoryImpl @Inject constructor(
     private val seriesTrackingDao: SeriesTrackingDao,
-    private val remoteDataSource: RemoteDataSource
+    private val remoteDataSource: RemoteDataSource,
+    private val context: Context
 ) : SeriesTrackingRepository {
+
+    private val workManager = WorkManager.getInstance(context)
 
     override fun getAllTrackedSeries(): Flow<List<TrackedSeries>> {
         return seriesTrackingDao.getAllTrackedSeries().map { list ->
@@ -29,72 +37,37 @@ class SeriesTrackingRepositoryImpl @Inject constructor(
     override suspend fun trackSeries(seriesId: Int): Flow<NetworkResults<Unit>> = flow {
         emit(NetworkResults.Loading())
         try {
+            // Immediately insert basic series info with PENDING status
             val tvDetailResponse = remoteDataSource.getTVDetail(seriesId)
-            if (tvDetailResponse.isSuccessful) {
-                val tvDetail = tvDetailResponse.body()
-                if (tvDetail != null) {
-                    val seriesEntity = SeriesTrackingEntity(
-                        id = tvDetail.id!!,
-                        name = tvDetail.name ?: "",
-                        posterPath = tvDetail.poster_path,
-                        backdropPath = tvDetail.backdrop_path,
-                        overview = tvDetail.overview,
-                        lastUpdated = System.currentTimeMillis()
-                    )
-                    seriesTrackingDao.insertSeries(seriesEntity)
+            if (tvDetailResponse.isSuccessful && tvDetailResponse.body() != null) {
+                val tvDetail = tvDetailResponse.body()!!
+                val seriesEntity = SeriesTrackingEntity(
+                    id = tvDetail.id!!,
+                    name = tvDetail.name ?: "",
+                    posterPath = tvDetail.poster_path,
+                    backdropPath = tvDetail.backdrop_path,
+                    overview = tvDetail.overview,
+                    syncStatus = "PENDING"
+                )
+                seriesTrackingDao.insertSeries(seriesEntity)
 
-                    val seasons = tvDetail.seasons ?: emptyList()
-                    val seasonEntities = mutableListOf<SeasonTrackingEntity>()
-                    val episodeEntities = mutableListOf<EpisodeTrackingEntity>()
-
-                    for (seasonBasic in seasons) {
-                        if (seasonBasic.season_number != null && seasonBasic.season_number > 0) {
-                            val seasonResponse = remoteDataSource.getTVSeason(seriesId, seasonBasic.season_number)
-                            if (seasonResponse.isSuccessful) {
-                                val seasonDetail = seasonResponse.body()
-                                if (seasonDetail != null) {
-                                    val seasonId = seasonDetail.id ?: (seriesId * 1000 + seasonBasic.season_number)
-                                    seasonEntities.add(
-                                        SeasonTrackingEntity(
-                                            id = seasonId,
-                                            seriesId = seriesId,
-                                            seasonNumber = seasonBasic.season_number,
-                                            name = seasonDetail.name,
-                                            episodeCount = seasonBasic.episode_count,
-                                            posterPath = seasonDetail.poster_path
-                                        )
-                                    )
-
-                                    seasonDetail.episodes?.forEach { episode ->
-                                        episodeEntities.add(
-                                            EpisodeTrackingEntity(
-                                                id = episode.id!!,
-                                                seriesId = seriesId,
-                                                seasonId = seasonId,
-                                                episodeNumber = episode.episode_number ?: 0,
-                                                seasonNumber = seasonBasic.season_number,
-                                                name = episode.name,
-                                                overview = episode.overview,
-                                                stillPath = episode.still_path,
-                                                runtime = episode.runtime
-                                            )
-                                        )
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    seriesTrackingDao.insertSeasons(seasonEntities)
-                    seriesTrackingDao.insertEpisodes(episodeEntities)
-                    emit(NetworkResults.Success(Unit))
-                } else {
-                    emit(NetworkResults.Error("Empty response body"))
-                }
+                // Kick off background worker for seasons and episodes
+                val data = Data.Builder()
+                    .putInt(SeriesTrackingWorker.KEY_SERIES_ID, seriesId)
+                    .build()
+                
+                val request = OneTimeWorkRequestBuilder<SeriesTrackingWorker>()
+                    .setInputData(data)
+                    .build()
+                
+                workManager.enqueue(request)
+                
+                emit(NetworkResults.Success(Unit))
             } else {
-                emit(NetworkResults.Error("Failed to fetch TV details: ${tvDetailResponse.message()}"))
+                emit(NetworkResults.Error("Failed to fetch series info"))
             }
         } catch (e: Exception) {
-            emit(NetworkResults.Error(e.message ?: "Unknown error occurred"))
+            emit(NetworkResults.Error(e.message ?: "Unknown error"))
         }
     }
 
@@ -141,7 +114,8 @@ class SeriesTrackingRepositoryImpl @Inject constructor(
         lastWatchedEpisodeId = lastWatchedEpisodeId,
         lastWatchedSeasonNumber = lastWatchedSeasonNumber,
         lastWatchedEpisodeNumber = lastWatchedEpisodeNumber,
-        lastUpdated = lastUpdated
+        lastUpdated = lastUpdated,
+        syncStatus = syncStatus
     )
 
     private fun SeasonTrackingEntity.toDomain() = TrackedSeason(

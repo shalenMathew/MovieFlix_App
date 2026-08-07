@@ -70,4 +70,18 @@
         <item name="android:textStyle">bold</item>
     </style>
 
+    <style name="TrackingAlertDialog" parent="Theme.Material3.DayNight.Dialog.Alert">
+        <item name="android:windowBackground">@drawable/tracking_dialog_bg</item>
+        <item name="android:textColorPrimary">@color/white</item>
+        <item name="android:textColorSecondary">@color/text_secondary</item>
+        <item name="colorAccent">@color/white</item>
+        <item name="buttonBarPositiveButtonStyle">@style/TrackingDialogButton</item>
+        <item name="buttonBarNegativeButtonStyle">@style/TrackingDialogButton</item>
+    </style>
+
+    <style name="TrackingDialogButton" parent="Widget.Material3.Button.TextButton.Dialog">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
 </resources>

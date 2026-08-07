@@ -49,11 +49,43 @@ class TrackingFragment : Fragment() {
     }
 
     private fun inIt() {
-        adapter = TrackingAdapter(onPosterClick = {
-            val bundle = Bundle()
-            bundle.putString(Constants.MEDIA_SEND_REQUEST_KEY, Gson().toJson(it))
-            findNavController().navigate(R.id.movieDetailsFragment, bundle)
-        })
+        adapter = TrackingAdapter(
+            onSeriesExpand = { series, callback ->
+                seriesTrackingViewModel.getSeasonsForSeries(series.id).observe(viewLifecycleOwner) { seasons ->
+                    callback(seasons)
+                }
+            },
+            onSeasonExpand = { season, callback ->
+                seriesTrackingViewModel.getEpisodesForSeason(season.id).observe(viewLifecycleOwner) { episodes ->
+                    callback(episodes.map { 
+                        com.shalenmathew.movieflix.domain.model.TVEpisode(
+                            id = it.id,
+                            airDate = null,
+                            episodeNumber = it.episodeNumber,
+                            name = it.name,
+                            overview = it.overview,
+                            runtime = it.runtime,
+                            seasonNumber = it.seasonNumber,
+                            stillPath = it.stillPath,
+                            voteAverage = null,
+                            isWatched = it.isWatched
+                        )
+                    })
+                }
+            },
+            onUntrackClick = { series ->
+                val ctx = context ?: return@TrackingAdapter
+                com.google.android.material.dialog.MaterialAlertDialogBuilder(ctx, R.style.TrackingAlertDialog)
+                    .setTitle("Stop Tracking Series?")
+                    .setMessage("This will remove \"${series.name}\" from your library and delete all cached episodes for offline viewing.")
+                    .setPositiveButton("Stop Tracking") { _, _ ->
+                        seriesTrackingViewModel.untrackSeries(series.id)
+                        com.shalenmathew.movieflix.core.utils.showToast(ctx, "Series removed from tracking")
+                    }
+                    .setNegativeButton("Keep Tracking", null)
+                    .show()
+            }
+        )
         binding.fragmentTrackingRv.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(requireContext())
         binding.fragmentTrackingRv.adapter = adapter
     }

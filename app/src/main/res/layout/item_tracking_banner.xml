@@ -3,50 +3,92 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <com.google.android.material.card.MaterialCardView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/_150sdp"
-        android:layout_marginHorizontal="@dimen/_10sdp"
-        android:layout_marginVertical="@dimen/_6sdp"
-        app:cardCornerRadius="@dimen/_12sdp"
-        app:cardElevation="@dimen/_4sdp"
-        app:strokeColor="@color/white"
-        app:strokeWidth="1dp">
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
-        <RelativeLayout
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/tracking_series_banner_card"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="@dimen/_150sdp"
+            android:layout_marginHorizontal="@dimen/_10sdp"
+            android:layout_marginVertical="@dimen/_6sdp"
+            app:cardCornerRadius="@dimen/_12sdp"
+            app:cardElevation="@dimen/_4sdp"
+            app:strokeColor="@color/white"
+            app:strokeWidth="1dp">
 
-            <ImageView
-                android:id="@+id/tracking_banner_image"
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:scaleType="centerCrop"
-                tools:src="@tools:sample/backgrounds/scenic" />
+                android:layout_height="match_parent">
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/_60sdp"
-                android:layout_alignParentBottom="true"
-                android:background="@drawable/gradient_bottom" />
+                <ImageView
+                    android:id="@+id/tracking_banner_image"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"
+                    tools:src="@tools:sample/backgrounds/scenic" />
 
-            <TextView
-                android:id="@+id/tracking_banner_title"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_marginHorizontal="@dimen/_12sdp"
-                android:layout_marginBottom="@dimen/_10sdp"
-                android:fontFamily="@font/montserrat_bold"
-                android:textColor="@color/white"
-                android:textSize="@dimen/_14ssp"
-                android:shadowColor="@color/black"
-                android:shadowDx="2"
-                android:shadowDy="2"
-                android:shadowRadius="2"
-                tools:text="Breaking Bad" />
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_60sdp"
+                    android:layout_alignParentBottom="true"
+                    android:background="@drawable/gradient_bottom" />
 
-        </RelativeLayout>
+                <TextView
+                    android:id="@+id/tracking_banner_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginHorizontal="@dimen/_12sdp"
+                    android:layout_marginBottom="@dimen/_10sdp"
+                    android:layout_toStartOf="@id/tracking_untrack_icon"
+                    android:fontFamily="@font/montserrat_bold"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/_14ssp"
+                    android:shadowColor="@color/black"
+                    android:shadowDx="2"
+                    android:shadowDy="2"
+                    android:shadowRadius="2"
+                    tools:text="Breaking Bad" />
 
-    </com.google.android.material.card.MaterialCardView>
+                <ImageView
+                    android:id="@+id/tracking_untrack_icon"
+                    android:layout_width="@dimen/_24sdp"
+                    android:layout_height="@dimen/_24sdp"
+                    android:layout_toStartOf="@id/tracking_banner_arrow"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginEnd="@dimen/_10sdp"
+                    android:layout_marginBottom="@dimen/_10sdp"
+                    android:src="@drawable/baseline_done_all_24"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    app:tint="@color/white" />
+
+                <ImageView
+                    android:id="@+id/tracking_banner_arrow"
+                    android:layout_width="@dimen/_24sdp"
+                    android:layout_height="@dimen/_24sdp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginEnd="@dimen/_10sdp"
+                    android:layout_marginBottom="@dimen/_10sdp"
+                    android:src="@drawable/baseline_keyboard_arrow_right_24"
+                    app:tint="@color/white" />
+
+            </RelativeLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Seasons Container -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/tracking_seasons_rv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/_10sdp"
+            android:visibility="gone"
+            tools:visibility="visible"
+            tools:listitem="@layout/item_tracking_season" />
+
+    </LinearLayout>
 </layout>

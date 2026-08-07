@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@drawable/search_et_background"
+        android:layout_marginBottom="@dimen/_6sdp"
+        android:padding="@dimen/_2sdp">
+
+        <!-- Season Header -->
+        <LinearLayout
+            android:id="@+id/tracking_season_header"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="@dimen/_10sdp"
+            android:gravity="center_vertical"
+            android:foreground="?attr/selectableItemBackground">
+
+            <TextView
+                android:id="@+id/tracking_season_title"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:fontFamily="@font/montserrat_semibold"
+                android:textColor="@color/white"
+                android:textSize="@dimen/_12ssp"
+                tools:text="Season 1" />
+
+            <ImageView
+                android:id="@+id/tracking_season_arrow"
+                android:layout_width="@dimen/_20sdp"
+                android:layout_height="@dimen/_20sdp"
+                android:src="@drawable/baseline_keyboard_arrow_right_24"
+                app:tint="@color/white" />
+
+        </LinearLayout>
+
+        <!-- Episodes Container -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/tracking_episodes_rv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            tools:visibility="visible"
+            tools:listitem="@layout/item_episode" />
+
+    </LinearLayout>
+</layout>
