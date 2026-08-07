@@ -8,6 +8,9 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.asFlow
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.google.gson.Gson
@@ -163,8 +166,11 @@ class TrackingFragment : Fragment() {
         val seriesId = series.id
         val seasonNumber = season.seasonNumber
 
-        // Fetch all episodes of this season to populate the horizontal pager in Detail View
-        seriesTrackingViewModel.getEpisodesForSeason(season.id).observe(viewLifecycleOwner) { episodes ->
+        // One-shot fetch using lifecycleScope to prevent accumulating observers
+        viewLifecycleOwner.lifecycleScope.launch {
+            // Using first() to get the current list once and then stop observing
+            val episodes = seriesTrackingViewModel.getEpisodesForSeason(season.id).asFlow().first()
+            
             val domainEpisodes = episodes.map {
                 com.shalenmathew.movieflix.domain.model.TVEpisode(
                     id = it.id,
@@ -181,18 +187,16 @@ class TrackingFragment : Fragment() {
             }
 
             val episodeIndex = domainEpisodes.indexOfFirst { it.id == episode.id }
-            if (episodeIndex == -1) return@observe
+            if (episodeIndex == -1) return@launch
 
             // Prepare Data Holder
             com.shalenmathew.movieflix.presentation.episode_details.EpisodeDataHolder.setData(
                 episodeList = domainEpisodes,
                 season = seasonNumber,
                 showName = series.name,
-                totalSeasons = 0, // We can fetch this if needed, or just default for now
+                totalSeasons = 0,
                 tvShowId = seriesId,
                 onSeasonChange = { _ ->
-                    // For tracking tab, we'll keep season navigation internal to the accordion
-                    // so we just show a toast if they try to swap seasons inside the detail view
                     context?.let { com.shalenmathew.movieflix.core.utils.showToast(it, "Swap seasons in the Tracking list") }
                 }
             )
