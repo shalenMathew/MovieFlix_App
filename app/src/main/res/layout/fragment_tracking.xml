@@ -60,8 +60,8 @@
                     android:layout_height="match_parent"
                     android:layout_below="@id/fragment_tracking_tv"
                     android:layout_marginTop="6dp"
-                    app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-                    app:spanCount="@integer/grid_span_count" />
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    android:orientation="vertical" />
             </RelativeLayout>
 
             <TextView

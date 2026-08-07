@@ -11,14 +11,13 @@ I have implemented the "Series Tracking" feature which allows you to track TV sh
 - Implemented `SeriesTrackingRepositoryImpl` which handles the "Track" logic by fetching and caching all seasons and episodes from the API.
 
 ### 2. Presentation
-- **Library**: Added a 3rd tab named **"Tracking"** that displays all your currently tracked series.
+- **Library**: Added a 3rd tab named **"Tracking"**. Updated its layout to show **vertical banners** instead of a grid of posters for a more cinematic look.
 - **Movie Details**: Added a **"Track Series"** option inside the "More Options" (three dots) bottom sheet for TV shows. Clicking it will trigger the caching process.
-- **Episode Details**: Added a **"Mark as Watched"** button. When clicked, it updates the watched status in the database.
-- **Home Screen**: Added a **"Continue Watching"** row at the very top of the feed that automatically shows your tracked series.
+- **Episode Details**: Removed "Mark as Watched" features as per user request to keep the UI clean.
+- **Home Screen**: Reverted "Continue Watching" row to maintain the original home feed layout.
 
 ### 3. Offline Support
 - Updated `MovieDetailsRepositoryImpl` to serve cached season and episode data if the show is tracked and there is no internet connection.
-- Episodes in the list will now show a "Watched" checkmark if they have been marked as such.
 
 ## Verification Done
 - [x] Database migration from v7 to v8.

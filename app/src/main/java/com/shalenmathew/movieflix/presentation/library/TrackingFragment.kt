@@ -54,8 +54,7 @@ class TrackingFragment : Fragment() {
             bundle.putString(Constants.MEDIA_SEND_REQUEST_KEY, Gson().toJson(it))
             findNavController().navigate(R.id.movieDetailsFragment, bundle)
         })
-        val spanCount = resources.getInteger(R.integer.grid_span_count)
-        binding.fragmentTrackingRv.layoutManager = GridLayoutManager(requireContext(), spanCount)
+        binding.fragmentTrackingRv.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(requireContext())
         binding.fragmentTrackingRv.adapter = adapter
     }
 
