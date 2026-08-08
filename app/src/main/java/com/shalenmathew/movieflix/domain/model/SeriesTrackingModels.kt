@@ -19,7 +19,8 @@ data class TrackedSeason(
     val seasonNumber: Int,
     val name: String?,
     val episodeCount: Int?,
-    val posterPath: String?
+    val posterPath: String?,
+    val watchedCount: Int = 0
 )
 
 data class TrackedEpisode(

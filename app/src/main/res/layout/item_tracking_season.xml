@@ -31,6 +31,45 @@
                 android:textSize="@dimen/_12ssp"
                 tools:text="Season 1" />
 
+            <FrameLayout
+                android:id="@+id/season_progress_container"
+                android:layout_width="@dimen/_32sdp"
+                android:layout_height="@dimen/_32sdp"
+                android:layout_marginEnd="@dimen/_8sdp">
+
+                <com.google.android.material.progressindicator.CircularProgressIndicator
+                    android:id="@+id/season_progress_bar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    app:indicatorSize="@dimen/_26sdp"
+                    app:trackThickness="2dp"
+                    app:indicatorColor="@color/white"
+                    app:trackColor="@color/dark_gray"
+                    android:progress="77"
+                    android:max="100" />
+
+                <TextView
+                    android:id="@+id/season_progress_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:textSize="@dimen/_7ssp"
+                    android:textColor="@color/white"
+                    android:fontFamily="@font/montserrat_medium"
+                    tools:text="77%" />
+
+                <ImageView
+                    android:id="@+id/season_completed_ic"
+                    android:layout_width="@dimen/_22sdp"
+                    android:layout_height="@dimen/_22sdp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/check_box"
+                    android:visibility="gone"
+                    tools:visibility="visible" />
+
+            </FrameLayout>
+
             <ImageView
                 android:id="@+id/tracking_season_arrow"
                 android:layout_width="@dimen/_20sdp"

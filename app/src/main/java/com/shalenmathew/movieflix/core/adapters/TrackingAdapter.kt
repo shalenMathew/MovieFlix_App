@@ -23,23 +23,30 @@ class TrackingAdapter(
     private val onSeriesExpand: (TrackedSeries, (List<TrackedSeason>) -> Unit) -> Unit,
     private val onSeasonExpand: (TrackedSeason, (List<TVEpisode>) -> Unit) -> Unit,
     private val onUntrackClick: (TrackedSeries) -> Unit,
-    private val onEpisodeClick: (TrackedSeries, TrackedSeason, TVEpisode) -> Unit
+    private val onEpisodeClick: (TrackedSeries, TrackedSeason, TVEpisode) -> Unit,
+    private val onEpisodeWatchedClick: (TrackedSeries, TrackedSeason, TVEpisode) -> Unit
 ) : ListAdapter<TrackedSeries, TrackingAdapter.ViewHolder>(DiffUtilCallback()) {
 
     private var expandedSeriesId: Int? = null
-    private val seasonsCache = mutableMapOf<Int, List<TrackedSeason>>()
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val bannerCard: View = itemView.findViewById(R.id.tracking_series_banner_card)
         val bannerImage: ImageView = itemView.findViewById(R.id.tracking_banner_image)
         val bannerTitle: TextView = itemView.findViewById(R.id.tracking_banner_title)
+        val lastWatchedText: TextView = itemView.findViewById(R.id.tracking_banner_last_watched)
         val bannerArrow: ImageView = itemView.findViewById(R.id.tracking_banner_arrow)
         val untrackIcon: ImageView = itemView.findViewById(R.id.tracking_untrack_icon)
         val seasonsRv: RecyclerView = itemView.findViewById(R.id.tracking_seasons_rv)
         
-        private val seasonAdapter = TrackingSeasonAdapter(onSeasonExpand) { season, episode ->
-            onEpisodeClick(getItem(bindingAdapterPosition), season, episode)
-        }
+        private val seasonAdapter = TrackingSeasonAdapter(
+            onSeasonExpand = onSeasonExpand,
+            onEpisodeClick = { season, episode ->
+                onEpisodeClick(getItem(bindingAdapterPosition), season, episode)
+            },
+            onEpisodeWatchedClick = { season, episode ->
+                onEpisodeWatchedClick(getItem(bindingAdapterPosition), season, episode)
+            }
+        )
 
         init {
             seasonsRv.layoutManager = LinearLayoutManager(itemView.context)
@@ -51,6 +58,14 @@ class TrackingAdapter(
         fun bind(series: TrackedSeries) {
             bannerImage.loadImage(Constants.TMDB_IMAGE_BASE_URL_W780.plus(series.backdropPath))
             bannerTitle.text = series.name
+            
+            // Set last watched info
+            if (series.lastWatchedSeasonNumber != null && series.lastWatchedEpisodeNumber != null) {
+                lastWatchedText.text = "Last watched : Season ${series.lastWatchedSeasonNumber} ep ${series.lastWatchedEpisodeNumber}"
+                lastWatchedText.visibility = View.VISIBLE
+            } else {
+                lastWatchedText.visibility = View.GONE
+            }
             
             updateExpansionState(series)
 
@@ -70,20 +85,20 @@ class TrackingAdapter(
             bannerArrow.rotation = if (isExpanded) 90f else 0f
             
             if (isExpanded) {
-                val cached = seasonsCache[series.id]
-                if (cached != null) {
-                    seasonAdapter.submitList(cached)
-                } else {
-                    seasonAdapter.submitList(null)
-                    onSeriesExpand(series) { seasons ->
-                        seasonsCache[series.id] = seasons
-                        if (expandedSeriesId == series.id) {
-                            seasonAdapter.submitList(seasons)
-                        }
-                    }
+                onSeriesExpand(series) { seasons ->
+                    seasonAdapter.submitList(seasons)
                 }
             } else {
                 seasonAdapter.submitList(null)
+            }
+        }
+
+        fun updateBookmarkInfo(series: TrackedSeries) {
+            if (series.lastWatchedSeasonNumber != null && series.lastWatchedEpisodeNumber != null) {
+                lastWatchedText.text = "Last watched : Season ${series.lastWatchedSeasonNumber} ep ${series.lastWatchedEpisodeNumber}"
+                lastWatchedText.visibility = View.VISIBLE
+            } else {
+                lastWatchedText.visibility = View.GONE
             }
         }
 
@@ -136,7 +151,14 @@ class TrackingAdapter(
         if (payloads.isEmpty()) {
             super.onBindViewHolder(holder, position, payloads)
         } else {
-            holder.updateExpansionState(getItem(position))
+            val combinedPayloads = payloads.flatMap { if (it is List<*>) it else listOf(it) }
+            
+            if (combinedPayloads.contains("EXPANSION_CHANGE")) {
+                holder.updateExpansionState(getItem(position))
+            }
+            if (combinedPayloads.contains("BOOKMARK_CHANGE")) {
+                holder.updateBookmarkInfo(getItem(position))
+            }
         }
     }
 
@@ -147,9 +169,14 @@ class TrackingAdapter(
             oldItem == newItem
 
         override fun getChangePayload(oldItem: TrackedSeries, newItem: TrackedSeries): Any? {
-            return if (oldItem.id == newItem.id) {
-                "EXPANSION_CHANGE"
-            } else null
+            val payloads = mutableListOf<String>()
+            if (oldItem.id == newItem.id) {
+                payloads.add("EXPANSION_CHANGE")
+            }
+            if (oldItem.lastWatchedEpisodeId != newItem.lastWatchedEpisodeId) {
+                payloads.add("BOOKMARK_CHANGE")
+            }
+            return if (payloads.isNotEmpty()) payloads else null
         }
     }
 }

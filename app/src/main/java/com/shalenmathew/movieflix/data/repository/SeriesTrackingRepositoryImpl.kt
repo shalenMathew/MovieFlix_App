@@ -76,8 +76,18 @@ class SeriesTrackingRepositoryImpl @Inject constructor(
     }
 
     override fun getSeasonsForSeries(seriesId: Int): Flow<List<TrackedSeason>> {
-        return seriesTrackingDao.getSeasonsForSeries(seriesId).map { list ->
-            list.map { it.toDomain() }
+        return seriesTrackingDao.getSeasonsWithProgress(seriesId).map { list ->
+            list.map { 
+                TrackedSeason(
+                    id = it.id,
+                    seriesId = it.seriesId,
+                    seasonNumber = it.seasonNumber,
+                    name = it.name,
+                    episodeCount = it.episodeCount,
+                    posterPath = it.posterPath,
+                    watchedCount = it.watchedCount
+                )
+            }
         }
     }
 
@@ -93,6 +103,10 @@ class SeriesTrackingRepositoryImpl @Inject constructor(
 
     override suspend fun updateLastWatchedEpisode(seriesId: Int, episodeId: Int, seasonNumber: Int, episodeNumber: Int) {
         seriesTrackingDao.updateLastWatchedEpisode(seriesId, episodeId, seasonNumber, episodeNumber)
+    }
+
+    override suspend fun markPreviousEpisodesAsWatched(seriesId: Int, seasonNumber: Int, episodeNumber: Int) {
+        seriesTrackingDao.markPreviousEpisodesAsWatched(seriesId, seasonNumber, episodeNumber)
     }
 
     override suspend fun isSeriesTracked(seriesId: Int): Boolean {

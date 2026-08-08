@@ -22,6 +22,8 @@ interface SeriesTrackingRepository {
 
     suspend fun updateLastWatchedEpisode(seriesId: Int, episodeId: Int, seasonNumber: Int, episodeNumber: Int)
 
+    suspend fun markPreviousEpisodesAsWatched(seriesId: Int, seasonNumber: Int, episodeNumber: Int)
+
     suspend fun isSeriesTracked(seriesId: Int): Boolean
 
     suspend fun getEpisodeWatchedStatus(episodeId: Int): Boolean

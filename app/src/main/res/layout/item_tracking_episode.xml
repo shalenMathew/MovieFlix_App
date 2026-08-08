@@ -7,51 +7,81 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:paddingHorizontal="@dimen/_10sdp"
-        android:paddingVertical="@dimen/_6sdp"
         android:gravity="center_vertical"
         android:background="@android:color/transparent">
 
-        <!-- Square Episode Thumbnail -->
-        <com.google.android.material.imageview.ShapeableImageView
-            android:id="@+id/item_episode_thumbnail"
-            android:layout_width="@dimen/_80sdp"
-            android:layout_height="@dimen/_80sdp"
-            android:scaleType="centerCrop"
-            android:background="@color/black"
-            app:shapeAppearanceOverlay="@style/RoundedCornerImage"
-            tools:src="@tools:sample/backgrounds/scenic" />
-
-        <!-- Episode Info -->
+        <!-- Info Area (Click to Navigate) -->
         <LinearLayout
+            android:id="@+id/item_episode_info_container"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:layout_marginStart="@dimen/_12sdp"
-            android:orientation="vertical">
+            android:orientation="horizontal"
+            android:paddingHorizontal="@dimen/_10sdp"
+            android:paddingVertical="@dimen/_6sdp"
+            android:gravity="center_vertical"
+            android:foreground="?attr/selectableItemBackground">
 
-            <TextView
-                android:id="@+id/item_episode_name"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/montserrat_semibold"
-                android:textColor="@color/white"
-                android:textSize="@dimen/_11ssp"
-                android:maxLines="2"
-                android:ellipsize="end"
-                tools:text="The Beginning of the End" />
+            <!-- Square Episode Thumbnail -->
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/item_episode_thumbnail"
+                android:layout_width="@dimen/_80sdp"
+                android:layout_height="@dimen/_80sdp"
+                android:scaleType="centerCrop"
+                android:background="@color/black"
+                app:shapeAppearanceOverlay="@style/RoundedCornerImage"
+                tools:src="@tools:sample/backgrounds/scenic" />
 
-            <TextView
-                android:id="@+id/item_episode_number"
-                android:layout_width="wrap_content"
+            <!-- Episode Info -->
+            <LinearLayout
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_2sdp"
-                android:fontFamily="@font/montserrat_medium"
-                android:textColor="@color/text_secondary"
-                android:textSize="@dimen/_9ssp"
-                tools:text="Episode 1" />
+                android:layout_weight="1"
+                android:layout_marginStart="@dimen/_12sdp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/item_episode_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/montserrat_semibold"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/_11ssp"
+                    android:maxLines="2"
+                    android:ellipsize="end"
+                    tools:text="The Beginning of the End" />
+
+                <TextView
+                    android:id="@+id/item_episode_number"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_2sdp"
+                    android:fontFamily="@font/montserrat_medium"
+                    android:textColor="@color/text_secondary"
+                    android:textSize="@dimen/_9ssp"
+                    tools:text="Episode 1" />
+
+            </LinearLayout>
 
         </LinearLayout>
+
+        <!-- Action Area (Dedicated space for Checkbox) -->
+        <FrameLayout
+            android:id="@+id/item_episode_watched_container"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:paddingHorizontal="@dimen/_12sdp"
+            android:foreground="?attr/selectableItemBackground">
+
+            <ImageView
+                android:id="@+id/item_episode_watched_btn"
+                android:layout_width="@dimen/_24sdp"
+                android:layout_height="@dimen/_24sdp"
+                android:layout_gravity="center"
+                android:padding="@dimen/_4sdp"
+                tools:src="@drawable/check_box_unmarked" />
+
+        </FrameLayout>
 
     </LinearLayout>
 </layout>

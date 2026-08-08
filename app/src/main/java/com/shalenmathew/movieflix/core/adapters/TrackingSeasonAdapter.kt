@@ -16,14 +16,15 @@ import androidx.transition.TransitionManager
 import androidx.transition.ChangeBounds
 import androidx.transition.Fade
 import androidx.transition.TransitionSet
+import com.google.android.material.progressindicator.CircularProgressIndicator
 
 class TrackingSeasonAdapter(
     private val onSeasonExpand: (TrackedSeason, (List<TVEpisode>) -> Unit) -> Unit,
-    private val onEpisodeClick: (TrackedSeason, TVEpisode) -> Unit
+    private val onEpisodeClick: (TrackedSeason, TVEpisode) -> Unit,
+    private val onEpisodeWatchedClick: (TrackedSeason, TVEpisode) -> Unit
 ) : ListAdapter<TrackedSeason, TrackingSeasonAdapter.ViewHolder>(DiffUtilCallback()) {
 
     private var expandedSeasonId: Int? = null
-    private val episodesCache = mutableMapOf<Int, List<TVEpisode>>()
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val seasonHeader: View = itemView.findViewById(R.id.tracking_season_header)
@@ -31,9 +32,18 @@ class TrackingSeasonAdapter(
         val seasonArrow: ImageView = itemView.findViewById(R.id.tracking_season_arrow)
         val episodesRv: RecyclerView = itemView.findViewById(R.id.tracking_episodes_rv)
         
-        private val episodeAdapter = TrackingEpisodeAdapter { episode ->
-            onEpisodeClick(getItem(bindingAdapterPosition), episode)
-        }
+        val progressBar: CircularProgressIndicator = itemView.findViewById(R.id.season_progress_bar)
+        val progressText: TextView = itemView.findViewById(R.id.season_progress_text)
+        val completedIcon: ImageView = itemView.findViewById(R.id.season_completed_ic)
+        
+        private val episodeAdapter = TrackingEpisodeAdapter(
+            onEpisodeClick = { episode ->
+                onEpisodeClick(getItem(bindingAdapterPosition), episode)
+            },
+            onWatchedClick = { episode ->
+                onEpisodeWatchedClick(getItem(bindingAdapterPosition), episode)
+            }
+        )
 
         init {
             episodesRv.layoutManager = LinearLayoutManager(itemView.context)
@@ -45,9 +55,28 @@ class TrackingSeasonAdapter(
             seasonTitle.text = season.name ?: "Season ${season.seasonNumber}"
             
             updateExpansionState(season)
+            updateProgress(season)
 
             seasonHeader.setOnClickListener {
                 toggleExpansion(season)
+            }
+        }
+
+        fun updateProgress(season: TrackedSeason) {
+            val total = season.episodeCount ?: 0
+            val watched = season.watchedCount
+            val percent = if (total > 0) (watched * 100) / total else 0
+
+            if (percent >= 100) {
+                progressBar.visibility = View.GONE
+                progressText.visibility = View.GONE
+                completedIcon.visibility = View.VISIBLE
+            } else {
+                progressBar.visibility = View.VISIBLE
+                progressText.visibility = View.VISIBLE
+                completedIcon.visibility = View.GONE
+                progressBar.progress = percent
+                progressText.text = "$percent%"
             }
         }
 
@@ -59,22 +88,10 @@ class TrackingSeasonAdapter(
             seasonArrow.rotation = if (isExpanded) 90f else 0f
 
             if (isExpanded) {
-                val cached = episodesCache[season.id]
-                if (cached != null) {
-                    episodeAdapter.submitList(cached)
-                } else {
-                    // Show empty immediately to wipe any recycled data
-                    episodeAdapter.submitList(null)
-                    onSeasonExpand(season) { episodes ->
-                        episodesCache[season.id] = episodes
-                        // Double check expansion state hasn't changed during async call
-                        if (expandedSeasonId == season.id) {
-                            episodeAdapter.submitList(episodes)
-                        }
-                    }
+                onSeasonExpand(season) { episodes ->
+                    episodeAdapter.submitList(episodes)
                 }
             } else {
-                // Instantly clear data to prevent recycling issues
                 episodeAdapter.submitList(null)
             }
         }
@@ -126,8 +143,14 @@ class TrackingSeasonAdapter(
         if (payloads.isEmpty()) {
             super.onBindViewHolder(holder, position, payloads)
         } else {
-            // Partial update for expansion state only
-            holder.updateExpansionState(getItem(position))
+            val combinedPayloads = payloads.flatMap { if (it is List<*>) it else listOf(it) }
+            
+            if (combinedPayloads.contains("EXPANSION_CHANGE")) {
+                holder.updateExpansionState(getItem(position))
+            }
+            if (combinedPayloads.contains("PROGRESS_CHANGE")) {
+                holder.updateProgress(getItem(position))
+            }
         }
     }
 
@@ -138,9 +161,14 @@ class TrackingSeasonAdapter(
             oldItem == newItem
 
         override fun getChangePayload(oldItem: TrackedSeason, newItem: TrackedSeason): Any? {
-            return if (oldItem.id == newItem.id) {
-                "EXPANSION_CHANGE"
-            } else null
+            val payloads = mutableListOf<String>()
+            if (oldItem.id == newItem.id) {
+                payloads.add("EXPANSION_CHANGE")
+            }
+            if (oldItem.watchedCount != newItem.watchedCount) {
+                payloads.add("PROGRESS_CHANGE")
+            }
+            return if (payloads.isNotEmpty()) payloads else null
         }
     }
 }

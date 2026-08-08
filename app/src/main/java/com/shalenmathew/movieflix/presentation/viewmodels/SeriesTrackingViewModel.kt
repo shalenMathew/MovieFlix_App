@@ -72,4 +72,10 @@ class SeriesTrackingViewModel @Inject constructor(
             seriesTrackingRepository.updateLastWatchedEpisode(seriesId, episodeId, seasonNumber, episodeNumber)
         }
     }
+
+    fun markPreviousEpisodesAsWatched(seriesId: Int, seasonNumber: Int, episodeNumber: Int) {
+        viewModelScope.launch {
+            seriesTrackingRepository.markPreviousEpisodesAsWatched(seriesId, seasonNumber, episodeNumber)
+        }
+    }
 }

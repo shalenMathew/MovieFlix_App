@@ -56,12 +56,17 @@ class TrackingFragment : Fragment() {
     private fun inIt() {
         adapter = TrackingAdapter(
             onSeriesExpand = { series, callback ->
-                seriesTrackingViewModel.getSeasonsForSeries(series.id).observe(viewLifecycleOwner) { seasons ->
+                // Using removeObservers to ensure we don't have multiple listeners for the same row
+                val liveData = seriesTrackingViewModel.getSeasonsForSeries(series.id)
+                liveData.removeObservers(viewLifecycleOwner)
+                liveData.observe(viewLifecycleOwner) { seasons ->
                     callback(seasons)
                 }
             },
             onSeasonExpand = { season, callback ->
-                seriesTrackingViewModel.getEpisodesForSeason(season.id).observe(viewLifecycleOwner) { episodes ->
+                val liveData = seriesTrackingViewModel.getEpisodesForSeason(season.id)
+                liveData.removeObservers(viewLifecycleOwner)
+                liveData.observe(viewLifecycleOwner) { episodes ->
                     callback(episodes.map { 
                         com.shalenmathew.movieflix.domain.model.TVEpisode(
                             id = it.id,
@@ -92,6 +97,29 @@ class TrackingFragment : Fragment() {
             },
             onEpisodeClick = { series, season, episode ->
                 navigateToEpisodeDetails(series, season, episode)
+            },
+            onEpisodeWatchedClick = { series, season, episode ->
+                val newStatus = !episode.isWatched
+                
+                if (newStatus) {
+                    // AUTO-FILL: Mark this episode AND all previous ones as watched
+                    seriesTrackingViewModel.markPreviousEpisodesAsWatched(
+                        seriesId = series.id,
+                        seasonNumber = season.seasonNumber,
+                        episodeNumber = episode.episodeNumber ?: 0
+                    )
+                    
+                    // Update "Last Watched" bookmark
+                    seriesTrackingViewModel.updateLastWatchedEpisode(
+                        seriesId = series.id,
+                        episodeId = episode.id ?: -1,
+                        seasonNumber = season.seasonNumber,
+                        episodeNumber = episode.episodeNumber ?: 0
+                    )
+                } else {
+                    // MANUAL OVERRIDE: Just unmark this specific episode
+                    seriesTrackingViewModel.updateEpisodeWatchedStatus(episode.id ?: -1, false)
+                }
             }
         )
         binding.fragmentTrackingRv.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(requireContext())

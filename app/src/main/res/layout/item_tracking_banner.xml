@@ -36,22 +36,45 @@
                     android:layout_alignParentBottom="true"
                     android:background="@drawable/gradient_bottom" />
 
-                <TextView
-                    android:id="@+id/tracking_banner_title"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_alignParentBottom="true"
                     android:layout_marginHorizontal="@dimen/_12sdp"
                     android:layout_marginBottom="@dimen/_10sdp"
                     android:layout_toStartOf="@id/tracking_untrack_icon"
-                    android:fontFamily="@font/montserrat_bold"
-                    android:textColor="@color/white"
-                    android:textSize="@dimen/_14ssp"
-                    android:shadowColor="@color/black"
-                    android:shadowDx="2"
-                    android:shadowDy="2"
-                    android:shadowRadius="2"
-                    tools:text="Breaking Bad" />
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tracking_banner_title"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/montserrat_bold"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/_14ssp"
+                        android:shadowColor="@color/black"
+                        android:shadowDx="2"
+                        android:shadowDy="2"
+                        android:shadowRadius="2"
+                        tools:text="Breaking Bad" />
+
+                    <TextView
+                        android:id="@+id/tracking_banner_last_watched"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_2sdp"
+                        android:fontFamily="@font/montserrat_medium"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/_11ssp"
+                        android:shadowColor="@color/black"
+                        android:shadowDx="1"
+                        android:shadowDy="1"
+                        android:shadowRadius="1"
+                        android:visibility="gone"
+                        tools:text="Last watched : Season 2 ep 5"
+                        tools:visibility="visible" />
+
+                </LinearLayout>
 
                 <ImageView
                     android:id="@+id/tracking_untrack_icon"
