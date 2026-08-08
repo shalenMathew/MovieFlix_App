@@ -24,7 +24,8 @@ class TrackingAdapter(
     private val onSeasonExpand: (TrackedSeason, (List<TVEpisode>) -> Unit) -> Unit,
     private val onUntrackClick: (TrackedSeries) -> Unit,
     private val onEpisodeClick: (TrackedSeries, TrackedSeason, TVEpisode) -> Unit,
-    private val onEpisodeWatchedClick: (TrackedSeries, TrackedSeason, TVEpisode) -> Unit
+    private val onEpisodeWatchedClick: (TrackedSeries, TrackedSeason, TVEpisode) -> Unit,
+    private val onSeriesLongClick: (TrackedSeries) -> Unit
 ) : ListAdapter<TrackedSeries, TrackingAdapter.ViewHolder>(DiffUtilCallback()) {
 
     private var expandedSeriesId: Int? = null
@@ -76,6 +77,11 @@ class TrackingAdapter(
             untrackIcon.setOnClickListener {
                 onUntrackClick(series)
             }
+
+            bannerCard.setOnLongClickListener {
+                onSeriesLongClick(series)
+                true
+            }
         }
 
         fun updateExpansionState(series: TrackedSeries) {
@@ -100,6 +106,10 @@ class TrackingAdapter(
             } else {
                 lastWatchedText.visibility = View.GONE
             }
+        }
+
+        fun updateBanner(series: TrackedSeries) {
+            bannerImage.loadImage(Constants.TMDB_IMAGE_BASE_URL_W780.plus(series.backdropPath))
         }
 
         private fun toggleExpansion(series: TrackedSeries) {
@@ -159,6 +169,9 @@ class TrackingAdapter(
             if (combinedPayloads.contains("BOOKMARK_CHANGE")) {
                 holder.updateBookmarkInfo(getItem(position))
             }
+            if (combinedPayloads.contains("BANNER_CHANGE")) {
+                holder.updateBanner(getItem(position))
+            }
         }
     }
 
@@ -175,6 +188,9 @@ class TrackingAdapter(
             }
             if (oldItem.lastWatchedEpisodeId != newItem.lastWatchedEpisodeId) {
                 payloads.add("BOOKMARK_CHANGE")
+            }
+            if (oldItem.backdropPath != newItem.backdropPath) {
+                payloads.add("BANNER_CHANGE")
             }
             return if (payloads.isNotEmpty()) payloads else null
         }

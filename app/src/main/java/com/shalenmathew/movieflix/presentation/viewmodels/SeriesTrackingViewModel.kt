@@ -29,6 +29,9 @@ class SeriesTrackingViewModel @Inject constructor(
     private val _isCurrentSeriesTracked = MutableLiveData<Boolean>()
     val isCurrentSeriesTracked: LiveData<Boolean> = _isCurrentSeriesTracked
 
+    private val _availableBanners = MutableLiveData<NetworkResults<List<String>>>()
+    val availableBanners: LiveData<NetworkResults<List<String>>> = _availableBanners
+
     fun trackSeries(seriesId: Int) {
         viewModelScope.launch {
             seriesTrackingRepository.trackSeries(seriesId).collectLatest {
@@ -76,6 +79,19 @@ class SeriesTrackingViewModel @Inject constructor(
     fun markPreviousEpisodesAsWatched(seriesId: Int, seasonNumber: Int, episodeNumber: Int) {
         viewModelScope.launch {
             seriesTrackingRepository.markPreviousEpisodesAsWatched(seriesId, seasonNumber, episodeNumber)
+        }
+    }
+
+    fun fetchAvailableBanners(seriesId: Int) {
+        _availableBanners.value = NetworkResults.Loading()
+        viewModelScope.launch {
+            _availableBanners.value = seriesTrackingRepository.getTVImages(seriesId)
+        }
+    }
+
+    fun updateSeriesBanner(seriesId: Int, bannerPath: String) {
+        viewModelScope.launch {
+            seriesTrackingRepository.updateSeriesBanner(seriesId, bannerPath)
         }
     }
 }

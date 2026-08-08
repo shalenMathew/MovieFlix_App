@@ -119,6 +119,27 @@ class SeriesTrackingRepositoryImpl @Inject constructor(
         return false // Placeholder
     }
 
+    override suspend fun getTVImages(seriesId: Int): NetworkResults<List<String>> {
+        return try {
+            val response = remoteDataSource.getTVImages(seriesId)
+            if (response.isSuccessful && response.body() != null) {
+                val paths = response.body()!!.backdrops?.mapNotNull { it.filePath } ?: emptyList()
+                NetworkResults.Success(paths)
+            } else {
+                NetworkResults.Error("Failed to fetch images")
+            }
+        } catch (e: Exception) {
+            NetworkResults.Error(e.message ?: "Unknown error")
+        }
+    }
+
+    override suspend fun updateSeriesBanner(seriesId: Int, bannerPath: String) {
+        val series = seriesTrackingDao.getSeriesById(seriesId)
+        series?.let {
+            seriesTrackingDao.insertSeries(it.copy(backdropPath = bannerPath))
+        }
+    }
+
     private fun SeriesTrackingEntity.toDomain() = TrackedSeries(
         id = id,
         name = name,

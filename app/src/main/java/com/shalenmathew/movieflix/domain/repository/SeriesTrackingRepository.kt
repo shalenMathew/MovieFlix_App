@@ -27,4 +27,8 @@ interface SeriesTrackingRepository {
     suspend fun isSeriesTracked(seriesId: Int): Boolean
 
     suspend fun getEpisodeWatchedStatus(episodeId: Int): Boolean
+
+    suspend fun getTVImages(seriesId: Int): NetworkResults<List<String>>
+
+    suspend fun updateSeriesBanner(seriesId: Int, bannerPath: String)
 }

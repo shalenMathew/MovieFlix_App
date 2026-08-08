@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.google.gson.Gson
 import com.shalenmathew.movieflix.R
 import com.shalenmathew.movieflix.core.adapters.TrackingAdapter
+import com.shalenmathew.movieflix.core.adapters.BannerChoiceAdapter
 import com.shalenmathew.movieflix.core.utils.Constants
 import com.shalenmathew.movieflix.core.utils.gone
 import com.shalenmathew.movieflix.core.utils.visible
@@ -131,6 +132,9 @@ class TrackingFragment : Fragment() {
                     // MANUAL OVERRIDE: Just unmark this specific episode
                     seriesTrackingViewModel.updateEpisodeWatchedStatus(episode.id ?: -1, false)
                 }
+            },
+            onSeriesLongClick = { series ->
+                showDemoBottomSheet(series)
             }
         )
         binding.fragmentTrackingRv.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(requireContext())
@@ -343,6 +347,63 @@ class TrackingFragment : Fragment() {
         }
 
         doneBtn.setOnClickListener { dialog.dismiss() }
+
+        dialog.setContentView(view)
+        dialog.show()
+    }
+
+    private fun showDemoBottomSheet(series: TrackedSeries) {
+        val dialog = BottomSheetDialog(requireContext(), R.style.SheetDialog)
+        val view = layoutInflater.inflate(R.layout.bottom_sheet_demo, null)
+        
+        view.findViewById<android.widget.TextView>(R.id.demo_series_name).text = series.name
+        
+        view.findViewById<View>(R.id.options_change_banner_btn).setOnClickListener {
+            dialog.dismiss()
+            showChooseBannerBottomSheet(series)
+        }
+        
+        view.findViewById<View>(R.id.demo_close_btn).setOnClickListener { dialog.dismiss() }
+
+        dialog.setContentView(view)
+        dialog.show()
+    }
+
+    private fun showChooseBannerBottomSheet(series: TrackedSeries) {
+        val dialog = BottomSheetDialog(requireContext(), R.style.SheetDialog)
+        val view = layoutInflater.inflate(R.layout.bottom_sheet_choose_banner, null)
+        
+        val loader = view.findViewById<View>(R.id.choose_banner_loader)
+        val rv = view.findViewById<androidx.recyclerview.widget.RecyclerView>(R.id.choose_banner_rv)
+        val cancelBtn = view.findViewById<View>(R.id.choose_banner_cancel_btn)
+        
+        val adapter = BannerChoiceAdapter { selectedPath ->
+            seriesTrackingViewModel.updateSeriesBanner(series.id, selectedPath)
+            dialog.dismiss()
+            com.shalenmathew.movieflix.core.utils.showToast(requireContext(), "Banner updated!")
+        }
+        rv.adapter = adapter
+
+        seriesTrackingViewModel.fetchAvailableBanners(series.id)
+        seriesTrackingViewModel.availableBanners.observe(viewLifecycleOwner) { result ->
+            when (result) {
+                is com.shalenmathew.movieflix.core.utils.NetworkResults.Loading -> {
+                    loader.visibility = View.VISIBLE
+                    rv.visibility = View.GONE
+                }
+                is com.shalenmathew.movieflix.core.utils.NetworkResults.Success -> {
+                    loader.visibility = View.GONE
+                    rv.visibility = View.VISIBLE
+                    adapter.submitList(result.data)
+                }
+                is com.shalenmathew.movieflix.core.utils.NetworkResults.Error -> {
+                    loader.visibility = View.GONE
+                    com.shalenmathew.movieflix.core.utils.showToast(requireContext(), result.message ?: "Error")
+                }
+            }
+        }
+
+        cancelBtn.setOnClickListener { dialog.dismiss() }
 
         dialog.setContentView(view)
         dialog.show()
