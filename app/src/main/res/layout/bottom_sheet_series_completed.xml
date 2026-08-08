@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/black"
+        android:orientation="vertical"
+        android:paddingBottom="@dimen/_24sdp">
+
+        <!-- Banner Image -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_160sdp"
+            app:cardCornerRadius="0dp"
+            app:cardElevation="0dp">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:id="@+id/completed_banner_image"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"
+                    tools:src="@tools:sample/backgrounds/scenic" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_80sdp"
+                    android:layout_alignParentBottom="true"
+                    android:background="@drawable/gradient_bottom" />
+
+                <TextView
+                    android:id="@+id/completed_header_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginHorizontal="@dimen/_16sdp"
+                    android:layout_marginBottom="@dimen/_12sdp"
+                    android:fontFamily="@font/montserrat_bold"
+                    android:text="Damn, finally over!"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/_18ssp" />
+
+            </RelativeLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <TextView
+            android:id="@+id/completed_subtitle_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/_16sdp"
+            android:layout_marginTop="@dimen/_12sdp"
+            android:fontFamily="@font/montserrat_medium"
+            android:textColor="@color/text_secondary"
+            android:textSize="@dimen/_11ssp"
+            tools:text="You just finished all 62 episodes of Breaking Bad." />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginHorizontal="@dimen/_16sdp"
+            android:layout_marginVertical="@dimen/_16sdp"
+            android:background="@color/divider"
+            android:alpha="0.3" />
+
+        <!-- Options -->
+        <LinearLayout
+            android:id="@+id/completed_watchlist_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?attr/selectableItemBackground"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingHorizontal="@dimen/_16sdp"
+            android:paddingVertical="@dimen/_12sdp">
+
+            <ImageView
+                android:id="@+id/completed_watchlist_icon"
+                android:layout_width="@dimen/_20sdp"
+                android:layout_height="@dimen/_20sdp"
+                android:src="@drawable/ic_add"
+                app:tint="@color/white" />
+
+            <TextView
+                android:id="@+id/completed_watchlist_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_16sdp"
+                android:fontFamily="@font/montserrat_semibold"
+                android:text="Add to Watchlist"
+                android:textColor="@color/white"
+                android:textSize="@dimen/_12ssp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/completed_fav_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?attr/selectableItemBackground"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingHorizontal="@dimen/_16sdp"
+            android:paddingVertical="@dimen/_12sdp">
+
+            <ImageView
+                android:id="@+id/completed_fav_icon"
+                android:layout_width="@dimen/_20sdp"
+                android:layout_height="@dimen/_20sdp"
+                android:src="@drawable/fav_outline"
+                app:tint="@color/white" />
+
+            <TextView
+                android:id="@+id/completed_fav_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_16sdp"
+                android:fontFamily="@font/montserrat_semibold"
+                android:text="Add to Favorites"
+                android:textColor="@color/white"
+                android:textSize="@dimen/_12ssp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/completed_untrack_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?attr/selectableItemBackground"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingHorizontal="@dimen/_16sdp"
+            android:paddingVertical="@dimen/_12sdp">
+
+            <ImageView
+                android:layout_width="@dimen/_20sdp"
+                android:layout_height="@dimen/_20sdp"
+                android:src="@drawable/baseline_delete_24"
+                app:tint="@color/white" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_16sdp"
+                android:fontFamily="@font/montserrat_semibold"
+                android:text="Stop Tracking &amp; Clear Space"
+                android:textColor="@color/white"
+                android:textSize="@dimen/_12ssp" />
+
+        </LinearLayout>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/completed_done_btn"
+            style="@style/Widget.Material3.Button.TonalButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/_16sdp"
+            android:layout_marginTop="@dimen/_16sdp"
+            android:text="Done"
+            android:textAllCaps="false"
+            android:fontFamily="@font/montserrat_bold"
+            app:backgroundTint="@color/app_color"
+            android:textColor="@color/white" />
+
+    </LinearLayout>
+</layout>

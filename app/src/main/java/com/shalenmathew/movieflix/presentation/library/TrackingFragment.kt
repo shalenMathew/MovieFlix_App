@@ -25,6 +25,11 @@ import com.shalenmathew.movieflix.domain.model.TrackedSeason
 import com.shalenmathew.movieflix.domain.model.TVEpisode
 import com.shalenmathew.movieflix.presentation.viewmodels.LibrarySearchViewModel
 import com.shalenmathew.movieflix.presentation.viewmodels.SeriesTrackingViewModel
+import com.shalenmathew.movieflix.presentation.viewmodels.WatchListViewModel
+import com.shalenmathew.movieflix.presentation.viewmodels.FavMovieViewModel
+import com.shalenmathew.movieflix.domain.model.MovieResult
+import com.shalenmathew.movieflix.core.utils.loadImage
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 
@@ -33,11 +38,14 @@ class TrackingFragment : Fragment() {
 
     private val seriesTrackingViewModel: SeriesTrackingViewModel by viewModels()
     private val librarySearchVm: LibrarySearchViewModel by activityViewModels()
+    private val watchListViewModel: WatchListViewModel by viewModels()
+    private val favMovieViewModel: FavMovieViewModel by viewModels()
 
     private var _binding: FragmentTrackingBinding? = null
     private val binding get() = _binding!!
 
     private lateinit var adapter: TrackingAdapter
+    private var completionDialog: BottomSheetDialog? = null
 
     private var fullList: List<TrackedSeries> = emptyList()
 
@@ -116,6 +124,9 @@ class TrackingFragment : Fragment() {
                         seasonNumber = season.seasonNumber,
                         episodeNumber = episode.episodeNumber ?: 0
                     )
+                    
+                    // Check for 100% completion
+                    checkShowCompletion(series)
                 } else {
                     // MANUAL OVERRIDE: Just unmark this specific episode
                     seriesTrackingViewModel.updateEpisodeWatchedStatus(episode.id ?: -1, false)
@@ -236,4 +247,113 @@ class TrackingFragment : Fragment() {
             startActivity(intent)
         }
     }
+
+    private fun checkShowCompletion(series: TrackedSeries) {
+        if (completionDialog?.isShowing == true) return
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            // Small delay to let the database bulk update finish
+            kotlinx.coroutines.delay(250)
+            
+            val seasons = seriesTrackingViewModel.getSeasonsForSeries(series.id).asFlow().first()
+            val totalEpisodes = seasons.sumOf { it.episodeCount ?: 0 }
+            val watchedEpisodes = seasons.sumOf { it.watchedCount }
+
+            if (totalEpisodes > 0 && watchedEpisodes >= totalEpisodes) {
+                showCompletionBottomSheet(series, totalEpisodes)
+            }
+        }
+    }
+
+    private fun showCompletionBottomSheet(series: TrackedSeries, totalCount: Int) {
+        if (completionDialog?.isShowing == true) return
+
+        val dialog = BottomSheetDialog(requireContext(), R.style.SheetDialog)
+        completionDialog = dialog
+        
+        val view = layoutInflater.inflate(R.layout.bottom_sheet_series_completed, null)
+        
+        val banner = view.findViewById<android.widget.ImageView>(R.id.completed_banner_image)
+        val subtitle = view.findViewById<android.widget.TextView>(R.id.completed_subtitle_text)
+        val watchlistBtn = view.findViewById<View>(R.id.completed_watchlist_btn)
+        val watchlistIcon = view.findViewById<android.widget.ImageView>(R.id.completed_watchlist_icon)
+        val watchlistText = view.findViewById<android.widget.TextView>(R.id.completed_watchlist_text)
+        val favBtn = view.findViewById<View>(R.id.completed_fav_btn)
+        val favIcon = view.findViewById<android.widget.ImageView>(R.id.completed_fav_icon)
+        val favText = view.findViewById<android.widget.TextView>(R.id.completed_fav_text)
+        val untrackBtn = view.findViewById<View>(R.id.completed_untrack_btn)
+        val doneBtn = view.findViewById<View>(R.id.completed_done_btn)
+
+        banner.loadImage(Constants.TMDB_IMAGE_BASE_URL_W780.plus(series.backdropPath))
+        subtitle.text = "You just finished all $totalCount episodes of ${series.name}."
+
+        val movieResult = series.toMovieResult()
+
+        // Initial State for Watchlist/Fav
+        var isInWatchlist = false
+        var isFav = false
+
+        // We need to observe the actual lists to know status
+        watchListViewModel.getAllWatchListData().observe(viewLifecycleOwner) { list ->
+            isInWatchlist = list.any { it.id == series.id }
+            if (isInWatchlist) {
+                watchlistIcon.setImageResource(R.drawable.baseline_done_all_24)
+                watchlistText.text = "Remove from Watchlist"
+            } else {
+                watchlistIcon.setImageResource(R.drawable.ic_add)
+                watchlistText.text = "Add to Watchlist"
+            }
+        }
+
+        favMovieViewModel.getAllMovieData().observe(viewLifecycleOwner) { list ->
+            isFav = list.any { it.id == series.id }
+            if (isFav) {
+                favIcon.setImageResource(R.drawable.fav_red)
+                favText.text = "Remove from Favorites"
+            } else {
+                favIcon.setImageResource(R.drawable.fav_outline)
+                favText.text = "Add to Favorites"
+            }
+        }
+
+        watchlistBtn.setOnClickListener {
+            if (isInWatchlist) {
+                watchListViewModel.deleteWatchListData(movieResult)
+                com.shalenmathew.movieflix.core.utils.showToast(requireContext(), "Removed from watchlist")
+            } else {
+                watchListViewModel.insertWatchListData(movieResult)
+                com.shalenmathew.movieflix.core.utils.showToast(requireContext(), "Added to watchlist")
+            }
+        }
+
+        favBtn.setOnClickListener {
+            if (isFav) {
+                favMovieViewModel.deleteWatchListData(movieResult)
+                com.shalenmathew.movieflix.core.utils.showToast(requireContext(), "Removed from Favorites")
+            } else {
+                favMovieViewModel.insertFavMovieData(movieResult)
+                com.shalenmathew.movieflix.core.utils.showToast(requireContext(), "Added to Favorites")
+            }
+        }
+
+        untrackBtn.setOnClickListener {
+            seriesTrackingViewModel.untrackSeries(series.id)
+            dialog.dismiss()
+            com.shalenmathew.movieflix.core.utils.showToast(requireContext(), "Tracking stopped")
+        }
+
+        doneBtn.setOnClickListener { dialog.dismiss() }
+
+        dialog.setContentView(view)
+        dialog.show()
+    }
+
+    private fun TrackedSeries.toMovieResult() = MovieResult(
+        id = id,
+        name = name,
+        posterPath = posterPath,
+        backdropPath = backdropPath,
+        overview = overview,
+        mediaType = "tv"
+    )
 }
