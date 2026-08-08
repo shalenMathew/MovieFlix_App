@@ -79,17 +79,34 @@ class SearchFragment : BaseFragment() {
             findNavController().navigate(R.id.action_searchFragment_to_movieDetailsFragment,bundle)
         })
         binding.apply {
-           fragmentSearchSearchResult.adapter=horizontalAdapter
-            fragmentSearchTrendRv.adapter=trendingMovieAdapter
-            fragmentSearchEt.doOnTextChanged { text,_,_,_ ->
-                text?.let {searchText->
-                    query=searchText.trim().toString()
-                    if(searchText.isNotEmpty() && searchText.isNotBlank()){
+            fragmentSearchSearchResult.adapter = horizontalAdapter
+            fragmentSearchTrendRv.adapter = trendingMovieAdapter
+            
+            fragmentSearchEt.doOnTextChanged { text, _, _, _ ->
+                val hasText = !text.isNullOrEmpty()
+                
+                // Toggle Search vs Clear icon
+                if (hasText) {
+                    fragmentSearchIconBtn.setImageResource(R.drawable.ic_clear)
+                } else {
+                    fragmentSearchIconBtn.setImageResource(R.drawable.ic_nav_search_24)
+                }
+
+                text?.let { searchText ->
+                    query = searchText.trim().toString()
+                    if (searchText.isNotEmpty() && searchText.isNotBlank()) {
                         performSearch(searchText.trim().toString())
-                    }else{
+                    } else {
                         searchMovieViewModel.fetchTrendingMovies()
                         job?.cancel()
                     }
+                }
+            }
+
+            // Click listener for the icon (act as Clear button if there's text)
+            fragmentSearchIconBtn.setOnClickListener {
+                if (fragmentSearchEt.text.isNotEmpty()) {
+                    fragmentSearchEt.setText("")
                 }
             }
         }

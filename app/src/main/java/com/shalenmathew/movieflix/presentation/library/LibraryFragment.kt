@@ -10,6 +10,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.google.android.material.tabs.TabLayout
+import com.shalenmathew.movieflix.R
 import com.shalenmathew.movieflix.databinding.FragmentLibraryBinding
 import com.shalenmathew.movieflix.presentation.favorites.FavFragment
 import com.shalenmathew.movieflix.presentation.watchlist.WatchListFragment
@@ -65,6 +66,15 @@ class LibraryFragment : Fragment() {
         }
 
         binding.fragmentLibrarySearchEt.doOnTextChanged { text, _, _, _ ->
+            val hasText = !text.isNullOrEmpty()
+
+            // Toggle Search vs Clear icon
+            if (hasText) {
+                binding.fragmentLibrarySearchIconBtn.setImageResource(R.drawable.ic_clear)
+            } else {
+                binding.fragmentLibrarySearchIconBtn.setImageResource(R.drawable.ic_nav_search_24)
+            }
+
             searchJob?.cancel()
             searchJob = lifecycleScope.launch {
                 delay(500)
@@ -74,6 +84,12 @@ class LibraryFragment : Fragment() {
             if (text.isNullOrBlank()) {
                 searchJob?.cancel()
                 librarySearchVm.setQuery("")
+            }
+        }
+
+        binding.fragmentLibrarySearchIconBtn.setOnClickListener {
+            if (binding.fragmentLibrarySearchEt.text.isNotEmpty()) {
+                binding.fragmentLibrarySearchEt.setText("")
             }
         }
 
