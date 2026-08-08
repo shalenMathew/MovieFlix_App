@@ -74,18 +74,9 @@ Create aesthetic movie cards to share like Spotify songs, manage your watchlist,
 
 ## 🚀 Roadmap
 
-MovieFlix is actively under development. Here's what's coming next:
+MovieFlix is actively under development. Check out the link for whats coming next:
 
-
-- [ ] share ur Fav movies & show just like Spotify-themed card or stickers
-- [x] ~~Track the seasons and episodes of the TV shows you're currently watching.~~
-- [x] ~~Add episodes list in the app~~
-- [x] ~~Bring watchlist and favorites under one screen~~
-- [x] ~~Feature to add personal notes under movies~~
-- [x] ~~Add pagination feature on list of movies on HomeFeed~~
-- [x] ~~Notify when to watch movie by allowing users to schedule time~~
-- [x] ~~Add bottom nav~~
-- [x] ~~Show whole cast working in a movie with their socials~~
+https://github.com/shalenMathew/MovieFlix_App/discussions/70
 
 
 ## Contribution/Issues 🤝
