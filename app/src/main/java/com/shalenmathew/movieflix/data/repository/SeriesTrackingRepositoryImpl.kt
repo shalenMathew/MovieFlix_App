@@ -134,10 +134,7 @@ class SeriesTrackingRepositoryImpl @Inject constructor(
     }
 
     override suspend fun updateSeriesBanner(seriesId: Int, bannerPath: String) {
-        val series = seriesTrackingDao.getSeriesById(seriesId)
-        series?.let {
-            seriesTrackingDao.insertSeries(it.copy(backdropPath = bannerPath))
-        }
+        seriesTrackingDao.updateSeriesBanner(seriesId, bannerPath)
     }
 
     private fun SeriesTrackingEntity.toDomain() = TrackedSeries(

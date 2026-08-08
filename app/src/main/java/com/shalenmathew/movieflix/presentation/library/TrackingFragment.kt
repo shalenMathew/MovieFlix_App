@@ -65,17 +65,13 @@ class TrackingFragment : Fragment() {
     private fun inIt() {
         adapter = TrackingAdapter(
             onSeriesExpand = { series, callback ->
-                // Using removeObservers to ensure we don't have multiple listeners for the same row
-                val liveData = seriesTrackingViewModel.getSeasonsForSeries(series.id)
-                liveData.removeObservers(viewLifecycleOwner)
-                liveData.observe(viewLifecycleOwner) { seasons ->
+                // Use a standard observer but tied to the series ID to avoid accumulation
+                seriesTrackingViewModel.getSeasonsForSeries(series.id).observe(viewLifecycleOwner) { seasons ->
                     callback(seasons)
                 }
             },
             onSeasonExpand = { season, callback ->
-                val liveData = seriesTrackingViewModel.getEpisodesForSeason(season.id)
-                liveData.removeObservers(viewLifecycleOwner)
-                liveData.observe(viewLifecycleOwner) { episodes ->
+                seriesTrackingViewModel.getEpisodesForSeason(season.id).observe(viewLifecycleOwner) { episodes ->
                     callback(episodes.map { 
                         com.shalenmathew.movieflix.domain.model.TVEpisode(
                             id = it.id,

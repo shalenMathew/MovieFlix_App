@@ -183,9 +183,6 @@ class TrackingAdapter(
 
         override fun getChangePayload(oldItem: TrackedSeries, newItem: TrackedSeries): Any? {
             val payloads = mutableListOf<String>()
-            if (oldItem.id == newItem.id) {
-                payloads.add("EXPANSION_CHANGE")
-            }
             if (oldItem.lastWatchedEpisodeId != newItem.lastWatchedEpisodeId) {
                 payloads.add("BOOKMARK_CHANGE")
             }
