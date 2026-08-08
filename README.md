@@ -64,9 +64,10 @@ Create aesthetic movie cards to share like Spotify songs, manage your watchlist,
 - Discover movies and show
 - Offline support
 - Save Movies in WatchList & Favourites
+- Track the seasons and episodes of the TV shows you're currently watching.
 - Share movies with family and friends
 - Watch official trailers instantly
-- Search for your favourite movies and shows
+- Browse for your favourite movies and shows
 - Get details about the latest episodes of your favourite shows
 - Add personal notes to your favourite movies & shows
 - Schedule and get notified when it’s time to watch
@@ -77,6 +78,7 @@ MovieFlix is actively under development. Here's what's coming next:
 
 
 - [ ] share ur Fav movies & show just like Spotify-themed card or stickers
+- [x] ~~Track the seasons and episodes of the TV shows you're currently watching.~~
 - [x] ~~Add episodes list in the app~~
 - [x] ~~Bring watchlist and favorites under one screen~~
 - [x] ~~Feature to add personal notes under movies~~
