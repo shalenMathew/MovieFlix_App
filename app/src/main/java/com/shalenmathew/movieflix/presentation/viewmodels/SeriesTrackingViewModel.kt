@@ -29,6 +29,9 @@ class SeriesTrackingViewModel @Inject constructor(
     private val _isCurrentSeriesTracked = MutableLiveData<Boolean>()
     val isCurrentSeriesTracked: LiveData<Boolean> = _isCurrentSeriesTracked
 
+    private val _currentSeriesProgress = MutableLiveData<TrackedSeries?>()
+    val currentSeriesProgress: LiveData<TrackedSeries?> = _currentSeriesProgress
+
     private val _availableBanners = MutableLiveData<NetworkResults<List<String>>>()
     val availableBanners: LiveData<NetworkResults<List<String>>> = _availableBanners
 
@@ -51,9 +54,19 @@ class SeriesTrackingViewModel @Inject constructor(
     }
 
     fun checkTrackingStatus(seriesId: Int) {
+        // Reset status immediately to avoid showing stale data from the previous show
+        _isCurrentSeriesTracked.value = false
+        _currentSeriesProgress.value = null
+        
         viewModelScope.launch {
+            val series = seriesTrackingRepository.getSeriesById(seriesId)
             _isCurrentSeriesTracked.value = seriesTrackingRepository.isSeriesTracked(seriesId)
+            _currentSeriesProgress.value = series
         }
+    }
+
+    suspend fun isSeriesTrackedDirect(seriesId: Int): Boolean {
+        return seriesTrackingRepository.isSeriesTracked(seriesId)
     }
 
     fun getSeasonsForSeries(seriesId: Int): LiveData<List<TrackedSeason>> {
@@ -73,6 +86,12 @@ class SeriesTrackingViewModel @Inject constructor(
     fun updateLastWatchedEpisode(seriesId: Int, episodeId: Int, seasonNumber: Int, episodeNumber: Int) {
         viewModelScope.launch {
             seriesTrackingRepository.updateLastWatchedEpisode(seriesId, episodeId, seasonNumber, episodeNumber)
+        }
+    }
+
+    fun deleteSeriesProgress(seriesId: Int) {
+        viewModelScope.launch {
+            seriesTrackingRepository.deleteSeriesProgress(seriesId)
         }
     }
 

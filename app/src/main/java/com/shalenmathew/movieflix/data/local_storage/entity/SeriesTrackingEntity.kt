@@ -11,9 +11,6 @@ data class SeriesTrackingEntity(
     val posterPath: String?,
     val backdropPath: String?,
     val overview: String?,
-    val lastWatchedEpisodeId: Int? = null,
-    val lastWatchedSeasonNumber: Int? = null,
-    val lastWatchedEpisodeNumber: Int? = null,
     val lastUpdated: Long = System.currentTimeMillis(),
     val syncStatus: String = "PENDING" // PENDING, COMPLETED, FAILED
 )

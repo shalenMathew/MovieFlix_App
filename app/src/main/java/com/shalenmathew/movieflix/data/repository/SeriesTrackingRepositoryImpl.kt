@@ -7,9 +7,11 @@ import androidx.work.WorkManager
 import com.shalenmathew.movieflix.core.background.SeriesTrackingWorker
 import com.shalenmathew.movieflix.core.utils.NetworkResults
 import com.shalenmathew.movieflix.data.local_storage.SeriesTrackingDao
+import com.shalenmathew.movieflix.data.local_storage.TrackedSeriesWithProgress
 import com.shalenmathew.movieflix.data.local_storage.entity.EpisodeTrackingEntity
 import com.shalenmathew.movieflix.data.local_storage.entity.SeasonTrackingEntity
 import com.shalenmathew.movieflix.data.local_storage.entity.SeriesTrackingEntity
+import com.shalenmathew.movieflix.data.local_storage.entity.SeriesProgressEntity
 import com.shalenmathew.movieflix.data.remote.RemoteDataSource
 import com.shalenmathew.movieflix.domain.model.TrackedEpisode
 import com.shalenmathew.movieflix.domain.model.TrackedSeason
@@ -37,10 +39,10 @@ class SeriesTrackingRepositoryImpl @Inject constructor(
     override suspend fun trackSeries(seriesId: Int): Flow<NetworkResults<Unit>> = flow {
         emit(NetworkResults.Loading())
         try {
-            // Immediately insert basic series info with PENDING status
             val tvDetailResponse = remoteDataSource.getTVDetail(seriesId)
             if (tvDetailResponse.isSuccessful && tvDetailResponse.body() != null) {
                 val tvDetail = tvDetailResponse.body()!!
+                
                 val seriesEntity = SeriesTrackingEntity(
                     id = tvDetail.id!!,
                     name = tvDetail.name ?: "",
@@ -51,7 +53,6 @@ class SeriesTrackingRepositoryImpl @Inject constructor(
                 )
                 seriesTrackingDao.insertSeries(seriesEntity)
 
-                // Kick off background worker for seasons and episodes
                 val data = Data.Builder()
                     .putInt(SeriesTrackingWorker.KEY_SERIES_ID, seriesId)
                     .build()
@@ -72,7 +73,32 @@ class SeriesTrackingRepositoryImpl @Inject constructor(
     }
 
     override suspend fun untrackSeries(seriesId: Int) {
-        seriesTrackingDao.deleteTrackedSeriesData(seriesId)
+        // Just delete from tracking table - seasons and episodes will cascade delete.
+        // Progress table is NOT touched here.
+        val series = seriesTrackingDao.getSeriesById(seriesId)
+        series?.let { seriesTrackingDao.deleteSeries(it) }
+        seriesTrackingDao.deleteSeasonsBySeriesId(seriesId)
+    }
+
+    override suspend fun getSeriesById(seriesId: Int): TrackedSeries? {
+        val series = seriesTrackingDao.getSeriesById(seriesId)
+        val progress = seriesTrackingDao.getSeriesProgressById(seriesId)
+        
+        // Return data if either tracking info OR progress info exists
+        if (series == null && progress == null) return null
+
+        return TrackedSeries(
+            id = seriesId,
+            name = series?.name ?: "", // Name might be empty if show is untracked
+            posterPath = series?.posterPath,
+            backdropPath = series?.backdropPath,
+            overview = series?.overview,
+            lastWatchedEpisodeId = progress?.lastWatchedEpisodeId,
+            lastWatchedSeasonNumber = progress?.lastWatchedSeasonNumber,
+            lastWatchedEpisodeNumber = progress?.lastWatchedEpisodeNumber,
+            lastUpdated = series?.lastUpdated ?: progress?.lastUpdated ?: System.currentTimeMillis(),
+            syncStatus = series?.syncStatus ?: "NONE"
+        )
     }
 
     override fun getSeasonsForSeries(seriesId: Int): Flow<List<TrackedSeason>> {
@@ -102,7 +128,18 @@ class SeriesTrackingRepositoryImpl @Inject constructor(
     }
 
     override suspend fun updateLastWatchedEpisode(seriesId: Int, episodeId: Int, seasonNumber: Int, episodeNumber: Int) {
-        seriesTrackingDao.updateLastWatchedEpisode(seriesId, episodeId, seasonNumber, episodeNumber)
+        seriesTrackingDao.insertProgress(
+            SeriesProgressEntity(
+                seriesId = seriesId,
+                lastWatchedEpisodeId = episodeId,
+                lastWatchedSeasonNumber = seasonNumber,
+                lastWatchedEpisodeNumber = episodeNumber
+            )
+        )
+    }
+
+    override suspend fun deleteSeriesProgress(seriesId: Int) {
+        seriesTrackingDao.deleteSeriesProgress(seriesId)
     }
 
     override suspend fun markPreviousEpisodesAsWatched(seriesId: Int, seasonNumber: Int, episodeNumber: Int) {
@@ -114,8 +151,6 @@ class SeriesTrackingRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getEpisodeWatchedStatus(episodeId: Int): Boolean {
-        // This might need a new DAO method if not directly available. 
-        // For now, let's assume we can check if series is tracked first.
         return false // Placeholder
     }
 
@@ -137,7 +172,7 @@ class SeriesTrackingRepositoryImpl @Inject constructor(
         seriesTrackingDao.updateSeriesBanner(seriesId, bannerPath)
     }
 
-    private fun SeriesTrackingEntity.toDomain() = TrackedSeries(
+    private fun TrackedSeriesWithProgress.toDomain() = TrackedSeries(
         id = id,
         name = name,
         posterPath = posterPath,
@@ -148,15 +183,6 @@ class SeriesTrackingRepositoryImpl @Inject constructor(
         lastWatchedEpisodeNumber = lastWatchedEpisodeNumber,
         lastUpdated = lastUpdated,
         syncStatus = syncStatus
-    )
-
-    private fun SeasonTrackingEntity.toDomain() = TrackedSeason(
-        id = id,
-        seriesId = seriesId,
-        seasonNumber = seasonNumber,
-        name = name,
-        episodeCount = episodeCount,
-        posterPath = posterPath
     )
 
     private fun EpisodeTrackingEntity.toDomain() = TrackedEpisode(

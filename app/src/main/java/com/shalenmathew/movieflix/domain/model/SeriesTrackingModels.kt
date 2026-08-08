@@ -10,7 +10,8 @@ data class TrackedSeries(
     val lastWatchedSeasonNumber: Int? = null,
     val lastWatchedEpisodeNumber: Int? = null,
     val lastUpdated: Long = System.currentTimeMillis(),
-    val syncStatus: String = "PENDING"
+    val syncStatus: String = "PENDING",
+    val isTracked: Boolean = true
 )
 
 data class TrackedSeason(

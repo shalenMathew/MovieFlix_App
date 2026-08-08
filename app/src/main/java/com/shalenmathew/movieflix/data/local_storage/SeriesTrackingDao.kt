@@ -23,14 +23,31 @@ interface SeriesTrackingDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertEpisodes(episodes: List<EpisodeTrackingEntity>)
 
-    @Query("SELECT * FROM series_tracking_table ORDER BY lastUpdated DESC")
-    fun getAllTrackedSeries(): Flow<List<SeriesTrackingEntity>>
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertProgress(progress: com.shalenmathew.movieflix.data.local_storage.entity.SeriesProgressEntity)
+
+    @Query("""
+        SELECT s.*, p.lastWatchedEpisodeId, p.lastWatchedSeasonNumber, p.lastWatchedEpisodeNumber 
+        FROM series_tracking_table s 
+        LEFT JOIN series_progress_table p ON s.id = p.seriesId 
+        ORDER BY s.lastUpdated DESC
+    """)
+    fun getAllTrackedSeries(): Flow<List<TrackedSeriesWithProgress>>
 
     @Query("SELECT * FROM series_tracking_table WHERE id = :seriesId")
     suspend fun getSeriesById(seriesId: Int): SeriesTrackingEntity?
 
+    @Query("SELECT * FROM series_progress_table WHERE seriesId = :seriesId")
+    suspend fun getSeriesProgressById(seriesId: Int): com.shalenmathew.movieflix.data.local_storage.entity.SeriesProgressEntity?
+
+    @Query("DELETE FROM series_progress_table WHERE seriesId = :seriesId")
+    suspend fun deleteSeriesProgress(seriesId: Int)
+
     @Query("SELECT * FROM seasons_tracking_table WHERE seriesId = :seriesId ORDER BY seasonNumber ASC")
     fun getSeasonsForSeries(seriesId: Int): Flow<List<SeasonTrackingEntity>>
+
+    @Query("DELETE FROM seasons_tracking_table WHERE seriesId = :seriesId")
+    suspend fun deleteSeasonsBySeriesId(seriesId: Int)
 
     @Query("""
         SELECT s.*, (SELECT COUNT(*) FROM episodes_tracking_table e WHERE e.seasonId = s.id AND e.isWatched = 1) as watchedCount 
@@ -52,9 +69,6 @@ interface SeriesTrackingDao {
     @Query("UPDATE episodes_tracking_table SET isWatched = :isWatched WHERE id = :episodeId")
     suspend fun updateEpisodeWatchedStatus(episodeId: Int, isWatched: Boolean)
 
-    @Query("UPDATE series_tracking_table SET lastWatchedEpisodeId = :episodeId, lastWatchedSeasonNumber = :seasonNumber, lastWatchedEpisodeNumber = :episodeNumber, lastUpdated = :timestamp WHERE id = :seriesId")
-    suspend fun updateLastWatchedEpisode(seriesId: Int, episodeId: Int, seasonNumber: Int, episodeNumber: Int, timestamp: Long = System.currentTimeMillis())
-
     @Query("UPDATE episodes_tracking_table SET isWatched = 1 WHERE seriesId = :seriesId AND (seasonNumber < :seasonNumber OR (seasonNumber = :seasonNumber AND episodeNumber <= :episodeNumber))")
     suspend fun markPreviousEpisodesAsWatched(seriesId: Int, seasonNumber: Int, episodeNumber: Int)
 
@@ -70,9 +84,25 @@ interface SeriesTrackingDao {
     @Transaction
     suspend fun deleteTrackedSeriesData(seriesId: Int) {
         val series = getSeriesById(seriesId)
-        series?.let { deleteSeries(it) }
+        series?.let { 
+            deleteSeries(it) 
+            deleteSeasonsBySeriesId(seriesId)
+        }
     }
 }
+
+data class TrackedSeriesWithProgress(
+    val id: Int,
+    val name: String,
+    val posterPath: String?,
+    val backdropPath: String?,
+    val overview: String?,
+    val lastUpdated: Long,
+    val syncStatus: String,
+    val lastWatchedEpisodeId: Int?,
+    val lastWatchedSeasonNumber: Int?,
+    val lastWatchedEpisodeNumber: Int?
+)
 
 data class SeasonWithProgress(
     val id: Int,

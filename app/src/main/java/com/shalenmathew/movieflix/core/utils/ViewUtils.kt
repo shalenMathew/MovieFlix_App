@@ -176,6 +176,35 @@ val MIGRATION_8_9 = object : Migration(8, 9) {
     }
 }
 
+val MIGRATION_9_10 = object : Migration(9, 10) {
+    override fun migrate(db: SupportSQLiteDatabase) {
+        db.execSQL("ALTER TABLE series_tracking_table ADD COLUMN isTracked INTEGER NOT NULL DEFAULT 1")
+    }
+}
+
+val MIGRATION_10_11 = object : Migration(10, 11) {
+    override fun migrate(db: SupportSQLiteDatabase) {
+        // Create the new progress table
+        db.execSQL("CREATE TABLE IF NOT EXISTS `series_progress_table` (`seriesId` INTEGER NOT NULL, `lastWatchedSeasonNumber` INTEGER, `lastWatchedEpisodeNumber` INTEGER, `lastWatchedEpisodeId` INTEGER, `lastUpdated` INTEGER NOT NULL, PRIMARY KEY(`seriesId`))")
+        
+        // Transfer existing progress from tracking table to progress table
+        db.execSQL("""
+            INSERT OR IGNORE INTO series_progress_table (seriesId, lastWatchedSeasonNumber, lastWatchedEpisodeNumber, lastWatchedEpisodeId, lastUpdated)
+            SELECT id, lastWatchedSeasonNumber, lastWatchedEpisodeNumber, lastWatchedEpisodeId, lastUpdated FROM series_tracking_table
+        """)
+        
+        // Clean up tracking table (remove columns no longer needed)
+        // Room doesn't support DROP COLUMN easily on older SQLite, so we'll just ignore them or recreate.
+        // For simplicity in migration script, we'll just leave them for now or recreate the table if needed.
+        // Let's do the standard recreate pattern to match the new Entity class exactly.
+        
+        db.execSQL("CREATE TABLE `series_tracking_table_new` (`id` INTEGER NOT NULL, `name` TEXT NOT NULL, `posterPath` TEXT, `backdropPath` TEXT, `overview` TEXT, `lastUpdated` INTEGER NOT NULL, `syncStatus` TEXT NOT NULL, PRIMARY KEY(`id`))")
+        db.execSQL("INSERT INTO series_tracking_table_new (id, name, posterPath, backdropPath, overview, lastUpdated, syncStatus) SELECT id, name, posterPath, backdropPath, overview, lastUpdated, syncStatus FROM series_tracking_table")
+        db.execSQL("DROP TABLE series_tracking_table")
+        db.execSQL("ALTER TABLE series_tracking_table_new RENAME TO series_tracking_table")
+    }
+}
+
 private fun complex5To6Migration(db: SupportSQLiteDatabase) {
     db.execSQL("""
             CREATE TABLE IF NOT EXISTS scheduled_movies_table (

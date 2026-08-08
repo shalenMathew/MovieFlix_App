@@ -180,6 +180,21 @@
                 app:iconTint="@color/white"
                 />
 
+            <TextView
+                android:id="@+id/fragment_movie_details_last_watched"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_5sdp"
+                android:layout_marginEnd="@dimen/_5sdp"
+                android:paddingVertical="@dimen/_8sdp"
+                android:fontFamily="@font/montserrat_medium"
+                android:textColor="@color/white"
+                android:textSize="@dimen/_11ssp"
+                android:gravity="start"
+                android:visibility="gone"
+                tools:text="Last watched : Season 2 ep 5"
+                tools:visibility="visible" />
+
             <LinearLayout
                 android:id="@+id/fragment_movie_details_personal_note_ll"
                 android:layout_width="match_parent"

@@ -14,6 +14,8 @@ interface SeriesTrackingRepository {
 
     suspend fun untrackSeries(seriesId: Int)
 
+    suspend fun getSeriesById(seriesId: Int): TrackedSeries?
+
     fun getSeasonsForSeries(seriesId: Int): Flow<List<TrackedSeason>>
 
     fun getEpisodesForSeason(seasonId: Int): Flow<List<TrackedEpisode>>
@@ -21,6 +23,8 @@ interface SeriesTrackingRepository {
     suspend fun updateEpisodeWatchedStatus(episodeId: Int, isWatched: Boolean)
 
     suspend fun updateLastWatchedEpisode(seriesId: Int, episodeId: Int, seasonNumber: Int, episodeNumber: Int)
+
+    suspend fun deleteSeriesProgress(seriesId: Int)
 
     suspend fun markPreviousEpisodesAsWatched(seriesId: Int, seasonNumber: Int, episodeNumber: Int)
 
