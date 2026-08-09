@@ -64,6 +64,7 @@ import com.shalenmathew.movieflix.presentation.viewmodels.ScheduledViewModel
 import com.shalenmathew.movieflix.presentation.viewmodels.SearchMovieViewModel
 import com.shalenmathew.movieflix.presentation.viewmodels.SeriesTrackingViewModel
 import com.shalenmathew.movieflix.presentation.viewmodels.WatchListViewModel
+import com.shalenmathew.movieflix.presentation.viewmodels.CustomListViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -97,6 +98,7 @@ class MovieDetailsFragment : BottomSheetDialogFragment() {
     private val favMovieViewModel: FavMovieViewModel by viewModels()
     private val scheduledViewModel: ScheduledViewModel by viewModels()
     private val seriesTrackingViewModel: SeriesTrackingViewModel by viewModels()
+    private val customListViewModel: CustomListViewModel by viewModels()
 
     private var isInWatchList: Boolean = false
     private var isFav: Boolean = false
@@ -829,6 +831,8 @@ class MovieDetailsFragment : BottomSheetDialogFragment() {
         val trackText = view.findViewById<TextView>(R.id.more_options_track_text)
         val trackSubtitle = view.findViewById<TextView>(R.id.more_options_track_subtitle)
 
+        val collectionItem = view.findViewById<View>(R.id.more_options_collection_item)
+
         header.text = "More Options"
 
         // Update UI based on current status
@@ -851,6 +855,11 @@ class MovieDetailsFragment : BottomSheetDialogFragment() {
         scheduleItem.setOnClickListener {
             bottomSheetDialog.dismiss()
             handleScheduleClick()
+        }
+
+        collectionItem.setOnClickListener {
+            bottomSheetDialog.dismiss()
+            showChooseCustomListBottomSheet()
         }
 
         // Setup Tracking Item
@@ -902,6 +911,75 @@ class MovieDetailsFragment : BottomSheetDialogFragment() {
             seriesTrackingViewModel.untrackSeries(mediaId!!)
             showToast(ctx, "Series untracked")
         }
+    }
+
+    private fun showChooseCustomListBottomSheet() {
+        val ctx = context ?: return
+        val dialog = BottomSheetDialog(ctx, R.style.SheetDialog)
+        val view = layoutInflater.inflate(R.layout.bottom_sheet_choose_custom_list, null)
+        
+        val rv = view.findViewById<androidx.recyclerview.widget.RecyclerView>(R.id.choose_list_rv)
+        val createBtn = view.findViewById<View>(R.id.create_new_list_btn)
+
+        customListViewModel.allLists.observe(viewLifecycleOwner) { lists ->
+            viewLifecycleOwner.lifecycleScope.launch {
+                val checkList = mutableListOf<Int>()
+                for (list in lists) {
+                    if (customListViewModel.isMovieInList(list.id, mediaId ?: -1)) {
+                        checkList.add(list.id)
+                    }
+                }
+                
+                val adapter = com.shalenmathew.movieflix.core.adapters.ChooseCustomListAdapter(
+                    onListClick = { selectedList ->
+                        viewLifecycleOwner.lifecycleScope.launch {
+                            if (customListViewModel.isMovieInList(selectedList.id, mediaId ?: -1)) {
+                                customListViewModel.removeMovieFromList(selectedList.id, mediaId ?: -1)
+                                showToast(ctx, "Removed from ${selectedList.name}")
+                            } else {
+                                customListViewModel.addMovieToList(selectedList.id, movieResult)
+                                showToast(ctx, "Added to ${selectedList.name}")
+                            }
+                        }
+                    },
+                    checkList = checkList
+                )
+                rv.adapter = adapter
+                adapter.submitList(lists)
+            }
+        }
+
+        createBtn.setOnClickListener {
+            dialog.dismiss()
+            showCreateListDialog()
+        }
+
+        dialog.setContentView(view)
+        dialog.show()
+    }
+
+    private fun showCreateListDialog() {
+        val ctx = context ?: return
+        val dialog = BottomSheetDialog(ctx, R.style.SheetDialog)
+        val view = layoutInflater.inflate(R.layout.dialog_create_list, null)
+        
+        val nameEt = view.findViewById<com.google.android.material.textfield.TextInputEditText>(R.id.list_name_et)
+        val descEt = view.findViewById<com.google.android.material.textfield.TextInputEditText>(R.id.list_desc_et)
+        val createBtn = view.findViewById<View>(R.id.create_list_confirm_btn)
+
+        createBtn.setOnClickListener {
+            val name = nameEt.text.toString().trim()
+            if (name.isNotEmpty()) {
+                customListViewModel.createList(name, descEt.text.toString().trim().takeIf { it.isNotEmpty() })
+                dialog.dismiss()
+                showChooseCustomListBottomSheet() // Return to selection
+            } else {
+                nameEt.error = "Name cannot be empty"
+            }
+        }
+
+        dialog.setContentView(view)
+        dialog.show()
     }
 
     private fun handleScheduleClick() {

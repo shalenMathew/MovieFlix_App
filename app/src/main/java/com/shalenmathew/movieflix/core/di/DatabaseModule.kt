@@ -14,23 +14,28 @@ import com.shalenmathew.movieflix.core.utils.MIGRATION_8_9
 import com.shalenmathew.movieflix.core.utils.MIGRATION_9_10
 import com.shalenmathew.movieflix.core.utils.MIGRATION_10_11
 import com.shalenmathew.movieflix.core.utils.MIGRATION_11_12
+import com.shalenmathew.movieflix.core.utils.MIGRATION_12_13
+import com.shalenmathew.movieflix.core.utils.MIGRATION_13_14
 import com.shalenmathew.movieflix.data.local_storage.LocalDataSource
 import com.shalenmathew.movieflix.data.local_storage.MovieDao
 import com.shalenmathew.movieflix.data.local_storage.MovieDataTypeConverter
 import com.shalenmathew.movieflix.data.local_storage.MovieDatabase
 import com.shalenmathew.movieflix.data.local_storage.SeriesTrackingDao
+import com.shalenmathew.movieflix.data.local_storage.CustomListDao
 import com.shalenmathew.movieflix.data.remote.RemoteDataSource
 import com.shalenmathew.movieflix.data.repository.ActorRepositoryImpl
 import com.shalenmathew.movieflix.data.repository.FavMovieRepositoryImpl
 import com.shalenmathew.movieflix.data.repository.MovieDetailsRepositoryImpl
 import com.shalenmathew.movieflix.data.repository.ScheduledRepositoryImpl
 import com.shalenmathew.movieflix.data.repository.SeriesTrackingRepositoryImpl
+import com.shalenmathew.movieflix.data.repository.CustomListRepositoryImpl
 import com.shalenmathew.movieflix.data.repository.WatchListRepositoryImpl
 import com.shalenmathew.movieflix.domain.repository.ActorRepository
 import com.shalenmathew.movieflix.domain.repository.FavMovieRepository
 import com.shalenmathew.movieflix.domain.repository.MovieInfoRepository
 import com.shalenmathew.movieflix.domain.repository.ScheduledRepository
 import com.shalenmathew.movieflix.domain.repository.SeriesTrackingRepository
+import com.shalenmathew.movieflix.domain.repository.CustomListRepository
 import com.shalenmathew.movieflix.domain.repository.WatchListRepository
 import com.shalenmathew.movieflix.core.notifications.MovieScheduler
 import com.google.gson.Gson
@@ -60,7 +65,9 @@ object DatabaseModule {
                 MIGRATION_8_9,
                 MIGRATION_9_10,
                 MIGRATION_10_11,
-                MIGRATION_11_12
+                MIGRATION_11_12,
+                MIGRATION_12_13,
+                MIGRATION_13_14
             )
             .addTypeConverter(MovieDataTypeConverter(GsonParser(Gson())))
             .build()
@@ -76,6 +83,12 @@ object DatabaseModule {
     @Singleton
     fun providesSeriesTrackingDao(movieDatabase: MovieDatabase): SeriesTrackingDao {
         return movieDatabase.seriesTrackingDao
+    }
+
+    @Provides
+    @Singleton
+    fun providesCustomListDao(movieDatabase: MovieDatabase): CustomListDao {
+        return movieDatabase.customListDao
     }
 
     @Provides
@@ -130,6 +143,14 @@ object DatabaseModule {
     @Singleton
     fun provideMovieScheduler(@ApplicationContext context: Context): MovieScheduler {
         return MovieScheduler(context)
+    }
+
+    @Provides
+    @Singleton
+    fun providesCustomListRepository(
+        customListDao: CustomListDao
+    ): CustomListRepository {
+        return CustomListRepositoryImpl(customListDao)
     }
 
 }

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/black"
+        android:orientation="vertical"
+        android:padding="@dimen/_16sdp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Add to Collection"
+            android:fontFamily="@font/montserrat_bold"
+            android:textColor="@color/white"
+            android:textSize="@dimen/_16ssp"
+            android:layout_marginBottom="@dimen/_16sdp"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/choose_list_rv"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_200sdp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:listitem="@layout/item_choose_list" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/create_new_list_btn"
+            style="@style/Widget.Material3.Button.TextButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_8sdp"
+            android:text="+ Create New List"
+            android:textAllCaps="false"
+            android:textColor="@color/app_color"
+            android:fontFamily="@font/montserrat_semibold" />
+
+    </LinearLayout>
+</layout>

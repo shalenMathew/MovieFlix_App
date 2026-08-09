@@ -86,6 +86,29 @@
         <action
             android:id="@+id/action_libraryFragment_to_movieDetailsFragment"
             app:destination="@id/movieDetailsFragment" />
+        <action
+            android:id="@+id/action_libraryFragment_to_listDetailsFragment"
+            app:destination="@id/listDetailsFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/listDetailsFragment"
+        android:name="com.shalenmathew.movieflix.presentation.library.ListDetailsFragment"
+        android:label="fragment_list_details"
+        tools:layout="@layout/fragment_list_details">
+        <argument
+            android:name="listId"
+            app:argType="integer" />
+        <argument
+            android:name="listName"
+            app:argType="string" />
+        <argument
+            android:name="listDesc"
+            app:argType="string"
+            app:nullable="true" />
+        <action
+            android:id="@+id/action_listDetailsFragment_to_movieDetailsFragment"
+            app:destination="@id/movieDetailsFragment" />
     </fragment>
 
     <fragment

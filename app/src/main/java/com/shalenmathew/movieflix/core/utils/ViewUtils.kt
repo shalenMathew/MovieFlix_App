@@ -212,6 +212,22 @@ val MIGRATION_11_12 = object : Migration(11, 12) {
     }
 }
 
+val MIGRATION_12_13 = object : Migration(12, 13) {
+    override fun migrate(db: SupportSQLiteDatabase) {
+        db.execSQL("CREATE TABLE IF NOT EXISTS `custom_list_table` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT NOT NULL, `description` TEXT, `createdAt` INTEGER NOT NULL)")
+        db.execSQL("CREATE TABLE IF NOT EXISTS `custom_list_movie_table` (`listId` INTEGER NOT NULL, `mediaId` INTEGER NOT NULL, `mediaType` TEXT, `name` TEXT, `posterPath` TEXT, `backdropPath` TEXT, `overview` TEXT, `addedAt` INTEGER NOT NULL, PRIMARY KEY(`listId`, `mediaId`), FOREIGN KEY(`listId`) REFERENCES `custom_list_table`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )")
+        db.execSQL("CREATE INDEX IF NOT EXISTS `index_custom_list_movie_table_listId` ON `custom_list_movie_table` (`listId`)")
+    }
+}
+
+val MIGRATION_13_14 = object : Migration(13, 14) {
+    override fun migrate(db: SupportSQLiteDatabase) {
+        db.execSQL("ALTER TABLE custom_list_movie_table ADD COLUMN voteAverage REAL")
+        db.execSQL("ALTER TABLE custom_list_movie_table ADD COLUMN releaseDate TEXT")
+        db.execSQL("ALTER TABLE custom_list_movie_table ADD COLUMN originalLanguage TEXT")
+    }
+}
+
 private fun complex5To6Migration(db: SupportSQLiteDatabase) {
     db.execSQL("""
             CREATE TABLE IF NOT EXISTS scheduled_movies_table (

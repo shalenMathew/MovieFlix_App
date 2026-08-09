@@ -20,13 +20,16 @@ import com.shalenmathew.movieflix.data.local_storage.entity.EpisodeTrackingEntit
         SeriesTrackingEntity::class,
         SeasonTrackingEntity::class,
         EpisodeTrackingEntity::class,
-        com.shalenmathew.movieflix.data.local_storage.entity.SeriesProgressEntity::class
+        com.shalenmathew.movieflix.data.local_storage.entity.SeriesProgressEntity::class,
+        com.shalenmathew.movieflix.data.local_storage.entity.CustomListEntity::class,
+        com.shalenmathew.movieflix.data.local_storage.entity.CustomListMovieEntity::class
     ],
-    version = 12
+    version = 14
 )
 @TypeConverters(MovieDataTypeConverter::class)
 abstract class MovieDatabase : RoomDatabase() {
 
     abstract val dao: MovieDao
     abstract val seriesTrackingDao: SeriesTrackingDao
+    abstract val customListDao: CustomListDao
 }

@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingBottom="@dimen/_16sdp"
+        android:background="?attr/selectableItemBackground">
+
+        <!-- List Header (Name + Delete) -->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="@dimen/_4sdp"
+            android:layout_marginBottom="@dimen/_8sdp">
+
+            <TextView
+                android:id="@+id/list_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_toStartOf="@id/delete_list_btn"
+                android:fontFamily="@font/montserrat_bold"
+                android:textColor="@color/white"
+                android:textSize="@dimen/_14ssp"
+                tools:text="MCU" />
+
+            <ImageView
+                android:id="@+id/delete_list_btn"
+                android:layout_width="@dimen/_20sdp"
+                android:layout_height="@dimen/_20sdp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:alpha="0.6"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:src="@drawable/baseline_delete_24"
+                app:tint="@color/white" />
+
+        </RelativeLayout>
+
+        <!-- Poster Stack Container -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_110sdp"
+            app:cardCornerRadius="@dimen/_8sdp"
+            app:cardElevation="@dimen/_2sdp"
+            app:strokeColor="@color/white"
+            app:strokeWidth="1dp">
+
+            <LinearLayout
+                android:id="@+id/list_poster_stack"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/black"
+                android:orientation="horizontal"
+                android:weightSum="4">
+
+                <!-- 4 ImageViews for the stack -->
+                <ImageView
+                    android:id="@+id/poster_1"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/poster_bg" />
+
+                <ImageView
+                    android:id="@+id/poster_2"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:scaleType="centerCrop"
+                    android:visibility="gone"
+                    tools:visibility="visible"
+                    tools:src="@tools:sample/backgrounds/scenic" />
+
+                <ImageView
+                    android:id="@+id/poster_3"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:scaleType="centerCrop"
+                    android:visibility="gone"
+                    tools:visibility="visible"
+                    tools:src="@tools:sample/backgrounds/scenic" />
+
+                <ImageView
+                    android:id="@+id/poster_4"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:scaleType="centerCrop"
+                    android:visibility="gone"
+                    tools:visibility="visible"
+                    tools:src="@tools:sample/backgrounds/scenic" />
+
+            </LinearLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Footer (Description + Count) -->
+        <TextView
+            android:id="@+id/list_description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_8sdp"
+            android:paddingHorizontal="@dimen/_4sdp"
+            android:fontFamily="@font/montserrat_medium"
+            android:textColor="@color/text_secondary"
+            android:textSize="@dimen/_10ssp"
+            android:maxLines="2"
+            android:ellipsize="end"
+            tools:text="All the MCU movies and projects in order of release." />
+
+        <TextView
+            android:id="@+id/list_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_4sdp"
+            android:paddingHorizontal="@dimen/_4sdp"
+            android:fontFamily="@font/montserrat_semibold"
+            android:textColor="@color/app_color"
+            android:textSize="@dimen/_9ssp"
+            tools:text="12 Movies" />
+
+    </LinearLayout>
+</layout>

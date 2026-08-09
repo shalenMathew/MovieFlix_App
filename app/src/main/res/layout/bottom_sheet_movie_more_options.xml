@@ -128,6 +128,51 @@
 
     </LinearLayout>
 
+    <!-- Add to Collection Item -->
+    <LinearLayout
+        android:id="@+id/more_options_collection_item"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingVertical="@dimen/_12sdp"
+        android:paddingHorizontal="@dimen/_16sdp"
+        android:foreground="?attr/selectableItemBackground"
+        android:gravity="center_vertical">
+
+        <ImageView
+            android:layout_width="@dimen/_20sdp"
+            android:layout_height="@dimen/_20sdp"
+            android:src="@drawable/baseline_add_circle_24"
+            app:tint="@color/white" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="@dimen/_16sdp"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Add to Collection"
+                android:fontFamily="@font/montserrat_semibold"
+                android:textColor="@color/white"
+                android:textSize="@dimen/_12ssp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Save to one of your custom lists"
+                android:fontFamily="@font/montserrat_medium"
+                android:textColor="@color/text_secondary"
+                android:textSize="@dimen/_10ssp"
+                android:layout_marginTop="@dimen/_2sdp" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
     <!-- Placeholder for future items -->
     <!-- <include layout="@layout/divider_line" /> -->
 

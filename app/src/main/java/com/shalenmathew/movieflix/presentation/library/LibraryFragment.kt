@@ -15,6 +15,7 @@ import com.shalenmathew.movieflix.databinding.FragmentLibraryBinding
 import com.shalenmathew.movieflix.presentation.favorites.FavFragment
 import com.shalenmathew.movieflix.presentation.watchlist.WatchListFragment
 import com.shalenmathew.movieflix.presentation.library.TrackingFragment
+import com.shalenmathew.movieflix.presentation.library.CustomListsFragment
 import com.google.android.material.tabs.TabLayoutMediator
 import com.shalenmathew.movieflix.core.utils.DataStoreReference
 import com.shalenmathew.movieflix.presentation.viewmodels.LibrarySearchViewModel
@@ -60,6 +61,7 @@ class LibraryFragment : Fragment() {
                     0 -> "Watchlist"
                     1 -> "Favorites"
                     2 -> "Tracking"
+                    3 -> "Lists"
                     else -> ""
                 }
             }.attach()
@@ -115,13 +117,14 @@ class LibraryFragment : Fragment() {
     }
 
     private inner class LibraryPagerAdapter(fragment: Fragment) : FragmentStateAdapter(fragment) {
-        override fun getItemCount(): Int = 3
+        override fun getItemCount(): Int = 4
 
         override fun createFragment(position: Int): Fragment {
             return when (position) {
                 0 -> WatchListFragment()
                 1 -> FavFragment()
                 2 -> TrackingFragment()
+                3 -> CustomListsFragment()
                 else -> WatchListFragment()
             }
         }

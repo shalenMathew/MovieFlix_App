@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+    </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/main_frag"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".presentation.movie_details.MovieDetailsFragment"
-        android:id="@+id/main_frag"
-
-        >
+        tools:context=".presentation.movie_details.MovieDetailsFragment">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -21,27 +22,25 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:gravity="center"
-                >
+                android:gravity="center">
 
                 <TextView
                     android:id="@+id/fragment_movie_details_title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textSize="@dimen/_15sdp"
-                    android:textColor="@color/white"
-                    tools:text="Batman v Superman: Dawn of Justice"
-                    android:gravity="center"
                     android:fontFamily="@font/montserrat_bold"
-                    />
+                    android:gravity="center"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/_15sdp"
+                    tools:text="Batman v Superman: Dawn of Justice" />
 
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/fragment_movie_details_title"
                     android:layout_centerHorizontal="true"
-                    android:padding="@dimen/_4sdp"
-                    >
+                    android:padding="@dimen/_4sdp">
+
                     <TextView
                         android:id="@+id/fragment_movie_details_year"
                         android:layout_width="wrap_content"
@@ -94,630 +93,604 @@
             </RelativeLayout>
 
 
-
-
-
             <androidx.core.widget.NestedScrollView
                 android:id="@+id/movie_details_nested_scroll_view"
-                android:fillViewport="true"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_width="match_parent"
-                >
+                android:fillViewport="true">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="bottom"
-        android:orientation="vertical">
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/fragment_movie_details_yt_card"
-                style="@style/Widget.Material3.CardView.Filled"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/player_height"
-                android:layout_centerInParent="true"
-                app:cardCornerRadius="@dimen/_16sdp"
-                app:cardElevation="0dp">
-
-                <com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
-                    android:id="@+id/fragment_movie_details_yt"
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent" >
+                    android:layout_height="match_parent"
+                    android:gravity="bottom"
+                    android:orientation="vertical">
 
-                    <ImageView
-                        android:id="@+id/poster_image"
+                    <RelativeLayout
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:background="@drawable/poster_bg"
-                        android:scaleType="centerCrop" />
-                </com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView>
+                        android:layout_height="wrap_content">
 
-            </com.google.android.material.card.MaterialCardView>
+                        <com.google.android.material.card.MaterialCardView
+                            android:id="@+id/fragment_movie_details_yt_card"
+                            style="@style/Widget.Material3.CardView.Filled"
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/player_height"
+                            android:layout_centerInParent="true"
+                            app:cardCornerRadius="@dimen/_16sdp"
+                            app:cardElevation="0dp">
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/_76sdp"
-                android:layout_alignBottom="@id/fragment_movie_details_yt_card"
-                android:background="@drawable/gradient_bottom_dark_grey"
-                android:translationZ="@dimen/_100sdp" />
+                            <com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
+                                android:id="@+id/fragment_movie_details_yt"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent">
 
-            <!--                <ImageView-->
-            <!--                    android:id="@+id/yt_icon"-->
-            <!--                    android:layout_width="match_parent"-->
-            <!--                    android:layout_height="@dimen/_100sdp"-->
-            <!--                    android:layout_centerInParent="true"-->
-            <!--                    android:src="@drawable/yt_icon" />-->
+                                <ImageView
+                                    android:id="@+id/poster_image"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:background="@drawable/poster_bg"
+                                    android:scaleType="centerCrop" />
+                            </com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView>
+
+                        </com.google.android.material.card.MaterialCardView>
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/_76sdp"
+                            android:layout_alignBottom="@id/fragment_movie_details_yt_card"
+                            android:background="@drawable/gradient_bottom_dark_grey"
+                            android:translationZ="@dimen/_100sdp" />
 
 
+                    </RelativeLayout>
 
-        </RelativeLayout>
 
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/black"
-            android:padding="@dimen/_5sdp"
-            android:orientation="vertical"
-            >
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/fragment_movie_details_play_btn"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="@dimen/_18sdp"
-                android:layout_marginVertical="@dimen/_8sdp"
-                android:backgroundTint="@color/app_color"
-                android:text="Play The Trailer"
-                android:textAllCaps="false"
-                android:textColor="@color/white"
-                app:icon="@drawable/ic_play_arrow"
-                app:iconGravity="textStart"
-                app:iconTint="@color/white"
-                />
-
-            <TextView
-                android:id="@+id/fragment_movie_details_last_watched"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_5sdp"
-                android:layout_marginEnd="@dimen/_5sdp"
-                android:paddingVertical="@dimen/_8sdp"
-                android:fontFamily="@font/montserrat_medium"
-                android:textColor="@color/white"
-                android:textSize="@dimen/_11ssp"
-                android:gravity="start"
-                android:visibility="gone"
-                tools:text="Last watched : Season 2 ep 5"
-                tools:visibility="visible" />
-
-            <LinearLayout
-                android:id="@+id/fragment_movie_details_personal_note_ll"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:visibility="gone"
-                tools:visibility="visible">
-
-                <TextView
-                    android:id="@+id/fragment_movie_details_personal_note_title"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/_5sdp"
-                    android:fontFamily="@font/montserrat_bold"
-                    android:gravity="start"
-                    android:text="@string/personal_note"
-                    android:textColor="@color/white"
-                    android:textSize="@dimen/_14sdp" />
-
-                <FrameLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/fragment_movie_details_personal_note_btn"
-                        style="@style/Widget.MaterialComponents.Button.TextButton"
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="@dimen/_18sdp"
-                        android:fontFamily="@font/montserrat_medium"
-                        android:letterSpacing="0.1"
-                        android:text="@string/click_to_add_your_personal_note"
-                        android:textAllCaps="false"
-                        android:textColor="@color/white"
-                        android:maxLines="1"
-                        android:autoSizeMaxTextSize="@dimen/_13ssp"
-                        android:autoSizeMinTextSize="@dimen/_11ssp"
-                        android:autoSizeTextType="uniform"
-                        android:visibility="gone"
-                        app:icon="@drawable/baseline_add_circle_24"
-                        app:iconGravity="textStart"
-                        app:iconTint="@color/white"
-                        tools:visibility="gone"
-                        tools:targetApi="26" />
+                        android:background="@color/black"
+                        android:orientation="vertical"
+                        android:padding="@dimen/_5sdp">
 
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/fragment_movie_details_personal_note_text_input_layout"
-                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/fragment_movie_details_play_btn"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginHorizontal="@dimen/_18sdp"
+                            android:layout_marginVertical="@dimen/_8sdp"
+                            android:backgroundTint="@color/app_color"
+                            android:fontFamily="@font/montserrat_medium"
+                            android:text="Play The Trailer"
+                            android:textAllCaps="false"
+                            android:textColor="@color/white"
+                            app:icon="@drawable/ic_play_arrow"
+                            app:iconGravity="textStart"
+                            app:iconTint="@color/white" />
+
+                        <TextView
+                            android:id="@+id/fragment_movie_details_last_watched"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/_5sdp"
+                            android:layout_marginEnd="@dimen/_5sdp"
+                            android:fontFamily="@font/montserrat_medium"
+                            android:gravity="start"
+                            android:paddingVertical="@dimen/_8sdp"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/_11ssp"
+                            android:visibility="gone"
+                            tools:text="Last watched : Season 2 ep 5"
+                            tools:visibility="visible" />
+
+                        <LinearLayout
+                            android:id="@+id/fragment_movie_details_personal_note_ll"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:visibility="gone"
+                            tools:visibility="visible">
+
+                            <TextView
+                                android:id="@+id/fragment_movie_details_personal_note_title"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="@dimen/_5sdp"
+                                android:fontFamily="@font/montserrat_bold"
+                                android:gravity="start"
+                                android:text="@string/personal_note"
+                                android:textColor="@color/white"
+                                android:textSize="@dimen/_14sdp" />
+
+                            <FrameLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
+
+                                <com.google.android.material.button.MaterialButton
+                                    android:id="@+id/fragment_movie_details_personal_note_btn"
+                                    style="@style/Widget.MaterialComponents.Button.TextButton"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginHorizontal="@dimen/_18sdp"
+                                    android:autoSizeMaxTextSize="@dimen/_13ssp"
+                                    android:autoSizeMinTextSize="@dimen/_11ssp"
+                                    android:autoSizeTextType="uniform"
+                                    android:fontFamily="@font/montserrat_medium"
+                                    android:letterSpacing="0.1"
+                                    android:maxLines="1"
+                                    android:text="@string/click_to_add_your_personal_note"
+                                    android:textAllCaps="false"
+                                    android:textColor="@color/white"
+                                    android:visibility="gone"
+                                    app:icon="@drawable/baseline_add_circle_24"
+                                    app:iconGravity="textStart"
+                                    app:iconTint="@color/white"
+                                    tools:targetApi="26"
+                                    tools:visibility="gone" />
+
+                                <com.google.android.material.textfield.TextInputLayout
+                                    android:id="@+id/fragment_movie_details_personal_note_text_input_layout"
+                                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="@dimen/_5sdp"
+                                    android:layout_marginBottom="@dimen/_12sdp"
+                                    android:hint="@string/enter_your_note"
+                                    android:textColorHint="@color/white"
+                                    android:visibility="gone"
+                                    app:boxCornerRadiusBottomEnd="@dimen/_5sdp"
+                                    app:boxCornerRadiusBottomStart="@dimen/_5sdp"
+                                    app:boxCornerRadiusTopEnd="@dimen/_5sdp"
+                                    app:boxCornerRadiusTopStart="@dimen/_5sdp"
+                                    app:boxStrokeColor="@color/personal_note_box_color"
+                                    app:hintTextColor="@color/white"
+                                    tools:visibility="gone">
+
+                                    <com.google.android.material.textfield.TextInputEditText
+                                        android:id="@+id/fragment_movie_details_personal_note_edit_text"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:fontFamily="@font/montserrat_medium"
+                                        android:gravity="top"
+                                        android:imeActionLabel="Save"
+                                        android:imeOptions="actionDone"
+                                        android:inputType="text"
+                                        android:maxLines="1"
+                                        android:minHeight="@dimen/_52sdp"
+                                        android:textColor="@color/white"
+                                        android:textSize="@dimen/_13ssp" />
+
+                                </com.google.android.material.textfield.TextInputLayout>
+
+                                <LinearLayout
+                                    android:id="@+id/personal_note_text_ll"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="@dimen/_5sdp"
+                                    android:layout_marginTop="@dimen/_8sdp"
+                                    android:layout_marginBottom="@dimen/_12sdp"
+                                    android:gravity="center_vertical"
+                                    tools:ignore="UseCompoundDrawables">
+
+                                    <TextView
+                                        android:id="@+id/fragment_movie_details_personal_note"
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginEnd="@dimen/_12sdp"
+                                        android:layout_weight="1"
+                                        android:fontFamily="@font/montserrat_medium"
+                                        android:textColor="@color/white"
+                                        android:textSize="@dimen/_13ssp"
+                                        android:visibility="gone"
+                                        tools:text="beautiful movie another twisted tale by fujimoto sensei 😭😭"
+                                        tools:visibility="visible" />
+
+                                    <ImageView
+                                        android:id="@+id/fragment_movie_details_personal_note_delete_btn"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:contentDescription="@string/delete_personal_note"
+                                        android:padding="@dimen/_8sdp"
+                                        android:src="@drawable/baseline_delete_24"
+                                        app:tint="@color/white" />
+                                </LinearLayout>
+                            </FrameLayout>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/_5sdp"
+                            android:layout_marginTop="@dimen/_8sdp"
+                            android:layout_marginEnd="@dimen/_5sdp"
+                            android:layout_marginBottom="@dimen/_12sdp"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:id="@+id/fragment_movie_details_scheduled_icon"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:src="@drawable/ic_calendar_check" />
+
+                            <TextView
+                                android:id="@+id/fragment_movie_details_scheduled_date"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_marginStart="@dimen/_5sdp"
+                                android:fontFamily="@font/montserrat_semibold"
+                                android:textColor="@color/white"
+                                android:textSize="@dimen/_10ssp"
+                                android:visibility="gone"
+                                app:drawableTint="@color/white"
+                                tools:text="Scheduled on: 28th October 2025, 5:30 PM"
+                                tools:visibility="visible" />
+                        </LinearLayout>
+
+                        <TextView
+                            android:id="@+id/fragment_movie_details_genre"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/_5sdp"
+                            android:fontFamily="@font/montserrat_light"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/_8sdp"
+                            tools:text="Action • Adventure • Comedy • Scifi" />
+
+                        <TextView
+                            android:id="@+id/fragment_movie_details_release_date"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/_5sdp"
+                            android:layout_marginTop="@dimen/_2sdp"
+                            android:fontFamily="@font/montserrat_light"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/_8sdp"
+                            android:visibility="gone"
+                            tools:text="Release Date: 2025-01-05" />
+
+                        <TextView
+                            android:id="@+id/fragment_movie_details_overview"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/_5sdp"
+                            android:layout_marginTop="@dimen/_4sdp"
+                            android:layout_marginEnd="@dimen/_5sdp"
+                            android:fontFamily="@font/montserrat_medium"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/_9ssp"
+                            tools:text="@tools:sample/lorem" />
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/_5sdp"
+                            android:layout_marginTop="@dimen/_12sdp">
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical">
+
+                                <com.google.android.material.card.MaterialCardView
+                                    android:id="@+id/fragment_movie_details_share_btn"
+                                    style="@style/Widget.Material3.CardView.Filled"
+                                    android:layout_width="@dimen/_35sdp"
+                                    android:layout_height="@dimen/_30sdp"
+                                    app:cardBackgroundColor="@color/app_color"
+                                    app:cardCornerRadius="8dp">
+
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:layout_gravity="center"
+                                        android:gravity="center">
+
+                                        <ImageView
+                                            android:layout_width="@dimen/_14sdp"
+                                            android:layout_height="@dimen/_14sdp"
+                                            android:src="@drawable/baseline_share_24"
+                                            app:tint="@color/white" />
+
+                                    </LinearLayout>
+
+                                </com.google.android.material.card.MaterialCardView>
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="@dimen/_15sdp"
+                                android:orientation="vertical">
+
+                                <com.google.android.material.card.MaterialCardView
+                                    android:id="@+id/fragment_movie_details_watchlist_btn"
+                                    style="@style/Widget.Material3.CardView.Filled"
+                                    android:layout_width="@dimen/_35sdp"
+                                    android:layout_height="@dimen/_30sdp"
+                                    app:cardBackgroundColor="@color/app_color"
+                                    app:cardCornerRadius="8dp">
+
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:layout_gravity="center"
+                                        android:gravity="center">
+
+                                        <ImageView
+                                            android:id="@+id/add_button_icon"
+                                            android:layout_width="@dimen/_14sdp"
+                                            android:layout_height="@dimen/_14sdp"
+                                            android:src="@drawable/ic_add"
+                                            app:tint="@color/white" />
+
+                                    </LinearLayout>
+
+                                </com.google.android.material.card.MaterialCardView>
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="@dimen/_15sdp"
+                                android:orientation="vertical">
+
+                                <com.google.android.material.card.MaterialCardView
+                                    android:id="@+id/fragment_movie_details_fav_btn"
+                                    style="@style/Widget.Material3.CardView.Filled"
+                                    android:layout_width="@dimen/_35sdp"
+                                    android:layout_height="@dimen/_30sdp"
+                                    app:cardBackgroundColor="@color/app_color"
+                                    app:cardCornerRadius="8dp">
+
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:layout_gravity="center"
+                                        android:gravity="center">
+
+                                        <ImageView
+                                            android:id="@+id/fav_icon"
+                                            android:layout_width="@dimen/_14sdp"
+                                            android:layout_height="@dimen/_14sdp"
+                                            android:src="@drawable/fav_outline"
+                                            app:tint="@color/white" />
+
+                                    </LinearLayout>
+
+                                </com.google.android.material.card.MaterialCardView>
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="@dimen/_15sdp"
+                                android:orientation="vertical">
+
+                                <com.google.android.material.card.MaterialCardView
+                                    android:id="@+id/fragment_movie_details_more_btn"
+                                    style="@style/Widget.Material3.CardView.Filled"
+                                    android:layout_width="@dimen/_35sdp"
+                                    android:layout_height="@dimen/_30sdp"
+                                    app:cardBackgroundColor="@color/app_color"
+                                    app:cardCornerRadius="8dp">
+
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:layout_gravity="center"
+                                        android:gravity="center">
+
+                                        <ImageView
+                                            android:layout_width="@dimen/_14sdp"
+                                            android:layout_height="@dimen/_14sdp"
+                                            android:src="@drawable/baseline_more_horiz_24"
+                                            app:tint="@color/white" />
+
+                                    </LinearLayout>
+
+                                </com.google.android.material.card.MaterialCardView>
+
+                            </LinearLayout>
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                    <!-- Where to Watch Section -->
+                    <LinearLayout
+                        android:id="@+id/where_to_watch_section"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_5sdp"
-                        android:layout_marginBottom="@dimen/_12sdp"
-                        android:hint="@string/enter_your_note"
-                        android:textColorHint="@color/white"
+                        android:background="@color/black"
+                        android:orientation="vertical"
                         android:visibility="gone"
-                        app:boxCornerRadiusBottomEnd="@dimen/_5sdp"
-                        app:boxCornerRadiusBottomStart="@dimen/_5sdp"
-                        app:boxCornerRadiusTopEnd="@dimen/_5sdp"
-                        app:boxCornerRadiusTopStart="@dimen/_5sdp"
-                        app:boxStrokeColor="@color/personal_note_box_color"
-                        app:hintTextColor="@color/white"
-                        tools:visibility="gone">
+                        tools:visibility="visible">
 
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/fragment_movie_details_personal_note_edit_text"
+                        <TextView
+                            android:id="@+id/where_to_watch_title"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/_12sdp"
+                            android:layout_marginTop="@dimen/_16sdp"
+                            android:layout_marginBottom="@dimen/_8sdp"
+                            android:fontFamily="@font/montserrat_semibold"
+                            android:gravity="start"
+                            android:text="@string/where_to_watch"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/_12ssp" />
+
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/where_to_watch_recycler_view"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:nestedScrollingEnabled="false"
+                            android:orientation="horizontal"
+                            android:paddingHorizontal="@dimen/_12sdp"
+                            android:paddingBottom="@dimen/_8sdp"
+                            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                            tools:itemCount="4"
+                            tools:listitem="@layout/item_watch_provider" />
+
+                    </LinearLayout>
+
+                    <!-- Tab Layout for About and Episodes (TV Shows only) -->
+                    <LinearLayout
+                        android:id="@+id/tabs_section"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/black"
+                        android:orientation="vertical"
+                        android:visibility="gone">
+
+                        <com.google.android.material.tabs.TabLayout
+                            android:id="@+id/tab_layout"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/_12sdp"
+                            android:background="@color/black"
+                            app:tabGravity="fill"
+                            app:tabIndicatorColor="@color/app_color"
+                            app:tabIndicatorHeight="@dimen/_2sdp"
+                            app:tabMode="fixed"
+                            app:tabSelectedTextColor="@color/white"
+                            app:tabTextColor="@color/text_secondary">
+
+                            <com.google.android.material.tabs.TabItem
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="About" />
+
+                            <com.google.android.material.tabs.TabItem
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Episodes" />
+
+                        </com.google.android.material.tabs.TabLayout>
+
+                    </LinearLayout>
+
+                    <!-- Episodes Section (TV Shows only) -->
+                    <LinearLayout
+                        android:id="@+id/episodes_section"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/black"
+                        android:orientation="vertical"
+                        android:paddingHorizontal="@dimen/_12sdp"
+                        android:paddingTop="@dimen/_12sdp"
+                        android:visibility="gone">
+
+                        <!-- Season Dropdown -->
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/_6sdp"
+                            android:fontFamily="@font/montserrat_semibold"
+                            android:text="Select Season"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/_10ssp" />
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/season_dropdown_button"
+                            style="@style/Widget.Material3.Button.OutlinedButton"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/montserrat_medium"
-                            android:gravity="top"
-                            android:imeActionLabel="Save"
-                            android:imeOptions="actionDone"
-                            android:inputType="text"
-                            android:minHeight="@dimen/_52sdp"
-                            android:maxLines="1"
+                            android:gravity="start|center_vertical"
+                            android:text="Season 1"
+                            android:textAllCaps="false"
                             android:textColor="@color/white"
-                            android:textSize="@dimen/_13ssp" />
+                            app:icon="@drawable/baseline_keyboard_arrow_right_24"
+                            app:iconGravity="end"
+                            app:iconTint="@color/white"
+                            app:strokeColor="@color/app_color"
+                            app:strokeWidth="1dp" />
 
-                    </com.google.android.material.textfield.TextInputLayout>
+                        <!-- Episodes RecyclerView -->
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/episodes_recycler_view"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/_8sdp"
+                            android:nestedScrollingEnabled="false"
+                            android:orientation="vertical"
+                            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                            tools:itemCount="10"
+                            tools:listitem="@layout/item_episode" />
 
+                    </LinearLayout>
+
+                    <!-- About Section Content (visible by default, hidden when Episodes tab is active) -->
                     <LinearLayout
-                        android:id="@+id/personal_note_text_ll"
+                        android:id="@+id/about_section"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/_5sdp"
-                        android:layout_marginTop="@dimen/_8sdp"
-                        android:layout_marginBottom="@dimen/_12sdp"
-                        android:gravity="center_vertical"
-                        tools:ignore="UseCompoundDrawables">
+                        android:background="@color/black"
+                        android:orientation="vertical">
+
+                        <!-- Cast Section -->
+                        <TextView
+                            android:id="@+id/cast_section_title"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:background="@color/black"
+                            android:fontFamily="@font/montserrat_semibold"
+                            android:gravity="start"
+                            android:paddingHorizontal="@dimen/_12sdp"
+                            android:paddingTop="@dimen/_12sdp"
+                            android:text="Cast"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/_12ssp" />
+
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/fragment_movie_details_cast_list"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@color/black"
+                            android:nestedScrollingEnabled="false"
+                            android:orientation="horizontal"
+                            android:paddingHorizontal="@dimen/_6sdp"
+                            android:paddingTop="@dimen/_4sdp"
+                            android:paddingBottom="@dimen/_8sdp"
+                            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                            tools:itemCount="5"
+                            tools:listitem="@layout/item_cast" />
 
                         <TextView
-                            android:id="@+id/fragment_movie_details_personal_note"
-                            android:layout_width="0dp"
+                            android:id="@+id/recommended_text"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginEnd="@dimen/_12sdp"
-                            android:layout_weight="1"
-                            android:fontFamily="@font/montserrat_medium"
+                            android:layout_gravity="center"
+                            android:background="@color/black"
+                            android:fontFamily="@font/montserrat_semibold"
+                            android:gravity="start"
+                            android:paddingHorizontal="@dimen/_12sdp"
+                            android:paddingTop="@dimen/_8sdp"
+                            android:text="More Like This"
                             android:textColor="@color/white"
-                            android:textSize="@dimen/_13ssp"
-                            android:visibility="gone"
-                            tools:text="beautiful movie another twisted tale by fujimoto sensei 😭😭"
-                            tools:visibility="visible" />
+                            android:textSize="@dimen/_12ssp" />
 
-                        <ImageView
-                            android:id="@+id/fragment_movie_details_personal_note_delete_btn"
-                            android:layout_width="wrap_content"
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/fragment_movie_details_recommend_list"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:contentDescription="@string/delete_personal_note"
-                            android:padding="@dimen/_8sdp"
-                            android:src="@drawable/baseline_delete_24"
-                            app:tint="@color/white" />
-                    </LinearLayout>
-                </FrameLayout>
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginStart="@dimen/_5sdp"
-                android:layout_marginEnd="@dimen/_5sdp"
-                android:layout_marginTop="@dimen/_8sdp"
-                android:layout_marginBottom="@dimen/_12sdp"
-                >
-
-                <ImageView
-                    android:id="@+id/fragment_movie_details_scheduled_icon"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ic_calendar_check"
-                    />
-
-                <TextView
-                    android:id="@+id/fragment_movie_details_scheduled_date"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/montserrat_semibold"
-                    android:textColor="@color/white"
-                    android:textSize="@dimen/_10ssp"
-                    android:visibility="gone"
-                    app:drawableTint="@color/white"
-                    tools:text="Scheduled on: 28th October 2025, 5:30 PM"
-                    tools:visibility="visible"
-                    android:layout_gravity="center"
-                    android:layout_marginStart="@dimen/_5sdp"
-                    />
-            </LinearLayout>
-
-            <TextView
-                android:id="@+id/fragment_movie_details_genre"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_5sdp"
-                android:fontFamily="@font/montserrat_light"
-                android:textColor="@color/white"
-                android:textSize="@dimen/_8sdp"
-                tools:text="Action • Adventure • Comedy • Scifi" />
-
-            <TextView
-                android:id="@+id/fragment_movie_details_release_date"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_5sdp"
-                android:fontFamily="@font/montserrat_light"
-                android:textColor="@color/white"
-                android:textSize="@dimen/_8sdp"
-                android:layout_marginTop="@dimen/_2sdp"
-                android:visibility="gone"
-                tools:text="Release Date: 2025-01-05" />
-
-            <TextView
-                android:id="@+id/fragment_movie_details_overview"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_4sdp"
-                android:fontFamily="@font/montserrat_medium"
-                android:textColor="@color/white"
-                android:textSize="@dimen/_9ssp"
-                android:layout_marginStart="@dimen/_5sdp"
-                android:layout_marginEnd="@dimen/_5sdp"
-                tools:text="@tools:sample/lorem"
-                />
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_12sdp"
-                android:layout_marginStart="@dimen/_5sdp"
-                >
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    >
-
-                <com.google.android.material.card.MaterialCardView
-                    android:id="@+id/fragment_movie_details_share_btn"
-                    style="@style/Widget.Material3.CardView.Filled"
-                    android:layout_width="@dimen/_35sdp"
-                    android:layout_height="@dimen/_30sdp"
-
-                    app:cardBackgroundColor="@color/app_color"
-                    app:cardCornerRadius="8dp">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="center"
-                        android:gravity="center">
-
-                        <ImageView
-                            android:layout_width="@dimen/_14sdp"
-                            android:layout_height="@dimen/_14sdp"
-                            android:src="@drawable/baseline_share_24"
-                            app:tint="@color/white" />
+                            android:background="@color/black"
+                            android:nestedScrollingEnabled="false"
+                            android:orientation="horizontal"
+                            android:paddingHorizontal="@dimen/_6sdp"
+                            android:paddingTop="@dimen/_4sdp"
+                            android:paddingBottom="@dimen/_5sdp"
+                            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                            tools:itemCount="2"
+                            tools:listitem="@layout/item_list" />
 
                     </LinearLayout>
+                    <!-- End of About Section -->
 
-                </com.google.android.material.card.MaterialCardView>
 
                 </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:layout_marginStart="@dimen/_15sdp"
-                    >
-
-                <com.google.android.material.card.MaterialCardView
-                    android:id="@+id/fragment_movie_details_watchlist_btn"
-                    style="@style/Widget.Material3.CardView.Filled"
-                    android:layout_width="@dimen/_35sdp"
-                    android:layout_height="@dimen/_30sdp"
-                    app:cardBackgroundColor="@color/app_color"
-                    app:cardCornerRadius="8dp"
-                    >
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="center"
-                        android:gravity="center">
-
-                        <ImageView
-                            android:id="@+id/add_button_icon"
-                            android:layout_width="@dimen/_14sdp"
-                            android:layout_height="@dimen/_14sdp"
-                            android:src="@drawable/ic_add"
-                            app:tint="@color/white" />
-
-                    </LinearLayout>
-
-                </com.google.android.material.card.MaterialCardView>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:layout_marginStart="@dimen/_15sdp"
-                    >
-
-                <com.google.android.material.card.MaterialCardView
-                    android:id="@+id/fragment_movie_details_fav_btn"
-                    style="@style/Widget.Material3.CardView.Filled"
-                    android:layout_width="@dimen/_35sdp"
-                    android:layout_height="@dimen/_30sdp"
-                    app:cardBackgroundColor="@color/app_color"
-                    app:cardCornerRadius="8dp"
-                    >
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="center"
-                        android:gravity="center">
-
-                        <ImageView
-                            android:id="@+id/fav_icon"
-                            android:layout_width="@dimen/_14sdp"
-                            android:layout_height="@dimen/_14sdp"
-                            android:src="@drawable/fav_outline"
-                            app:tint="@color/white" />
-
-                    </LinearLayout>
-
-                </com.google.android.material.card.MaterialCardView>
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:layout_marginStart="@dimen/_15sdp"
-                    >
-
-                <com.google.android.material.card.MaterialCardView
-                    android:id="@+id/fragment_movie_details_more_btn"
-                    style="@style/Widget.Material3.CardView.Filled"
-                    android:layout_width="@dimen/_35sdp"
-                    android:layout_height="@dimen/_30sdp"
-                    app:cardBackgroundColor="@color/app_color"
-                    app:cardCornerRadius="8dp"
-                    >
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="center"
-                        android:gravity="center">
-
-                        <ImageView
-                            android:layout_width="@dimen/_14sdp"
-                            android:layout_height="@dimen/_14sdp"
-                            android:src="@drawable/baseline_more_horiz_24"
-                            app:tint="@color/white" />
-
-                    </LinearLayout>
-
-                </com.google.android.material.card.MaterialCardView>
-
-                </LinearLayout>
-
-            </LinearLayout>
-
-        </LinearLayout>
-
-        <!-- Where to Watch Section -->
-        <LinearLayout
-            android:id="@+id/where_to_watch_section"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/black"
-            android:orientation="vertical"
-            android:visibility="gone"
-            tools:visibility="visible">
-
-            <TextView
-                android:id="@+id/where_to_watch_title"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_12sdp"
-                android:layout_marginTop="@dimen/_16sdp"
-                android:layout_marginBottom="@dimen/_8sdp"
-                android:fontFamily="@font/montserrat_semibold"
-                android:gravity="start"
-                android:text="@string/where_to_watch"
-                android:textColor="@color/white"
-                android:textSize="@dimen/_12ssp" />
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/where_to_watch_recycler_view"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:nestedScrollingEnabled="false"
-                android:orientation="horizontal"
-                android:paddingHorizontal="@dimen/_12sdp"
-                android:paddingBottom="@dimen/_8sdp"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                tools:itemCount="4"
-                tools:listitem="@layout/item_watch_provider" />
-
-        </LinearLayout>
-
-        <!-- Tab Layout for About and Episodes (TV Shows only) -->
-        <LinearLayout
-            android:id="@+id/tabs_section"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/black"
-            android:orientation="vertical"
-            android:visibility="gone">
-
-            <com.google.android.material.tabs.TabLayout
-                android:id="@+id/tab_layout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_12sdp"
-                android:background="@color/black"
-                app:tabIndicatorColor="@color/app_color"
-                app:tabIndicatorHeight="@dimen/_2sdp"
-                app:tabSelectedTextColor="@color/white"
-                app:tabTextColor="@color/text_secondary"
-                app:tabMode="fixed"
-                app:tabGravity="fill">
-
-                <com.google.android.material.tabs.TabItem
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="About" />
-
-                <com.google.android.material.tabs.TabItem
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Episodes" />
-
-            </com.google.android.material.tabs.TabLayout>
-
-        </LinearLayout>
-
-        <!-- Episodes Section (TV Shows only) -->
-        <LinearLayout
-            android:id="@+id/episodes_section"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/black"
-            android:orientation="vertical"
-            android:paddingHorizontal="@dimen/_12sdp"
-            android:paddingTop="@dimen/_12sdp"
-            android:visibility="gone">
-
-            <!-- Season Dropdown -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/montserrat_semibold"
-                android:text="Select Season"
-                android:textColor="@color/white"
-                android:textSize="@dimen/_10ssp"
-                android:layout_marginBottom="@dimen/_6sdp" />
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/season_dropdown_button"
-                style="@style/Widget.Material3.Button.OutlinedButton"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Season 1"
-                android:textAllCaps="false"
-                android:textColor="@color/white"
-                android:fontFamily="@font/montserrat_medium"
-                android:gravity="start|center_vertical"
-                app:icon="@drawable/baseline_keyboard_arrow_right_24"
-                app:iconGravity="end"
-                app:iconTint="@color/white"
-                app:strokeColor="@color/app_color"
-                app:strokeWidth="1dp" />
-
-            <!-- Episodes RecyclerView -->
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/episodes_recycler_view"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_8sdp"
-                android:nestedScrollingEnabled="false"
-                android:orientation="vertical"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                tools:itemCount="10"
-                tools:listitem="@layout/item_episode" />
-
-        </LinearLayout>
-
-        <!-- About Section Content (visible by default, hidden when Episodes tab is active) -->
-        <LinearLayout
-            android:id="@+id/about_section"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/black"
-            android:orientation="vertical">
-
-        <!-- Cast Section -->
-        <TextView
-            android:id="@+id/cast_section_title"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:background="@color/black"
-            android:fontFamily="@font/montserrat_semibold"
-            android:gravity="start"
-            android:paddingHorizontal="@dimen/_12sdp"
-            android:paddingTop="@dimen/_12sdp"
-            android:text="Cast"
-            android:textColor="@color/white"
-            android:textSize="@dimen/_12ssp"
-             />
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/fragment_movie_details_cast_list"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/black"
-            android:nestedScrollingEnabled="false"
-            android:orientation="horizontal"
-            android:paddingHorizontal="@dimen/_6sdp"
-            android:paddingTop="@dimen/_4sdp"
-            android:paddingBottom="@dimen/_8sdp"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            tools:itemCount="5"
-            tools:listitem="@layout/item_cast" />
-
-        <TextView
-            android:id="@+id/recommended_text"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:background="@color/black"
-            android:fontFamily="@font/montserrat_semibold"
-            android:gravity="start"
-            android:paddingHorizontal="@dimen/_12sdp"
-            android:paddingTop="@dimen/_8sdp"
-            android:text="More Like This"
-            android:textColor="@color/white"
-            android:textSize="@dimen/_12ssp" />
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/fragment_movie_details_recommend_list"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/black"
-            android:nestedScrollingEnabled="false"
-            android:orientation="horizontal"
-            android:paddingHorizontal="@dimen/_6sdp"
-            android:paddingTop="@dimen/_4sdp"
-            android:paddingBottom="@dimen/_5sdp"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            tools:itemCount="2"
-            tools:listitem="@layout/item_list" />
-
-        </LinearLayout>
-        <!-- End of About Section -->
-
-
-    </LinearLayout>
 
             </androidx.core.widget.NestedScrollView>
 
@@ -725,8 +698,4 @@
 
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
-
-
-
-
-
+</layout>
