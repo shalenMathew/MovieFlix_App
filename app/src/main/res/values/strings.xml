@@ -11,4 +11,36 @@
     <string name="where_to_watch">Available On</string>
     <string name="no_streaming_info">No streaming information available</string>
     <string name="release_date">Release Date: %1$s</string>
+
+    <!-- Settings -->
+    <string name="settings">Settings</string>
+    <string name="learn_how_to_use">Learn how to use the app</string>
+    <string name="app_suggestion">More Apps u might like</string>
+    <string name="about_me">About me</string>
+    <string name="donation">Your donations helps to keep the app free for other users</string>
+    <string name="source_code">Source Code</string>
+
+    <!-- More Apps -->
+    <string name="quotes_app_title">Quotes.app</string>
+    <string name="quotes_app_description">A minimalistic open-source add-free quotes app with Tinder-like swipeable cards, delivering positivity and gratitude in your life.</string>
+
+    <!-- About Me -->
+    <string name="portfolio">Portfolio</string>
+    <string name="github">Github</string>
+    <string name="twitter">Twitter</string>
+    <string name="discord">Discord</string>
+    <string name="linkedin">LinkedIn</string>
+    <string name="youtube">Youtube</string>
+    <string name="linktree">LinkTree</string>
+
+    <!-- Donation -->
+    <string name="buy_me_a_coffee">Buy me a coffee</string>
+    <string name="ko_fi">Ko-fi</string>
+
+    <!-- Backup -->
+    <string name="backup_restore">Backup &amp; Restore</string>
+    <string name="export_library">Export Library</string>
+    <string name="import_library">Import Library</string>
+    <string name="export_desc">Save your watchlist, favorites, and tracking data to a JSON file.</string>
+    <string name="import_desc">Restore your data from a previously saved JSON backup file.</string>
 </resources>

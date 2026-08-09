@@ -89,6 +89,39 @@ interface SeriesTrackingDao {
             deleteSeasonsBySeriesId(seriesId)
         }
     }
+
+    @Query("SELECT * FROM series_tracking_table")
+    suspend fun getAllSeriesSync(): List<SeriesTrackingEntity>
+
+    @Query("SELECT * FROM seasons_tracking_table")
+    suspend fun getAllSeasonsSync(): List<SeasonTrackingEntity>
+
+    @Query("SELECT * FROM episodes_tracking_table")
+    suspend fun getAllEpisodesSync(): List<EpisodeTrackingEntity>
+
+    @Query("SELECT * FROM series_progress_table")
+    suspend fun getAllProgressSync(): List<com.shalenmathew.movieflix.data.local_storage.entity.SeriesProgressEntity>
+
+    @Query("DELETE FROM series_tracking_table")
+    suspend fun deleteAllSeries()
+
+    @Query("DELETE FROM seasons_tracking_table")
+    suspend fun deleteAllSeasons()
+
+    @Query("DELETE FROM episodes_tracking_table")
+    suspend fun deleteAllEpisodes()
+
+    @Query("DELETE FROM series_progress_table")
+    suspend fun deleteAllProgress()
+
+    @Query("DELETE FROM watch_list_table")
+    suspend fun deleteAllWatchList()
+
+    @Query("DELETE FROM favorites_movies_table")
+    suspend fun deleteAllFavorites()
+
+    @Query("DELETE FROM scheduled_movies_table")
+    suspend fun deleteAllScheduled()
 }
 
 data class TrackedSeriesWithProgress(

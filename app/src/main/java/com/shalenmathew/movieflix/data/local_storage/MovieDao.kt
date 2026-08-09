@@ -36,6 +36,9 @@ interface MovieDao {
     @Query(" SELECT * FROM watch_list_table ORDER BY id DESC ")
     fun getAllWatchListData(): LiveData<List<WatchListEntity>>
 
+    @Query(" SELECT * FROM watch_list_table ")
+    suspend fun getAllWatchListDataSync(): List<WatchListEntity>
+
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertFavMovie(favouritesEntity: FavouritesEntity)
@@ -49,16 +52,32 @@ interface MovieDao {
     @Query(" SELECT * FROM favorites_movies_table ORDER BY id DESC ")
     fun getAllFavMovies(): LiveData<List<FavouritesEntity>>
 
+    @Query(" SELECT * FROM favorites_movies_table ")
+    suspend fun getAllFavMoviesSync(): List<FavouritesEntity>
+
     @Query("UPDATE favorites_movies_table SET personalNote = :personalNote WHERE id = :favoriteId")
     suspend fun addPersonalNote(favoriteId: Int, personalNote: String?)
 
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertScheduledMovie(scheduledEntity: ScheduledEntity)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertFavMovies(favorites: List<FavouritesEntity>)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertWatchListItems(watchList: List<WatchListEntity>)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertScheduledMovies(scheduled: List<ScheduledEntity>)
+
     @Delete
     suspend fun deleteScheduledMovie(scheduledEntity: ScheduledEntity)
     @Query(" SELECT * FROM scheduled_movies_table ORDER BY scheduledDate ASC ")
     fun getAllScheduledMovies():LiveData<List<ScheduledEntity>>
+
+    @Query(" SELECT * FROM scheduled_movies_table ")
+    suspend fun getAllScheduledMoviesSync(): List<ScheduledEntity>
     @Query("SELECT * FROM scheduled_movies_table WHERE id = :movieId LIMIT 1")
     suspend fun getScheduledMovieById(movieId: Int): ScheduledEntity?
 

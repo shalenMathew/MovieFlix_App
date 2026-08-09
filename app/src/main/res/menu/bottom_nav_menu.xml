@@ -14,4 +14,9 @@
         android:id="@+id/libraryFragment"
         android:icon="@drawable/icon_library"
         android:title="Library" />
+
+    <item
+        android:id="@+id/settingsFragment"
+        android:icon="@drawable/settings"
+        android:title="@string/settings" />
 </menu>

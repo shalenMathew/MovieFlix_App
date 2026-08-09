@@ -88,4 +88,56 @@
             app:destination="@id/movieDetailsFragment" />
     </fragment>
 
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="com.shalenmathew.movieflix.presentation.settings.SettingsFragment"
+        android:label="fragment_settings"
+        tools:layout="@layout/fragment_settings">
+        <action
+            android:id="@+id/action_settingsFragment_to_comingSoonFragment"
+            app:destination="@id/coming_soon_fragment" />
+        <action
+            android:id="@+id/action_settingsFragment_to_moreAppsFragment"
+            app:destination="@id/more_apps_fragment" />
+        <action
+            android:id="@+id/action_settingsFragment_to_aboutMeFragment"
+            app:destination="@id/about_me_fragment" />
+        <action
+            android:id="@+id/action_settingsFragment_to_donationFragment"
+            app:destination="@id/donation_fragment" />
+        <action
+            android:id="@+id/action_settingsFragment_to_backupFragment"
+            app:destination="@id/backup_fragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/coming_soon_fragment"
+        android:name="com.shalenmathew.movieflix.presentation.settings.ComingSoonFragment"
+        android:label="fragment_coming_soon"
+        tools:layout="@layout/fragment_coming_soon" />
+
+    <fragment
+        android:id="@+id/more_apps_fragment"
+        android:name="com.shalenmathew.movieflix.presentation.settings.MoreAppsFragment"
+        android:label="fragment_more_apps"
+        tools:layout="@layout/fragment_more_apps" />
+
+    <fragment
+        android:id="@+id/about_me_fragment"
+        android:name="com.shalenmathew.movieflix.presentation.settings.AboutMeFragment"
+        android:label="fragment_about_me"
+        tools:layout="@layout/fragment_about_me" />
+
+    <fragment
+        android:id="@+id/donation_fragment"
+        android:name="com.shalenmathew.movieflix.presentation.settings.DonationFragment"
+        android:label="fragment_donation"
+        tools:layout="@layout/fragment_donation" />
+
+    <fragment
+        android:id="@+id/backup_fragment"
+        android:name="com.shalenmathew.movieflix.presentation.settings.BackupFragment"
+        android:label="fragment_backup"
+        tools:layout="@layout/fragment_backup" />
+
 </navigation>

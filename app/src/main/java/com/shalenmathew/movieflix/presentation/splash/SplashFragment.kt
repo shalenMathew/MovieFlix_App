@@ -7,7 +7,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AccelerateDecelerateInterpolator
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.shalenmathew.movieflix.R
 import com.shalenmathew.movieflix.core.utils.DataStoreReference
@@ -90,16 +92,18 @@ private  var _binding:FragmentSplashBinding?=null
     private fun tryNavigate() {
         val navId = pendingNavigationId
         if (isAnimationFinished && navId != null && !hasNavigated) {
-            hasNavigated = true
-            lifecycleScope.launch {
-                if (isAdded && viewLifecycleOwner.lifecycle.currentState.isAtLeast(androidx.lifecycle.Lifecycle.State.RESUMED)) {
-                    try {
-                        if (findNavController().currentDestination?.id == R.id.splashFragment) {
-                            findNavController().navigate(navId)
+            viewLifecycleOwner.lifecycleScope.launch {
+                viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.RESUMED) {
+                    if (!hasNavigated) {
+                        hasNavigated = true
+                        try {
+                            if (findNavController().currentDestination?.id == R.id.splashFragment) {
+                                findNavController().navigate(navId)
+                            }
+                        } catch (e: Exception) {
+                            e.printStackTrace()
+                            hasNavigated = false // Reset on failure
                         }
-                    } catch (e: Exception) {
-                        e.printStackTrace()
-                        hasNavigated = false // Reset on failure
                     }
                 }
             }

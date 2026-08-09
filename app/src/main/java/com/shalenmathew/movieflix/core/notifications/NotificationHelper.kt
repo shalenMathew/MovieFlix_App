@@ -69,7 +69,7 @@ object NotificationHelper {
         val posterBitmap = moviePosterUrl?.let { loadImageFromUrl(it) }
 
         val notificationBuilder = NotificationCompat.Builder(context, CHANNEL_ID)
-            .setSmallIcon(R.drawable.ic_calendar_check)
+            .setSmallIcon(R.drawable.ic_notification_bell)
             .setContentTitle("⏰ Time to watch: $movieTitle")
             .setContentText("Your scheduled movie/show is ready to watch!")
             .setPriority(NotificationCompat.PRIORITY_HIGH)
@@ -132,6 +132,25 @@ object NotificationHelper {
             ) == PackageManager.PERMISSION_GRANTED
         } else {
             true // Permission not required for older Android versions
+        }
+    }
+
+    fun showStatusNotification(context: Context, title: String, message: String) {
+        val notificationId = 1001
+        val notification = NotificationCompat.Builder(context, CHANNEL_ID)
+            .setSmallIcon(R.drawable.ic_notification_bell)
+            .setContentTitle(title)
+            .setContentText(message)
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
+            .setAutoCancel(true)
+            .build()
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ActivityCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED) {
+                NotificationManagerCompat.from(context).notify(notificationId, notification)
+            }
+        } else {
+            NotificationManagerCompat.from(context).notify(notificationId, notification)
         }
     }
 }

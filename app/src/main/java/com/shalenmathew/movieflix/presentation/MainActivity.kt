@@ -43,6 +43,11 @@ class MainActivity : AppCompatActivity() {
         // Setup bottom navigation with nav controller
         binding.bottomNavigationView.setupWithNavController(navController)
 
+        // Avoid re-navigating to the same destination when clicking the bottom nav item again
+        binding.bottomNavigationView.setOnItemReselectedListener {
+            // Do nothing
+        }
+
         binding.bottomNavigationView.isItemActiveIndicatorEnabled = true
 
         val csl = ColorStateList(
@@ -57,7 +62,7 @@ class MainActivity : AppCompatActivity() {
         // Handle bottom navigation visibility
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
-                R.id.homeFragment, R.id.searchFragment, R.id.libraryFragment -> {
+                R.id.homeFragment, R.id.searchFragment, R.id.libraryFragment, R.id.settingsFragment -> {
                     binding.bottomNavigationView.visibility = android.view.View.VISIBLE
                 }
                 else -> {
@@ -83,7 +88,7 @@ class MainActivity : AppCompatActivity() {
         // Handle notification intent - open movie details if launched from notification
         handleNotificationIntent()
     }
-    
+
     private fun handleNotificationIntent() {
         if (intent?.getBooleanExtra("OPEN_MOVIE_DETAILS", false) == true) {
             val movieData = intent.getStringExtra("MOVIE_DATA")
