@@ -22,7 +22,7 @@ import com.shalenmathew.movieflix.data.local_storage.entity.EpisodeTrackingEntit
         EpisodeTrackingEntity::class,
         com.shalenmathew.movieflix.data.local_storage.entity.SeriesProgressEntity::class
     ],
-    version = 11
+    version = 12
 )
 @TypeConverters(MovieDataTypeConverter::class)
 abstract class MovieDatabase : RoomDatabase() {

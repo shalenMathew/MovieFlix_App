@@ -195,6 +195,8 @@ class SeriesTrackingRepositoryImpl @Inject constructor(
         overview = overview,
         stillPath = stillPath,
         runtime = runtime,
+        airDate = airDate,
+        voteAverage = voteAverage,
         isWatched = isWatched
     )
 }

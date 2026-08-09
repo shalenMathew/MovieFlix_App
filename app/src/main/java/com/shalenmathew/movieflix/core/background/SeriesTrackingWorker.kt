@@ -90,7 +90,9 @@ class SeriesTrackingWorker(
                                     name = ep.name,
                                     overview = ep.overview,
                                     stillPath = ep.still_path,
-                                    runtime = ep.runtime
+                                    runtime = ep.runtime,
+                                    airDate = ep.air_date,
+                                    voteAverage = ep.vote_average
                                 )
                             )
                         }

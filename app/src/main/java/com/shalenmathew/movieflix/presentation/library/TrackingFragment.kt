@@ -75,14 +75,14 @@ class TrackingFragment : Fragment() {
                     callback(episodes.map { 
                         com.shalenmathew.movieflix.domain.model.TVEpisode(
                             id = it.id,
-                            airDate = null,
+                            airDate = it.airDate,
                             episodeNumber = it.episodeNumber,
                             name = it.name,
                             overview = it.overview,
                             runtime = it.runtime,
                             seasonNumber = it.seasonNumber,
                             stillPath = it.stillPath,
-                            voteAverage = null,
+                            voteAverage = it.voteAverage,
                             isWatched = it.isWatched
                         )
                     })
@@ -213,14 +213,14 @@ class TrackingFragment : Fragment() {
             val domainEpisodes = episodes.map {
                 com.shalenmathew.movieflix.domain.model.TVEpisode(
                     id = it.id,
-                    airDate = null,
+                    airDate = it.airDate,
                     episodeNumber = it.episodeNumber,
                     name = it.name,
                     overview = it.overview,
                     runtime = it.runtime,
                     seasonNumber = it.seasonNumber,
                     stillPath = it.stillPath,
-                    voteAverage = null,
+                    voteAverage = it.voteAverage,
                     isWatched = it.isWatched
                 )
             }

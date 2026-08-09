@@ -37,19 +37,21 @@ data class EpisodeTrackingEntity(
     val overview: String?,
     val stillPath: String?,
     val runtime: Int?,
+    val airDate: String?,
+    val voteAverage: Double?,
     val isWatched: Boolean = false
 ) {
     fun toTVEpisode(): com.shalenmathew.movieflix.domain.model.TVEpisode {
         return com.shalenmathew.movieflix.domain.model.TVEpisode(
             id = id,
-            airDate = null,
+            airDate = airDate,
             episodeNumber = episodeNumber,
             name = name,
             overview = overview,
             runtime = runtime,
             seasonNumber = seasonNumber,
             stillPath = stillPath,
-            voteAverage = null,
+            voteAverage = voteAverage,
             isWatched = isWatched
         )
     }

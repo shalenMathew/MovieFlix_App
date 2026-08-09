@@ -34,5 +34,7 @@ data class TrackedEpisode(
     val overview: String?,
     val stillPath: String?,
     val runtime: Int?,
+    val airDate: String?,
+    val voteAverage: Double?,
     val isWatched: Boolean = false
 )

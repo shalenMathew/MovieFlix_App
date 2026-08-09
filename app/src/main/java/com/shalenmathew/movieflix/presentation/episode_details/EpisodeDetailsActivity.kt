@@ -4,9 +4,16 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.view.ViewGroup
+import androidx.activity.SystemBarStyle
+import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.updatePadding
 import com.shalenmathew.movieflix.R
+import com.shalenmathew.movieflix.core.utils.Constants
 import com.shalenmathew.movieflix.core.utils.formatDate
 import com.shalenmathew.movieflix.core.utils.loadImage
 import com.shalenmathew.movieflix.databinding.FragmentEpisodeDetailsBinding
@@ -35,12 +42,30 @@ class EpisodeDetailsActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        enableEdgeToEdge(
+            statusBarStyle = SystemBarStyle.dark(
+                scrim = android.graphics.Color.TRANSPARENT
+            ),
+            navigationBarStyle = SystemBarStyle.dark(
+                scrim = android.graphics.Color.TRANSPARENT
+            )
+        )
         binding = FragmentEpisodeDetailsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        setupWindowInsets()
         getIntentData()
         setupUI()
         setupClickListeners()
+    }
+
+    private fun setupWindowInsets() {
+        // Handle bottom navigation insets to prevent buttons from going behind system nav bar
+        ViewCompat.setOnApplyWindowInsetsListener(binding.bottomNavigationContainer) { v, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            v.updatePadding(bottom = systemBars.bottom)
+            insets
+        }
     }
 
     private fun getIntentData() {
@@ -92,10 +117,10 @@ class EpisodeDetailsActivity : AppCompatActivity() {
                 episodeOverview.text = episode.overview?.takeIf { it.isNotBlank() }
                     ?: "No overview available for this episode."
 
-                // Episode still/thumbnail - use W500 for detail view
+                // Episode still/thumbnail - use W780 for clearer detail view
                 if (episode.stillPath != null) {
                     episodeStill.loadImage(
-                        "https://image.tmdb.org/t/p/w500${episode.stillPath}",
+                        Constants.TMDB_IMAGE_BASE_URL_W780.plus(episode.stillPath),
                         placeholder = ContextCompat.getDrawable(this@EpisodeDetailsActivity, R.drawable.poster_bg)
                     )
                 } else {
