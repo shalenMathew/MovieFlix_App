@@ -15,9 +15,6 @@
 
 ![Adobe Express - rec (1)](https://github.com/user-attachments/assets/f7c5b24e-4606-49f3-a809-e9a39c7e6f1b)
 
-![Adobe Express - rec (1)](https://github.com/user-attachments/assets/fac7a701-a2fd-43d6-9be2-40eba2f63af8)
-
-
 
 ### A movie diary for cinephile for tracking every movie and TV show you watch.
 
