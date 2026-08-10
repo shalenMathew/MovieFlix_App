@@ -16,9 +16,9 @@
 ![Adobe Express - rec (1)](https://github.com/user-attachments/assets/f7c5b24e-4606-49f3-a809-e9a39c7e6f1b)
 
 
-### A movie diary for cinephile for tracking every movie and TV show you watch.
+### Your Ad-Free, Open-Source Media Diary
 
-Create aesthetic movie cards to share like Spotify songs, manage your watchlist, get episodes list of your fav shows, dive deep into cast filmographies, and maintain your personal movie diary—all in one beautifully designed Android app powered by TMDB API.
+MovieFlix is an ad-free, open-source journal for tracking your favourite movies and TV shows offline—from managing your watchlist and tracking series progress to sharing your movies & shows as custom Spotify-style cards.
 
 ### Get From
 > [<img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png" height="80">](https://f-droid.org/en/packages/com.shalenmathew.movieflix)
