@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/sharable_root"
+    android:layout_width="1080px"
+    android:layout_height="wrap_content"
+    android:background="@color/black"
+    android:orientation="vertical"
+    android:padding="60px">
+
+    <TextView
+        android:id="@+id/sharable_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/montserrat_bold"
+        android:textColor="@color/white"
+        android:textSize="58px"
+        tools:text="Best Movies of 2024" />
+
+    <TextView
+        android:id="@+id/sharable_desc"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16px"
+        android:fontFamily="@font/montserrat_medium"
+        android:textColor="@color/text_secondary"
+        android:textSize="26px"
+        android:maxLines="2"
+        android:ellipsize="end"
+        tools:text="My personal collection of the best cinematic experiences this year." />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="3px"
+        android:layout_marginVertical="40px"
+        android:background="@color/white"
+        android:alpha="0.5" />
+
+    <GridLayout
+        android:id="@+id/sharable_grid"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:columnCount="3"
+        android:useDefaultMargins="false">
+
+        <!-- 9 Posters with 2:3 ratio (~310px wide, ~465px high) - Restored Padding and Corners -->
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/poster_1" android:layout_width="310px" android:layout_height="465px" android:scaleType="centerCrop" android:layout_margin="5px" app:shapeAppearanceOverlay="@style/RoundedCornerImage" />
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/poster_2" android:layout_width="310px" android:layout_height="465px" android:scaleType="centerCrop" android:layout_margin="5px" app:shapeAppearanceOverlay="@style/RoundedCornerImage" />
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/poster_3" android:layout_width="310px" android:layout_height="465px" android:scaleType="centerCrop" android:layout_margin="5px" app:shapeAppearanceOverlay="@style/RoundedCornerImage" />
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/poster_4" android:layout_width="310px" android:layout_height="465px" android:scaleType="centerCrop" android:layout_margin="5px" app:shapeAppearanceOverlay="@style/RoundedCornerImage" />
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/poster_5" android:layout_width="310px" android:layout_height="465px" android:scaleType="centerCrop" android:layout_margin="5px" app:shapeAppearanceOverlay="@style/RoundedCornerImage" />
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/poster_6" android:layout_width="310px" android:layout_height="465px" android:scaleType="centerCrop" android:layout_margin="5px" app:shapeAppearanceOverlay="@style/RoundedCornerImage" />
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/poster_7" android:layout_width="310px" android:layout_height="465px" android:scaleType="centerCrop" android:layout_margin="5px" app:shapeAppearanceOverlay="@style/RoundedCornerImage" />
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/poster_8" android:layout_width="310px" android:layout_height="465px" android:scaleType="centerCrop" android:layout_margin="5px" app:shapeAppearanceOverlay="@style/RoundedCornerImage" />
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/poster_9" android:layout_width="310px" android:layout_height="465px" android:scaleType="centerCrop" android:layout_margin="5px" app:shapeAppearanceOverlay="@style/RoundedCornerImage" />
+
+    </GridLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50px"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="60px"
+            android:layout_height="60px"
+            android:src="@mipmap/ic_launcher" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20px"
+            android:fontFamily="@font/montserrat_bold"
+            android:text="Created on MovieFlix"
+            android:textColor="@color/white"
+            android:textSize="26px" />
+
+    </LinearLayout>
+
+</LinearLayout>

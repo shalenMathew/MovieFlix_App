@@ -60,8 +60,8 @@ class LibraryFragment : Fragment() {
                 tab.text = when (position) {
                     0 -> "Watchlist"
                     1 -> "Favorites"
-                    2 -> "Tracking"
-                    3 -> "Lists"
+                    2 -> "Lists"
+                    3 -> "Tracking"
                     else -> ""
                 }
             }.attach()
@@ -123,8 +123,8 @@ class LibraryFragment : Fragment() {
             return when (position) {
                 0 -> WatchListFragment()
                 1 -> FavFragment()
-                2 -> TrackingFragment()
-                3 -> CustomListsFragment()
+                2 -> CustomListsFragment()
+                3 -> TrackingFragment()
                 else -> WatchListFragment()
             }
         }

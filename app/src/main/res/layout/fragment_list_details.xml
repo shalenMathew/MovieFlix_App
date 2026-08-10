@@ -38,6 +38,17 @@
                 android:textSize="@dimen/_14ssp"
                 tools:text="Best Horror 2024" />
 
+            <ImageView
+                android:id="@+id/list_details_share_btn"
+                android:layout_width="@dimen/_24sdp"
+                android:layout_height="@dimen/_24sdp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:src="@drawable/baseline_share_24"
+                app:tint="@color/white"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="Share List" />
+
         </RelativeLayout>
 
         <TextView

@@ -21,7 +21,6 @@ class CustomListAdapter(
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val name: TextView = itemView.findViewById(R.id.list_name)
         val description: TextView = itemView.findViewById(R.id.list_description)
-        val count: TextView = itemView.findViewById(R.id.list_count)
         val deleteBtn: ImageView = itemView.findViewById(R.id.delete_list_btn)
         
         private val posterImages = listOf<ImageView>(
@@ -35,9 +34,8 @@ class CustomListAdapter(
             name.text = list.name
             description.text = list.description ?: ""
             description.visibility = if (list.description.isNullOrEmpty()) View.GONE else View.VISIBLE
-            count.text = "${list.movieCount} Items"
             
-            // Bind top 5 posters
+            // Bind top 4 posters
             val topPosters = list.topPosters
             posterImages.forEachIndexed { index, imageView ->
                 if (index < topPosters.size) {

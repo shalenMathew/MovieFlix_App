@@ -114,16 +114,5 @@
             android:ellipsize="end"
             tools:text="All the MCU movies and projects in order of release." />
 
-        <TextView
-            android:id="@+id/list_count"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_4sdp"
-            android:paddingHorizontal="@dimen/_4sdp"
-            android:fontFamily="@font/montserrat_semibold"
-            android:textColor="@color/app_color"
-            android:textSize="@dimen/_9ssp"
-            tools:text="12 Movies" />
-
     </LinearLayout>
 </layout>
