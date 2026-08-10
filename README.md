@@ -43,6 +43,8 @@ Create aesthetic movie cards to share like Spotify songs, manage your watchlist,
 | ![ps1](https://github.com/user-attachments/assets/45ae6a12-2808-4ee2-a82a-ea569c0a65a3) | ![ps2](https://github.com/user-attachments/assets/4675976f-9d32-4c33-8f3c-d2e42f591b96) |
 |:-----------------------------------------------------------------------------------------|:---------------------------------------------------------------------------------------:|
 | ![ps3](https://github.com/user-attachments/assets/fd008344-126a-49ae-9699-da5092f9d291)  | ![ps4](https://github.com/user-attachments/assets/d667ee51-0e1e-481b-b66f-0f970506a335)  |
+| ![ps5](https://github.com/user-attachments/assets/44d2d299-6f84-44b2-84f7-628e084ec64b)  | ![ps6](https://github.com/user-attachments/assets/ae1a46ea-7b61-4778-97cd-b8bfab25bf59)  |
+
 
 
  ## Built With 🛠
