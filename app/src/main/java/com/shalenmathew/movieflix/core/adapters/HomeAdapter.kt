@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.shalenmathew.movieflix.R
+import com.shalenmathew.movieflix.core.utils.Constants
 import com.shalenmathew.movieflix.databinding.HorizontalFeedItemListBinding
 import com.shalenmathew.movieflix.domain.model.HomeFeed
 import com.shalenmathew.movieflix.domain.model.MovieResult
@@ -42,7 +43,19 @@ class HomeAdapter(
 
        fun bind(homeFeed: HomeFeed){
             binding.apply {
-                horizontalFeedListItemTitle.text=homeFeed.title
+                horizontalFeedListItemTitle.text = when (homeFeed.title) {
+                    Constants.POPULAR_MOVIES -> itemView.context.getString(R.string.popular_movies)
+                    Constants.POPULAR_TV_SHOWS -> itemView.context.getString(R.string.popular_tv_shows)
+                    Constants.TOP_RATED_MOVIES -> itemView.context.getString(R.string.top_rated)
+                    Constants.ANIME_SERIES -> itemView.context.getString(R.string.anime_series)
+                    Constants.NETFLIX_SHOWS -> itemView.context.getString(R.string.netflix_shows)
+                    Constants.UPCOMING_MOVIES -> itemView.context.getString(R.string.upcoming_movies)
+                    Constants.TRENDING_MOVIES -> itemView.context.getString(R.string.whats_trending)
+                    Constants.PRIME_SHOWS -> itemView.context.getString(R.string.amazon_prime_shows)
+                    Constants.NOW_PLAYING_MOVIES -> itemView.context.getString(R.string.now_playing_movies)
+                    Constants.CONTINUE_WATCHING -> itemView.context.getString(R.string.continue_watching)
+                    else -> homeFeed.title
+                }
 
                 val horizontalAdapter = adapterMap.getOrPut(homeFeed.title) {
                     HorizontalAdapter(

@@ -131,7 +131,16 @@
         <action
             android:id="@+id/action_settingsFragment_to_backupFragment"
             app:destination="@id/backup_fragment" />
+        <action
+            android:id="@+id/action_settingsFragment_to_languageFragment"
+            app:destination="@id/languageFragment" />
     </fragment>
+
+    <fragment
+        android:id="@+id/languageFragment"
+        android:name="com.shalenmathew.movieflix.presentation.settings.LanguageFragment"
+        android:label="fragment_language"
+        tools:layout="@layout/fragment_language" />
 
     <fragment
         android:id="@+id/coming_soon_fragment"

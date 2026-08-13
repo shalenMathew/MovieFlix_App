@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.work.Data
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
+import com.shalenmathew.movieflix.R
 import com.shalenmathew.movieflix.core.background.SeriesTrackingWorker
 import com.shalenmathew.movieflix.core.utils.NetworkResults
 import com.shalenmathew.movieflix.data.local_storage.SeriesTrackingDao
@@ -65,10 +66,10 @@ class SeriesTrackingRepositoryImpl @Inject constructor(
                 
                 emit(NetworkResults.Success(Unit))
             } else {
-                emit(NetworkResults.Error("Failed to fetch series info"))
+                emit(NetworkResults.Error(context.getString(R.string.msg_failed_fetch_series)))
             }
         } catch (e: Exception) {
-            emit(NetworkResults.Error(e.message ?: "Unknown error"))
+            emit(NetworkResults.Error(e.message ?: context.getString(R.string.msg_something_went_wrong)))
         }
     }
 
@@ -161,10 +162,10 @@ class SeriesTrackingRepositoryImpl @Inject constructor(
                 val paths = response.body()!!.backdrops?.mapNotNull { it.filePath } ?: emptyList()
                 NetworkResults.Success(paths)
             } else {
-                NetworkResults.Error("Failed to fetch images")
+                NetworkResults.Error(context.getString(R.string.msg_failed_fetch_images))
             }
         } catch (e: Exception) {
-            NetworkResults.Error(e.message ?: "Unknown error")
+            NetworkResults.Error(e.message ?: context.getString(R.string.msg_something_went_wrong))
         }
     }
 

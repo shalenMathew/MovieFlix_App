@@ -64,7 +64,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/montserrat_medium"
-                android:text="endless entertainment for everyone"
+                android:text="@string/intro_subtitle"
                 android:textColor="@color/white"
                 android:textSize="@dimen/_14ssp" />
 
@@ -99,7 +99,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/white"
-                    android:text="Countinue  >"
+                    android:text="@string/continue_btn"
                     android:textSize="@dimen/_13ssp"
                     android:fontFamily="@font/montserrat_semibold"
                     />

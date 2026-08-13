@@ -62,7 +62,7 @@ class TrackingAdapter(
             
             // Set last watched info
             if (series.lastWatchedSeasonNumber != null && series.lastWatchedEpisodeNumber != null) {
-                lastWatchedText.text = "Last watched : Season ${series.lastWatchedSeasonNumber} ep ${series.lastWatchedEpisodeNumber}"
+                lastWatchedText.text = itemView.context.getString(R.string.lbl_last_watched, series.lastWatchedSeasonNumber, series.lastWatchedEpisodeNumber)
                 lastWatchedText.visibility = View.VISIBLE
             } else {
                 lastWatchedText.visibility = View.GONE
@@ -101,7 +101,7 @@ class TrackingAdapter(
 
         fun updateBookmarkInfo(series: TrackedSeries) {
             if (series.lastWatchedSeasonNumber != null && series.lastWatchedEpisodeNumber != null) {
-                lastWatchedText.text = "Last watched : Season ${series.lastWatchedSeasonNumber} ep ${series.lastWatchedEpisodeNumber}"
+                lastWatchedText.text = itemView.context.getString(R.string.lbl_last_watched, series.lastWatchedSeasonNumber, series.lastWatchedEpisodeNumber)
                 lastWatchedText.visibility = View.VISIBLE
             } else {
                 lastWatchedText.visibility = View.GONE
@@ -116,7 +116,7 @@ class TrackingAdapter(
             if (series.syncStatus == "PENDING") {
                 com.shalenmathew.movieflix.core.utils.showToast(
                     itemView.context, 
-                    "Syncing episodes... please wait."
+                    itemView.context.getString(R.string.msg_syncing_episodes)
                 )
                 return
             }

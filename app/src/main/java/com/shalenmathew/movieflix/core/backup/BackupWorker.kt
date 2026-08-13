@@ -38,6 +38,7 @@ class BackupWorker(
             val db = entryPoint.movieDatabase()
             val movieDao = db.dao
             val seriesDao = db.seriesTrackingDao
+            val customListDao = db.customListDao
 
             val backupData = BackupData(
                 favorites = movieDao.getAllFavMoviesSync(),
@@ -46,7 +47,9 @@ class BackupWorker(
                 series = seriesDao.getAllSeriesSync(),
                 seasons = seriesDao.getAllSeasonsSync(),
                 episodes = seriesDao.getAllEpisodesSync(),
-                progress = seriesDao.getAllProgressSync()
+                progress = seriesDao.getAllProgressSync(),
+                customLists = customListDao.getAllListsSync(),
+                customListMovies = customListDao.getAllCustomListMoviesSync()
             )
 
             val json = Gson().toJson(backupData)

@@ -86,10 +86,10 @@ class EpisodeDetailsActivity : AppCompatActivity() {
         episode.let {
             binding.apply {
                 // Episode title
-                episodeTitle.text = episode.name ?: "Episode ${episode.episodeNumber}"
+                episodeTitle.text = episode.name ?: getString(R.string.lbl_episode_number, episode.episodeNumber)
 
                 // Episode number and season
-                val episodeText = "Episode ${episode.episodeNumber} • Season $seasonNumber"
+                val episodeText = "${getString(R.string.lbl_episode_number, episode.episodeNumber)} • ${getString(R.string.lbl_season_number, seasonNumber)}"
                 episodeNumber.text = episodeText
 
                 // Duration
@@ -115,7 +115,7 @@ class EpisodeDetailsActivity : AppCompatActivity() {
 
                 // Overview
                 episodeOverview.text = episode.overview?.takeIf { it.isNotBlank() }
-                    ?: "No overview available for this episode."
+                    ?: getString(R.string.msg_no_overview_episode)
 
                 // Episode still/thumbnail - use W780 for clearer detail view
                 if (episode.stillPath != null) {
@@ -148,19 +148,19 @@ class EpisodeDetailsActivity : AppCompatActivity() {
             when {
                 currentIndex > 0 -> {
                     // Not at first episode - show normal Previous
-                    "Previous".also { previousButton.text = it }
+                    getString(R.string.previous).also { previousButton.text = it }
                     previousButton.isEnabled = true
                     previousButton.alpha = 1f
                 }
                 seasonNumber > 1 -> {
                     // First episode but not first season - show Previous Season
-                    "Previous Season".also { previousButton.text = it }
+                    getString(R.string.btn_previous_season).also { previousButton.text = it }
                     previousButton.isEnabled = true
                     previousButton.alpha = 1f
                 }
                 else -> {
                     // First episode of first season - disable
-                    "Previous".also { previousButton.text = it }
+                    getString(R.string.previous).also { previousButton.text = it }
                     previousButton.isEnabled = false
                     previousButton.alpha = 0.5f
                 }
@@ -170,19 +170,19 @@ class EpisodeDetailsActivity : AppCompatActivity() {
             when {
                 currentIndex < episodes.size - 1 -> {
                     // Not at last episode - show normal Next
-                    "Next".also { nextButton.text = it }
+                    getString(R.string.next).also { nextButton.text = it }
                     nextButton.isEnabled = true
                     nextButton.alpha = 1f
                 }
                 seasonNumber < totalSeasons -> {
                     // Last episode but not last season - show Next Season
-                    "Next Season".also { nextButton.text = it }
+                    getString(R.string.btn_next_season).also { nextButton.text = it }
                     nextButton.isEnabled = true
                     nextButton.alpha = 1f
                 }
                 else -> {
                     // Last episode of last season - disable
-                    "Next".also { nextButton.text = it }
+                    getString(R.string.next).also { nextButton.text = it }
                     nextButton.isEnabled = false
                     nextButton.alpha = 0.5f
                 }

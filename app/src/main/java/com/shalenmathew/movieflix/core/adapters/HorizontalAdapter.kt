@@ -61,7 +61,7 @@ class HorizontalAdapter(
                     if(isNetworkAvailable(context)){
                         onPosterClick?.invoke(item)
                     }else{
-                        showToast(context,"Internet connection req")
+                        showToast(context, context.getString(R.string.msg_check_internet))
                     }
                 }
             }

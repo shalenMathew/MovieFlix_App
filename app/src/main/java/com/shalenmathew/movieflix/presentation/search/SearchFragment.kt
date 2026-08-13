@@ -138,7 +138,7 @@ class SearchFragment : BaseFragment() {
                            fragmentSearchSearchResult.visible()
                            horizontalAdapter.submitList(movieList.results)
                        }else{
-                           Toast.makeText(context, "No movie found", Toast.LENGTH_SHORT).show()
+                           Toast.makeText(context, getString(R.string.msg_no_movie_found), Toast.LENGTH_SHORT).show()
                        }
                     }
 

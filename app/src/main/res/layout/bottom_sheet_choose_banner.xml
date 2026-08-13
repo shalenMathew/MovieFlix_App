@@ -12,7 +12,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Choose a New Banner"
+            android:text="@string/choose_a_new_banner"
             android:fontFamily="@font/montserrat_bold"
             android:textColor="@color/white"
             android:textSize="@dimen/_16ssp"
@@ -39,7 +39,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_12sdp"
-            android:text="Cancel"
+            android:text="@string/cancel"
             android:textAllCaps="false"
             android:textColor="@color/white"
             android:fontFamily="@font/montserrat_semibold" />

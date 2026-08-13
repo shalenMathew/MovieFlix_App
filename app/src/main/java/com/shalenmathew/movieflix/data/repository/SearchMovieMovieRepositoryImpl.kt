@@ -1,6 +1,7 @@
 package com.shalenmathew.movieflix.data.repository
 
 import android.app.Application
+import com.shalenmathew.movieflix.R
 import com.shalenmathew.movieflix.core.utils.NetworkResults
 import com.shalenmathew.movieflix.core.utils.isNetworkAvailable
 import com.shalenmathew.movieflix.data.remote.RemoteDataSource
@@ -27,11 +28,11 @@ class SearchMovieMovieRepositoryImpl(
             when(e){
 
                 is IOException->{
-                    emit(NetworkResults.Error("Check ur internet connection"))
+                    emit(NetworkResults.Error(appContext.getString(R.string.msg_check_internet)))
                 }
 
                 else->{
-                    emit(NetworkResults.Error(e.message?:"Unknown error"))
+                    emit(NetworkResults.Error(e.message?:appContext.getString(R.string.msg_something_went_wrong)))
                 }
             }
 
@@ -51,11 +52,11 @@ try {
     when(e){
 
         is IOException->{
-            emit(NetworkResults.Error("Check ur internet connection"))
+            emit(NetworkResults.Error(appContext.getString(R.string.msg_check_internet)))
         }
 
         else->{
-            emit(NetworkResults.Error(e.message?:"Unknown error"))
+            emit(NetworkResults.Error(e.message ?: appContext.getString(R.string.msg_something_went_wrong)))
         }
     }
 }

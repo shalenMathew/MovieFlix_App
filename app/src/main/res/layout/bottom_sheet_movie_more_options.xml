@@ -23,7 +23,7 @@
         android:id="@+id/more_options_header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="More Options"
+        android:text="@string/more_options"
         android:fontFamily="@font/montserrat_bold"
         android:textColor="@color/white"
         android:textSize="@dimen/_14ssp"
@@ -59,7 +59,7 @@
                 android:id="@+id/more_options_schedule_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Schedule Reminder"
+                android:text="@string/schedule_reminder"
                 android:fontFamily="@font/montserrat_semibold"
                 android:textColor="@color/white"
                 android:textSize="@dimen/_12ssp" />
@@ -68,7 +68,7 @@
                 android:id="@+id/more_options_schedule_subtitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Notify me to watch this movie later"
+                android:text="@string/notify_me_to_watch_this_movie_later"
                 android:fontFamily="@font/montserrat_medium"
                 android:textColor="@color/text_secondary"
                 android:textSize="@dimen/_10ssp"
@@ -109,7 +109,7 @@
                 android:id="@+id/more_options_track_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Track Series"
+                android:text="@string/track_series"
                 android:fontFamily="@font/montserrat_semibold"
                 android:textColor="@color/white"
                 android:textSize="@dimen/_12ssp" />
@@ -118,7 +118,7 @@
                 android:id="@+id/more_options_track_subtitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Cache all episodes to track your currently watching episodes"
+                android:text="@string/track_series_subtitle"
                 android:fontFamily="@font/montserrat_medium"
                 android:textColor="@color/text_secondary"
                 android:textSize="@dimen/_10ssp"
@@ -155,7 +155,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Add to Collection"
+                android:text="@string/add_to_collection"
                 android:fontFamily="@font/montserrat_semibold"
                 android:textColor="@color/white"
                 android:textSize="@dimen/_12ssp" />
@@ -163,7 +163,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Save to one of your custom lists"
+                android:text="@string/save_to_custom_list"
                 android:fontFamily="@font/montserrat_medium"
                 android:textColor="@color/text_secondary"
                 android:textSize="@dimen/_10ssp"

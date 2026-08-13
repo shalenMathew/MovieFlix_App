@@ -129,7 +129,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="@dimen/_2sdp"
                                 android:fontFamily="@font/montserrat_medium"
-                                android:text="Watch Now"
+                                android:text="@string/watch_now"
                                 android:textColor="@color/white"
                                 android:textSize="@dimen/_12ssp" />
 

@@ -52,7 +52,7 @@ class TrackingSeasonAdapter(
         }
 
         fun bind(season: TrackedSeason) {
-            seasonTitle.text = season.name ?: "Season ${season.seasonNumber}"
+            seasonTitle.text = season.name ?: itemView.context.getString(R.string.lbl_season_number, season.seasonNumber)
             
             updateExpansionState(season)
             updateProgress(season)
@@ -76,7 +76,7 @@ class TrackingSeasonAdapter(
                 progressText.visibility = View.VISIBLE
                 completedIcon.visibility = View.GONE
                 progressBar.progress = percent
-                progressText.text = "$percent%"
+                progressText.text = itemView.context.getString(R.string.lbl_percent, percent)
             }
         }
 

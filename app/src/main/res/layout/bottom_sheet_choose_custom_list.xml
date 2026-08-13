@@ -13,7 +13,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Add to Collection"
+            android:text="@string/add_to_collection"
             android:fontFamily="@font/montserrat_bold"
             android:textColor="@color/white"
             android:textSize="@dimen/_16ssp"
@@ -32,7 +32,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_8sdp"
-            android:text="+ Create New List"
+            android:text="@string/plus_create_new_list"
             android:textAllCaps="false"
             android:textColor="@color/app_color"
             android:fontFamily="@font/montserrat_semibold" />

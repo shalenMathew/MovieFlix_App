@@ -24,7 +24,7 @@ class CastAdapter : ListAdapter<CastMember, CastAdapter.ViewHolder>(CastDiffCall
                 itemCastName.text = castMember.name
                 // Handle missing character name - display in uppercase
                 itemCastCharacter.text = if (castMember.character.isNullOrBlank()) {
-                    "CAST MEMBER"
+                    root.context.getString(R.string.lbl_cast_member)
                 } else {
                     castMember.character.uppercase()
                 }

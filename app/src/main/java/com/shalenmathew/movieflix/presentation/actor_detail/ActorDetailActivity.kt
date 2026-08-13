@@ -114,7 +114,7 @@ class ActorDetailActivity : AppCompatActivity() {
                 }
                 is NetworkResults.Error -> {
                     showLoading(false)
-                    showError(result.message ?: "Failed to load actor details")
+                    showError(result.message ?: getString(R.string.failed_to_load_actor_details))
                 }
             }
         }
@@ -156,14 +156,14 @@ class ActorDetailActivity : AppCompatActivity() {
             }
 
             // Set known for department
-            actorKnownFor.text = actor.knownForDepartment?.let { "Known for $it" } ?: "Actor"
+            actorKnownFor.text = actor.knownForDepartment?.let { getString(R.string.lbl_known_for, it) } ?: getString(R.string.lbl_actor)
 
             // Set biography
             if (!actor.biography.isNullOrEmpty()) {
                 actorBiography.text = actor.biography
                 actorBiography.visibility = View.VISIBLE
             } else {
-                "No biography available for this person.".also { actorBiography.text = it }
+                getString(R.string.msg_no_biography).also { actorBiography.text = it }
                 actorBiography.visibility = View.VISIBLE
             }
 

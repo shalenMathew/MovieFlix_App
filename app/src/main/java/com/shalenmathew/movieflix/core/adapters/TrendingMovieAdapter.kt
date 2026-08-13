@@ -32,7 +32,7 @@ class TrendingMovieAdapter(private val onClick:(movie:MovieResult)-> Unit): List
                    if(isNetworkAvailable(context)){
                        onClick(movie)
                    }else{
-                       Toast.makeText(context, "Check ur internet connection ", Toast.LENGTH_SHORT).show()
+                       Toast.makeText(context, context.getString(R.string.msg_check_internet), Toast.LENGTH_SHORT).show()
                    }
                 }
             }

@@ -4,6 +4,7 @@ import android.app.Application
 import android.content.Context
 import com.shalenmathew.movieflix.BuildConfig
 import com.shalenmathew.movieflix.core.utils.Constants
+import com.shalenmathew.movieflix.core.utils.DataStoreReference
 import com.shalenmathew.movieflix.core.utils.NetworkConnectivityObserver
 import com.shalenmathew.movieflix.data.network.ApiClient
 import com.shalenmathew.movieflix.data.remote.RemoteDataSource
@@ -15,6 +16,8 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.runBlocking
 import okhttp3.Cache
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -50,10 +53,30 @@ object NetworkModule {
                val  originalHttpUrl = chain.request().url
 
                val url = originalHttpUrl.newBuilder()
-                   .addQueryParameter("api_key",BuildConfig.MOVIE_API_KEY)
+                   .setQueryParameter("api_key", BuildConfig.MOVIE_API_KEY)
                    .build()
                request.url(url)
                return@addInterceptor chain.proceed(request.build())
+           }.addInterceptor { chain ->
+               val originalHttpUrl = chain.request().url
+
+               val languageCode = try {
+                   runBlocking {
+                       DataStoreReference.getSelectedLanguage(context).first()
+                   }
+               } catch (e: Exception) {
+                   "en-US"
+               }
+
+               val url = originalHttpUrl.newBuilder()
+                   .setQueryParameter("language", languageCode)
+                   .build()
+
+               val request = chain.request().newBuilder()
+                   .url(url)
+                   .build()
+
+               chain.proceed(request)
            }.addInterceptor{chain ->
                var request = chain.request()
                request = request.newBuilder().header("Cache-Control", "public, max-age=" + 60 * 5)

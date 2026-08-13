@@ -1,6 +1,7 @@
 package com.shalenmathew.movieflix.data.repository
 
 import android.app.Application
+import com.shalenmathew.movieflix.R
 import com.shalenmathew.movieflix.core.utils.NetworkResults
 import com.shalenmathew.movieflix.core.utils.isNetworkAvailable
 import com.shalenmathew.movieflix.data.remote.RemoteDataSource
@@ -71,13 +72,13 @@ class ActorRepositoryImpl @Inject constructor(
 
                     emit(NetworkResults.Success(actorDetail))
                 } else {
-                    emit(NetworkResults.Error("Failed to load actor details"))
+                    emit(NetworkResults.Error(appContext.getString(R.string.failed_to_load_actor_details)))
                 }
             } else {
-                emit(NetworkResults.Error("No internet connection"))
+                emit(NetworkResults.Error(appContext.getString(R.string.no_internet_connection)))
             }
         } catch (e: Exception) {
-            emit(NetworkResults.Error(e.message ?: "Unknown error occurred"))
+            emit(NetworkResults.Error(e.message ?: appContext.getString(R.string.msg_something_went_wrong)))
         }
     }
 
@@ -152,10 +153,10 @@ class ActorRepositoryImpl @Inject constructor(
 
                 emit(NetworkResults.Success(sortedContent))
             } else {
-                emit(NetworkResults.Error("No internet connection"))
+                emit(NetworkResults.Error(appContext.getString(R.string.no_internet_connection)))
             }
         } catch (e: Exception) {
-            emit(NetworkResults.Error(e.message ?: "Unknown error occurred"))
+            emit(NetworkResults.Error(e.message ?: appContext.getString(R.string.msg_something_went_wrong)))
         }
     }
 }

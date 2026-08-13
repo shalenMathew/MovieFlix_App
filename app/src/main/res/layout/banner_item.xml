@@ -44,7 +44,7 @@
             android:gravity="center"
             android:layout_marginBottom="@dimen/_12sdp"
             android:fontFamily="@font/montserrat_bold"
-            android:text="Movie Name"
+            android:text="@string/movie_name_placeholder"
             android:textColor="@color/white"
             android:textSize="@dimen/_15ssp" />
 
@@ -52,7 +52,7 @@
             android:id="@+id/banner_item_genere"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Action • Explosive • Suspenseful • Exciting • Adventure"
+            android:text="@string/genres_placeholder"
             android:textColor="@color/white"
             android:fontFamily="@font/montserrat_semibold"
             android:textSize="@dimen/_8ssp"

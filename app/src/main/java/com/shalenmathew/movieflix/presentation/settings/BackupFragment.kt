@@ -14,6 +14,7 @@ import androidx.work.Data
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkInfo
 import androidx.work.WorkManager
+import com.shalenmathew.movieflix.R
 import com.shalenmathew.movieflix.core.backup.BackupWorker
 import com.shalenmathew.movieflix.core.backup.RestoreWorker
 import com.shalenmathew.movieflix.databinding.FragmentBackupBinding
@@ -86,13 +87,13 @@ class BackupFragment : Fragment() {
         workManager.getWorkInfoByIdLiveData(request.id)
             .observe(viewLifecycleOwner) { workInfo ->
                 if (workInfo?.state == WorkInfo.State.SUCCEEDED) {
-                    Toast.makeText(requireContext(), "Export successful!", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), getString(R.string.msg_export_success), Toast.LENGTH_SHORT).show()
                 } else if (workInfo?.state == WorkInfo.State.FAILED) {
-                    Toast.makeText(requireContext(), "Export failed!", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), getString(R.string.msg_export_failed), Toast.LENGTH_SHORT).show()
                 }
             }
             
-        Toast.makeText(requireContext(), "Exporting library in background...", Toast.LENGTH_SHORT).show()
+        Toast.makeText(requireContext(), getString(R.string.msg_exporting_background), Toast.LENGTH_SHORT).show()
     }
 
     private fun startRestoreWorker(uriString: String) {
@@ -107,13 +108,13 @@ class BackupFragment : Fragment() {
         workManager.getWorkInfoByIdLiveData(request.id)
             .observe(viewLifecycleOwner) { workInfo ->
                 if (workInfo?.state == WorkInfo.State.SUCCEEDED) {
-                    Toast.makeText(requireContext(), "Restore successful!", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), getString(R.string.msg_restore_success), Toast.LENGTH_SHORT).show()
                 } else if (workInfo?.state == WorkInfo.State.FAILED) {
-                    Toast.makeText(requireContext(), "Restore failed!", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), getString(R.string.msg_restore_failed), Toast.LENGTH_SHORT).show()
                 }
             }
 
-        Toast.makeText(requireContext(), "Restoring library in background...", Toast.LENGTH_SHORT).show()
+        Toast.makeText(requireContext(), getString(R.string.msg_restoring_background), Toast.LENGTH_SHORT).show()
     }
 
     override fun onDestroyView() {

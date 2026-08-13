@@ -39,4 +39,22 @@ interface CustomListDao {
 
     @Query("SELECT posterPath FROM custom_list_movie_table WHERE listId = :listId ORDER BY addedAt DESC LIMIT 4")
     fun getTopPostersForList(listId: Int): Flow<List<String>>
+
+    @Query("SELECT * FROM custom_list_table")
+    suspend fun getAllListsSync(): List<CustomListEntity>
+
+    @Query("SELECT * FROM custom_list_movie_table")
+    suspend fun getAllCustomListMoviesSync(): List<CustomListMovieEntity>
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertLists(lists: List<CustomListEntity>)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertCustomListMovies(movies: List<CustomListMovieEntity>)
+
+    @Query("DELETE FROM custom_list_table")
+    suspend fun deleteAllLists()
+
+    @Query("DELETE FROM custom_list_movie_table")
+    suspend fun deleteAllCustomListMovies()
 }

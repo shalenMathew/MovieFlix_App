@@ -36,7 +36,7 @@
             android:id="@+id/fragmentLibrarySearchEt"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Search..."
+            android:hint="@string/search_hint"
             android:textColorHint="@color/white"
             android:padding="12dp"
             android:fontFamily="@font/montserrat_medium"

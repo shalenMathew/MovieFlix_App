@@ -6,8 +6,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/gradient_background"
-        tools:context=".presentation.settings.DonationFragment">
+        android:background="@drawable/gradient_background">
 
         <View
             android:layout_width="match_parent"
@@ -16,7 +15,7 @@
             app:layout_constraintBottom_toBottomOf="parent" />
 
         <RelativeLayout
-            android:id="@+id/donation_toolbar"
+            android:id="@+id/language_toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/gradient_top"
@@ -28,49 +27,35 @@
                 android:layout_height="@dimen/_24sdp"
                 android:layout_centerVertical="true"
                 android:layout_marginStart="@dimen/_12sdp"
+                android:padding="@dimen/_4sdp"
                 android:src="@drawable/ic_back"
                 app:tint="@color/white" />
 
             <TextView
+                android:id="@+id/toolbar_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:layout_marginStart="@dimen/_12sdp"
+                android:layout_marginStart="@dimen/_10sdp"
                 android:layout_marginTop="@dimen/_10sdp"
                 android:layout_marginBottom="@dimen/_15sdp"
                 android:layout_toEndOf="@id/btn_back"
                 android:fontFamily="@font/montserrat_semibold"
-                android:text="@string/donation_title"
+                android:text="@string/change_language"
                 android:textColor="@color/white"
                 android:textSize="@dimen/_15ssp" />
 
         </RelativeLayout>
 
-        <androidx.core.widget.NestedScrollView
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_languages"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:fillViewport="true"
+            android:paddingTop="@dimen/_10sdp"
+            android:paddingBottom="@dimen/_20sdp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/donation_toolbar">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:paddingTop="@dimen/_10sdp"
-                android:paddingBottom="@dimen/_100sdp">
-
-                <include
-                    android:id="@+id/item_buy_me_a_coffee"
-                    layout="@layout/item_setting" />
-
-                <include
-                    android:id="@+id/item_ko_fi"
-                    layout="@layout/item_setting" />
-
-            </LinearLayout>
-
-        </androidx.core.widget.NestedScrollView>
+            app:layout_constraintTop_toBottomOf="@id/language_toolbar"
+            tools:listitem="@layout/item_language_select" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/root"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginHorizontal="@dimen/_12sdp"
@@ -18,29 +19,22 @@
         android:orientation="horizontal"
         android:padding="@dimen/_12sdp">
 
-        <ImageView
-            android:id="@+id/item_setting_icon"
-            android:layout_width="@dimen/_24sdp"
-            android:layout_height="@dimen/_24sdp"
-            android:src="@drawable/settings"
-            app:tint="@color/white" />
-
         <TextView
-            android:id="@+id/item_setting_title"
+            android:id="@+id/tv_language_name"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/_12sdp"
+            android:layout_marginStart="@dimen/_4sdp"
             android:layout_weight="1"
             android:fontFamily="@font/montserrat_medium"
-            android:text="@string/setting_item"
             android:textColor="@color/white"
-            android:textSize="@dimen/_12ssp" />
+            android:textSize="@dimen/_13ssp" />
 
         <ImageView
+            android:id="@+id/iv_selected"
             android:layout_width="@dimen/_20sdp"
             android:layout_height="@dimen/_20sdp"
-            android:src="@drawable/baseline_keyboard_arrow_right_24"
-            app:tint="@color/text_secondary" />
+            android:src="@drawable/check_box"
+            android:visibility="gone" />
 
     </LinearLayout>
 

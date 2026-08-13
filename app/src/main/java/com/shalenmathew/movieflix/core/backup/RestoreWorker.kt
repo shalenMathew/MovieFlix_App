@@ -40,6 +40,7 @@ class RestoreWorker(
             val db = entryPoint.movieDatabase()
             val movieDao = db.dao
             val seriesDao = db.seriesTrackingDao
+            val customListDao = db.customListDao
 
             val json = applicationContext.contentResolver.openInputStream(uri)?.use { inputStream ->
                 BufferedReader(InputStreamReader(inputStream)).use { reader ->
@@ -58,6 +59,8 @@ class RestoreWorker(
                 seriesDao.deleteAllWatchList()
                 seriesDao.deleteAllFavorites()
                 seriesDao.deleteAllScheduled()
+                customListDao.deleteAllCustomListMovies()
+                customListDao.deleteAllLists()
 
                 // Insert backup data
                 movieDao.insertFavMovies(backupData.favorites)
@@ -68,6 +71,9 @@ class RestoreWorker(
                 seriesDao.insertSeasons(backupData.seasons)
                 seriesDao.insertEpisodes(backupData.episodes)
                 backupData.progress.forEach { seriesDao.insertProgress(it) }
+
+                customListDao.insertLists(backupData.customLists)
+                customListDao.insertCustomListMovies(backupData.customListMovies)
             }
 
             NotificationHelper.showStatusNotification(

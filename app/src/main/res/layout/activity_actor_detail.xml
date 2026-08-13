@@ -66,7 +66,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_4sdp"
-                        android:text="known for acting"
+                        android:text="@string/known_for_acting"
                         android:textColor="@android:color/white"
                         android:textSize="@dimen/_12ssp"
                         android:alpha="0.8" />
@@ -135,7 +135,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_24sdp"
                     android:fontFamily="@font/montserrat_semibold"
-                    android:text="Biography"
+                    android:text="@string/biography"
                     android:textColor="@color/white"
                     android:textSize="@dimen/_14ssp" />
 
@@ -169,7 +169,7 @@
                             android:layout_width="@dimen/_80sdp"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/montserrat_semibold"
-                            android:text="Birthday:"
+                            android:text="@string/birthday"
                             android:textColor="@color/white"
                             android:textSize="@dimen/_10ssp" />
 
@@ -196,7 +196,7 @@
                             android:layout_width="@dimen/_80sdp"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/montserrat_semibold"
-                            android:text="Birthplace:"
+                            android:text="@string/birthplace"
                             android:textColor="@color/white"
                             android:textSize="@dimen/_10ssp" />
 
@@ -220,7 +220,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_24sdp"
                     android:fontFamily="@font/montserrat_semibold"
-                    android:text="Movies &amp; Shows"
+                    android:text="@string/movies_and_shows"
                     android:textColor="@color/white"
                     android:textSize="@dimen/_14ssp" />
 
@@ -253,7 +253,7 @@
                     android:textColor="@color/text_secondary"
                     android:textSize="@dimen/_12ssp"
                     android:visibility="gone"
-                    tools:text="Failed to load actor details" />
+                    android:text="@string/failed_to_load_actor_details" />
 
             </LinearLayout>
 

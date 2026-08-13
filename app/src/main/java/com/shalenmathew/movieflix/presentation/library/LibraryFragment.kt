@@ -58,10 +58,10 @@ class LibraryFragment : Fragment() {
 
             TabLayoutMediator(binding.tabLayout, binding.viewPager) { tab, position ->
                 tab.text = when (position) {
-                    0 -> "Watchlist"
-                    1 -> "Favorites"
-                    2 -> "Lists"
-                    3 -> "Tracking"
+                    0 -> getString(R.string.watch_list)
+                    1 -> getString(R.string.favourites)
+                    2 -> getString(R.string.lists)
+                    3 -> getString(R.string.tracking)
                     else -> ""
                 }
             }.attach()

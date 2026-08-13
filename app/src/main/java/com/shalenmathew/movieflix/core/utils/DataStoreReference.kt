@@ -6,6 +6,7 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.intPreferencesKey
+import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import kotlinx.coroutines.flow.map
 
@@ -16,6 +17,7 @@ private val Context.userDatastore:DataStore<Preferences> by preferencesDataStore
 
 val IS_INTRO_COMPLETED = booleanPreferencesKey("IS_INTRO_COMPLETED")
 val LAST_SELECTED_LIBRARY_TAB = intPreferencesKey("LAST_SELECTED_LIBRARY_TAB")
+val SELECTED_LANGUAGE = stringPreferencesKey("SELECTED_LANGUAGE")
 
 object DataStoreReference{
 
@@ -39,5 +41,15 @@ object DataStoreReference{
 
     fun getLastSelectedLibraryTab(context: Context) = context.userDatastore.data.map {
         it[LAST_SELECTED_LIBRARY_TAB] ?: 0
+    }
+
+    suspend fun setSelectedLanguage(context: Context, value: String) {
+        context.userDatastore.edit {
+            it[SELECTED_LANGUAGE] = value
+        }
+    }
+
+    fun getSelectedLanguage(context: Context) = context.userDatastore.data.map {
+        it[SELECTED_LANGUAGE] ?: "en-US"
     }
 }

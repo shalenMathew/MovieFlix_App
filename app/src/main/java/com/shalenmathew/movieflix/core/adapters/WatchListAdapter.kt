@@ -47,7 +47,7 @@ fun bind(watchListEntity: WatchListEntity)=binding.apply{
         if (isNetworkAvailable(root.context)){
             onPosterClick(item)
         }else{
-            Toast.makeText(root.context, "Internet req", Toast.LENGTH_SHORT).show()
+            Toast.makeText(root.context, root.context.getString(R.string.msg_internet_required), Toast.LENGTH_SHORT).show()
         }
     }
 }

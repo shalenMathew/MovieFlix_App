@@ -27,8 +27,8 @@ class TrackingEpisodeAdapter(
         val watchedContainer: View = itemView.findViewById(R.id.item_episode_watched_container)
 
         fun bind(episode: TVEpisode) {
-            name.text = episode.name ?: "Episode ${episode.episodeNumber}"
-            number.text = "Episode ${episode.episodeNumber}"
+            name.text = episode.name ?: itemView.context.getString(R.string.lbl_episode_number, episode.episodeNumber)
+            number.text = itemView.context.getString(R.string.lbl_episode_number, episode.episodeNumber)
             
             if (episode.stillPath != null) {
                 thumbnail.loadImage(

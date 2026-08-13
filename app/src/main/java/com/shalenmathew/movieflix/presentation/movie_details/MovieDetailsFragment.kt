@@ -134,7 +134,7 @@ class MovieDetailsFragment : BottomSheetDialogFragment() {
             context?.let { ctx ->
                 showToast(
                     ctx,
-                    "Notification permission is required for scheduled reminders"
+                    getString(R.string.msg_notification_permission_required)
                 )
             }
         }
@@ -186,7 +186,7 @@ class MovieDetailsFragment : BottomSheetDialogFragment() {
                             R.drawable.baseline_done_all_24
                         )
                     )
-                    showToast(ctx, "Movie added to watchList")
+                    showToast(ctx, getString(R.string.msg_added_to_watchlist))
                 } else {
                     watchListViewModel.deleteWatchListData(movieResult)
                     addButtonIcon.setImageDrawable(
@@ -195,7 +195,7 @@ class MovieDetailsFragment : BottomSheetDialogFragment() {
                             R.drawable.ic_add
                         )
                     )
-                    showToast(ctx, "Movie removed from watchList")
+                    showToast(ctx, getString(R.string.msg_removed_from_watchlist))
                 }
                 isInWatchList = !isInWatchList
                 updateScheduleButtonVisibility()
@@ -209,12 +209,12 @@ class MovieDetailsFragment : BottomSheetDialogFragment() {
                 if (!isFav) {
                     favMovieViewModel.insertFavMovieData(movieResult)
                     favIcon.setImageDrawable(ContextCompat.getDrawable(ctx, R.drawable.fav_red))
-                    showToast(ctx, "Movie added to Favourites")
+                    showToast(ctx, getString(R.string.msg_added_to_favorites))
                 } else {
 
                     favMovieViewModel.deleteWatchListData(movieResult)
                     favIcon.setImageDrawable(ContextCompat.getDrawable(ctx, R.drawable.fav_outline))
-                    showToast(ctx, "Movie removed from Favourites")
+                    showToast(ctx, getString(R.string.msg_removed_from_favorites))
                 }
 
                 isFav = !isFav
@@ -356,7 +356,7 @@ class MovieDetailsFragment : BottomSheetDialogFragment() {
                 }
 
                 is NetworkResults.Error -> {
-                    context?.let { ctx -> showToast(ctx, "" + it.message) }
+                    context?.let { ctx -> showToast(ctx, it.message ?: getString(R.string.msg_something_went_wrong)) }
                     Log.d("YTPlayerBug", "" + it.message)
                 }
             }
@@ -369,10 +369,10 @@ class MovieDetailsFragment : BottomSheetDialogFragment() {
                     movieList.data?.let { resultList ->
                         resultList.results.let {
                             if (it.isNotEmpty()) {
-                                binding.recommendedText.text = "More Like this"
+                                binding.recommendedText.text = getString(R.string.more_like_this)
                                 recommendationAdapter.submitList(it)
                             } else {
-                                binding.recommendedText.text = "No recommendation"
+                                binding.recommendedText.text = getString(R.string.msg_no_recommendation)
                             }
                         }
                     }
@@ -486,7 +486,7 @@ class MovieDetailsFragment : BottomSheetDialogFragment() {
                                         // Load secondary data with delay
                                         loadSecondaryData(id)
                                     } else {
-                                        context?.let { ctx -> showToast(ctx, "media id is null") }
+                                        context?.let { ctx -> showToast(ctx, getString(R.string.msg_media_id_null)) }
                                     }
                                 }
 
@@ -502,7 +502,7 @@ class MovieDetailsFragment : BottomSheetDialogFragment() {
                                         loadSecondaryData(id)
                                         seriesTrackingViewModel.checkTrackingStatus(id)
                                     } else {
-                                        context?.let { ctx -> showToast(ctx, "media id is null") }
+                                        context?.let { ctx -> showToast(ctx, getString(R.string.msg_media_id_null)) }
                                     }
                                 }
                             }
@@ -561,7 +561,7 @@ class MovieDetailsFragment : BottomSheetDialogFragment() {
                             currentSeasonNumber = availableSeasons[0].seasonNumber ?: 1
                             val epCount = availableSeasons[0].episodeCount ?: 0
                             binding.seasonDropdownButton.text =
-                                "Season $currentSeasonNumber • Episodes ${epCount}"
+                                "${getString(R.string.lbl_season_number, currentSeasonNumber)} • ${getString(R.string.msg_episodes_count, epCount)}"
                             mediaId?.let { tvId ->
                                 homeInfoViewModel.getTVSeason(tvId, currentSeasonNumber)
                             }
@@ -594,7 +594,7 @@ class MovieDetailsFragment : BottomSheetDialogFragment() {
                     context?.let { ctx ->
                         showToast(
                             ctx,
-                            "Error loading episodes: ${result.message}"
+                            getString(R.string.msg_something_went_wrong) + ": ${result.message}"
                         )
                     }
                 }
@@ -608,10 +608,10 @@ class MovieDetailsFragment : BottomSheetDialogFragment() {
         seriesTrackingViewModel.trackingStatus.observe(viewLifecycleOwner) { result ->
             when (result) {
                 is NetworkResults.Success -> {
-                    context?.let { showToast(it, "Series tracked successfully!") }
+                    context?.let { showToast(it, getString(R.string.msg_tracking_started)) }
                 }
                 is NetworkResults.Error -> {
-                    context?.let { showToast(it, "Tracking failed: ${result.message}") }
+                    context?.let { showToast(it, getString(R.string.msg_something_went_wrong) + ": ${result.message}") }
                 }
                 is NetworkResults.Loading -> {}
             }
@@ -624,11 +624,11 @@ class MovieDetailsFragment : BottomSheetDialogFragment() {
                 val showBookmark = isInWatchList || isFav
                 if (showBookmark) {
                     binding.fragmentMovieDetailsLastWatched.apply {
-                        val label = "Last watched : "
-                        val info = "Season ${series.lastWatchedSeasonNumber} ep ${series.lastWatchedEpisodeNumber}"
-                        val spannable = SpannableString(label + info)
-                        spannable.setSpan(StyleSpan(Typeface.BOLD), 0, label.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+                        val label = getString(R.string.lbl_last_watched, series.lastWatchedSeasonNumber, series.lastWatchedEpisodeNumber)
+                        val spannable = SpannableString(label)
                         
+                        // Bold "Last watched :" part if possible, or just use the whole string
+                        // For simplicity since the whole string is generated from a pattern:
                         text = spannable
                         visibility = View.VISIBLE
                     }
@@ -696,7 +696,7 @@ class MovieDetailsFragment : BottomSheetDialogFragment() {
         currentSeasonNumber = seasonNumber
 
         // Update dropdown text
-        binding.seasonDropdownButton.text = "Season $seasonNumber"
+        binding.seasonDropdownButton.text = getString(R.string.lbl_season_number, seasonNumber)
 
         // Load episodes for the new season
         mediaId?.let { tvId ->
@@ -787,7 +787,7 @@ class MovieDetailsFragment : BottomSheetDialogFragment() {
                 val dateStr = simpleDateFormat.format(java.util.Date(currentScheduledDate))
 
                 binding.fragmentMovieDetailsScheduledDate.apply {
-                    text = "Scheduled on: $day$daySuffix $dateStr"
+                    text = getString(R.string.lbl_scheduled_on, "$day$daySuffix", dateStr)
                     visibility = View.VISIBLE
                 }
                 binding.fragmentMovieDetailsScheduledIcon.visibility = View.VISIBLE
@@ -833,23 +833,23 @@ class MovieDetailsFragment : BottomSheetDialogFragment() {
 
         val collectionItem = view.findViewById<View>(R.id.more_options_collection_item)
 
-        header.text = "More Options"
+        header.text = getString(R.string.more_options)
 
         // Update UI based on current status
         if (isScheduled) {
             scheduleIcon.setImageDrawable(ContextCompat.getDrawable(ctx, R.drawable.ic_calendar_check))
-            scheduleText.text = "Remove Schedule"
+            scheduleText.text = getString(R.string.btn_remove_schedule)
             
             // Show formatted date in subtitle
             if (currentScheduledDate > 0) {
                 val dateFormat = SimpleDateFormat("MMM dd, hh:mm a", Locale.getDefault())
                 val dateStr = dateFormat.format(java.util.Date(currentScheduledDate))
-                scheduleSubtitle.text = "You'll be notified on $dateStr"
+                scheduleSubtitle.text = getString(R.string.msg_notified_on, dateStr)
             }
         } else {
             scheduleIcon.setImageDrawable(ContextCompat.getDrawable(ctx, R.drawable.baseline_calendar_month_24))
-            scheduleText.text = "Schedule a Reminder"
-            scheduleSubtitle.text = "Get a notification to watch this movie later"
+            scheduleText.text = getString(R.string.btn_schedule_reminder)
+            scheduleSubtitle.text = getString(R.string.msg_schedule_reminder_desc)
         }
 
         scheduleItem.setOnClickListener {
@@ -868,19 +868,19 @@ class MovieDetailsFragment : BottomSheetDialogFragment() {
             
             // Default to "Track" state immediately to avoid showing "Untrack" from a previous show
             trackIcon.setImageDrawable(ContextCompat.getDrawable(ctx, R.drawable.baseline_playlist_add_check_24))
-            trackText.text = "Track Series"
-            trackSubtitle.text = "Cache all episodes to track your currently watching episodes"
+            trackText.text = getString(R.string.track_series)
+            trackSubtitle.text = getString(R.string.track_series_subtitle)
 
             // Observe tracking status to update UI dynamically
             seriesTrackingViewModel.isCurrentSeriesTracked.observe(viewLifecycleOwner) { isTracked ->
                 if (isTracked) {
                     trackIcon.setImageDrawable(ContextCompat.getDrawable(ctx, R.drawable.baseline_done_all_24))
-                    trackText.text = "Untrack Series"
-                    trackSubtitle.text = "Stop tracking and remove cached episodes"
+                    trackText.text = getString(R.string.btn_untrack_series)
+                    trackSubtitle.text = getString(R.string.msg_untrack_series_desc)
                 } else {
                     trackIcon.setImageDrawable(ContextCompat.getDrawable(ctx, R.drawable.baseline_playlist_add_check_24))
-                    trackText.text = "Track Series"
-                    trackSubtitle.text = "Cache all episodes to track your currently watching episodes"
+                    trackText.text = getString(R.string.track_series)
+                    trackSubtitle.text = getString(R.string.track_series_subtitle)
                 }
 
                 trackItem.setOnClickListener {
@@ -906,10 +906,10 @@ class MovieDetailsFragment : BottomSheetDialogFragment() {
 
         if (!isTracked) {
             seriesTrackingViewModel.trackSeries(mediaId!!)
-            showToast(ctx, "Starting to track series. Caching episodes...")
+            showToast(ctx, getString(R.string.msg_tracking_started))
         } else {
             seriesTrackingViewModel.untrackSeries(mediaId!!)
-            showToast(ctx, "Series untracked")
+            showToast(ctx, getString(R.string.msg_series_untracked))
         }
     }
 
@@ -974,7 +974,7 @@ class MovieDetailsFragment : BottomSheetDialogFragment() {
                 dialog.dismiss()
                 showChooseCustomListBottomSheet() // Return to selection
             } else {
-                nameEt.error = "Name cannot be empty"
+                nameEt.error = getString(R.string.error_name_empty)
             }
         }
 
@@ -993,7 +993,7 @@ class MovieDetailsFragment : BottomSheetDialogFragment() {
                         showScheduleDateTimePicker()
                     }
                     shouldShowRequestPermissionRationale(Manifest.permission.POST_NOTIFICATIONS) -> {
-                        showToast(ctx, "Allow notifications to get reminders for scheduled movies")
+                        showToast(ctx, getString(R.string.msg_allow_notifications_rationale))
                         requestNotificationPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
                     }
                     else -> {
@@ -1010,13 +1010,13 @@ class MovieDetailsFragment : BottomSheetDialogFragment() {
             isScheduled = false
             currentScheduledDate = 0
             updateScheduleButtonIcon()
-            showToast(ctx, "Schedule removed")
+            showToast(ctx, getString(R.string.msg_schedule_removed))
         }
     }
 
     private fun showScheduleDateTimePicker() {
         if (!::movieResult.isInitialized) {
-            context?.let { ctx -> showToast(ctx, "Movie data not loaded yet. Please try again.") }
+            context?.let { ctx -> showToast(ctx, getString(R.string.msg_movie_data_not_loaded)) }
             return
         }
 
@@ -1038,7 +1038,7 @@ class MovieDetailsFragment : BottomSheetDialogFragment() {
             context?.let { c ->
                 showToast(
                     c,
-                    "Scheduled for $formattedDate. You'll get a notification!"
+                    getString(R.string.msg_scheduled_for, formattedDate)
                 )
             }
         }
@@ -1301,7 +1301,7 @@ class MovieDetailsFragment : BottomSheetDialogFragment() {
     private fun setupSeasonDropdown() {
         binding.seasonDropdownButton.setOnClickListener {
             if (availableSeasons.isEmpty()) {
-                context?.let { ctx -> showToast(ctx, "No seasons available") }
+                context?.let { ctx -> showToast(ctx, getString(R.string.msg_no_seasons_available)) }
                 return@setOnClickListener
             }
 
@@ -1398,7 +1398,7 @@ class MovieDetailsFragment : BottomSheetDialogFragment() {
                                 when (state) {
                                     PlayerConstants.PlayerState.PLAYING -> {
                                         isPlaying = true
-                                        "Pause Trailer".also {
+                                        getString(R.string.btn_pause_trailer).also {
                                             binding.fragmentMovieDetailsPlayBtn.text = it
                                         }
                                         context?.let { ctx ->
@@ -1409,7 +1409,7 @@ class MovieDetailsFragment : BottomSheetDialogFragment() {
 
                                     PlayerConstants.PlayerState.PAUSED -> {
                                         isPlaying = false
-                                        "Play Trailer".also {
+                                        getString(R.string.btn_play_trailer).also {
                                             binding.fragmentMovieDetailsPlayBtn.text = it
                                         }
                                         context?.let { ctx ->
@@ -1423,7 +1423,7 @@ class MovieDetailsFragment : BottomSheetDialogFragment() {
 
                                     PlayerConstants.PlayerState.ENDED -> {
                                         isPlaying = false
-                                        "Play Trailer".also {
+                                        getString(R.string.btn_play_trailer).also {
                                             binding.fragmentMovieDetailsPlayBtn.text = it
                                         }
                                         context?.let { ctx ->
@@ -1487,7 +1487,7 @@ class MovieDetailsFragment : BottomSheetDialogFragment() {
 
             binding.apply {
                 fragmentMovieDetailsTitle.text = title
-                fragmentMovieDetailsGenre.text = getGenreListById(genreList).joinToString { genre ->
+                fragmentMovieDetailsGenre.text = getGenreListById(requireContext(), genreList).joinToString { genre ->
                     genre.name
                 }
                 posterImage.loadImage(TMDB_IMAGE_BASE_URL_W780.plus(img))

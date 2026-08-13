@@ -35,7 +35,7 @@
                 android:layout_marginBottom="@dimen/_15sdp"
                 android:layout_toEndOf="@id/btn_back"
                 android:fontFamily="@font/montserrat_semibold"
-                android:text="Coming Soon"
+                android:text="@string/coming_soon"
                 android:textColor="@color/white"
                 android:textSize="@dimen/_15ssp" />
 
@@ -45,7 +45,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/montserrat_medium"
-            android:text="Coming soon"
+            android:text="@string/coming_soon"
             android:textColor="@color/white"
             android:textSize="@dimen/_20ssp"
             app:layout_constraintBottom_toBottomOf="parent"

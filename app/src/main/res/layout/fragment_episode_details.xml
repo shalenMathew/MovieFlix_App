@@ -186,7 +186,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="@dimen/_8sdp"
                         android:fontFamily="@font/montserrat_bold"
-                        android:text="Overview"
+                        android:text="@string/overview"
                         android:textColor="@color/white"
                         android:textSize="@dimen/_14ssp" />
 
@@ -231,7 +231,7 @@
                 android:layout_weight="1"
                 android:enabled="true"
                 android:fontFamily="@font/montserrat_semibold"
-                android:text="Previous"
+                android:text="@string/previous"
                 android:textAllCaps="false"
                 android:textColor="@color/white"
                 app:icon="@drawable/baseline_keyboard_arrow_left_24"
@@ -249,7 +249,7 @@
                 android:layout_weight="1"
                 android:enabled="true"
                 android:fontFamily="@font/montserrat_semibold"
-                android:text="Next"
+                android:text="@string/next"
                 android:textAllCaps="false"
                 android:textColor="@color/white"
                 app:backgroundTint="@color/app_color"

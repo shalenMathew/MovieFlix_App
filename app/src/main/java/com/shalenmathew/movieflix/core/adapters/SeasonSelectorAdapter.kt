@@ -3,6 +3,7 @@ package com.shalenmathew.movieflix.core.adapters
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.shalenmathew.movieflix.R
 import com.shalenmathew.movieflix.databinding.ItemSeasonSelectorBinding
 import com.shalenmathew.movieflix.domain.model.TVSeasonBasic
 
@@ -17,13 +18,13 @@ class SeasonSelectorAdapter(
         fun bind(season: TVSeasonBasic) {
             binding.apply {
                 val seasonNumber = season.seasonNumber ?: 0
-                seasonTitle.text = season.name ?: "Season $seasonNumber"
+                seasonTitle.text = season.name ?: root.context.getString(R.string.lbl_season_number, seasonNumber)
                 
                 val episodeCount = season.episodeCount ?: 0
                 seasonInfo.text = if (episodeCount > 0) {
                     "$episodeCount episode${if (episodeCount != 1) "s" else ""}"
                 } else {
-                    "No episodes"
+                    root.context.getString(R.string.msg_no_episodes)
                 }
                 
                 root.setOnClickListener {

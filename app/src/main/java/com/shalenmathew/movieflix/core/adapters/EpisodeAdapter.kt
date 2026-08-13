@@ -31,14 +31,14 @@ class EpisodeAdapter(
         fun bind(episode: TVEpisode) {
             binding.apply {
                 // Episode name
-                itemEpisodeName.text = episode.name ?: "Episode ${episode.episodeNumber}"
+                itemEpisodeName.text = episode.name ?: root.context.getString(R.string.lbl_episode_number, episode.episodeNumber)
                 
                 // Episode number
-                itemEpisodeNumber.text = "Episode ${episode.episodeNumber}"
+                itemEpisodeNumber.text = root.context.getString(R.string.lbl_episode_number, episode.episodeNumber)
                 
                 // Episode description
                 itemEpisodeDescription.text = episode.overview?.takeIf { it.isNotBlank() }
-                    ?: "No description available"
+                    ?: root.context.getString(R.string.msg_no_description)
                 
                 // Episode duration
                 val runtime = episode.runtime

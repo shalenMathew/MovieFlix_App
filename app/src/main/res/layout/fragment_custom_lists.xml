@@ -42,7 +42,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_16sdp"
                 android:fontFamily="@font/montserrat_medium"
-                android:text="No custom lists yet."
+                android:text="@string/no_custom_lists_yet"
                 android:textColor="@color/text_secondary"
                 android:textSize="@dimen/_12ssp" />
 

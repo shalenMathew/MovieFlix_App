@@ -11,5 +11,7 @@ data class BackupData(
     val series: List<SeriesTrackingEntity> = emptyList(),
     val seasons: List<SeasonTrackingEntity> = emptyList(),
     val episodes: List<EpisodeTrackingEntity> = emptyList(),
-    val progress: List<SeriesProgressEntity> = emptyList()
+    val progress: List<SeriesProgressEntity> = emptyList(),
+    val customLists: List<CustomListEntity> = emptyList(),
+    val customListMovies: List<CustomListMovieEntity> = emptyList()
 )

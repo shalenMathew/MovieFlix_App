@@ -42,7 +42,7 @@
                     android:layout_marginHorizontal="@dimen/_16sdp"
                     android:layout_marginBottom="@dimen/_12sdp"
                     android:fontFamily="@font/montserrat_bold"
-                    android:text="Damn, finally over!"
+                    android:text="@string/finally_over"
                     android:textColor="@color/white"
                     android:textSize="@dimen/_18ssp" />
 
@@ -93,7 +93,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_16sdp"
                 android:fontFamily="@font/montserrat_semibold"
-                android:text="Add to Watchlist"
+                android:text="@string/add_to_watchlist"
                 android:textColor="@color/white"
                 android:textSize="@dimen/_12ssp" />
 
@@ -122,7 +122,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_16sdp"
                 android:fontFamily="@font/montserrat_semibold"
-                android:text="Add to Favorites"
+                android:text="@string/add_to_favorites"
                 android:textColor="@color/white"
                 android:textSize="@dimen/_12ssp" />
 
@@ -149,7 +149,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_16sdp"
                 android:fontFamily="@font/montserrat_semibold"
-                android:text="Stop Tracking &amp; Clear Space"
+                android:text="@string/stop_tracking_clear_space"
                 android:textColor="@color/white"
                 android:textSize="@dimen/_12ssp" />
 
@@ -162,7 +162,7 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/_16sdp"
             android:layout_marginTop="@dimen/_16sdp"
-            android:text="Done"
+            android:text="@string/done"
             android:textAllCaps="false"
             android:fontFamily="@font/montserrat_bold"
             app:backgroundTint="@color/app_color"

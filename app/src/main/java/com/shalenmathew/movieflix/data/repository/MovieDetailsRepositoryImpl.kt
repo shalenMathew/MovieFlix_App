@@ -2,6 +2,7 @@ package com.shalenmathew.movieflix.data.repository
 
 import android.app.Application
 import android.content.Context
+import com.shalenmathew.movieflix.R
 import com.shalenmathew.movieflix.core.utils.Constants
 import com.shalenmathew.movieflix.core.utils.NetworkResults
 import com.shalenmathew.movieflix.core.utils.isNetworkAvailable
@@ -82,21 +83,31 @@ class MovieDetailsRepositoryImpl(
                     val animeList = animeListDef.await()
                     val movieBannerOnHomeList = movieBannerOnHomeListDef.await()
 
-                    wholeMoviesList.add(HomeFeedResponse(Constants.UPCOMING_MOVIES, upcomingMovieList.body()?.results!!))
-                    wholeMoviesList.add(HomeFeedResponse(Constants.TRENDING_MOVIES,trendingMovieList.body()?.results!!))
-                    wholeMoviesList.add(HomeFeedResponse(Constants.POPULAR_MOVIES,popularMovieList.body()?.results!!))
-                    wholeMoviesList.add(HomeFeedResponse(Constants.TOP_RATED_MOVIES,topRatedMovieList.body()?.results!!))
-                    wholeMoviesList.add(HomeFeedResponse(Constants.NETFLIX_SHOWS,netflixShowList.body()?.results!!))
-                    wholeMoviesList.add(HomeFeedResponse(Constants.PRIME_SHOWS,amazonPrimeShowList.body()?.results!!))
-                    wholeMoviesList.add(HomeFeedResponse(Constants.ANIME_SERIES, animeList.body()?.results!!))
+                    upcomingMovieList.body()?.results?.let { 
+                        wholeMoviesList.add(HomeFeedResponse(Constants.UPCOMING_MOVIES, it)) 
+                    }
+                    trendingMovieList.body()?.results?.let { 
+                        wholeMoviesList.add(HomeFeedResponse(Constants.TRENDING_MOVIES, it)) 
+                    }
+                    popularMovieList.body()?.results?.let { 
+                        wholeMoviesList.add(HomeFeedResponse(Constants.POPULAR_MOVIES, it)) 
+                    }
+                    topRatedMovieList.body()?.results?.let { 
+                        wholeMoviesList.add(HomeFeedResponse(Constants.TOP_RATED_MOVIES, it)) 
+                    }
+                    netflixShowList.body()?.results?.let { 
+                        wholeMoviesList.add(HomeFeedResponse(Constants.NETFLIX_SHOWS, it)) 
+                    }
+                    amazonPrimeShowList.body()?.results?.let { 
+                        wholeMoviesList.add(HomeFeedResponse(Constants.PRIME_SHOWS, it)) 
+                    }
+                    animeList.body()?.results?.let { 
+                        wholeMoviesList.add(HomeFeedResponse(Constants.ANIME_SERIES, it)) 
+                    }
 
-//                     homeFeedResponse = HomeFeedDataResponse(nowPlayingMoviesList.body()?.results!!,wholeMoviesList) // this line of code only makes the
-//                     response from api to work only if there is an internet connection, so below we using local data storage to make
-//                     life little easier
-
-                    localDataSource.deleteAllHomeFeedData() // this for offline support
-                    localDataSource.insertHomeFeedData(HomeFeedEntity( // here we r storing whatever data fetched from  online in database
-                        bannerMovies = movieBannerOnHomeList.body()?.results!!,
+                    localDataSource.deleteAllHomeFeedData() 
+                    localDataSource.insertHomeFeedData(HomeFeedEntity(
+                        bannerMovies = movieBannerOnHomeList.body()?.results ?: emptyList(),
                         homeFeedResponseList = wholeMoviesList))
                 }
 
@@ -109,11 +120,11 @@ class MovieDetailsRepositoryImpl(
             when(e){
 
                 is IOException -> {
-                    emit(NetworkResults.Error("Check ur internet connection"))
+                    emit(NetworkResults.Error(appContext.getString(R.string.msg_check_internet)))
                 }
 
                 else ->{
-                    emit(NetworkResults.Error(e.message ?: "Something went wrong"))
+                    emit(NetworkResults.Error(e.message ?: appContext.getString(R.string.msg_something_went_wrong)))
                 }
             }
         }
@@ -131,10 +142,10 @@ class MovieDetailsRepositoryImpl(
         }catch (e:Throwable){
 
             when(e){
-                is IOException -> emit(NetworkResults.Error("Please check ur internet"))
+                is IOException -> emit(NetworkResults.Error(appContext.getString(R.string.msg_check_internet)))
 
                 else -> {
-                    emit(NetworkResults.Error(e.message?:"Something went wrong"))
+                    emit(NetworkResults.Error(e.message?:appContext.getString(R.string.msg_something_went_wrong)))
                 }
             }
         }
@@ -152,10 +163,10 @@ class MovieDetailsRepositoryImpl(
         }catch (e:Throwable){
 
             when(e){
-                is IOException -> emit(NetworkResults.Error("Please check ur internet"))
+                is IOException -> emit(NetworkResults.Error(appContext.getString(R.string.msg_check_internet)))
 
                 else -> {
-                    emit(NetworkResults.Error(e.message?:"Something went wrong"))
+                    emit(NetworkResults.Error(e.message?:appContext.getString(R.string.msg_something_went_wrong)))
                 }
             }
         }
@@ -173,10 +184,10 @@ class MovieDetailsRepositoryImpl(
 
             when(e){
                 is IOException -> {
-                    emit(NetworkResults.Error("check ur internet connection"))
+                    emit(NetworkResults.Error(appContext.getString(R.string.msg_check_internet)))
                 }
                 else->{
-                   emit(NetworkResults.Error(e.message?:"Unknown error"))
+                   emit(NetworkResults.Error(e.message?:appContext.getString(R.string.msg_something_went_wrong)))
                 }
             }
         }
@@ -193,10 +204,10 @@ class MovieDetailsRepositoryImpl(
       }catch (e:Exception){
           when(e){
               is IOException -> {
-                  emit(NetworkResults.Error("Check ur internet connection"))
+                  emit(NetworkResults.Error(appContext.getString(R.string.msg_check_internet)))
               }
               else -> {
-                  emit(NetworkResults.Error(e.message?:"Unknown error"))
+                  emit(NetworkResults.Error(e.message?:appContext.getString(R.string.msg_something_went_wrong)))
               }
           }
       }
@@ -212,10 +223,10 @@ class MovieDetailsRepositoryImpl(
       }catch (e:Exception){
           when(e){
               is IOException -> {
-                  emit(NetworkResults.Error("Check ur internet connection"))
+                  emit(NetworkResults.Error(appContext.getString(R.string.msg_check_internet)))
               }
               else -> {
-                  emit(NetworkResults.Error(e.message?:"Unknown error"))
+                  emit(NetworkResults.Error(e.message?:appContext.getString(R.string.msg_something_went_wrong)))
               }
           }
       }
@@ -241,17 +252,17 @@ class MovieDetailsRepositoryImpl(
 
                 response?.let {
                     emit(NetworkResults.Success(it.body()?.toMovieList()))
-                } ?: emit(NetworkResults.Error("Unknown category"))
+                } ?: emit(NetworkResults.Error(appContext.getString(R.string.msg_unknown_category)))
             } else {
-                emit(NetworkResults.Error("No internet connection"))
+                emit(NetworkResults.Error(appContext.getString(R.string.no_internet_connection)))
             }
         } catch (e: Exception) {
             when (e) {
                 is IOException -> {
-                    emit(NetworkResults.Error("Check ur internet connection"))
+                    emit(NetworkResults.Error(appContext.getString(R.string.msg_check_internet)))
                 }
                 else -> {
-                    emit(NetworkResults.Error(e.message ?: "Unknown error"))
+                    emit(NetworkResults.Error(e.message ?: appContext.getString(R.string.msg_something_went_wrong)))
                 }
             }
         }
@@ -278,14 +289,14 @@ class MovieDetailsRepositoryImpl(
                     } ?: emptyList()
                     
                     emit(NetworkResults.Success(castList))
-                } ?: emit(NetworkResults.Error("No cast data available"))
+                } ?: emit(NetworkResults.Error(appContext.getString(R.string.msg_no_cast_available)))
             } else {
-                emit(NetworkResults.Error("No internet connection"))
+                emit(NetworkResults.Error(appContext.getString(R.string.no_internet_connection)))
             }
         } catch (e: Exception) {
             when (e) {
-                is IOException -> emit(NetworkResults.Error("Check ur internet connection"))
-                else -> emit(NetworkResults.Error(e.message ?: "Unknown error"))
+                is IOException -> emit(NetworkResults.Error(appContext.getString(R.string.msg_check_internet)))
+                else -> emit(NetworkResults.Error(e.message ?: appContext.getString(R.string.msg_something_went_wrong)))
             }
         }
     }
@@ -311,14 +322,14 @@ class MovieDetailsRepositoryImpl(
                     } ?: emptyList()
                     
                     emit(NetworkResults.Success(castList))
-                } ?: emit(NetworkResults.Error("No cast data available"))
+                } ?: emit(NetworkResults.Error(appContext.getString(R.string.msg_no_cast_available)))
             } else {
-                emit(NetworkResults.Error("No internet connection"))
+                emit(NetworkResults.Error(appContext.getString(R.string.no_internet_connection)))
             }
         } catch (e: Exception) {
             when (e) {
-                is IOException -> emit(NetworkResults.Error("Check ur internet connection"))
-                else -> emit(NetworkResults.Error(e.message ?: "Unknown error"))
+                is IOException -> emit(NetworkResults.Error(appContext.getString(R.string.msg_check_internet)))
+                else -> emit(NetworkResults.Error(e.message ?: appContext.getString(R.string.msg_something_went_wrong)))
             }
         }
     }
@@ -347,14 +358,14 @@ class MovieDetailsRepositoryImpl(
                     } ?: emptyList()
                     
                     emit(NetworkResults.Success(crewList))
-                } ?: emit(NetworkResults.Error("No crew data available"))
+                } ?: emit(NetworkResults.Error(appContext.getString(R.string.msg_no_crew_available)))
             } else {
-                emit(NetworkResults.Error("No internet connection"))
+                emit(NetworkResults.Error(appContext.getString(R.string.no_internet_connection)))
             }
         } catch (e: Exception) {
             when (e) {
-                is IOException -> emit(NetworkResults.Error("Check ur internet connection"))
-                else -> emit(NetworkResults.Error(e.message ?: "Unknown error"))
+                is IOException -> emit(NetworkResults.Error(appContext.getString(R.string.msg_check_internet)))
+                else -> emit(NetworkResults.Error(e.message ?: appContext.getString(R.string.msg_something_went_wrong)))
             }
         }
     }
@@ -383,14 +394,14 @@ class MovieDetailsRepositoryImpl(
                     } ?: emptyList()
                     
                     emit(NetworkResults.Success(crewList))
-                } ?: emit(NetworkResults.Error("No crew data available"))
+                } ?: emit(NetworkResults.Error(appContext.getString(R.string.msg_no_crew_available)))
             } else {
-                emit(NetworkResults.Error("No internet connection"))
+                emit(NetworkResults.Error(appContext.getString(R.string.no_internet_connection)))
             }
         } catch (e: Exception) {
             when (e) {
-                is IOException -> emit(NetworkResults.Error("Check ur internet connection"))
-                else -> emit(NetworkResults.Error(e.message ?: "Unknown error"))
+                is IOException -> emit(NetworkResults.Error(appContext.getString(R.string.msg_check_internet)))
+                else -> emit(NetworkResults.Error(e.message ?: appContext.getString(R.string.msg_something_went_wrong)))
             }
         }
     }
@@ -435,12 +446,12 @@ class MovieDetailsRepositoryImpl(
                     }
                 )))
             } else {
-                emit(NetworkResults.Error("No internet connection"))
+                emit(NetworkResults.Error(appContext.getString(R.string.no_internet_connection)))
             }
         } catch (e: Exception) {
             when (e) {
-                is IOException -> emit(NetworkResults.Error("Check ur internet connection"))
-                else -> emit(NetworkResults.Error(e.message ?: "Unknown error"))
+                is IOException -> emit(NetworkResults.Error(appContext.getString(R.string.msg_check_internet)))
+                else -> emit(NetworkResults.Error(e.message ?: appContext.getString(R.string.msg_something_went_wrong)))
             }
         }
     }
@@ -487,15 +498,15 @@ class MovieDetailsRepositoryImpl(
                         episodes = episodes.map { it.toTVEpisode() }
                     )))
                 } else {
-                    emit(NetworkResults.Error("Season not found locally"))
+                    emit(NetworkResults.Error(appContext.getString(R.string.msg_season_not_found_locally)))
                 }
             } else {
-                emit(NetworkResults.Error("No internet connection"))
+                emit(NetworkResults.Error(appContext.getString(R.string.no_internet_connection)))
             }
         } catch (e: Exception) {
             when (e) {
-                is IOException -> emit(NetworkResults.Error("Check ur internet connection"))
-                else -> emit(NetworkResults.Error(e.message ?: "Unknown error"))
+                is IOException -> emit(NetworkResults.Error(appContext.getString(R.string.msg_check_internet)))
+                else -> emit(NetworkResults.Error(e.message ?: appContext.getString(R.string.msg_something_went_wrong)))
             }
         }
     }

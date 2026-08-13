@@ -159,7 +159,7 @@
                             android:layout_marginVertical="@dimen/_8sdp"
                             android:backgroundTint="@color/app_color"
                             android:fontFamily="@font/montserrat_medium"
-                            android:text="Play The Trailer"
+                            android:text="@string/play_the_trailer"
                             android:textAllCaps="false"
                             android:textColor="@color/white"
                             app:icon="@drawable/ic_play_arrow"
@@ -559,12 +559,12 @@
                             <com.google.android.material.tabs.TabItem
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="About" />
+                                android:text="@string/about" />
 
                             <com.google.android.material.tabs.TabItem
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Episodes" />
+                                android:text="@string/episodes" />
 
                         </com.google.android.material.tabs.TabLayout>
 
@@ -587,7 +587,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="@dimen/_6sdp"
                             android:fontFamily="@font/montserrat_semibold"
-                            android:text="Select Season"
+                            android:text="@string/select_season"
                             android:textColor="@color/white"
                             android:textSize="@dimen/_10ssp" />
 
@@ -598,7 +598,7 @@
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/montserrat_medium"
                             android:gravity="start|center_vertical"
-                            android:text="Season 1"
+                            android:text="@string/season_1"
                             android:textAllCaps="false"
                             android:textColor="@color/white"
                             app:icon="@drawable/baseline_keyboard_arrow_right_24"
@@ -640,7 +640,7 @@
                             android:gravity="start"
                             android:paddingHorizontal="@dimen/_12sdp"
                             android:paddingTop="@dimen/_12sdp"
-                            android:text="Cast"
+                            android:text="@string/cast"
                             android:textColor="@color/white"
                             android:textSize="@dimen/_12ssp" />
 
@@ -668,7 +668,7 @@
                             android:gravity="start"
                             android:paddingHorizontal="@dimen/_12sdp"
                             android:paddingTop="@dimen/_8sdp"
-                            android:text="More Like This"
+                            android:text="@string/more_like_this"
                             android:textColor="@color/white"
                             android:textSize="@dimen/_12ssp" />
 

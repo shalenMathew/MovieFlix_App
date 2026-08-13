@@ -31,7 +31,7 @@ class BannerAdapter():ListAdapter<MovieResult, BannerAdapter.ViewHolder>(DiffUti
 
         fun bind(item:MovieResult)=binding.apply {
             bannerItemTitle.text = item.title
-            bannerItemGenere.text = getGenreListById(item.genreIds).joinToString(" • ") {
+            bannerItemGenere.text = getGenreListById(itemView.context, item.genreIds).joinToString(" • ") {
                 it.name
             }
             bannerItemBanner.loadImage(TMDB_IMAGE_BASE_URL_W780.plus(item.backdropPath))

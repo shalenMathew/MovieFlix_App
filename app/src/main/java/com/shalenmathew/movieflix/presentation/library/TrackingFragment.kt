@@ -91,13 +91,13 @@ class TrackingFragment : Fragment() {
             onUntrackClick = { series ->
                 val ctx = context ?: return@TrackingAdapter
                 com.google.android.material.dialog.MaterialAlertDialogBuilder(ctx, R.style.TrackingAlertDialog)
-                    .setTitle("Stop Tracking Series?")
-                    .setMessage("This will remove \"${series.name}\" from your library and delete all cached episodes for offline viewing.")
-                    .setPositiveButton("Stop Tracking") { _, _ ->
+                    .setTitle(getString(R.string.msg_stop_tracking_title))
+                    .setMessage(getString(R.string.msg_stop_tracking_message, series.name))
+                    .setPositiveButton(getString(R.string.btn_stop_tracking)) { _, _ ->
                         seriesTrackingViewModel.untrackSeries(series.id)
-                        com.shalenmathew.movieflix.core.utils.showToast(ctx, "Series removed from tracking")
+                        com.shalenmathew.movieflix.core.utils.showToast(ctx, getString(R.string.msg_series_removed_tracking))
                     }
-                    .setNegativeButton("Keep Tracking", null)
+                    .setNegativeButton(getString(R.string.btn_keep_tracking), null)
                     .show()
             },
             onEpisodeClick = { series, season, episode ->
@@ -236,7 +236,7 @@ class TrackingFragment : Fragment() {
                 totalSeasons = 0,
                 tvShowId = seriesId,
                 onSeasonChange = { _ ->
-                    context?.let { com.shalenmathew.movieflix.core.utils.showToast(it, "Swap seasons in the Tracking list") }
+                    context?.let { com.shalenmathew.movieflix.core.utils.showToast(it, getString(R.string.msg_swap_seasons_tracking)) }
                 }
             )
 
@@ -285,7 +285,7 @@ class TrackingFragment : Fragment() {
         val doneBtn = view.findViewById<View>(R.id.completed_done_btn)
 
         banner.loadImage(Constants.TMDB_IMAGE_BASE_URL_W780.plus(series.backdropPath))
-        subtitle.text = "You just finished all $totalCount episodes of ${series.name}."
+        subtitle.text = getString(R.string.msg_finished_episodes, totalCount, series.name)
 
         val movieResult = series.toMovieResult()
 
@@ -298,10 +298,10 @@ class TrackingFragment : Fragment() {
             isInWatchlist = list.any { it.id == series.id }
             if (isInWatchlist) {
                 watchlistIcon.setImageResource(R.drawable.baseline_done_all_24)
-                watchlistText.text = "Remove from Watchlist"
+                watchlistText.text = getString(R.string.btn_remove_watchlist)
             } else {
                 watchlistIcon.setImageResource(R.drawable.ic_add)
-                watchlistText.text = "Add to Watchlist"
+                watchlistText.text = getString(R.string.add_to_watchlist)
             }
         }
 
@@ -309,37 +309,37 @@ class TrackingFragment : Fragment() {
             isFav = list.any { it.id == series.id }
             if (isFav) {
                 favIcon.setImageResource(R.drawable.fav_red)
-                favText.text = "Remove from Favorites"
+                favText.text = getString(R.string.btn_remove_favorites)
             } else {
                 favIcon.setImageResource(R.drawable.fav_outline)
-                favText.text = "Add to Favorites"
+                favText.text = getString(R.string.add_to_favorites)
             }
         }
 
         watchlistBtn.setOnClickListener {
             if (isInWatchlist) {
                 watchListViewModel.deleteWatchListData(movieResult)
-                com.shalenmathew.movieflix.core.utils.showToast(requireContext(), "Removed from watchlist")
+                com.shalenmathew.movieflix.core.utils.showToast(requireContext(), getString(R.string.msg_removed_watchlist))
             } else {
                 watchListViewModel.insertWatchListData(movieResult)
-                com.shalenmathew.movieflix.core.utils.showToast(requireContext(), "Added to watchlist")
+                com.shalenmathew.movieflix.core.utils.showToast(requireContext(), getString(R.string.msg_added_watchlist))
             }
         }
 
         favBtn.setOnClickListener {
             if (isFav) {
                 favMovieViewModel.deleteWatchListData(movieResult)
-                com.shalenmathew.movieflix.core.utils.showToast(requireContext(), "Removed from Favorites")
+                com.shalenmathew.movieflix.core.utils.showToast(requireContext(), getString(R.string.msg_removed_favorites))
             } else {
                 favMovieViewModel.insertFavMovieData(movieResult)
-                com.shalenmathew.movieflix.core.utils.showToast(requireContext(), "Added to Favorites")
+                com.shalenmathew.movieflix.core.utils.showToast(requireContext(), getString(R.string.msg_added_favorites))
             }
         }
 
         untrackBtn.setOnClickListener {
             seriesTrackingViewModel.untrackSeries(series.id)
             dialog.dismiss()
-            com.shalenmathew.movieflix.core.utils.showToast(requireContext(), "Tracking stopped")
+            com.shalenmathew.movieflix.core.utils.showToast(requireContext(), getString(R.string.msg_tracking_stopped))
         }
 
         doneBtn.setOnClickListener { dialog.dismiss() }
@@ -376,7 +376,7 @@ class TrackingFragment : Fragment() {
         val adapter = BannerChoiceAdapter { selectedPath ->
             seriesTrackingViewModel.updateSeriesBanner(series.id, selectedPath)
             dialog.dismiss()
-            com.shalenmathew.movieflix.core.utils.showToast(requireContext(), "Banner updated!")
+            com.shalenmathew.movieflix.core.utils.showToast(requireContext(), getString(R.string.msg_banner_updated))
         }
         rv.adapter = adapter
 

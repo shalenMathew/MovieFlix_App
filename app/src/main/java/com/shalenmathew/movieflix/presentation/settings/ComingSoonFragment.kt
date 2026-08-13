@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import com.shalenmathew.movieflix.R
 import com.shalenmathew.movieflix.databinding.FragmentComingSoonBinding
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -26,7 +27,7 @@ class ComingSoonFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         
-        val title = arguments?.getString("TITLE") ?: "Coming Soon"
+        val title = arguments?.getString("TITLE") ?: getString(R.string.coming_soon)
         binding.toolbarTitle.text = title
 
         binding.btnBack.setOnClickListener {

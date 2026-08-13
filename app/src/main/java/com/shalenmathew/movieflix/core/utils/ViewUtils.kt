@@ -11,6 +11,7 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.widget.NestedScrollView
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
+import com.shalenmathew.movieflix.R
 import com.shalenmathew.movieflix.domain.model.Genre
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import java.text.SimpleDateFormat
@@ -18,38 +19,38 @@ import java.util.Date
 import java.util.Locale
 
 
-fun getGenreListById(id: List<Int>?): List<Genre> {
+fun getGenreListById(context: Context, id: List<Int>?): List<Genre> {
     if (id == null) {
         return emptyList()
     }
     val results = mutableListOf<Genre>()
 
     id.forEach {
-        moviesGenresMap.containsKey(it) && results.add(Genre(it, moviesGenresMap.get(it)!!))
+        moviesGenresMap.containsKey(it) && results.add(Genre(it, context.getString(moviesGenresMap.get(it)!!)))
     }
     return results
 }
 
-private val moviesGenresMap: HashMap<Int, String> = hashMapOf(
-    28 to "Action",
-    12 to "Adventure",
-    16 to "Animation",
-    35 to "Comedy",
-    80 to "Crime",
-    99 to "Documentary",
-    18 to "Drama",
-    10751 to "Family",
-    14 to "Fantasy",
-    36 to "History",
-    27 to "Horror",
-    10402 to "Music",
-    9648 to "Mystery",
-    10749 to "Romance",
-    878 to "Science Fiction",
-    10770 to "TV Movie",
-    53 to "Thriller",
-    10752 to "War",
-    37 to "Western",
+private val moviesGenresMap: HashMap<Int, Int> = hashMapOf(
+    28 to R.string.genre_action,
+    12 to R.string.genre_adventure,
+    16 to R.string.genre_animation,
+    35 to R.string.genre_comedy,
+    80 to R.string.genre_crime,
+    99 to R.string.genre_documentary,
+    18 to R.string.genre_drama,
+    10751 to R.string.genre_family,
+    14 to R.string.genre_fantasy,
+    36 to R.string.genre_history,
+    27 to R.string.genre_horror,
+    10402 to R.string.genre_music,
+    9648 to R.string.genre_mystery,
+    10749 to R.string.genre_romance,
+    878 to R.string.genre_scifi,
+    10770 to R.string.genre_tv_movie,
+    53 to R.string.genre_thriller,
+    10752 to R.string.genre_war,
+    37 to R.string.genre_western,
 )
 
 fun isNetworkAvailable(context: Context?): Boolean {

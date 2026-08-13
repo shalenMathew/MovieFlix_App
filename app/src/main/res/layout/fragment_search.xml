@@ -49,7 +49,7 @@
         android:id="@+id/fragment_search_et"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Search..."
+        android:hint="@string/search_hint"
         android:textColorHint="@color/white"
         android:padding="12dp"
         android:fontFamily="@font/montserrat_medium"
@@ -95,7 +95,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/montserrat_medium"
-                        android:text="Trending Searches"
+                        android:text="@string/trending_searches"
                         android:textColor="@color/white"
                         android:textSize="@dimen/_12ssp"
 

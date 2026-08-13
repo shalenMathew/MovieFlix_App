@@ -56,6 +56,10 @@
                     layout="@layout/item_setting" />
 
                 <include
+                    android:id="@+id/item_language"
+                    layout="@layout/item_setting" />
+
+                <include
                     android:id="@+id/item_app_suggestion"
                     layout="@layout/item_setting" />
 
@@ -84,7 +88,7 @@
                     android:gravity="center"
                     android:textColor="@color/text_secondary"
                     android:textSize="@dimen/_10ssp"
-                    tools:text="Made by ❤️ by Shalen Mathew" />
+                    android:text="@string/made_by_shalen_mathew" />
 
             </LinearLayout>
 

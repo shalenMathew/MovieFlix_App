@@ -12,7 +12,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Preview Collage"
+            android:text="@string/preview_collage"
             android:fontFamily="@font/montserrat_bold"
             android:textColor="@color/white"
             android:textSize="@dimen/_16ssp"
@@ -48,7 +48,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:layout_marginEnd="@dimen/_8sdp"
-                android:text="Download"
+                android:text="@string/download"
                 android:textAllCaps="false"
                 android:textColor="@color/white"
                 app:strokeColor="@color/white"
@@ -60,7 +60,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Share"
+                android:text="@string/share"
                 android:textAllCaps="false"
                 android:textColor="@color/white"
                 app:backgroundTint="@color/app_color"
@@ -75,7 +75,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_4sdp"
-            android:text="Cancel"
+            android:text="@string/cancel"
             android:textAllCaps="false"
             android:textColor="@color/text_secondary" />
 

@@ -37,7 +37,7 @@ class SettingsFragment : Fragment() {
     }
 
     private fun setupFooter() {
-        var footerText = "Made by ❤️ by Shalen Mathew"
+        var footerText = getString(R.string.made_by_shalen_mathew)
         if (BuildConfig.DEBUG) {
             footerText += " {debug.mod}"
         }
@@ -51,6 +51,13 @@ class SettingsFragment : Fragment() {
         binding.itemTroubleshoot.root.setOnClickListener {
             val bundle = bundleOf("TITLE" to getString(R.string.learn_how_to_use))
             findNavController().navigate(R.id.action_settingsFragment_to_comingSoonFragment, bundle)
+        }
+
+        // Language
+        binding.itemLanguage.itemSettingTitle.text = getString(R.string.change_language)
+        binding.itemLanguage.itemSettingIcon.setImageResource(R.drawable.ic_language)
+        binding.itemLanguage.root.setOnClickListener {
+            findNavController().navigate(R.id.action_settingsFragment_to_languageFragment)
         }
 
         // App Suggestion

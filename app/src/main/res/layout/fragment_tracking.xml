@@ -19,7 +19,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.5"
-            android:text="No series tracked yet. Start tracking your favorite shows!"
+            android:text="@string/tracking_placeholder"
             android:textColor="@color/white"
             android:gravity="center"
             android:textSize="@dimen/_16sdp"
@@ -50,7 +50,7 @@
                     android:paddingStart="@dimen/_15sdp"
                     android:paddingTop="@dimen/_12sdp"
                     android:paddingBottom="@dimen/_18sdp"
-                    android:text="Tracking"
+                    android:text="@string/tracking"
                     android:textColor="@color/white"
                     android:textSize="@dimen/_20ssp" />
 
@@ -68,7 +68,7 @@
                 android:id="@+id/tvNoResult"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="No series found"
+                android:text="@string/no_series_found"
                 android:textSize="16sp"
                 android:fontFamily="@font/montserrat_medium"
                 android:textColor="@android:color/white"
