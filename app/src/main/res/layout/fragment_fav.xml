@@ -14,6 +14,7 @@
         android:id="@+id/fragment_fav_placeholder"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:paddingHorizontal="32dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
@@ -23,20 +24,8 @@
         android:text="@string/fav_placeholder"
         android:textColor="@color/white"
         android:gravity="center"
-        android:textSize="@dimen/_16sdp"
+        android:textSize="15sp"
         android:fontFamily="@font/montserrat_light"
-        android:visibility="gone"
-        />
-
-    <ImageView
-        android:id="@+id/randomEmoji"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:src="@drawable/lustful_emoji"
-        app:layout_constraintTop_toBottomOf="@id/fragment_fav_placeholder"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="18dp"
         android:visibility="gone"
         />
 
@@ -108,6 +97,29 @@
 
 
     </LinearLayout>
+
+    <View
+        android:id="@+id/peekingShelf"
+        android:layout_width="match_parent"
+        android:layout_height="6dp"
+        android:background="@android:color/black"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:visibility="gone"
+        tools:visibility="visible"
+        />
+
+    <ImageView
+        android:id="@+id/peekingLogo"
+        android:layout_width="165dp"
+        android:layout_height="165dp"
+        android:src="@drawable/logo_6"
+        app:layout_constraintBottom_toTopOf="@id/peekingShelf"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginBottom="-6dp"
+        android:layout_marginStart="-25dp"
+        android:visibility="gone"
+        tools:visibility="visible"
+        />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 

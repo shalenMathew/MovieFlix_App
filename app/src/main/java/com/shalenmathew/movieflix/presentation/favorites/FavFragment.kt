@@ -102,7 +102,8 @@ class FavFragment : Fragment() {
             adapter.submitList(list)
             binding.fragmentFavRv.visible()
             binding.fragmentFavPlaceholder.gone()
-            binding.randomEmoji.gone()
+            binding.peekingLogo.gone()
+            binding.peekingShelf.gone()
         } else {
             adapter.submitList(emptyList())
             binding.fragmentFavRv.gone()
@@ -110,12 +111,14 @@ class FavFragment : Fragment() {
             if (query.isBlank()) {
                 binding.tvNoResult.gone()
                 binding.fragmentFavPlaceholder.visible()
-                binding.randomEmoji.visible()
+                binding.peekingLogo.visible()
+                binding.peekingShelf.visible()
             }
             else {
                 binding.tvNoResult.visible()
                 binding.fragmentFavPlaceholder.gone()
-                binding.randomEmoji.gone()
+                binding.peekingLogo.gone()
+                binding.peekingShelf.gone()
             }
         }
     }

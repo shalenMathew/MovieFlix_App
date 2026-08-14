@@ -11,6 +11,7 @@ import com.shalenmathew.movieflix.R
 import androidx.databinding.DataBindingUtil
 import com.shalenmathew.movieflix.databinding.FragmentCustomListsBinding
 import com.shalenmathew.movieflix.presentation.viewmodels.CustomListViewModel
+import com.shalenmathew.movieflix.presentation.viewmodels.LibrarySearchViewModel
 import com.shalenmathew.movieflix.core.adapters.CustomListAdapter
 import com.shalenmathew.movieflix.core.utils.gone
 import com.shalenmathew.movieflix.core.utils.visible
@@ -62,9 +63,13 @@ class CustomListsFragment : Fragment() {
                 adapter.submitList(lists)
                 mBinding.customListsRv.visible()
                 mBinding.customListsPlaceholder.gone()
+                mBinding.peekingLogo.gone()
+                mBinding.peekingShelf.gone()
             } else {
                 mBinding.customListsRv.gone()
                 mBinding.customListsPlaceholder.visible()
+                mBinding.peekingLogo.visible()
+                mBinding.peekingShelf.visible()
             }
         }
     }

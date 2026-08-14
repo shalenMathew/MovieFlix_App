@@ -178,6 +178,8 @@ class TrackingFragment : Fragment() {
             adapter.submitList(list)
             binding.fragmentTrackingRv.visible()
             binding.fragmentTrackingPlaceholder.gone()
+            binding.peekingLogo.gone()
+            binding.peekingShelf.gone()
         } else {
             adapter.submitList(emptyList())
             binding.fragmentTrackingRv.gone()
@@ -185,9 +187,13 @@ class TrackingFragment : Fragment() {
             if (query.isNullOrBlank()) {
                 binding.tvNoResult.gone()
                 binding.fragmentTrackingPlaceholder.visible()
+                binding.peekingLogo.visible()
+                binding.peekingShelf.visible()
             } else {
                 binding.tvNoResult.visible()
                 binding.fragmentTrackingPlaceholder.gone()
+                binding.peekingLogo.gone()
+                binding.peekingShelf.gone()
             }
         }
     }

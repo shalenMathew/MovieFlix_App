@@ -105,7 +105,8 @@ class WatchListFragment : Fragment() {
             adapter.submitList(list)
             binding.fragmentWatchListRv.visible()
             binding.fragmentWatchListPlaceholder.gone()
-            binding.randomEmoji.gone()
+            binding.peekingLogo.gone()
+            binding.peekingShelf.gone()
         }
         else {
             adapter.submitList(emptyList())
@@ -114,12 +115,14 @@ class WatchListFragment : Fragment() {
             if (query.isBlank()) {
                 binding.tvNoResult.gone()
                 binding.fragmentWatchListPlaceholder.visible()
-                binding.randomEmoji.visible()
+                binding.peekingLogo.visible()
+                binding.peekingShelf.visible()
             }
             else {
                 binding.tvNoResult.visible()
                 binding.fragmentWatchListPlaceholder.gone()
-                binding.randomEmoji.gone()
+                binding.peekingLogo.gone()
+                binding.peekingShelf.gone()
             }
         }
     }
