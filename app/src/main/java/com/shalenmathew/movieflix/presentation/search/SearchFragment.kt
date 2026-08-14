@@ -179,6 +179,7 @@ class SearchFragment : BaseFragment() {
         super.onNetworkLost()
         requireActivity().runOnUiThread {
             binding.fragmentHomeNetworkCheck.layoutNtwContainer.visible()
+            binding.noInternetMascot.visible()
         }
     }
 
@@ -186,6 +187,7 @@ class SearchFragment : BaseFragment() {
         super.onNetworkAvailable()
         requireActivity().runOnUiThread {
             binding.fragmentHomeNetworkCheck.layoutNtwContainer.gone()
+            binding.noInternetMascot.gone()
             if (binding.fragmentSearchEt.text.isNullOrEmpty()) {
                 searchMovieViewModel.fetchTrendingMovies()
             }

@@ -61,7 +61,7 @@
         <View
             android:id="@+id/peekingShelf"
             android:layout_width="match_parent"
-            android:layout_height="6dp"
+            android:layout_height="@dimen/_5sdp"
             android:background="@android:color/black"
             android:layout_gravity="bottom"
             android:visibility="gone"
@@ -70,12 +70,12 @@
 
         <ImageView
             android:id="@+id/peekingLogo"
-            android:layout_width="165dp"
-            android:layout_height="165dp"
+            android:layout_width="@dimen/_110sdp"
+            android:layout_height="@dimen/_110sdp"
             android:src="@drawable/logo_6"
             android:layout_gravity="bottom|start"
-            android:layout_marginBottom="-6dp"
-            android:layout_marginStart="-25dp"
+            android:layout_marginBottom="-4dp"
+            android:layout_marginStart="-20dp"
             android:visibility="gone"
             tools:visibility="visible"
             />

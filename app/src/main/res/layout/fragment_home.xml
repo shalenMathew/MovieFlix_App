@@ -177,6 +177,20 @@
         app:layout_constraintEnd_toEndOf="parent"
         />
 
+    <ImageView
+        android:id="@+id/noInternetMascot"
+        android:layout_width="@dimen/_100sdp"
+        android:layout_height="@dimen/_100sdp"
+        android:src="@drawable/logo_4"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@id/fragment_home_network_check"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginBottom="-40dp"
+        android:elevation="10dp"
+        tools:visibility="visible"
+        />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>

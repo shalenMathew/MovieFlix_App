@@ -201,6 +201,7 @@ class HomeFragment : BaseFragment() {
         super.onNetworkLost()
         requireActivity().runOnUiThread {
             binding.fragmentHomeNetworkCheck.layoutNtwContainer.visible()
+            binding.noInternetMascot.visible()
         }
     }
 
@@ -208,6 +209,7 @@ class HomeFragment : BaseFragment() {
         super.onNetworkAvailable()
         requireActivity().runOnUiThread {
             binding.fragmentHomeNetworkCheck.layoutNtwContainer.gone()
+            binding.noInternetMascot.gone()
             // This logic is still correct.
             homeInfoViewModel.getMovieInfoData()
         }
