@@ -18,8 +18,9 @@
             />
 
         <LinearLayout
+            android:id="@+id/fragment_search_content"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="vertical"
             >
             <RelativeLayout
@@ -128,6 +129,28 @@
                 app:spanCount="@integer/grid_span_count"
 
                 />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layout_no_internet"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:visibility="gone"
+            android:layout_gravity="center"
+            tools:visibility="visible">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/montserrat_light"
+                android:paddingHorizontal="32dp"
+                android:text="@string/no_internet_connection"
+                android:textColor="@color/white"
+                android:gravity="center"
+                android:textSize="15sp" />
+
         </LinearLayout>
 
         <include
