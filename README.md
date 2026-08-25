@@ -99,13 +99,13 @@ https://github.com/shalenMathew/MovieFlix_App/discussions/70
 - Tip for beginners : Try to fix small bugs and dont get overwhelmed by the source code , take your time... Start by making small fixes or making small changes 👍
 
 
-  ## Star History
+## Star History
 
-<a href="https://www.star-history.com/?repos=shalenMathew%2FMovieFlix_App&type=date&legend=top-left">
+<a href="https://star-history.dera.page/#shalenMathew/MovieFlix_App&type=timeline">
  <picture>
-   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/chart?repos=shalenMathew/MovieFlix_App&type=date&theme=dark&legend=top-left" />
-   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/chart?repos=shalenMathew/MovieFlix_App&type=date&legend=top-left" />
-   <img alt="Star History Chart" src="https://api.star-history.com/chart?repos=shalenMathew/MovieFlix_App&type=date&legend=top-left" />
+   <source media="(prefers-color-scheme: dark)" srcset="https://star-history.dera.page/svg?repos=shalenMathew/MovieFlix_App&type=timeline&theme=dark" />
+   <source media="(prefers-color-scheme: light)" srcset="https://star-history.dera.page/svg?repos=shalenMathew/MovieFlix_App&type=timeline" />
+   <img alt="Star History Chart" src="https://star-history.dera.page/svg?repos=shalenMathew/MovieFlix_App&type=timeline" />
  </picture>
 </a>
 
