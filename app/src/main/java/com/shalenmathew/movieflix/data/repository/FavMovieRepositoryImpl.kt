@@ -6,13 +6,17 @@ import com.shalenmathew.movieflix.data.local_storage.entity.FavouritesEntity
 import com.shalenmathew.movieflix.data.local_storage.entity.IdAndMovieResult
 import com.shalenmathew.movieflix.domain.repository.FavMovieRepository
 
-class FavMovieRepositoryImpl(private val localDataSource: LocalDataSource):FavMovieRepository {
+class FavMovieRepositoryImpl(
+    private val localDataSource: LocalDataSource,
+    private val seriesTrackingRepository: com.shalenmathew.movieflix.domain.repository.SeriesTrackingRepository
+) : FavMovieRepository {
     override suspend fun insertFavMovie(idAndMovieResult: IdAndMovieResult) {
         localDataSource.insertFavMovie(idAndMovieResult)
     }
 
     override suspend fun deleteFavMovie(favouritesEntity: FavouritesEntity) {
-      localDataSource.deleteFavMovie(favouritesEntity)
+        localDataSource.deleteFavMovie(favouritesEntity)
+        seriesTrackingRepository.cleanupOrphanedProgress(favouritesEntity.id)
     }
 
     override fun getAllFavMovie(): LiveData<List<FavouritesEntity>> {

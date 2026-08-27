@@ -26,6 +26,7 @@ import javax.inject.Inject
 class SeriesTrackingRepositoryImpl @Inject constructor(
     private val seriesTrackingDao: SeriesTrackingDao,
     private val remoteDataSource: RemoteDataSource,
+    private val localDataSource: com.shalenmathew.movieflix.data.local_storage.LocalDataSource,
     private val context: Context
 ) : SeriesTrackingRepository {
 
@@ -75,10 +76,12 @@ class SeriesTrackingRepositoryImpl @Inject constructor(
 
     override suspend fun untrackSeries(seriesId: Int) {
         // Just delete from tracking table - seasons and episodes will cascade delete.
-        // Progress table is NOT touched here.
         val series = seriesTrackingDao.getSeriesById(seriesId)
         series?.let { seriesTrackingDao.deleteSeries(it) }
         seriesTrackingDao.deleteSeasonsBySeriesId(seriesId)
+        
+        // Proactive cleanup of progress if not in any other list
+        cleanupOrphanedProgress(seriesId)
     }
 
     override suspend fun getSeriesById(seriesId: Int): TrackedSeries? {
@@ -141,6 +144,16 @@ class SeriesTrackingRepositoryImpl @Inject constructor(
 
     override suspend fun deleteSeriesProgress(seriesId: Int) {
         seriesTrackingDao.deleteSeriesProgress(seriesId)
+    }
+
+    override suspend fun cleanupOrphanedProgress(seriesId: Int) {
+        val isTracked = isSeriesTracked(seriesId)
+        val inWatchlist = localDataSource.isMovieInWatchList(seriesId)
+        val inFav = localDataSource.isMovieInFavorites(seriesId)
+
+        if (!isTracked && !inWatchlist && !inFav) {
+            deleteSeriesProgress(seriesId)
+        }
     }
 
     override suspend fun markPreviousEpisodesAsWatched(seriesId: Int, seasonNumber: Int, episodeNumber: Int) {

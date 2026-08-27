@@ -31,6 +31,8 @@ class LocalDataSource @Inject constructor(private val movieDao: MovieDao) {
         return movieDao.getAllWatchListData()
     }
 
+    suspend fun isMovieInWatchList(id: Int): Boolean = movieDao.isMovieInWatchList(id)
+
     suspend fun insertFavMovie(idAndMovieResult: IdAndMovieResult){
         movieDao.insertFavMovie(idAndMovieResult)
     }
@@ -42,6 +44,8 @@ class LocalDataSource @Inject constructor(private val movieDao: MovieDao) {
     fun getAllFavMovie():LiveData<List<FavouritesEntity>>{
         return movieDao.getAllFavMovies()
     }
+
+    suspend fun isMovieInFavorites(id: Int): Boolean = movieDao.isMovieInFavorites(id)
 
     suspend fun addPersonalNote(favoriteId: Int, personalNote: String?) {
         return movieDao.addPersonalNote(favoriteId, personalNote)

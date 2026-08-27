@@ -104,14 +104,20 @@ object DatabaseModule {
 
     @Provides
     @Singleton
-    fun getWatchList(localDataSource: LocalDataSource): WatchListRepository {
-        return WatchListRepositoryImpl(localDataSource)
+    fun getWatchList(
+        localDataSource: LocalDataSource,
+        seriesTrackingRepository: SeriesTrackingRepository
+    ): WatchListRepository {
+        return WatchListRepositoryImpl(localDataSource, seriesTrackingRepository)
     }
 
     @Provides
     @Singleton
-    fun getFavMovie(localDataSource: LocalDataSource): FavMovieRepository {
-        return FavMovieRepositoryImpl(localDataSource)
+    fun getFavMovie(
+        localDataSource: LocalDataSource,
+        seriesTrackingRepository: SeriesTrackingRepository
+    ): FavMovieRepository {
+        return FavMovieRepositoryImpl(localDataSource, seriesTrackingRepository)
     }
 
     @Provides
@@ -134,9 +140,10 @@ object DatabaseModule {
     fun providesSeriesTrackingRepository(
         seriesTrackingDao: SeriesTrackingDao,
         remoteDataSource: RemoteDataSource,
+        localDataSource: LocalDataSource,
         @ApplicationContext context: Context
     ): SeriesTrackingRepository {
-        return SeriesTrackingRepositoryImpl(seriesTrackingDao, remoteDataSource, context)
+        return SeriesTrackingRepositoryImpl(seriesTrackingDao, remoteDataSource, localDataSource, context)
     }
 
     @Provides

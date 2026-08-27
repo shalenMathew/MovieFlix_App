@@ -122,6 +122,7 @@ class MovieDetailsFragment : BottomSheetDialogFragment() {
     private var tvDetailsLoaded = false
 
     private var isPlaying: Boolean = false
+    private var currentSeriesProgressCache: com.shalenmathew.movieflix.domain.model.TrackedSeries? = null
 
     // Notification permission launcher
     private val requestNotificationPermissionLauncher = registerForActivityResult(
@@ -199,7 +200,6 @@ class MovieDetailsFragment : BottomSheetDialogFragment() {
                 }
                 isInWatchList = !isInWatchList
                 updateScheduleButtonVisibility()
-                checkAndCleanupProgress(mediaId ?: -1, isInWatchList, isFav)
             }
 
             fragmentMovieDetailsFavBtn.setOnClickListener {
@@ -219,7 +219,6 @@ class MovieDetailsFragment : BottomSheetDialogFragment() {
 
                 isFav = !isFav
                 updateScheduleButtonVisibility()
-                checkAndCleanupProgress(mediaId ?: -1, isInWatchList, isFav)
             }
 
 
@@ -423,8 +422,8 @@ class MovieDetailsFragment : BottomSheetDialogFragment() {
                 updateScheduleButtonVisibility()
             } else {
                 binding.addButtonIcon.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_add))
-                checkAndCleanupProgress(mediaId ?: -1, isInWatchList, isFav)
             }
+            updateLastWatchedUI()
         }
 
         favMovieViewModel.getAllMovieData().observe(viewLifecycleOwner) { list ->
@@ -439,8 +438,8 @@ class MovieDetailsFragment : BottomSheetDialogFragment() {
             } else {
                 binding.favIcon.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.fav_outline))
                 binding.fragmentMovieDetailsPersonalNoteLl.isVisible = false
-                checkAndCleanupProgress(mediaId ?: -1, isInWatchList, isFav)
             }
+            updateLastWatchedUI()
         }
 
         scheduledViewModel.getAllScheduledMovies().observe(viewLifecycleOwner) { scheduledList ->
@@ -619,25 +618,8 @@ class MovieDetailsFragment : BottomSheetDialogFragment() {
 
         // Setup Bookmark Text
         seriesTrackingViewModel.currentSeriesProgress.observe(viewLifecycleOwner) { series ->
-            if (series != null && series.lastWatchedSeasonNumber != null && series.lastWatchedEpisodeNumber != null) {
-                // Check if in Watchlist or Favorites
-                val showBookmark = isInWatchList || isFav
-                if (showBookmark) {
-                    binding.fragmentMovieDetailsLastWatched.apply {
-                        val label = getString(R.string.lbl_last_watched, series.lastWatchedSeasonNumber, series.lastWatchedEpisodeNumber)
-                        val spannable = SpannableString(label)
-                        
-                        // Bold "Last watched :" part if possible, or just use the whole string
-                        // For simplicity since the whole string is generated from a pattern:
-                        text = spannable
-                        visibility = View.VISIBLE
-                    }
-                } else {
-                    binding.fragmentMovieDetailsLastWatched.visibility = View.GONE
-                }
-            } else {
-                binding.fragmentMovieDetailsLastWatched.visibility = View.GONE
-            }
+            currentSeriesProgressCache = series
+            updateLastWatchedUI()
         }
     }
 
@@ -886,10 +868,6 @@ class MovieDetailsFragment : BottomSheetDialogFragment() {
                 trackItem.setOnClickListener {
                     bottomSheetDialog.dismiss()
                     handleTrackClick(isTracked)
-                    if (isTracked) {
-                        // We just stopped tracking, check if we should cleanup progress
-                        checkAndCleanupProgress(mediaId ?: -1, isInWatchList, isFav)
-                    }
                 }
             }
         } else {
@@ -1465,6 +1443,10 @@ class MovieDetailsFragment : BottomSheetDialogFragment() {
         // Remove previous observers to prevent stale data from showing when navigating between shows
         seriesTrackingViewModel.isCurrentSeriesTracked.removeObservers(viewLifecycleOwner)
         seriesTrackingViewModel.currentSeriesProgress.removeObservers(viewLifecycleOwner)
+        
+        // Reset cache
+        currentSeriesProgressCache = null
+        binding.fragmentMovieDetailsLastWatched.visibility = View.GONE
 
         val result = Gson().fromJson(
             arguments?.getString(Constants.MEDIA_SEND_REQUEST_KEY),
@@ -1672,17 +1654,25 @@ class MovieDetailsFragment : BottomSheetDialogFragment() {
         _binding = null
     }
 
-    private fun checkAndCleanupProgress(seriesId: Int, inWatchlist: Boolean, inFav: Boolean) {
-        // If not in Watchlist AND not in Favorites -> Check if also not tracked
-        if (!inWatchlist && !inFav) {
-            viewLifecycleOwner.lifecycleScope.launch {
-                val isTracked = seriesTrackingViewModel.isSeriesTrackedDirect(seriesId)
-                if (!isTracked) {
-                    seriesTrackingViewModel.deleteSeriesProgress(seriesId)
-                    // Update UI immediately
-                    binding.fragmentMovieDetailsLastWatched.visibility = View.GONE
+    private fun updateLastWatchedUI() {
+        val series = currentSeriesProgressCache
+        if (series != null && series.lastWatchedSeasonNumber != null && series.lastWatchedEpisodeNumber != null) {
+            val showBookmark = isInWatchList || isFav
+            if (showBookmark) {
+                binding.fragmentMovieDetailsLastWatched.apply {
+                    val label = getString(
+                        R.string.lbl_last_watched,
+                        series.lastWatchedSeasonNumber,
+                        series.lastWatchedEpisodeNumber
+                    )
+                    text = SpannableString(label)
+                    visibility = View.VISIBLE
                 }
+            } else {
+                binding.fragmentMovieDetailsLastWatched.visibility = View.GONE
             }
+        } else {
+            binding.fragmentMovieDetailsLastWatched.visibility = View.GONE
         }
     }
 

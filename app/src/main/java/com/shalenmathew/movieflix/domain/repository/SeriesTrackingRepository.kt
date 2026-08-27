@@ -26,6 +26,8 @@ interface SeriesTrackingRepository {
 
     suspend fun deleteSeriesProgress(seriesId: Int)
 
+    suspend fun cleanupOrphanedProgress(seriesId: Int)
+
     suspend fun markPreviousEpisodesAsWatched(seriesId: Int, seasonNumber: Int, episodeNumber: Int)
 
     suspend fun isSeriesTracked(seriesId: Int): Boolean

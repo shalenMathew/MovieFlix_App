@@ -39,6 +39,9 @@ interface MovieDao {
     @Query(" SELECT * FROM watch_list_table ")
     suspend fun getAllWatchListDataSync(): List<WatchListEntity>
 
+    @Query("SELECT COUNT(*) > 0 FROM watch_list_table WHERE id = :id")
+    suspend fun isMovieInWatchList(id: Int): Boolean
+
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertFavMovie(favouritesEntity: FavouritesEntity)
@@ -54,6 +57,9 @@ interface MovieDao {
 
     @Query(" SELECT * FROM favorites_movies_table ")
     suspend fun getAllFavMoviesSync(): List<FavouritesEntity>
+
+    @Query("SELECT COUNT(*) > 0 FROM favorites_movies_table WHERE id = :id")
+    suspend fun isMovieInFavorites(id: Int): Boolean
 
     @Query("UPDATE favorites_movies_table SET personalNote = :personalNote WHERE id = :favoriteId")
     suspend fun addPersonalNote(favoriteId: Int, personalNote: String?)
