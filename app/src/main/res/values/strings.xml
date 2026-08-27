@@ -145,6 +145,7 @@
     <string name="movie_name_placeholder">Movie Name</string>
     <string name="genres_placeholder">Action • Explosive • Suspenseful • Exciting • Adventure</string>
     <string name="choose_a_new_banner">Choose a New Banner</string>
+    <string name="add_banner_from_gallery">Add banner from gallery</string>
     <string name="plus_create_new_list">+ Create New List</string>
 
     <!-- Messages and Labels -->

@@ -137,4 +137,5 @@
     <string name="btn_keep_tracking">ट्रैकिंग जारी रखें</string>
     <string name="msg_unknown_error">अज्ञात त्रुटि</string>
     <string name="msg_episodes_count">एपिसोड %1$d</string>
+    <string name="add_banner_from_gallery">गैलरी से बैनर जोड़ें</string>
 </resources>

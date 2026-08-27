@@ -157,7 +157,8 @@ class SeriesTrackingRepositoryImpl @Inject constructor(
 
     override suspend fun getTVImages(seriesId: Int): NetworkResults<List<String>> {
         return try {
-            val response = remoteDataSource.getTVImages(seriesId)
+            // Include English and Textless (null) banners to ensure consistency
+            val response = remoteDataSource.getTVImages(seriesId, "en,null")
             if (response.isSuccessful && response.body() != null) {
                 val paths = response.body()!!.backdrops?.mapNotNull { it.filePath } ?: emptyList()
                 NetworkResults.Success(paths)

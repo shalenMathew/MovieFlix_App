@@ -137,4 +137,5 @@
     <string name="btn_keep_tracking">Tracking fortsetzen</string>
     <string name="msg_unknown_error">Unbekannter Fehler</string>
     <string name="msg_episodes_count">Episoden %1$d</string>
+    <string name="add_banner_from_gallery">Banner aus der Galerie hinzufügen</string>
 </resources>

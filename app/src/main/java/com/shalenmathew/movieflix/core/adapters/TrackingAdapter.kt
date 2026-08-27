@@ -57,7 +57,15 @@ class TrackingAdapter(
         }
 
         fun bind(series: TrackedSeries) {
-            bannerImage.loadImage(Constants.TMDB_IMAGE_BASE_URL_W780.plus(series.backdropPath))
+            val bannerPath = series.backdropPath
+            // TMDB paths only have one slash (e.g., /abc.jpg), local paths have many (e.g., /data/user/...)
+            val isLocal = bannerPath != null && (bannerPath.startsWith("content://") || bannerPath.count { it == '/' } > 1)
+            
+            if (isLocal) {
+                bannerImage.loadImage(bannerPath)
+            } else {
+                bannerImage.loadImage(Constants.TMDB_IMAGE_BASE_URL_W780.plus(bannerPath))
+            }
             bannerTitle.text = series.name
             
             // Set last watched info
@@ -109,7 +117,14 @@ class TrackingAdapter(
         }
 
         fun updateBanner(series: TrackedSeries) {
-            bannerImage.loadImage(Constants.TMDB_IMAGE_BASE_URL_W780.plus(series.backdropPath))
+            val bannerPath = series.backdropPath
+            val isLocal = bannerPath != null && (bannerPath.startsWith("content://") || bannerPath.count { it == '/' } > 1)
+            
+            if (isLocal) {
+                bannerImage.loadImage(bannerPath)
+            } else {
+                bannerImage.loadImage(Constants.TMDB_IMAGE_BASE_URL_W780.plus(bannerPath))
+            }
         }
 
         private fun toggleExpansion(series: TrackedSeries) {

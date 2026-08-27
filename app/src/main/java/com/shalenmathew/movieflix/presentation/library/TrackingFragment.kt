@@ -31,6 +31,9 @@ import com.shalenmathew.movieflix.presentation.viewmodels.FavMovieViewModel
 import com.shalenmathew.movieflix.domain.model.MovieResult
 import com.shalenmathew.movieflix.core.utils.loadImage
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import android.net.Uri
+import java.io.File
+import androidx.activity.result.contract.ActivityResultContracts
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 
@@ -47,6 +50,15 @@ class TrackingFragment : Fragment() {
 
     private lateinit var adapter: TrackingAdapter
     private var completionDialog: BottomSheetDialog? = null
+
+    private var currentSeriesForBanner: TrackedSeries? = null
+    private val pickImageLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
+        uri?.let {
+            currentSeriesForBanner?.let { series ->
+                handleLocalBannerSelection(series, it)
+            }
+        }
+    }
 
     private var fullList: List<TrackedSeries> = emptyList()
 
@@ -290,7 +302,15 @@ class TrackingFragment : Fragment() {
         val untrackBtn = view.findViewById<View>(R.id.completed_untrack_btn)
         val doneBtn = view.findViewById<View>(R.id.completed_done_btn)
 
-        banner.loadImage(Constants.TMDB_IMAGE_BASE_URL_W780.plus(series.backdropPath))
+        val bannerPath = series.backdropPath
+        val isLocal = bannerPath != null && (bannerPath.startsWith("content://") || bannerPath.count { it == '/' } > 1)
+        
+        if (isLocal) {
+            banner.loadImage(bannerPath)
+        } else {
+            banner.loadImage(Constants.TMDB_IMAGE_BASE_URL_W780.plus(bannerPath))
+        }
+        
         subtitle.text = getString(R.string.msg_finished_episodes, totalCount, series.name)
 
         val movieResult = series.toMovieResult()
@@ -378,6 +398,13 @@ class TrackingFragment : Fragment() {
         val loader = view.findViewById<View>(R.id.choose_banner_loader)
         val rv = view.findViewById<androidx.recyclerview.widget.RecyclerView>(R.id.choose_banner_rv)
         val cancelBtn = view.findViewById<View>(R.id.choose_banner_cancel_btn)
+        val galleryBtn = view.findViewById<View>(R.id.choose_banner_from_gallery_btn)
+
+        galleryBtn.setOnClickListener {
+            currentSeriesForBanner = series
+            pickImageLauncher.launch("image/*")
+            dialog.dismiss()
+        }
         
         val adapter = BannerChoiceAdapter { selectedPath ->
             seriesTrackingViewModel.updateSeriesBanner(series.id, selectedPath)
@@ -409,6 +436,25 @@ class TrackingFragment : Fragment() {
 
         dialog.setContentView(view)
         dialog.show()
+    }
+
+    private fun handleLocalBannerSelection(series: TrackedSeries, uri: Uri) {
+        val context = context ?: return
+        val fileName = "banner_${series.id}_${System.currentTimeMillis()}.jpg"
+        val file = File(context.filesDir, fileName)
+
+        try {
+            context.contentResolver.openInputStream(uri)?.use { input ->
+                file.outputStream().use { output ->
+                    input.copyTo(output)
+                }
+            }
+            seriesTrackingViewModel.updateSeriesBanner(series.id, file.absolutePath)
+            com.shalenmathew.movieflix.core.utils.showToast(context, getString(R.string.msg_banner_updated))
+        } catch (e: Exception) {
+            e.printStackTrace()
+            com.shalenmathew.movieflix.core.utils.showToast(context, "Failed to copy image")
+        }
     }
 
     private fun TrackedSeries.toMovieResult() = MovieResult(
