@@ -25,6 +25,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.gson.Gson
 import com.shalenmathew.movieflix.R
 import com.shalenmathew.movieflix.core.adapters.HorizontalAdapter
+import com.shalenmathew.movieflix.core.utils.ClickHandler
 import com.shalenmathew.movieflix.core.utils.Constants
 import com.shalenmathew.movieflix.core.utils.showToast
 import com.shalenmathew.movieflix.databinding.FragmentListDetailsBinding
@@ -85,9 +86,11 @@ class ListDetailsFragment : Fragment() {
     private fun setupRecyclerView() {
         adapter = HorizontalAdapter(
             onPosterClick = { movie ->
-                val bundle = Bundle()
-                bundle.putString(Constants.MEDIA_SEND_REQUEST_KEY, Gson().toJson(movie))
-                findNavController().navigate(R.id.movieDetailsFragment, bundle)
+                if (ClickHandler.isClickAllowed() && findNavController().currentDestination?.id == R.id.listDetailsFragment) {
+                    val bundle = Bundle()
+                    bundle.putString(Constants.MEDIA_SEND_REQUEST_KEY, Gson().toJson(movie))
+                    findNavController().navigate(R.id.movieDetailsFragment, bundle)
+                }
             },
             onLongClick = { movie ->
                 showQuickActionsBottomSheet(movie)

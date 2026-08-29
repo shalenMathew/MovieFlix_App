@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.gson.Gson
 import com.shalenmathew.movieflix.R
 import com.shalenmathew.movieflix.core.adapters.WatchListAdapter
+import com.shalenmathew.movieflix.core.utils.ClickHandler
 import com.shalenmathew.movieflix.core.utils.Constants
 import com.shalenmathew.movieflix.core.utils.gone
 import com.shalenmathew.movieflix.core.utils.visible
@@ -60,9 +61,11 @@ class WatchListFragment : Fragment() {
         watchListViewModel.getAllWatchListData()
         adapter = WatchListAdapter(
             onPosterClick = {
-                val bundle = Bundle()
-                bundle.putString(Constants.MEDIA_SEND_REQUEST_KEY, Gson().toJson(it))
-                findNavController().navigate(R.id.movieDetailsFragment, bundle)
+                if (ClickHandler.isClickAllowed() && findNavController().currentDestination?.id == R.id.libraryFragment) {
+                    val bundle = Bundle()
+                    bundle.putString(Constants.MEDIA_SEND_REQUEST_KEY, Gson().toJson(it))
+                    findNavController().navigate(R.id.movieDetailsFragment, bundle)
+                }
             },
             onLongClick = { movie ->
                 showQuickActionsBottomSheet(movie)

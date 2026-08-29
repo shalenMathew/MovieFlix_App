@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.gson.Gson
 import com.shalenmathew.movieflix.R
 import com.shalenmathew.movieflix.core.adapters.FavAdapters
+import com.shalenmathew.movieflix.core.utils.ClickHandler
 import com.shalenmathew.movieflix.core.utils.Constants
 import com.shalenmathew.movieflix.core.utils.gone
 import com.shalenmathew.movieflix.core.utils.visible
@@ -76,9 +77,11 @@ class FavFragment : Fragment() {
         favMovieViewModel.getAllMovieData()
         adapter = FavAdapters(
             onPosterClick = {
-                val bundle = Bundle()
-                bundle.putString(Constants.MEDIA_SEND_REQUEST_KEY, Gson().toJson(it))
-                findNavController().navigate(R.id.movieDetailsFragment, bundle)
+                if (ClickHandler.isClickAllowed() && findNavController().currentDestination?.id == R.id.libraryFragment) {
+                    val bundle = Bundle()
+                    bundle.putString(Constants.MEDIA_SEND_REQUEST_KEY, Gson().toJson(it))
+                    findNavController().navigate(R.id.movieDetailsFragment, bundle)
+                }
             },
             onLongClick = { movie ->
                 val entity = fullList.find { it.id == movie.id }
@@ -114,7 +117,8 @@ class FavFragment : Fragment() {
 
         // Setup Change Poster Option
         changePosterItem.visibility = View.VISIBLE
-        changePosterText.text = if (movie.mediaType == "tv") getString(R.string.btn_change_show_poster) else getString(R.string.btn_change_movie_poster)
+        val isTVItem = movie.mediaType == "tv" || (movie.name != null && movie.title == null)
+        changePosterText.text = if (isTVItem) getString(R.string.btn_change_show_poster) else getString(R.string.btn_change_movie_poster)
         changePosterItem.setOnClickListener {
             dialog.dismiss()
             showChoosePosterBottomSheet(favouritesEntity)
@@ -160,7 +164,7 @@ class FavFragment : Fragment() {
 
         val lang = if (movie.originalLanguage?.length == 2) movie.originalLanguage else null
         val mediaId = movie.id ?: -1
-        val isTV = movie.mediaType == "tv"
+        val isTV = movie.mediaType == "tv" || (movie.name != null && movie.title == null)
 
         if (isTV) {
             homeInfoViewModel.getTVImages(mediaId, lang)

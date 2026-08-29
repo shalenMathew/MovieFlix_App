@@ -46,6 +46,7 @@ import com.shalenmathew.movieflix.core.adapters.EpisodeAdapter
 import com.shalenmathew.movieflix.core.adapters.RecommendationAdapter
 import com.shalenmathew.movieflix.core.adapters.SeasonSelectorAdapter
 import com.shalenmathew.movieflix.core.notifications.NotificationHelper
+import com.shalenmathew.movieflix.core.utils.ClickHandler
 import com.shalenmathew.movieflix.core.utils.Constants
 import com.shalenmathew.movieflix.core.utils.Constants.BASE_YOUTUBE_URL
 import com.shalenmathew.movieflix.core.utils.Constants.TMDB_IMAGE_BASE_URL_W780
@@ -324,6 +325,8 @@ class MovieDetailsFragment : BottomSheetDialogFragment() {
     }
 
     private fun openDetailFragment(it: MovieResult) {
+        if (!ClickHandler.isClickAllowed()) return
+
         // Update current arguments and reload data
         val bundle = Bundle()
         bundle.putString(Constants.MEDIA_SEND_REQUEST_KEY, Gson().toJson(it))
@@ -332,17 +335,11 @@ class MovieDetailsFragment : BottomSheetDialogFragment() {
         try {
             findNavController().navigate(R.id.action_movieDetailsFragment_self, bundle)
         } catch (_: IllegalStateException) {
-            // NavController not available - we're shown as a standalone dialog
-            // Update arguments and reload the fragment
-            arguments = bundle
-
-            // Reset state
-            isPlaying = false
-            youTubePlayer?.pause()
-            tvDetailsLoaded = false
-
-            // Reload data with new movie
-            setUpDetailFragment()
+            // NavController not available - we're shown as a standalone dialog (e.g. from ActorDetailActivity)
+            // Instead of reusing this instance, open a new one to get the sheet animation
+            val movieDetailsFragment = MovieDetailsFragment()
+            movieDetailsFragment.arguments = bundle
+            movieDetailsFragment.show(parentFragmentManager, "MovieDetailsFragment")
         }
     }
 
@@ -522,10 +519,17 @@ class MovieDetailsFragment : BottomSheetDialogFragment() {
                     it.data?.let { movieList ->
 
                         if (movieList.results.isNotEmpty()) {
-                            mediaType = movieList.results[0].mediaType
+                            val detectedMediaType = movieList.results[0].mediaType
+                            mediaType = detectedMediaType
+                            
+                            // Update movieResult with detected type for database consistency
+                            if (::movieResult.isInitialized) {
+                                movieResult = movieResult.copy(mediaType = detectedMediaType)
+                            }
+                            
                             val id = movieList.results[0].id
 
-                            when (mediaType) {
+                            when (detectedMediaType) {
                                 "movie" -> {
                                     isTVShow = false
                                     binding.tabsSection.visibility = View.GONE

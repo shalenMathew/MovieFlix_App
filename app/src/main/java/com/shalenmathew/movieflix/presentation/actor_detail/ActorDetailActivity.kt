@@ -10,6 +10,7 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.shalenmathew.movieflix.R
 import com.shalenmathew.movieflix.core.adapters.ActorMoviesAdapter
+import com.shalenmathew.movieflix.core.utils.ClickHandler
 import com.shalenmathew.movieflix.core.utils.Constants
 import com.shalenmathew.movieflix.core.utils.NetworkResults
 import com.shalenmathew.movieflix.core.utils.loadImage
@@ -93,6 +94,7 @@ class ActorDetailActivity : AppCompatActivity() {
     }
 
     private fun openMovieDetail(movie: MovieResult) {
+        if (!ClickHandler.isClickAllowed()) return
         val movieDetailsFragment = MovieDetailsFragment()
         val bundle = Bundle()
         bundle.putString(Constants.MEDIA_SEND_REQUEST_KEY, Gson().toJson(movie))

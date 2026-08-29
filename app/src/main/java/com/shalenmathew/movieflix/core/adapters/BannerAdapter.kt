@@ -30,7 +30,7 @@ class BannerAdapter():ListAdapter<MovieResult, BannerAdapter.ViewHolder>(DiffUti
         private val binding:BannerItemBinding = BannerItemBinding.bind(itemView)
 
         fun bind(item:MovieResult)=binding.apply {
-            bannerItemTitle.text = item.title
+            bannerItemTitle.text = item.title ?: item.name
             bannerItemGenere.text = getGenreListById(itemView.context, item.genreIds).joinToString(" • ") {
                 it.name
             }

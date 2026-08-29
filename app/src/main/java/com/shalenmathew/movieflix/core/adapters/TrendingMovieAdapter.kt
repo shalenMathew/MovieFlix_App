@@ -25,7 +25,7 @@ class TrendingMovieAdapter(private val onClick:(movie:MovieResult)-> Unit): List
         fun bind(movie:MovieResult){
             binding.apply {
                 val context = root.context
-                movieNameText.text=movie.title
+                movieNameText.text = movie.title ?: movie.name
                 movieImage.loadImage(Constants.TMDB_IMAGE_BASE_URL_W500.plus(movie.backdropPath))
 
                 root.setOnClickListener(){

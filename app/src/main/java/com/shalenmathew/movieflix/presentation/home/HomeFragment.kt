@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.SnapHelper
 import com.shalenmathew.movieflix.R
 import com.shalenmathew.movieflix.core.adapters.BannerAdapter
 import com.shalenmathew.movieflix.core.adapters.HomeAdapter
+import com.shalenmathew.movieflix.core.utils.ClickHandler
 import com.shalenmathew.movieflix.core.utils.Constants
 import com.shalenmathew.movieflix.core.utils.NetworkResults
 import com.shalenmathew.movieflix.core.utils.gone
@@ -111,24 +112,18 @@ class HomeFragment : BaseFragment() {
         }
     }
 
-    object ClickHandler{
-        private var lastClick = 0L;
 
-        fun isClickAllowed(): Boolean {
-            val allowUser = System.currentTimeMillis() - lastClick > 1000L
-            if(allowUser){
-                lastClick = System.currentTimeMillis()
-            }
-            return allowUser;
-
-        }
-    }
 
     private fun openDetailFragment(it: MovieResult) {
 
         if(!ClickHandler.isClickAllowed()){
             return
         }
+
+        if (findNavController().currentDestination?.id != R.id.homeFragment) {
+            return
+        }
+
         val bundle = Bundle()
         bundle.putString(Constants.MEDIA_SEND_REQUEST_KEY, Gson().toJson(it))
 

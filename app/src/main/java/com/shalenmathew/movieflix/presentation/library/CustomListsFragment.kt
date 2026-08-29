@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.shalenmathew.movieflix.core.utils.ClickHandler
 import com.shalenmathew.movieflix.R
 import androidx.databinding.DataBindingUtil
 import com.shalenmathew.movieflix.databinding.FragmentCustomListsBinding
@@ -43,12 +44,14 @@ class CustomListsFragment : Fragment() {
     private fun setupRecyclerView() {
         adapter = CustomListAdapter(
             onListClick = { list ->
-                val bundle = Bundle().apply {
-                    putInt("listId", list.id)
-                    putString("listName", list.name)
-                    putString("listDesc", list.description)
+                if (ClickHandler.isClickAllowed() && findNavController().currentDestination?.id == R.id.libraryFragment) {
+                    val bundle = Bundle().apply {
+                        putInt("listId", list.id)
+                        putString("listName", list.name)
+                        putString("listDesc", list.description)
+                    }
+                    findNavController().navigate(R.id.action_libraryFragment_to_listDetailsFragment, bundle)
                 }
-                findNavController().navigate(R.id.action_libraryFragment_to_listDetailsFragment, bundle)
             },
             onDeleteClick = { list ->
                 viewModel.deleteList(list.id)

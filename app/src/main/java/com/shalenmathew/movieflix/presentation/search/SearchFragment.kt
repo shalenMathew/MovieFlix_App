@@ -13,6 +13,7 @@ import androidx.navigation.fragment.findNavController
 import com.shalenmathew.movieflix.R
 import com.shalenmathew.movieflix.core.adapters.HorizontalAdapter
 import com.shalenmathew.movieflix.core.adapters.TrendingMovieAdapter
+import com.shalenmathew.movieflix.core.utils.ClickHandler
 import com.shalenmathew.movieflix.core.utils.Constants
 import com.shalenmathew.movieflix.core.utils.NetworkResults
 import com.shalenmathew.movieflix.core.utils.gone
@@ -68,15 +69,19 @@ class SearchFragment : BaseFragment() {
 //        searchMovieViewModel.fetchTrendingMovies()
 
         trendingMovieAdapter=TrendingMovieAdapter(onClick = {
-            val bundle = Bundle()
-            bundle.putString(Constants.MEDIA_SEND_REQUEST_KEY,Gson().toJson(it))
-            findNavController().navigate(R.id.action_searchFragment_to_movieDetailsFragment,bundle)
+            if (ClickHandler.isClickAllowed() && findNavController().currentDestination?.id == R.id.searchFragment) {
+                val bundle = Bundle()
+                bundle.putString(Constants.MEDIA_SEND_REQUEST_KEY, Gson().toJson(it))
+                findNavController().navigate(R.id.action_searchFragment_to_movieDetailsFragment, bundle)
+            }
         })
 
         horizontalAdapter = HorizontalAdapter(onPosterClick = {
-            val bundle =Bundle()
-            bundle.putString(Constants.MEDIA_SEND_REQUEST_KEY,Gson().toJson(it))
-            findNavController().navigate(R.id.action_searchFragment_to_movieDetailsFragment,bundle)
+            if (ClickHandler.isClickAllowed() && findNavController().currentDestination?.id == R.id.searchFragment) {
+                val bundle = Bundle()
+                bundle.putString(Constants.MEDIA_SEND_REQUEST_KEY, Gson().toJson(it))
+                findNavController().navigate(R.id.action_searchFragment_to_movieDetailsFragment, bundle)
+            }
         })
         binding.apply {
             fragmentSearchSearchResult.adapter = horizontalAdapter
