@@ -40,7 +40,13 @@ class CustomListAdapter(
             posterImages.forEachIndexed { index, imageView ->
                 if (index < topPosters.size) {
                     imageView.visibility = View.VISIBLE
-                    imageView.loadImage(Constants.TMDB_POSTER_IMAGE_BASE_URL_W342.plus(topPosters[index]))
+                    val path = topPosters[index]
+                    val isLocal = path.startsWith("content://") || path.count { it == '/' } > 1
+                    if (isLocal) {
+                        imageView.loadImage(path)
+                    } else {
+                        imageView.loadImage(Constants.TMDB_POSTER_IMAGE_BASE_URL_W342.plus(path))
+                    }
                 } else if (index == 0 && topPosters.isEmpty()) {
                     imageView.visibility = View.VISIBLE
                     imageView.setImageResource(R.drawable.poster_bg)

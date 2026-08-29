@@ -223,4 +223,13 @@
     <string name="btn_pause_trailer">Pause Trailer</string>
     <string name="btn_play_trailer">Play Trailer</string>
     <string name="lbl_scheduled_on">Scheduled on: %1$s %2$s</string>
+
+    <!-- Poster Customization -->
+    <string name="btn_change_movie_poster">Change Movie Poster</string>
+    <string name="btn_change_show_poster">Change Show Poster</string>
+    <string name="lbl_choose_a_new_poster">Choose a New Poster</string>
+    <string name="btn_add_poster_from_gallery">Add poster from gallery</string>
+    <string name="msg_poster_updated">Poster updated!</string>
+    <string name="btn_change_movie_banner">Change Movie Banner</string>
+    <string name="btn_change_show_banner">Change Show Banner</string>
 </resources>

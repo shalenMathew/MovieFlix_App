@@ -40,6 +40,12 @@ interface CustomListDao {
     @Query("SELECT posterPath FROM custom_list_movie_table WHERE listId = :listId ORDER BY addedAt DESC LIMIT 4")
     fun getTopPostersForList(listId: Int): Flow<List<String>>
 
+    @Query("UPDATE custom_list_movie_table SET posterPath = :posterPath WHERE mediaId = :mediaId")
+    suspend fun updateMoviePosterAcrossLists(mediaId: Int, posterPath: String)
+
+    @Query("UPDATE custom_list_movie_table SET backdropPath = :bannerPath WHERE mediaId = :mediaId")
+    suspend fun updateMovieBannerAcrossLists(mediaId: Int, bannerPath: String)
+
     @Query("SELECT * FROM custom_list_table")
     suspend fun getAllListsSync(): List<CustomListEntity>
 

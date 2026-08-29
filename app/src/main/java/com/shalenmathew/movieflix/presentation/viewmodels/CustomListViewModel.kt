@@ -50,4 +50,16 @@ class CustomListViewModel @Inject constructor(
     suspend fun isMovieInList(listId: Int, mediaId: Int): Boolean {
         return repository.isMovieInList(listId, mediaId)
     }
+
+    fun updateMoviePosterAcrossLists(mediaId: Int, posterPath: String) {
+        viewModelScope.launch {
+            repository.updateMoviePosterAcrossLists(mediaId, posterPath)
+        }
+    }
+
+    fun updateMovieBannerAcrossLists(mediaId: Int, bannerPath: String) {
+        viewModelScope.launch {
+            repository.updateMovieBannerAcrossLists(mediaId, bannerPath)
+        }
+    }
 }

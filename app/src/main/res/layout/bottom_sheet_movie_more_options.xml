@@ -30,6 +30,102 @@
         android:paddingHorizontal="@dimen/_16sdp"
         android:paddingBottom="@dimen/_12sdp" />
 
+    <!-- Change Poster Item -->
+    <LinearLayout
+        android:id="@+id/more_options_change_poster_item"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingVertical="@dimen/_12sdp"
+        android:paddingHorizontal="@dimen/_16sdp"
+        android:foreground="?attr/selectableItemBackground"
+        android:gravity="center_vertical"
+        android:visibility="gone"
+        tools:visibility="visible">
+
+        <ImageView
+            android:layout_width="@dimen/_20sdp"
+            android:layout_height="@dimen/_20sdp"
+            android:src="@drawable/ic_gallery"
+            app:tint="@color/white" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="@dimen/_16sdp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/more_options_change_poster_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/btn_change_movie_poster"
+                android:fontFamily="@font/montserrat_semibold"
+                android:textColor="@color/white"
+                android:textSize="@dimen/_12ssp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/lbl_choose_a_new_poster"
+                android:fontFamily="@font/montserrat_medium"
+                android:textColor="@color/text_secondary"
+                android:textSize="@dimen/_10ssp"
+                android:layout_marginTop="@dimen/_2sdp" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <!-- Change Banner Item -->
+    <LinearLayout
+        android:id="@+id/more_options_change_banner_item"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingVertical="@dimen/_12sdp"
+        android:paddingHorizontal="@dimen/_16sdp"
+        android:foreground="?attr/selectableItemBackground"
+        android:gravity="center_vertical"
+        android:visibility="gone"
+        tools:visibility="visible">
+
+        <ImageView
+            android:layout_width="@dimen/_20sdp"
+            android:layout_height="@dimen/_20sdp"
+            android:src="@drawable/ic_gallery"
+            app:tint="@color/white" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="@dimen/_16sdp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/more_options_change_banner_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/btn_change_movie_banner"
+                android:fontFamily="@font/montserrat_semibold"
+                android:textColor="@color/white"
+                android:textSize="@dimen/_12ssp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/choose_a_new_banner"
+                android:fontFamily="@font/montserrat_medium"
+                android:textColor="@color/text_secondary"
+                android:textSize="@dimen/_10ssp"
+                android:layout_marginTop="@dimen/_2sdp" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
     <!-- Schedule Reminder Item -->
     <LinearLayout
         android:id="@+id/more_options_schedule_item"

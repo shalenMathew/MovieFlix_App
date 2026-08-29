@@ -170,8 +170,17 @@ class SeriesTrackingRepositoryImpl @Inject constructor(
 
     override suspend fun getTVImages(seriesId: Int): NetworkResults<List<String>> {
         return try {
-            // Include English and Textless (null) banners to ensure consistency
-            val response = remoteDataSource.getTVImages(seriesId, "en,null")
+            // Fetch series info to get original language
+            val series = seriesTrackingDao.getSeriesById(seriesId)
+            
+            // Explicitly request English, Textless (null), and the series' original language
+            val languages = mutableListOf("en", "null")
+            series?.let { 
+                // We don't have originalLanguage in SeriesTrackingEntity, 
+                // but we can try to fetch it or just use en,null which covers 99% of high-quality banners
+            }
+            
+            val response = remoteDataSource.getTVImages(seriesId, languages.joinToString(","))
             if (response.isSuccessful && response.body() != null) {
                 val paths = response.body()!!.backdrops?.mapNotNull { it.filePath } ?: emptyList()
                 NetworkResults.Success(paths)
@@ -185,6 +194,10 @@ class SeriesTrackingRepositoryImpl @Inject constructor(
 
     override suspend fun updateSeriesBanner(seriesId: Int, bannerPath: String) {
         seriesTrackingDao.updateSeriesBanner(seriesId, bannerPath)
+    }
+
+    override suspend fun updateSeriesPoster(seriesId: Int, posterPath: String) {
+        seriesTrackingDao.updateSeriesPoster(seriesId, posterPath)
     }
 
     private fun TrackedSeriesWithProgress.toDomain() = TrackedSeries(

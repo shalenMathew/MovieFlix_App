@@ -66,4 +66,12 @@ class  GetMovieInfo @Inject constructor(private val movieInfoRepository: MovieIn
     fun getTVSeason(tvId: Int, seasonNumber: Int): Flow<NetworkResults<TVSeason>> {
         return movieInfoRepository.getTVSeason(tvId, seasonNumber)
     }
+
+    fun getMovieImages(movieId: Int, includeLanguages: String? = null): Flow<NetworkResults<com.shalenmathew.movieflix.data.model.TVImagesResponse>> {
+        return movieInfoRepository.getMovieImages(movieId, includeLanguages)
+    }
+
+    fun getTVImages(tvId: Int, includeLanguages: String? = null): Flow<NetworkResults<com.shalenmathew.movieflix.data.model.TVImagesResponse>> {
+        return movieInfoRepository.getTVImages(tvId, includeLanguages)
+    }
 }

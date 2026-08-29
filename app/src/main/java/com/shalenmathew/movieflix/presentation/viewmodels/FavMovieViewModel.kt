@@ -42,4 +42,16 @@ class FavMovieViewModel @Inject constructor(private val favMovie: FavMovie) : Vi
         }
     }
 
+    fun updateFavPoster(id: Int, posterPath: String) {
+        viewModelScope.launch {
+            favMovie.updateFavMoviePoster(id, posterPath)
+        }
+    }
+
+    fun updateFavBanner(id: Int, bannerPath: String) {
+        viewModelScope.launch {
+            favMovie.updateFavMovieBanner(id, bannerPath)
+        }
+    }
+
 }

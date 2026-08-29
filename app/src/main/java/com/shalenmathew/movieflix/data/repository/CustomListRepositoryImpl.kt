@@ -83,6 +83,14 @@ class CustomListRepositoryImpl @Inject constructor(
         return customListDao.isMovieInList(listId, mediaId)
     }
 
+    override suspend fun updateMoviePosterAcrossLists(mediaId: Int, posterPath: String) {
+        customListDao.updateMoviePosterAcrossLists(mediaId, posterPath)
+    }
+
+    override suspend fun updateMovieBannerAcrossLists(mediaId: Int, bannerPath: String) {
+        customListDao.updateMovieBannerAcrossLists(mediaId, bannerPath)
+    }
+
     private fun CustomListMovieEntity.toDomain() = CustomListMovie(
         listId = listId,
         mediaId = mediaId,

@@ -41,4 +41,16 @@ class WatchListViewModel @Inject constructor(private val watchList: WatchList) :
         }
     }
 
+    fun updateWatchListPoster(id: Int, posterPath: String) {
+        viewModelScope.launch {
+            watchList.updateWatchListPoster(id, posterPath)
+        }
+    }
+
+    fun updateWatchListBanner(id: Int, bannerPath: String) {
+        viewModelScope.launch {
+            watchList.updateWatchListBanner(id, bannerPath)
+        }
+    }
+
 }

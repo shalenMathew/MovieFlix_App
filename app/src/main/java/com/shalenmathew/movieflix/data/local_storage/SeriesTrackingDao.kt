@@ -78,6 +78,9 @@ interface SeriesTrackingDao {
     @Query("UPDATE series_tracking_table SET backdropPath = :bannerPath WHERE id = :seriesId")
     suspend fun updateSeriesBanner(seriesId: Int, bannerPath: String)
 
+    @Query("UPDATE series_tracking_table SET posterPath = :posterPath WHERE id = :seriesId")
+    suspend fun updateSeriesPoster(seriesId: Int, posterPath: String)
+
     @Delete
     suspend fun deleteSeries(series: SeriesTrackingEntity)
 

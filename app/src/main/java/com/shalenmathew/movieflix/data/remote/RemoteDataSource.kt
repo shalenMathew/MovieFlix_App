@@ -110,6 +110,10 @@ class RemoteDataSource @Inject constructor(private val apiClient: ApiClient) {
         return apiClient.fetchTVImagesApiCall(tvId, includeImageLanguage)
     }
 
+    suspend fun getMovieImages(movieId: Int, includeImageLanguage: String? = null): Response<TVImagesResponse> {
+        return apiClient.fetchMovieImagesApiCall(movieId, includeImageLanguage)
+    }
+
     suspend fun getTVSeason(tvId: Int, seasonNumber: Int): Response<TVSeasonResponse> {
         return apiClient.fetchTVSeasonApiCall(tvId, seasonNumber)
     }

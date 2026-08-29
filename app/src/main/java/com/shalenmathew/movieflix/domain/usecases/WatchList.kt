@@ -20,5 +20,13 @@ class WatchList @Inject constructor(private val watchListRepository: WatchListRe
         return  watchListRepository.getAllWatchListData()
     }
 
+    suspend fun updateWatchListPoster(id: Int, posterPath: String) {
+        watchListRepository.updateWatchListPoster(id, posterPath)
+    }
+
+    suspend fun updateWatchListBanner(id: Int, bannerPath: String) {
+        watchListRepository.updateWatchListBanner(id, bannerPath)
+    }
+
 
 }

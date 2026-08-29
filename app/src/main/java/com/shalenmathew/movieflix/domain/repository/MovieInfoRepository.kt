@@ -45,4 +45,8 @@ fun getTVDetail(tvId: Int): Flow<NetworkResults<TVDetail>>
 
 fun getTVSeason(tvId: Int, seasonNumber: Int): Flow<NetworkResults<TVSeason>>
 
+fun getMovieImages(movieId: Int, includeLanguages: String? = null): Flow<NetworkResults<com.shalenmathew.movieflix.data.model.TVImagesResponse>>
+
+fun getTVImages(tvId: Int, includeLanguages: String? = null): Flow<NetworkResults<com.shalenmathew.movieflix.data.model.TVImagesResponse>>
+
 }

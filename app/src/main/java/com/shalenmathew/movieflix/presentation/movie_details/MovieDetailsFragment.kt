@@ -141,6 +141,18 @@ class MovieDetailsFragment : BottomSheetDialogFragment() {
         }
     }
 
+    private val pickPosterLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
+        uri?.let {
+            handleLocalPosterSelection(it)
+        }
+    }
+
+    private val pickBannerLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
+        uri?.let {
+            handleLocalBannerSelection(it)
+        }
+    }
+
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         setStyle(STYLE_NO_FRAME, R.style.SheetDialog)
         return super.onCreateDialog(savedInstanceState)
@@ -621,6 +633,11 @@ class MovieDetailsFragment : BottomSheetDialogFragment() {
             currentSeriesProgressCache = series
             updateLastWatchedUI()
         }
+
+        homeInfoViewModel.mediaImages.observe(viewLifecycleOwner) { result ->
+            // This will be handled inside the bottom sheet logic via direct observation if needed,
+            // or we can keep a reference here.
+        }
     }
 
     private fun openEpisodeDetails(episode: com.shalenmathew.movieflix.domain.model.TVEpisode) {
@@ -803,6 +820,15 @@ class MovieDetailsFragment : BottomSheetDialogFragment() {
         val view = layoutInflater.inflate(R.layout.bottom_sheet_movie_more_options, null)
 
         val header = view.findViewById<TextView>(R.id.more_options_header)
+        
+        // Change Poster Item
+        val changePosterItem = view.findViewById<View>(R.id.more_options_change_poster_item)
+        val changePosterText = view.findViewById<TextView>(R.id.more_options_change_poster_text)
+        
+        // Change Banner Item
+        val changeBannerItem = view.findViewById<View>(R.id.more_options_change_banner_item)
+        val changeBannerText = view.findViewById<TextView>(R.id.more_options_change_banner_text)
+        
         val scheduleItem = view.findViewById<View>(R.id.more_options_schedule_item)
         val scheduleIcon = view.findViewById<android.widget.ImageView>(R.id.more_options_schedule_icon)
         val scheduleText = view.findViewById<TextView>(R.id.more_options_schedule_text)
@@ -816,6 +842,30 @@ class MovieDetailsFragment : BottomSheetDialogFragment() {
         val collectionItem = view.findViewById<View>(R.id.more_options_collection_item)
 
         header.text = getString(R.string.more_options)
+
+        // Setup Change Poster Option - Limited to Favorites only
+        if (isFav) {
+            changePosterItem.visibility = View.VISIBLE
+            changePosterText.text = if (isTVShow) getString(R.string.btn_change_show_poster) else getString(R.string.btn_change_movie_poster)
+            changePosterItem.setOnClickListener {
+                bottomSheetDialog.dismiss()
+                showChoosePosterBottomSheet()
+            }
+        } else {
+            changePosterItem.visibility = View.GONE
+        }
+
+        // Setup Change Banner Option - Limited to Favorites only
+        if (isFav) {
+            changeBannerItem.visibility = View.VISIBLE
+            changeBannerText.text = if (isTVShow) getString(R.string.btn_change_show_banner) else getString(R.string.btn_change_movie_banner)
+            changeBannerItem.setOnClickListener {
+                bottomSheetDialog.dismiss()
+                showChooseBannerBottomSheet()
+            }
+        } else {
+            changeBannerItem.visibility = View.GONE
+        }
 
         // Update UI based on current status
         if (isScheduled) {
@@ -1472,7 +1522,15 @@ class MovieDetailsFragment : BottomSheetDialogFragment() {
                 fragmentMovieDetailsGenre.text = getGenreListById(requireContext(), genreList).joinToString { genre ->
                     genre.name
                 }
-                posterImage.loadImage(TMDB_IMAGE_BASE_URL_W780.plus(img))
+                
+                val isLocal = img != null && (img.startsWith("content://") || img.count { it == '/' } > 1)
+                val fullUrl = when {
+                    isLocal -> img
+                    img?.startsWith("http") == true -> img
+                    else -> TMDB_IMAGE_BASE_URL_W780.plus(img)
+                }
+                posterImage.loadImage(fullUrl)
+                
                 fragmentMovieDetailsLang.text = language
                 overView?.let { setExpandableText(fragmentMovieDetailsOverview, it) }
                 fragmentMovieDetailsRating.text = String.format("%.1f", rating)
@@ -1673,6 +1731,190 @@ class MovieDetailsFragment : BottomSheetDialogFragment() {
             }
         } else {
             binding.fragmentMovieDetailsLastWatched.visibility = View.GONE
+        }
+    }
+
+    private fun showChoosePosterBottomSheet() {
+        val ctx = context ?: return
+        val dialog = BottomSheetDialog(ctx, R.style.SheetDialog)
+        val view = layoutInflater.inflate(R.layout.bottom_sheet_choose_poster, null)
+
+        val loader = view.findViewById<View>(R.id.choose_poster_loader)
+        val rv = view.findViewById<androidx.recyclerview.widget.RecyclerView>(R.id.choose_poster_rv)
+        val cancelBtn = view.findViewById<View>(R.id.choose_poster_cancel_btn)
+        val galleryBtn = view.findViewById<View>(R.id.choose_poster_from_gallery_btn)
+
+        galleryBtn.setOnClickListener {
+            pickPosterLauncher.launch("image/*")
+            dialog.dismiss()
+        }
+
+        val adapter = com.shalenmathew.movieflix.core.adapters.PosterChoiceAdapter { selectedPath ->
+            updateMediaPoster(selectedPath)
+            dialog.dismiss()
+        }
+        rv.adapter = adapter
+
+        val lang = movieResult.originalLanguage
+        if (isTVShow) {
+            homeInfoViewModel.getTVImages(mediaId ?: -1, lang)
+        } else {
+            homeInfoViewModel.getMovieImages(mediaId ?: -1, lang)
+        }
+
+        homeInfoViewModel.mediaImages.observe(viewLifecycleOwner) { result ->
+            when (result) {
+                is NetworkResults.Loading -> {
+                    loader.visibility = View.VISIBLE
+                    rv.visibility = View.GONE
+                }
+                is NetworkResults.Success -> {
+                    loader.visibility = View.GONE
+                    rv.visibility = View.VISIBLE
+                    adapter.submitList(result.data?.posters?.mapNotNull { it.filePath })
+                }
+                is NetworkResults.Error -> {
+                    loader.visibility = View.GONE
+                    showToast(ctx, result.message ?: getString(R.string.msg_something_went_wrong))
+                }
+            }
+        }
+
+        cancelBtn.setOnClickListener { dialog.dismiss() }
+
+        dialog.setContentView(view)
+        dialog.show()
+    }
+
+    private fun updateMediaPoster(posterPath: String) {
+        val id = mediaId ?: return
+        
+        // Update Favorites
+        if (isFav) {
+            favMovieViewModel.updateFavPoster(id, posterPath)
+        }
+        
+        // Always sync with other lists regardless of where the change was initiated
+        // (The option is only visible if isFav is true)
+        watchListViewModel.updateWatchListPoster(id, posterPath)
+        seriesTrackingViewModel.updateSeriesPoster(id, posterPath)
+        customListViewModel.updateMoviePosterAcrossLists(id, posterPath)
+        
+        showToast(requireContext(), getString(R.string.msg_poster_updated))
+    }
+
+    private fun handleLocalPosterSelection(uri: android.net.Uri) {
+        val ctx = context ?: return
+        val id = mediaId ?: return
+        val fileName = "poster_${id}_${System.currentTimeMillis()}.jpg"
+        val file = java.io.File(ctx.filesDir, fileName)
+
+        try {
+            ctx.contentResolver.openInputStream(uri)?.use { input ->
+                file.outputStream().use { output ->
+                    input.copyTo(output)
+                }
+            }
+            updateMediaPoster(file.absolutePath)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            showToast(ctx, "Failed to copy image")
+        }
+    }
+
+    private fun showChooseBannerBottomSheet() {
+        val ctx = context ?: return
+        val dialog = BottomSheetDialog(ctx, R.style.SheetDialog)
+        val view = layoutInflater.inflate(R.layout.bottom_sheet_choose_banner, null)
+
+        val loader = view.findViewById<View>(R.id.choose_banner_loader)
+        val rv = view.findViewById<androidx.recyclerview.widget.RecyclerView>(R.id.choose_banner_rv)
+        val cancelBtn = view.findViewById<View>(R.id.choose_banner_cancel_btn)
+        val galleryBtn = view.findViewById<View>(R.id.choose_banner_from_gallery_btn)
+
+        galleryBtn.setOnClickListener {
+            pickBannerLauncher.launch("image/*")
+            dialog.dismiss()
+        }
+
+        val adapter = com.shalenmathew.movieflix.core.adapters.BannerChoiceAdapter { selectedPath ->
+            updateMediaBanner(selectedPath)
+            dialog.dismiss()
+        }
+        rv.adapter = adapter
+
+        val lang = movieResult.originalLanguage
+        if (isTVShow) {
+            homeInfoViewModel.getTVImages(mediaId ?: -1, lang)
+        } else {
+            homeInfoViewModel.getMovieImages(mediaId ?: -1, lang)
+        }
+
+        homeInfoViewModel.mediaImages.observe(viewLifecycleOwner) { result ->
+            when (result) {
+                is NetworkResults.Loading -> {
+                    loader.visibility = View.VISIBLE
+                    rv.visibility = View.GONE
+                }
+                is NetworkResults.Success -> {
+                    loader.visibility = View.GONE
+                    rv.visibility = View.VISIBLE
+                    adapter.submitList(result.data?.backdrops?.mapNotNull { it.filePath })
+                }
+                is NetworkResults.Error -> {
+                    loader.visibility = View.GONE
+                    showToast(ctx, result.message ?: getString(R.string.msg_something_went_wrong))
+                }
+            }
+        }
+
+        cancelBtn.setOnClickListener { dialog.dismiss() }
+
+        dialog.setContentView(view)
+        dialog.show()
+    }
+
+    private fun updateMediaBanner(bannerPath: String?) {
+        val id = mediaId ?: return
+        if (bannerPath == null) return
+        
+        // Update Favorites
+        if (isFav) {
+            favMovieViewModel.updateFavBanner(id, bannerPath)
+        }
+        
+        // Global Sync
+        watchListViewModel.updateWatchListBanner(id, bannerPath)
+        seriesTrackingViewModel.updateSeriesBanner(id, bannerPath)
+        customListViewModel.updateMovieBannerAcrossLists(id, bannerPath)
+        
+        // Update local UI immediately since this is the banner on the details screen
+        val isLocal = bannerPath.startsWith("content://") || bannerPath.count { it == '/' } > 1
+        val fullUrl = when {
+            isLocal -> bannerPath
+            bannerPath.startsWith("http") -> bannerPath
+            else -> TMDB_IMAGE_BASE_URL_W780.plus(bannerPath)
+        }
+        binding.posterImage.loadImage(fullUrl)
+        showToast(requireContext(), getString(R.string.msg_banner_updated))
+    }
+
+    private fun handleLocalBannerSelection(uri: android.net.Uri) {
+        val ctx = context ?: return
+        val id = mediaId ?: return
+        val fileName = "banner_${id}_${System.currentTimeMillis()}.jpg"
+        val file = java.io.File(ctx.filesDir, fileName)
+
+        try {
+            ctx.contentResolver.openInputStream(uri)?.use { input ->
+                file.outputStream().use { output ->
+                    input.copyTo(output)
+                }
+            }
+            updateMediaBanner(file.absolutePath)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            showToast(ctx, "Failed to copy image")
         }
     }
 

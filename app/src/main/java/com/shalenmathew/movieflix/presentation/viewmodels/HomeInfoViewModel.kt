@@ -47,6 +47,9 @@ class HomeInfoViewModel @Inject constructor(private val getMovieInfo: GetMovieIn
     private var _tvSeason = MutableLiveData<NetworkResults<TVSeason>>()
     val tvSeason: LiveData<NetworkResults<TVSeason>> = _tvSeason
 
+    private var _mediaImages = MutableLiveData<NetworkResults<com.shalenmathew.movieflix.data.model.TVImagesResponse>>()
+    val mediaImages: LiveData<NetworkResults<com.shalenmathew.movieflix.data.model.TVImagesResponse>> = _mediaImages
+
     // Pagination support
     private var _loadMoreMovies = MutableLiveData<NetworkResults<Pair<String, MovieList>>>()
     val loadMoreMovies: LiveData<NetworkResults<Pair<String, MovieList>>> = _loadMoreMovies
@@ -180,6 +183,22 @@ class HomeInfoViewModel @Inject constructor(private val getMovieInfo: GetMovieIn
         viewModelScope.launch {
             getMovieInfo.getTVSeason(tvId, seasonNumber).onEach {
                 _tvSeason.value = it
+            }.launchIn(this)
+        }
+    }
+
+    fun getMovieImages(movieId: Int, includeLanguages: String? = null) {
+        viewModelScope.launch {
+            getMovieInfo.getMovieImages(movieId, includeLanguages).onEach {
+                _mediaImages.value = it
+            }.launchIn(this)
+        }
+    }
+
+    fun getTVImages(tvId: Int, includeLanguages: String? = null) {
+        viewModelScope.launch {
+            getMovieInfo.getTVImages(tvId, includeLanguages).onEach {
+                _mediaImages.value = it
             }.launchIn(this)
         }
     }

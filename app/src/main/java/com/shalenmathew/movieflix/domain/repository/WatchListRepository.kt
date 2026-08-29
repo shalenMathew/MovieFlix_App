@@ -10,6 +10,10 @@ interface WatchListRepository {
 
   suspend  fun deleteWatchListData(watchListEntity: WatchListEntity)
 
+  suspend fun updateWatchListPoster(id: Int, posterPath: String)
+
+  suspend fun updateWatchListBanner(id: Int, bannerPath: String)
+
    fun getAllWatchListData():LiveData<List<WatchListEntity>>
 
 }

@@ -4,7 +4,8 @@ import com.google.gson.annotations.SerializedName
 
 data class TVImagesResponse(
     val id: Int?,
-    @SerializedName("backdrops") val backdrops: List<ImageDetailResponse>?
+    @SerializedName("backdrops") val backdrops: List<ImageDetailResponse>?,
+    @SerializedName("posters") val posters: List<ImageDetailResponse>?
 )
 
 data class ImageDetailResponse(

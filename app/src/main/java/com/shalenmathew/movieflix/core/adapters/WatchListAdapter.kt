@@ -33,7 +33,15 @@ class WatchListAdapter(private var onPosterClick: ((movieResult: MovieResult) ->
 fun bind(watchListEntity: WatchListEntity)=binding.apply{
 
     val item = watchListEntity.movieResult
-    itemListPoster.loadImage(Constants.TMDB_POSTER_IMAGE_BASE_URL_W342.plus(item.posterPath))
+    val posterPath = item.posterPath
+    val isLocal = posterPath != null && (posterPath.startsWith("content://") || posterPath.count { it == '/' } > 1)
+    
+    if (isLocal) {
+        itemListPoster.loadImage(posterPath)
+    } else {
+        itemListPoster.loadImage(Constants.TMDB_POSTER_IMAGE_BASE_URL_W342.plus(posterPath))
+    }
+    
     itemListRatingTxt.text = String.format("%.1f", item.voteAverage)
 
     // Show schedule icon if movie is scheduled

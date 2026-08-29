@@ -37,4 +37,6 @@ interface SeriesTrackingRepository {
     suspend fun getTVImages(seriesId: Int): NetworkResults<List<String>>
 
     suspend fun updateSeriesBanner(seriesId: Int, bannerPath: String)
+
+    suspend fun updateSeriesPoster(seriesId: Int, posterPath: String)
 }

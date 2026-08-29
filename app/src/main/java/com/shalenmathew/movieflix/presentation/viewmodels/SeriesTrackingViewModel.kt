@@ -113,4 +113,10 @@ class SeriesTrackingViewModel @Inject constructor(
             seriesTrackingRepository.updateSeriesBanner(seriesId, bannerPath)
         }
     }
+
+    fun updateSeriesPoster(seriesId: Int, posterPath: String) {
+        viewModelScope.launch {
+            seriesTrackingRepository.updateSeriesPoster(seriesId, posterPath)
+        }
+    }
 }

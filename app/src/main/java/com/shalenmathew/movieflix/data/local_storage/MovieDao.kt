@@ -42,6 +42,9 @@ interface MovieDao {
     @Query("SELECT COUNT(*) > 0 FROM watch_list_table WHERE id = :id")
     suspend fun isMovieInWatchList(id: Int): Boolean
 
+    @Query("SELECT * FROM watch_list_table WHERE id = :id")
+    suspend fun getWatchListMovieById(id: Int): WatchListEntity?
+
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertFavMovie(favouritesEntity: FavouritesEntity)
@@ -61,8 +64,23 @@ interface MovieDao {
     @Query("SELECT COUNT(*) > 0 FROM favorites_movies_table WHERE id = :id")
     suspend fun isMovieInFavorites(id: Int): Boolean
 
+    @Query("SELECT * FROM favorites_movies_table WHERE id = :id")
+    suspend fun getFavMovieById(id: Int): FavouritesEntity?
+
     @Query("UPDATE favorites_movies_table SET personalNote = :personalNote WHERE id = :favoriteId")
     suspend fun addPersonalNote(favoriteId: Int, personalNote: String?)
+
+    @Query("UPDATE favorites_movies_table SET movieResult = :movieResult WHERE id = :id")
+    suspend fun updateFavMovieResult(id: Int, movieResult: com.shalenmathew.movieflix.domain.model.MovieResult)
+
+    @Query("UPDATE watch_list_table SET movieResult = :movieResult WHERE id = :id")
+    suspend fun updateWatchListMovieResult(id: Int, movieResult: com.shalenmathew.movieflix.domain.model.MovieResult)
+
+    @Query("UPDATE favorites_movies_table SET movieResult = :movieResult WHERE id = :id")
+    suspend fun updateFavMovieBanner(id: Int, movieResult: com.shalenmathew.movieflix.domain.model.MovieResult)
+
+    @Query("UPDATE watch_list_table SET movieResult = :movieResult WHERE id = :id")
+    suspend fun updateWatchListMovieBanner(id: Int, movieResult: com.shalenmathew.movieflix.domain.model.MovieResult)
 
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

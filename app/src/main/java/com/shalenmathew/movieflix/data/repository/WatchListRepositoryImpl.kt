@@ -19,6 +19,22 @@ class WatchListRepositoryImpl(
         seriesTrackingRepository.cleanupOrphanedProgress(watchListEntity.id)
     }
 
+    override suspend fun updateWatchListPoster(id: Int, posterPath: String) {
+        val watchItem = localDataSource.getWatchListMovieById(id)
+        watchItem?.let {
+            val updatedMovieResult = it.movieResult.copy(posterPath = posterPath)
+            localDataSource.updateWatchListMovieResult(id, updatedMovieResult)
+        }
+    }
+
+    override suspend fun updateWatchListBanner(id: Int, bannerPath: String) {
+        val watchItem = localDataSource.getWatchListMovieById(id)
+        watchItem?.let {
+            val updatedMovieResult = it.movieResult.copy(backdropPath = bannerPath)
+            localDataSource.updateWatchListMovieResult(id, updatedMovieResult)
+        }
+    }
+
     override  fun getAllWatchListData(): LiveData<List<WatchListEntity>> {
        return localDataSource.getAllWatchListData()
     }

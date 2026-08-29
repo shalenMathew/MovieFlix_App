@@ -168,6 +168,12 @@ interface ApiClient {
         @Query("include_image_language") includeImageLanguage: String? = null
     ): Response<TVImagesResponse>
 
+    @GET("3/movie/{movie_id}/images")
+    suspend fun fetchMovieImagesApiCall(
+        @Path("movie_id") movieId: Int,
+        @Query("include_image_language") includeImageLanguage: String? = null
+    ): Response<TVImagesResponse>
+
     @GET("3/tv/{tv_id}/season/{season_number}")
     suspend fun fetchTVSeasonApiCall(
         @Path("tv_id") tvId: Int,

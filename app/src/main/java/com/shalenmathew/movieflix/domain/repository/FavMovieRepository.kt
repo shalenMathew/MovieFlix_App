@@ -11,5 +11,9 @@ interface FavMovieRepository {
 
     suspend fun deleteFavMovie(favouritesEntity: FavouritesEntity)
 
+    suspend fun updateFavMoviePoster(id: Int, posterPath: String)
+
+    suspend fun updateFavMovieBanner(id: Int, bannerPath: String)
+
     fun getAllFavMovie(): LiveData<List<FavouritesEntity>>
 }

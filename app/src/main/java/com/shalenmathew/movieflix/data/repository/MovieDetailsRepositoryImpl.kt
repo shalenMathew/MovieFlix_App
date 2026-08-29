@@ -511,4 +511,48 @@ class MovieDetailsRepositoryImpl(
         }
     }
 
+    override fun getMovieImages(movieId: Int, includeLanguages: String?): Flow<NetworkResults<com.shalenmathew.movieflix.data.model.TVImagesResponse>> = flow {
+        emit(NetworkResults.Loading())
+        try {
+            if (networkChecker(appContext)) {
+                // Combine mandatory languages (en, null) with the movie's original language
+                val languages = mutableListOf("en", "null")
+                includeLanguages?.let { if (it !in languages) languages.add(it) }
+                
+                val response = remoteDataSource.getMovieImages(movieId, languages.joinToString(","))
+                if (response.isSuccessful && response.body() != null) {
+                    emit(NetworkResults.Success(response.body()))
+                } else {
+                    emit(NetworkResults.Error(appContext.getString(R.string.msg_failed_fetch_images)))
+                }
+            } else {
+                emit(NetworkResults.Error(appContext.getString(R.string.no_internet_connection)))
+            }
+        } catch (e: Exception) {
+            emit(NetworkResults.Error(e.message ?: appContext.getString(R.string.msg_something_went_wrong)))
+        }
+    }
+
+    override fun getTVImages(tvId: Int, includeLanguages: String?): Flow<NetworkResults<com.shalenmathew.movieflix.data.model.TVImagesResponse>> = flow {
+        emit(NetworkResults.Loading())
+        try {
+            if (networkChecker(appContext)) {
+                // Combine mandatory languages (en, null) with the series' original language
+                val languages = mutableListOf("en", "null")
+                includeLanguages?.let { if (it !in languages) languages.add(it) }
+                
+                val response = remoteDataSource.getTVImages(tvId, languages.joinToString(","))
+                if (response.isSuccessful && response.body() != null) {
+                    emit(NetworkResults.Success(response.body()))
+                } else {
+                    emit(NetworkResults.Error(appContext.getString(R.string.msg_failed_fetch_images)))
+                }
+            } else {
+                emit(NetworkResults.Error(appContext.getString(R.string.no_internet_connection)))
+            }
+        } catch (e: Exception) {
+            emit(NetworkResults.Error(e.message ?: appContext.getString(R.string.msg_something_went_wrong)))
+        }
+    }
+
 }

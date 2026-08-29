@@ -26,7 +26,15 @@ class RecommendationAdapter(private val posterClick:(movieResult:MovieResult)->U
       fun bind(movieResult: MovieResult){
           binding.apply {
               itemListRatingTxt.text = String.format("%.1f",movieResult.voteAverage)
-              itemListPoster.loadImage(Constants.TMDB_POSTER_IMAGE_BASE_URL_W342.plus(movieResult.posterPath))
+              
+              val posterPath = movieResult.posterPath
+              val isLocal = posterPath != null && (posterPath.startsWith("content://") || posterPath.count { it == '/' } > 1)
+              
+              if (isLocal) {
+                  itemListPoster.loadImage(posterPath)
+              } else {
+                  itemListPoster.loadImage(Constants.TMDB_POSTER_IMAGE_BASE_URL_W342.plus(posterPath))
+              }
 
               // Show schedule icon if movie is scheduled
               itemListScheduleIcon.visibility = if (scheduledMovieIds.contains(movieResult.id)) {

@@ -20,6 +20,14 @@ class FavMovie @Inject constructor(private val favMovieRepository: FavMovieRepos
         return favMovieRepository.getAllFavMovie()
     }
 
+    suspend fun updateFavMoviePoster(id: Int, posterPath: String) {
+        favMovieRepository.updateFavMoviePoster(id, posterPath)
+    }
+
+    suspend fun updateFavMovieBanner(id: Int, bannerPath: String) {
+        favMovieRepository.updateFavMovieBanner(id, bannerPath)
+    }
+
     suspend fun addPersonalNote(id: Int, personalNote: String?) {
         return favMovieRepository.addPersonalNote(id, personalNote)
     }

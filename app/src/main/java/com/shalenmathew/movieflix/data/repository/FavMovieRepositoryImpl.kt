@@ -19,6 +19,22 @@ class FavMovieRepositoryImpl(
         seriesTrackingRepository.cleanupOrphanedProgress(favouritesEntity.id)
     }
 
+    override suspend fun updateFavMoviePoster(id: Int, posterPath: String) {
+        val fav = localDataSource.getFavMovieById(id)
+        fav?.let {
+            val updatedMovieResult = it.movieResult.copy(posterPath = posterPath)
+            localDataSource.updateFavMovieResult(id, updatedMovieResult)
+        }
+    }
+
+    override suspend fun updateFavMovieBanner(id: Int, bannerPath: String) {
+        val fav = localDataSource.getFavMovieById(id)
+        fav?.let {
+            val updatedMovieResult = it.movieResult.copy(backdropPath = bannerPath)
+            localDataSource.updateFavMovieResult(id, updatedMovieResult)
+        }
+    }
+
     override fun getAllFavMovie(): LiveData<List<FavouritesEntity>> {
        return localDataSource.getAllFavMovie()
     }

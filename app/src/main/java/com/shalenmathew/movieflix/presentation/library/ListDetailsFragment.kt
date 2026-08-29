@@ -126,9 +126,13 @@ class ListDetailsFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch(Dispatchers.IO) {
             try {
                 val posterBitmaps = moviesToShare.map { movie ->
+                    val path = movie.posterPath
+                    val isLocal = path != null && (path.startsWith("content://") || path.count { it == '/' } > 1)
+                    val fullPath = if (isLocal) path else Constants.TMDB_POSTER_IMAGE_BASE_URL_W342.plus(path)
+                    
                     Glide.with(this@ListDetailsFragment)
                         .asBitmap()
-                        .load(Constants.TMDB_POSTER_IMAGE_BASE_URL_W342.plus(movie.posterPath))
+                        .load(fullPath)
                         .submit()
                         .get()
                 }
