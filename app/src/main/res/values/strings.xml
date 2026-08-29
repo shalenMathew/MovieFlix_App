@@ -81,8 +81,8 @@
     <string name="backup_restore">Backup &amp; Restore</string>
     <string name="export_library">Export Library</string>
     <string name="import_library">Import Library</string>
-    <string name="export_desc">Save your watchlist, favorites, and tracking data to a JSON file.</string>
-    <string name="import_desc">Restore your data from a previously saved JSON backup file.</string>
+    <string name="export_desc">Save your watchlist, favorites, tracking data &amp; collection to a ZIP file.</string>
+    <string name="import_desc">Restore your data and personalized media from a previously saved ZIP backup file.</string>
 
     <!-- UI Components -->
     <string name="watch_now">Watch Now</string>

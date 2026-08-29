@@ -60,8 +60,8 @@ class BackupFragment : Fragment() {
         binding.btnExport.setOnClickListener {
             val intent = Intent(Intent.ACTION_CREATE_DOCUMENT).apply {
                 addCategory(Intent.CATEGORY_OPENABLE)
-                type = "application/json"
-                putExtra(Intent.EXTRA_TITLE, "movieflix_backup_${System.currentTimeMillis()}.json")
+                type = "application/zip"
+                putExtra(Intent.EXTRA_TITLE, "movieflix_backup_${System.currentTimeMillis()}.zip")
             }
             exportLauncher.launch(intent)
         }
@@ -69,7 +69,7 @@ class BackupFragment : Fragment() {
         binding.btnImport.setOnClickListener {
             val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
                 addCategory(Intent.CATEGORY_OPENABLE)
-                type = "application/json"
+                type = "application/zip"
             }
             importLauncher.launch(intent)
         }
