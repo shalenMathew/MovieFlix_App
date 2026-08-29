@@ -232,7 +232,7 @@ class MovieDetailsFragment : BottomSheetDialogFragment() {
                     showToast(ctx, getString(R.string.msg_added_to_favorites))
                 } else {
 
-                    favMovieViewModel.deleteWatchListData(movieResult)
+                    favMovieViewModel.deleteFavMovieData(movieResult)
                     favIcon.setImageDrawable(ContextCompat.getDrawable(ctx, R.drawable.fav_outline))
                     showToast(ctx, getString(R.string.msg_removed_from_favorites))
                 }

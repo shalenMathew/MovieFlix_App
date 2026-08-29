@@ -237,4 +237,6 @@
     <string name="lbl_my_collection">My Collection</string>
     <string name="lbl_add_to_collection">Add to Collection</string>
     <string name="lbl_collection_desc">Save your favorite scenes or fan art from gallery</string>
+    <string name="btn_remove_from_watchlist">Remove from Watchlist</string>
+    <string name="btn_remove_from_favorites">Remove from Favorites</string>
 </resources>

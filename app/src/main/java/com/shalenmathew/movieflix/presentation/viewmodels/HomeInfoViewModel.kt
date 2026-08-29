@@ -188,6 +188,7 @@ class HomeInfoViewModel @Inject constructor(private val getMovieInfo: GetMovieIn
     }
 
     fun getMovieImages(movieId: Int, includeLanguages: String? = null) {
+        _mediaImages.value = NetworkResults.Loading() // Reset state
         viewModelScope.launch {
             getMovieInfo.getMovieImages(movieId, includeLanguages).onEach {
                 _mediaImages.value = it
@@ -196,6 +197,7 @@ class HomeInfoViewModel @Inject constructor(private val getMovieInfo: GetMovieIn
     }
 
     fun getTVImages(tvId: Int, includeLanguages: String? = null) {
+        _mediaImages.value = NetworkResults.Loading() // Reset state
         viewModelScope.launch {
             getMovieInfo.getTVImages(tvId, includeLanguages).onEach {
                 _mediaImages.value = it

@@ -15,8 +15,10 @@ import com.shalenmathew.movieflix.data.local_storage.entity.FavouritesEntity
 import com.shalenmathew.movieflix.databinding.ItemSmallListBinding
 import com.shalenmathew.movieflix.domain.model.MovieResult
 
-class FavAdapters(private var onPosterClick: ((movieResult: MovieResult) -> Unit)):
-    ListAdapter<FavouritesEntity,FavAdapters.ViewHolder >(DiffUtilCallback()) {
+class FavAdapters(
+    private var onPosterClick: ((movieResult: MovieResult) -> Unit),
+    private var onLongClick: ((movieResult: MovieResult) -> Unit)
+): ListAdapter<FavouritesEntity,FavAdapters.ViewHolder >(DiffUtilCallback()) {
     
     private var scheduledMovieIds = setOf<Int>()
 
@@ -57,6 +59,11 @@ class FavAdapters(private var onPosterClick: ((movieResult: MovieResult) -> Unit
                 }else{
                     Toast.makeText(root.context, root.context.getString(R.string.msg_internet_required), Toast.LENGTH_SHORT).show()
                 }
+            }
+
+            root.setOnLongClickListener {
+                onLongClick(item)
+                true
             }
         }
     }

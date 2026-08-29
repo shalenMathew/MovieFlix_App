@@ -29,7 +29,7 @@ class FavMovieViewModel @Inject constructor(private val favMovie: FavMovie) : Vi
         }
     }
 
-    fun deleteWatchListData(movieResult: MovieResult) {
+    fun deleteFavMovieData(movieResult: MovieResult) {
         val favMovieEntity = FavouritesEntity(movieResult.id!!, movieResult, insertedAt = null)
         viewModelScope.launch {
             favMovie.deleteFavMovie(favMovieEntity)

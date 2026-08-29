@@ -83,12 +83,87 @@ class ListDetailsFragment : Fragment() {
     }
 
     private fun setupRecyclerView() {
-        adapter = HorizontalAdapter(onPosterClick = { movie ->
-            val bundle = Bundle()
-            bundle.putString(Constants.MEDIA_SEND_REQUEST_KEY, Gson().toJson(movie))
-            findNavController().navigate(R.id.movieDetailsFragment, bundle)
-        })
+        adapter = HorizontalAdapter(
+            onPosterClick = { movie ->
+                val bundle = Bundle()
+                bundle.putString(Constants.MEDIA_SEND_REQUEST_KEY, Gson().toJson(movie))
+                findNavController().navigate(R.id.movieDetailsFragment, bundle)
+            },
+            onLongClick = { movie ->
+                showQuickActionsBottomSheet(movie)
+            }
+        )
         mBinding.listMoviesRv.adapter = adapter
+    }
+
+    private fun showQuickActionsBottomSheet(movie: MovieResult) {
+        val ctx = context ?: return
+        val dialog = BottomSheetDialog(ctx, R.style.SheetDialog)
+        val view = layoutInflater.inflate(R.layout.bottom_sheet_quick_actions, null)
+
+        val header = view.findViewById<android.widget.TextView>(R.id.quick_actions_header)
+        val shareItem = view.findViewById<View>(R.id.quick_action_share)
+        val removeItem = view.findViewById<View>(R.id.quick_action_remove)
+        val collectionItem = view.findViewById<View>(R.id.quick_action_collection)
+
+        header.text = movie.title ?: movie.name
+        
+        // Hide options not requested for custom lists
+        shareItem.visibility = View.GONE
+        removeItem.visibility = View.GONE
+
+        collectionItem.setOnClickListener {
+            dialog.dismiss()
+            showChooseCustomListBottomSheet(movie)
+        }
+
+        dialog.setContentView(view)
+        dialog.show()
+    }
+
+    private fun showChooseCustomListBottomSheet(movie: MovieResult) {
+        val ctx = context ?: return
+        val dialog = BottomSheetDialog(ctx, R.style.SheetDialog)
+        val view = layoutInflater.inflate(R.layout.bottom_sheet_choose_custom_list, null)
+        
+        val rv = view.findViewById<androidx.recyclerview.widget.RecyclerView>(R.id.choose_list_rv)
+        val createBtn = view.findViewById<View>(R.id.create_new_list_btn)
+
+        viewModel.allLists.observe(viewLifecycleOwner) { lists ->
+            viewLifecycleOwner.lifecycleScope.launch {
+                val checkList = mutableListOf<Int>()
+                for (list in lists) {
+                    if (viewModel.isMovieInList(list.id, movie.id ?: -1)) {
+                        checkList.add(list.id)
+                    }
+                }
+                
+                val adapter = com.shalenmathew.movieflix.core.adapters.ChooseCustomListAdapter(
+                    onListClick = { selectedList ->
+                        viewLifecycleOwner.lifecycleScope.launch {
+                            if (viewModel.isMovieInList(selectedList.id, movie.id ?: -1)) {
+                                viewModel.removeMovieFromList(selectedList.id, movie.id ?: -1)
+                                showToast(ctx, "Removed from ${selectedList.name}")
+                            } else {
+                                viewModel.addMovieToList(selectedList.id, movie)
+                                showToast(ctx, "Added to ${selectedList.name}")
+                            }
+                        }
+                    },
+                    checkList = checkList
+                )
+                rv.adapter = adapter
+                adapter.submitList(lists)
+            }
+        }
+
+        createBtn.setOnClickListener {
+            dialog.dismiss()
+            showToast(ctx, "Go to Lists tab to create new lists")
+        }
+
+        dialog.setContentView(view)
+        dialog.show()
     }
 
     private fun observeData() {

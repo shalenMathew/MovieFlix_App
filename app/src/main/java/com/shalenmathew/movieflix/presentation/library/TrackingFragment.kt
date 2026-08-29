@@ -354,7 +354,7 @@ class TrackingFragment : Fragment() {
 
         favBtn.setOnClickListener {
             if (isFav) {
-                favMovieViewModel.deleteWatchListData(movieResult)
+                favMovieViewModel.deleteFavMovieData(movieResult)
                 com.shalenmathew.movieflix.core.utils.showToast(requireContext(), getString(R.string.msg_removed_favorites))
             } else {
                 favMovieViewModel.insertFavMovieData(movieResult)

@@ -16,6 +16,7 @@ import com.shalenmathew.movieflix.domain.model.MovieResult
 
 class HorizontalAdapter(
     private var onPosterClick: ((movieResult: MovieResult) -> Unit)? = null,
+    private var onLongClick: ((movieResult: MovieResult) -> Unit)? = null,
     private var onLoadMore: (() -> Unit)? = null
 ) : ListAdapter<MovieResult, HorizontalAdapter.ViewHolder>(DiffUtilCallback()) {
 
@@ -71,6 +72,11 @@ class HorizontalAdapter(
                     }else{
                         showToast(context, context.getString(R.string.msg_check_internet))
                     }
+                }
+
+                itemListPoster.setOnLongClickListener {
+                    onLongClick?.invoke(item)
+                    true
                 }
             }
         }
