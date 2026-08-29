@@ -229,6 +229,21 @@ val MIGRATION_13_14 = object : Migration(13, 14) {
     }
 }
 
+val MIGRATION_14_15 = object : Migration(14, 15) {
+    override fun migrate(db: SupportSQLiteDatabase) {
+        db.execSQL("""
+            CREATE TABLE IF NOT EXISTS `personal_gallery_table` (
+                `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, 
+                `mediaId` INTEGER NOT NULL, 
+                `imagePath` TEXT NOT NULL, 
+                `addedAt` INTEGER NOT NULL, 
+                FOREIGN KEY(`mediaId`) REFERENCES `favorites_movies_table`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE 
+            )
+        """.trimIndent())
+        db.execSQL("CREATE INDEX IF NOT EXISTS `index_personal_gallery_table_mediaId` ON `personal_gallery_table` (`mediaId`)")
+    }
+}
+
 private fun complex5To6Migration(db: SupportSQLiteDatabase) {
     db.execSQL("""
             CREATE TABLE IF NOT EXISTS scheduled_movies_table (

@@ -49,7 +49,8 @@ class BackupWorker(
                 episodes = seriesDao.getAllEpisodesSync(),
                 progress = seriesDao.getAllProgressSync(),
                 customLists = customListDao.getAllListsSync(),
-                customListMovies = customListDao.getAllCustomListMoviesSync()
+                customListMovies = customListDao.getAllCustomListMoviesSync(),
+                galleryImages = movieDao.getAllGalleryImagesSync()
             )
 
             val json = Gson().toJson(backupData)

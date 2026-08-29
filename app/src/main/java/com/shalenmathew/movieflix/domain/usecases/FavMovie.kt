@@ -32,4 +32,16 @@ class FavMovie @Inject constructor(private val favMovieRepository: FavMovieRepos
         return favMovieRepository.addPersonalNote(id, personalNote)
     }
 
+    suspend fun insertGalleryImage(image: com.shalenmathew.movieflix.data.local_storage.entity.PersonalGalleryEntity) {
+        favMovieRepository.insertGalleryImage(image)
+    }
+
+    suspend fun deleteGalleryImage(image: com.shalenmathew.movieflix.data.local_storage.entity.PersonalGalleryEntity) {
+        favMovieRepository.deleteGalleryImage(image)
+    }
+
+    fun getGalleryImagesForMedia(mediaId: Int): LiveData<List<com.shalenmathew.movieflix.data.local_storage.entity.PersonalGalleryEntity>> {
+        return favMovieRepository.getGalleryImagesForMedia(mediaId)
+    }
+
 }

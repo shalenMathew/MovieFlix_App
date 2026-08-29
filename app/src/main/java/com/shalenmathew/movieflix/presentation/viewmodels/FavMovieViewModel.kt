@@ -54,4 +54,20 @@ class FavMovieViewModel @Inject constructor(private val favMovie: FavMovie) : Vi
         }
     }
 
+    fun insertGalleryImage(id: Int, imagePath: String) {
+        viewModelScope.launch {
+            favMovie.insertGalleryImage(com.shalenmathew.movieflix.data.local_storage.entity.PersonalGalleryEntity(mediaId = id, imagePath = imagePath))
+        }
+    }
+
+    fun deleteGalleryImage(image: com.shalenmathew.movieflix.data.local_storage.entity.PersonalGalleryEntity) {
+        viewModelScope.launch {
+            favMovie.deleteGalleryImage(image)
+        }
+    }
+
+    fun getGalleryImages(mediaId: Int): LiveData<List<com.shalenmathew.movieflix.data.local_storage.entity.PersonalGalleryEntity>> {
+        return favMovie.getGalleryImagesForMedia(mediaId)
+    }
+
 }

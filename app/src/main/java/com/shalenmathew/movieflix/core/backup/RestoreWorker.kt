@@ -61,11 +61,13 @@ class RestoreWorker(
                 seriesDao.deleteAllScheduled()
                 customListDao.deleteAllCustomListMovies()
                 customListDao.deleteAllLists()
+                movieDao.deleteAllGalleryImages()
 
                 // Insert backup data
                 movieDao.insertFavMovies(backupData.favorites)
                 movieDao.insertWatchListItems(backupData.watchList)
                 movieDao.insertScheduledMovies(backupData.scheduled)
+                movieDao.insertGalleryImages(backupData.galleryImages)
                 
                 backupData.series.forEach { seriesDao.insertSeries(it) }
                 seriesDao.insertSeasons(backupData.seasons)

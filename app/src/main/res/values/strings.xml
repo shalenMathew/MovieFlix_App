@@ -232,4 +232,9 @@
     <string name="msg_poster_updated">Poster updated!</string>
     <string name="btn_change_movie_banner">Change Movie Banner</string>
     <string name="btn_change_show_banner">Change Show Banner</string>
+
+    <!-- My Collection -->
+    <string name="lbl_my_collection">My Collection</string>
+    <string name="lbl_add_to_collection">Add to Collection</string>
+    <string name="lbl_collection_desc">Save your favorite scenes or fan art from gallery</string>
 </resources>

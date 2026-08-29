@@ -295,6 +295,40 @@
                             </FrameLayout>
                         </LinearLayout>
 
+                        <!-- Personal Gallery Section -->
+                        <LinearLayout
+                            android:id="@+id/fragment_movie_details_gallery_ll"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/_10sdp"
+                            android:orientation="vertical"
+                            android:visibility="gone"
+                            tools:visibility="visible">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="@dimen/_5sdp"
+                                android:fontFamily="@font/montserrat_bold"
+                                android:gravity="start"
+                                android:text="@string/lbl_my_collection"
+                                android:textColor="@color/white"
+                                android:textSize="@dimen/_14sdp" />
+
+                            <androidx.recyclerview.widget.RecyclerView
+                                android:id="@+id/fragment_movie_details_gallery_rv"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/_4sdp"
+                                android:clipToPadding="false"
+                                android:nestedScrollingEnabled="false"
+                                android:orientation="horizontal"
+                                android:paddingEnd="@dimen/_8sdp"
+                                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                                tools:listitem="@layout/item_personal_gallery" />
+
+                        </LinearLayout>
+
                         <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"

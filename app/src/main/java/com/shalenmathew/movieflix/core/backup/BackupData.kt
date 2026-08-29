@@ -13,5 +13,6 @@ data class BackupData(
     val episodes: List<EpisodeTrackingEntity> = emptyList(),
     val progress: List<SeriesProgressEntity> = emptyList(),
     val customLists: List<CustomListEntity> = emptyList(),
-    val customListMovies: List<CustomListMovieEntity> = emptyList()
+    val customListMovies: List<CustomListMovieEntity> = emptyList(),
+    val galleryImages: List<PersonalGalleryEntity> = emptyList()
 )

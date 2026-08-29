@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="@dimen/_140sdp"
+    android:layout_height="@dimen/_110sdp"
+    android:layout_marginStart="@dimen/_8sdp"
+    android:layout_marginVertical="@dimen/_4sdp"
+    app:cardBackgroundColor="@color/dark_gray"
+    app:cardCornerRadius="@dimen/_12sdp"
+    app:cardElevation="@dimen/_2sdp"
+    app:strokeColor="@color/transparent"
+    app:strokeWidth="0dp"
+    android:clickable="true"
+    android:focusable="true"
+    android:foreground="?attr/selectableItemBackground">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:paddingHorizontal="@dimen/_12sdp">
+
+        <ImageView
+            android:layout_width="@dimen/_28sdp"
+            android:layout_height="@dimen/_28sdp"
+            android:src="@drawable/baseline_add_circle_24"
+            app:tint="@color/white" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_6sdp"
+            android:fontFamily="@font/montserrat_semibold"
+            android:text="@string/lbl_add_to_collection"
+            android:textColor="@color/white"
+            android:textSize="@dimen/_10ssp"
+            android:gravity="center" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_2sdp"
+            android:fontFamily="@font/montserrat_medium"
+            android:text="@string/lbl_collection_desc"
+            android:textColor="@color/text_secondary"
+            android:textSize="@dimen/_8ssp"
+            android:gravity="center"
+            android:alpha="0.8" />
+
+    </LinearLayout>
+
+</com.google.android.material.card.MaterialCardView>

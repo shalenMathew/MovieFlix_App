@@ -78,4 +78,16 @@ class LocalDataSource @Inject constructor(private val movieDao: MovieDao) {
     suspend fun getScheduledMovieById(movieId: Int): ScheduledEntity? {
         return movieDao.getScheduledMovieById(movieId)
     }
+
+    suspend fun insertGalleryImage(image: com.shalenmathew.movieflix.data.local_storage.entity.PersonalGalleryEntity) {
+        movieDao.insertGalleryImage(image)
+    }
+
+    suspend fun deleteGalleryImage(image: com.shalenmathew.movieflix.data.local_storage.entity.PersonalGalleryEntity) {
+        movieDao.deleteGalleryImage(image)
+    }
+
+    fun getGalleryImagesForMedia(mediaId: Int): LiveData<List<com.shalenmathew.movieflix.data.local_storage.entity.PersonalGalleryEntity>> {
+        return movieDao.getGalleryImagesForMedia(mediaId)
+    }
 }

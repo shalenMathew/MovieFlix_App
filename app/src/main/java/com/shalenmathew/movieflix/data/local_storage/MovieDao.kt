@@ -105,4 +105,22 @@ interface MovieDao {
     @Query("SELECT * FROM scheduled_movies_table WHERE id = :movieId LIMIT 1")
     suspend fun getScheduledMovieById(movieId: Int): ScheduledEntity?
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertGalleryImage(image: com.shalenmathew.movieflix.data.local_storage.entity.PersonalGalleryEntity)
+
+    @Delete
+    suspend fun deleteGalleryImage(image: com.shalenmathew.movieflix.data.local_storage.entity.PersonalGalleryEntity)
+
+    @Query("SELECT * FROM personal_gallery_table WHERE mediaId = :mediaId ORDER BY addedAt DESC")
+    fun getGalleryImagesForMedia(mediaId: Int): LiveData<List<com.shalenmathew.movieflix.data.local_storage.entity.PersonalGalleryEntity>>
+
+    @Query("SELECT * FROM personal_gallery_table")
+    suspend fun getAllGalleryImagesSync(): List<com.shalenmathew.movieflix.data.local_storage.entity.PersonalGalleryEntity>
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertGalleryImages(images: List<com.shalenmathew.movieflix.data.local_storage.entity.PersonalGalleryEntity>)
+
+    @Query("DELETE FROM personal_gallery_table")
+    suspend fun deleteAllGalleryImages()
+
 }

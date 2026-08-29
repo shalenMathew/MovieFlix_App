@@ -42,4 +42,16 @@ class FavMovieRepositoryImpl(
     override suspend fun addPersonalNote(id: Int, personalNote: String?) {
         return localDataSource.addPersonalNote(id, personalNote)
     }
+
+    override suspend fun insertGalleryImage(image: com.shalenmathew.movieflix.data.local_storage.entity.PersonalGalleryEntity) {
+        localDataSource.insertGalleryImage(image)
+    }
+
+    override suspend fun deleteGalleryImage(image: com.shalenmathew.movieflix.data.local_storage.entity.PersonalGalleryEntity) {
+        localDataSource.deleteGalleryImage(image)
+    }
+
+    override fun getGalleryImagesForMedia(mediaId: Int): LiveData<List<com.shalenmathew.movieflix.data.local_storage.entity.PersonalGalleryEntity>> {
+        return localDataSource.getGalleryImagesForMedia(mediaId)
+    }
 }
