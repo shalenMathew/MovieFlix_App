@@ -17,7 +17,7 @@ import com.shalenmathew.movieflix.domain.model.MovieResult
 
 class FavAdapters(
     private var onPosterClick: ((movieResult: MovieResult) -> Unit),
-    private var onLongClick: ((movieResult: MovieResult) -> Unit)
+    private var onLongClick: ((view: View, movieResult: MovieResult) -> Unit)
 ): ListAdapter<FavouritesEntity,FavAdapters.ViewHolder >(DiffUtilCallback()) {
     
     private var scheduledMovieIds = setOf<Int>()
@@ -62,7 +62,7 @@ class FavAdapters(
             }
 
             root.setOnLongClickListener {
-                onLongClick(item)
+                onLongClick(root, item)
                 true
             }
         }

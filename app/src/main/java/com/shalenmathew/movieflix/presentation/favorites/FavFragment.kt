@@ -27,6 +27,8 @@ import com.shalenmathew.movieflix.presentation.viewmodels.CustomListViewModel
 import com.shalenmathew.movieflix.presentation.viewmodels.HomeInfoViewModel
 import com.shalenmathew.movieflix.presentation.viewmodels.WatchListViewModel
 import com.shalenmathew.movieflix.presentation.viewmodels.SeriesTrackingViewModel
+import com.shalenmathew.movieflix.presentation.MainActivity
+import com.shalenmathew.movieflix.core.utils.QuickActionOverlay
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.shalenmathew.movieflix.core.utils.showToast
 import com.shalenmathew.movieflix.core.utils.shareMovie
@@ -83,9 +85,9 @@ class FavFragment : Fragment() {
                     findNavController().navigate(R.id.movieDetailsFragment, bundle)
                 }
             },
-            onLongClick = { movie ->
+            onLongClick = { view, movie ->
                 val entity = fullList.find { it.id == movie.id }
-                entity?.let { showQuickActionsBottomSheet(it) }
+                entity?.let { showFloatingQuickActions(view, it) }
             }
         )
         val spanCount = resources.getInteger(R.integer.grid_span_count)
@@ -93,51 +95,40 @@ class FavFragment : Fragment() {
         binding.fragmentFavRv.adapter = adapter
     }
 
-    private fun showQuickActionsBottomSheet(favouritesEntity: FavouritesEntity) {
+    private fun showFloatingQuickActions(targetView: View, favouritesEntity: FavouritesEntity) {
         val movie = favouritesEntity.movieResult
-        val ctx = context ?: return
-        val dialog = BottomSheetDialog(ctx, R.style.SheetDialog)
-        val view = layoutInflater.inflate(R.layout.bottom_sheet_quick_actions, null)
+        val mainActivity = requireActivity() as? MainActivity ?: return
+        val isTV = movie.mediaType == "tv" || (movie.name != null && movie.title == null)
 
-        val header = view.findViewById<TextView>(R.id.quick_actions_header)
-        val shareItem = view.findViewById<View>(R.id.quick_action_share)
-        val changePosterItem = view.findViewById<View>(R.id.quick_action_change_poster)
-        val changePosterText = view.findViewById<TextView>(R.id.quick_action_change_poster_text)
-        val removeItem = view.findViewById<View>(R.id.quick_action_remove)
-        val removeText = view.findViewById<android.widget.TextView>(R.id.quick_action_remove_text)
-        val collectionItem = view.findViewById<View>(R.id.quick_action_collection)
+        mainActivity.showQuickActionMenu(
+            targetView = targetView,
+            isTV = isTV,
+            callback = object : QuickActionOverlay.QuickActionCallback {
+                override fun onShare() {
+                    shareMovie(requireContext(), movie.title ?: movie.name ?: "", "")
+                }
 
-        header.text = movie.title ?: movie.name
-        removeText.text = getString(R.string.btn_remove_from_favorites)
+                override fun onRemove() {
+                    favMovieViewModel.deleteFavMovieData(movie)
+                    showToast(requireContext(), getString(R.string.msg_removed_from_favorites))
+                }
 
-        shareItem.setOnClickListener {
-            dialog.dismiss()
-            shareMovie(ctx, movie.title ?: movie.name ?: "", "")
-        }
+                override fun onCollection() {
+                    showChooseCustomListBottomSheet(movie)
+                }
 
-        // Setup Change Poster Option
-        changePosterItem.visibility = View.VISIBLE
-        val isTVItem = movie.mediaType == "tv" || (movie.name != null && movie.title == null)
-        changePosterText.text = if (isTVItem) getString(R.string.btn_change_show_poster) else getString(R.string.btn_change_movie_poster)
-        changePosterItem.setOnClickListener {
-            dialog.dismiss()
-            showChoosePosterBottomSheet(favouritesEntity)
-        }
+                override fun onChangePoster() {
+                    showChoosePosterBottomSheet(favouritesEntity)
+                }
 
-        removeItem.setOnClickListener {
-            dialog.dismiss()
-            favMovieViewModel.deleteFavMovieData(movie)
-            showToast(ctx, getString(R.string.msg_removed_from_favorites))
-        }
-
-        collectionItem.setOnClickListener {
-            dialog.dismiss()
-            showChooseCustomListBottomSheet(movie)
-        }
-
-        dialog.setContentView(view)
-        dialog.show()
+                override fun onDismiss() {
+                    // Handled internally by overlay
+                }
+            }
+        )
     }
+
+
 
     private fun showChoosePosterBottomSheet(favouritesEntity: FavouritesEntity) {
         val movie = favouritesEntity.movieResult

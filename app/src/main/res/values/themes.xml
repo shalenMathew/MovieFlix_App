@@ -84,4 +84,9 @@
         <item name="android:textStyle">bold</item>
     </style>
 
+    <style name="QuickActionFabShape" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">25%</item>
+    </style>
+
 </resources>

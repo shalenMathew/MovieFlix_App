@@ -12,6 +12,7 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.shalenmathew.movieflix.R
 import com.shalenmathew.movieflix.core.utils.Constants
+import com.shalenmathew.movieflix.core.utils.QuickActionOverlay
 import com.shalenmathew.movieflix.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -23,7 +24,7 @@ class MainActivity : AppCompatActivity() {
                 as NavHostFragment).navController
     }
     private lateinit var binding: ActivityMainBinding
-
+    private var quickActionOverlay: QuickActionOverlay? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -61,6 +62,9 @@ class MainActivity : AppCompatActivity() {
 
         // Handle bottom navigation visibility
         navController.addOnDestinationChangedListener { _, destination, _ ->
+            // Ensure quick action overlay is dismissed on any navigation
+            quickActionOverlay?.dismiss()
+
             when (destination.id) {
                 R.id.homeFragment, R.id.searchFragment, R.id.libraryFragment, R.id.settingsFragment -> {
                     binding.bottomNavigationView.visibility = android.view.View.VISIBLE
@@ -73,7 +77,13 @@ class MainActivity : AppCompatActivity() {
 
         val callback = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
-                // Check if the current destination is the home fragment
+                // 1. Check if Quick Action Overlay is showing
+                if (quickActionOverlay?.isShowing() == true) {
+                    quickActionOverlay?.dismiss()
+                    return
+                }
+
+                // 2. Check if the current destination is the home fragment
                 if (navController.currentDestination?.id == R.id.homeFragment) {
                     // If it is, finish the activity
                     finish()
@@ -144,6 +154,17 @@ class MainActivity : AppCompatActivity() {
         }
     }
     
+    fun showQuickActionMenu(
+        targetView: android.view.View,
+        isTV: Boolean,
+        callback: QuickActionOverlay.QuickActionCallback
+    ) {
+        if (quickActionOverlay == null) {
+            quickActionOverlay = QuickActionOverlay(this)
+        }
+        quickActionOverlay?.show(binding.root, targetView, isTV, callback)
+    }
+
     override fun onNewIntent(intent: android.content.Intent) {
         super.onNewIntent(intent)
         setIntent(intent)

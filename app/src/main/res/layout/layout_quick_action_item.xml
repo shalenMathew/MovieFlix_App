@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/action_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@null"
+        app:backgroundTint="@color/app_color"
+        app:fabCustomSize="@dimen/_39sdp"
+        app:maxImageSize="@dimen/_19sdp"
+        app:shapeAppearanceOverlay="@style/QuickActionFabShape"
+        app:tint="@color/white" />
+
+    <TextView
+        android:id="@+id/action_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_4sdp"
+        android:fontFamily="@font/montserrat_semibold"
+        android:textColor="@color/white"
+        android:textSize="@dimen/_9ssp"
+        android:shadowColor="@color/black"
+        android:shadowDx="2"
+        android:shadowDy="2"
+        android:shadowRadius="2"/>
+
+</LinearLayout>
