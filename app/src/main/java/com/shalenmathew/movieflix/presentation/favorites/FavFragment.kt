@@ -100,31 +100,38 @@ class FavFragment : Fragment() {
         val mainActivity = requireActivity() as? MainActivity ?: return
         val isTV = movie.mediaType == "tv" || (movie.name != null && movie.title == null)
 
+        val actions = mutableListOf<QuickActionOverlay.ActionItem>()
+        
+        actions.add(QuickActionOverlay.ActionItem(
+            icon = R.drawable.baseline_share_24,
+            label = getString(R.string.share).plus(" Movie"),
+            action = { shareMovie(requireContext(), movie.title ?: movie.name ?: "", "") }
+        ))
+
+        actions.add(QuickActionOverlay.ActionItem(
+            icon = R.drawable.baseline_delete_24,
+            label = getString(R.string.btn_remove_from_favorites),
+            action = { 
+                favMovieViewModel.deleteFavMovieData(movie)
+                showToast(requireContext(), getString(R.string.msg_removed_from_favorites))
+            }
+        ))
+
+        actions.add(QuickActionOverlay.ActionItem(
+            icon = R.drawable.baseline_add_circle_24,
+            label = getString(R.string.add_to_collection),
+            action = { showChooseCustomListBottomSheet(movie) }
+        ))
+
+        actions.add(QuickActionOverlay.ActionItem(
+            icon = R.drawable.ic_gallery,
+            label = getString(if (isTV) R.string.btn_change_show_poster else R.string.btn_change_movie_poster),
+            action = { showChoosePosterBottomSheet(favouritesEntity) }
+        ))
+
         mainActivity.showQuickActionMenu(
             targetView = targetView,
-            isTV = isTV,
-            callback = object : QuickActionOverlay.QuickActionCallback {
-                override fun onShare() {
-                    shareMovie(requireContext(), movie.title ?: movie.name ?: "", "")
-                }
-
-                override fun onRemove() {
-                    favMovieViewModel.deleteFavMovieData(movie)
-                    showToast(requireContext(), getString(R.string.msg_removed_from_favorites))
-                }
-
-                override fun onCollection() {
-                    showChooseCustomListBottomSheet(movie)
-                }
-
-                override fun onChangePoster() {
-                    showChoosePosterBottomSheet(favouritesEntity)
-                }
-
-                override fun onDismiss() {
-                    // Handled internally by overlay
-                }
-            }
+            actions = actions
         )
     }
 

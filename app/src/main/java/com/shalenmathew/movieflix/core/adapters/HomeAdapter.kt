@@ -14,6 +14,7 @@ import com.shalenmathew.movieflix.domain.model.MovieResult
 
 class HomeAdapter(
     private val onPosterClick:(movieResult:MovieResult)->Unit,
+    private val onLongClick: ((view: View, movieResult: MovieResult) -> Unit)? = null,
     private val onLoadMore:(categoryTitle:String)->Unit
 ):ListAdapter<HomeFeed, HomeAdapter.ViewHolder>(
     DiffUtilCallback()
@@ -60,6 +61,7 @@ class HomeAdapter(
                 val horizontalAdapter = adapterMap.getOrPut(homeFeed.title) {
                     HorizontalAdapter(
                         onPosterClick = onPosterClick,
+                        onLongClick = onLongClick,
                         onLoadMore = { onLoadMore(homeFeed.title) }
                     ).also { newAdapter ->
                         // Apply scheduled IDs to newly created adapter

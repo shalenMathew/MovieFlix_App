@@ -7,6 +7,7 @@ import android.animation.ObjectAnimator
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
+import android.view.HapticFeedbackConstants
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -27,19 +28,17 @@ class QuickActionOverlay(private val context: Context) {
     private val buttons = mutableListOf<View>()
     private var isDismissing = false
 
-    interface QuickActionCallback {
-        fun onShare()
-        fun onRemove()
-        fun onCollection()
-        fun onChangePoster()
-        fun onDismiss()
-    }
+    data class ActionItem(
+        val icon: Int,
+        val label: String,
+        val action: () -> Unit
+    )
 
     fun show(
         parent: ViewGroup,
         targetView: View,
-        isTV: Boolean,
-        callback: QuickActionCallback
+        actions: List<ActionItem>,
+        onDismiss: (() -> Unit)? = null
     ) {
         // 1. Create Overlay
         overlayView = FrameLayout(context).apply {
@@ -52,7 +51,7 @@ class QuickActionOverlay(private val context: Context) {
             elevation = context.resources.getDimension(com.intuit.sdp.R.dimen._100sdp)
             setOnClickListener { 
                 dismiss()
-                callback.onDismiss()
+                onDismiss?.invoke()
             }
         }
 
@@ -67,6 +66,8 @@ class QuickActionOverlay(private val context: Context) {
             layoutParams = FrameLayout.LayoutParams(targetView.width, targetView.height)
             x = location[0].toFloat()
             y = location[1].toFloat()
+            // Enable hardware acceleration for smooth rotation anti-aliasing
+            setLayerType(View.LAYER_TYPE_HARDWARE, null)
         }
 
         overlayView?.addView(ghostImageView)
@@ -75,35 +76,32 @@ class QuickActionOverlay(private val context: Context) {
         val screenWidth = context.resources.displayMetrics.widthPixels
         val centerX = location[0] + targetView.width / 2
         val centerY = location[1] + targetView.height / 2
-        val isOnRightSide = centerX > screenWidth / 2
+        val isOnRightSide = (centerX > screenWidth / 2)
         
-        setupActions(centerX, centerY, isOnRightSide, isTV, callback)
+        setupActions(centerX, centerY, isOnRightSide, actions)
 
         parent.addView(overlayView)
         overlayView?.bringToFront()
 
-        // 4. Animate everything
-        animateEntry()
+        // 4. Trigger Haptic Feedback for Long Press
+        targetView.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
+
+        // 5. Animate everything
+        animateEntry(isOnRightSide)
     }
 
     private fun setupActions(
         centerX: Int, 
         centerY: Int, 
         isOnRightSide: Boolean,
-        isTV: Boolean, 
-        callback: QuickActionCallback
+        actions: List<ActionItem>
     ) {
-        val actions = mutableListOf<ActionInfo>()
-        actions.add(ActionInfo(R.drawable.baseline_share_24, context.getString(R.string.share).plus(" Movie")) { callback.onShare() })
-        actions.add(ActionInfo(R.drawable.baseline_delete_24, context.getString(if (isTV) R.string.btn_remove_from_favorites else R.string.btn_remove_from_favorites)) { callback.onRemove() })
-        actions.add(ActionInfo(R.drawable.baseline_add_circle_24, context.getString(R.string.add_to_collection)) { callback.onCollection() })
-        actions.add(ActionInfo(R.drawable.ic_gallery, context.getString(if (isTV) R.string.btn_change_show_poster else R.string.btn_change_movie_poster)) { callback.onChangePoster() })
-
         val radius = context.resources.getDimensionPixelSize(com.intuit.sdp.R.dimen._95sdp).toFloat()
         
         // Start exactly at 12 o'clock (-90 degrees)
         val startAngle = -90.0
-        val angleStep = 55.0
+        // Adjust angle step based on number of buttons (fewer buttons = wider gap)
+        val angleStep = if (actions.size <= 3) 60.0 else 55.0
 
         actions.forEachIndexed { index, action ->
             val angle = Math.toRadians(if (isOnRightSide) (startAngle - (index * angleStep)) else (startAngle + (index * angleStep)))
@@ -116,7 +114,7 @@ class QuickActionOverlay(private val context: Context) {
             
             val actionView = binding.root
             
-            // CRITICAL: Measure the view so we can find its TRUE center
+            // Measure the view for TRUE center alignment
             actionView.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED)
             val viewWidth = actionView.measuredWidth
             val viewHeight = actionView.measuredHeight
@@ -132,7 +130,7 @@ class QuickActionOverlay(private val context: Context) {
             binding.actionButton.setOnClickListener {
                 if (ClickHandler.isClickAllowed()) {
                     dismiss()
-                    action.onClick()
+                    action.action()
                 }
             }
 
@@ -140,7 +138,7 @@ class QuickActionOverlay(private val context: Context) {
             actionView.setOnClickListener {
                 if (ClickHandler.isClickAllowed()) {
                     dismiss()
-                    action.onClick()
+                    action.action()
                 }
             }
 
@@ -164,12 +162,12 @@ class QuickActionOverlay(private val context: Context) {
         }
     }
 
-    private fun animateEntry() {
+    private fun animateEntry(isOnRightSide: Boolean) {
         ghostImageView?.let {
             // Fix sharp borders: Create a rounded corner outline
             it.outlineProvider = object : android.view.ViewOutlineProvider() {
                 override fun getOutline(view: View, outline: android.graphics.Outline) {
-                    val cornerRadius = context.resources.getDimension(com.intuit.sdp.R.dimen._4sdp)
+                    val cornerRadius = context.resources.getDimension(com.intuit.sdp.R.dimen._3sdp)
                     outline.setRoundRect(0, 0, view.width, view.height, cornerRadius)
                 }
             }
@@ -179,7 +177,8 @@ class QuickActionOverlay(private val context: Context) {
 
             val scaleX = ObjectAnimator.ofFloat(it, "scaleX", 1.1f)
             val scaleY = ObjectAnimator.ofFloat(it, "scaleY", 1.1f)
-            val rotation = ObjectAnimator.ofFloat(it, "rotation", 5f)
+            // Rotate in opposite direction if on the right side for better visuals
+            val rotation = ObjectAnimator.ofFloat(it, "rotation", if (isOnRightSide) -5f else 5f)
             
             AnimatorSet().apply {
                 playTogether(scaleX, scaleY, rotation)

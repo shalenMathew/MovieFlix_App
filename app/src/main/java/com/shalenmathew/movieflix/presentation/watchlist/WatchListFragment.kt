@@ -24,6 +24,8 @@ import com.shalenmathew.movieflix.presentation.viewmodels.LibrarySearchViewModel
 import com.shalenmathew.movieflix.presentation.viewmodels.ScheduledViewModel
 import com.shalenmathew.movieflix.presentation.viewmodels.WatchListViewModel
 import com.shalenmathew.movieflix.presentation.viewmodels.CustomListViewModel
+import com.shalenmathew.movieflix.presentation.MainActivity
+import com.shalenmathew.movieflix.core.utils.QuickActionOverlay
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.shalenmathew.movieflix.core.utils.showToast
 import com.shalenmathew.movieflix.core.utils.shareMovie
@@ -67,8 +69,8 @@ class WatchListFragment : Fragment() {
                     findNavController().navigate(R.id.movieDetailsFragment, bundle)
                 }
             },
-            onLongClick = { movie ->
-                showQuickActionsBottomSheet(movie)
+            onLongClick = { view, movie ->
+                showFloatingQuickActions(view, movie)
             }
         )
         val spanCount = resources.getInteger(R.integer.grid_span_count)
@@ -76,39 +78,39 @@ class WatchListFragment : Fragment() {
         binding.fragmentWatchListRv.adapter = adapter
     }
 
-    private fun showQuickActionsBottomSheet(movie: com.shalenmathew.movieflix.domain.model.MovieResult) {
-        val ctx = context ?: return
-        val dialog = BottomSheetDialog(ctx, R.style.SheetDialog)
-        val view = layoutInflater.inflate(R.layout.bottom_sheet_quick_actions, null)
+    private fun showFloatingQuickActions(targetView: View, movie: com.shalenmathew.movieflix.domain.model.MovieResult) {
+        val mainActivity = requireActivity() as? MainActivity ?: return
 
-        val header = view.findViewById<android.widget.TextView>(R.id.quick_actions_header)
-        val shareItem = view.findViewById<View>(R.id.quick_action_share)
-        val removeItem = view.findViewById<View>(R.id.quick_action_remove)
-        val removeText = view.findViewById<android.widget.TextView>(R.id.quick_action_remove_text)
-        val collectionItem = view.findViewById<View>(R.id.quick_action_collection)
+        val actions = mutableListOf<QuickActionOverlay.ActionItem>()
 
-        header.text = movie.title ?: movie.name
-        removeText.text = getString(R.string.btn_remove_from_watchlist)
+        actions.add(QuickActionOverlay.ActionItem(
+            icon = R.drawable.baseline_share_24,
+            label = getString(R.string.share).plus(" Movie"),
+            action = { shareMovie(requireContext(), movie.title ?: movie.name ?: "", "") }
+        ))
 
-        shareItem.setOnClickListener {
-            dialog.dismiss()
-            shareMovie(ctx, movie.title ?: movie.name ?: "", "")
-        }
+        actions.add(QuickActionOverlay.ActionItem(
+            icon = R.drawable.baseline_delete_24,
+            label = getString(R.string.btn_remove_from_watchlist),
+            action = {
+                watchListViewModel.deleteWatchListData(movie)
+                showToast(requireContext(), getString(R.string.msg_removed_from_watchlist))
+            }
+        ))
 
-        removeItem.setOnClickListener {
-            dialog.dismiss()
-            watchListViewModel.deleteWatchListData(movie)
-            showToast(ctx, getString(R.string.msg_removed_from_watchlist))
-        }
+        actions.add(QuickActionOverlay.ActionItem(
+            icon = R.drawable.baseline_add_circle_24,
+            label = getString(R.string.add_to_collection),
+            action = { showChooseCustomListBottomSheet(movie) }
+        ))
 
-        collectionItem.setOnClickListener {
-            dialog.dismiss()
-            showChooseCustomListBottomSheet(movie)
-        }
-
-        dialog.setContentView(view)
-        dialog.show()
+        mainActivity.showQuickActionMenu(
+            targetView = targetView,
+            actions = actions
+        )
     }
+
+
 
     private fun showChooseCustomListBottomSheet(movie: com.shalenmathew.movieflix.domain.model.MovieResult) {
         val ctx = context ?: return

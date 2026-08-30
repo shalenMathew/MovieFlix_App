@@ -68,7 +68,7 @@ class SearchFragment : BaseFragment() {
     private fun intit() {
 //        searchMovieViewModel.fetchTrendingMovies()
 
-        trendingMovieAdapter=TrendingMovieAdapter(onClick = {
+        trendingMovieAdapter = TrendingMovieAdapter(onClick = {
             if (ClickHandler.isClickAllowed() && findNavController().currentDestination?.id == R.id.searchFragment) {
                 val bundle = Bundle()
                 bundle.putString(Constants.MEDIA_SEND_REQUEST_KEY, Gson().toJson(it))
@@ -76,13 +76,15 @@ class SearchFragment : BaseFragment() {
             }
         })
 
-        horizontalAdapter = HorizontalAdapter(onPosterClick = {
-            if (ClickHandler.isClickAllowed() && findNavController().currentDestination?.id == R.id.searchFragment) {
-                val bundle = Bundle()
-                bundle.putString(Constants.MEDIA_SEND_REQUEST_KEY, Gson().toJson(it))
-                findNavController().navigate(R.id.action_searchFragment_to_movieDetailsFragment, bundle)
+        horizontalAdapter = HorizontalAdapter(
+            onPosterClick = {
+                if (ClickHandler.isClickAllowed() && findNavController().currentDestination?.id == R.id.searchFragment) {
+                    val bundle = Bundle()
+                    bundle.putString(Constants.MEDIA_SEND_REQUEST_KEY, Gson().toJson(it))
+                    findNavController().navigate(R.id.action_searchFragment_to_movieDetailsFragment, bundle)
+                }
             }
-        })
+        )
         binding.apply {
             fragmentSearchSearchResult.adapter = horizontalAdapter
             fragmentSearchTrendRv.adapter = trendingMovieAdapter
@@ -116,6 +118,8 @@ class SearchFragment : BaseFragment() {
             }
         }
     }
+
+
 
     private fun performSearch(searchedMovie: String) {
         // job is a way to control coroutine, we can run multiple coroutine  concurrently or we can cancel a coroutine using a job

@@ -10,6 +10,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
@@ -31,6 +32,7 @@ import com.shalenmathew.movieflix.presentation.viewmodels.HomeInfoViewModel
 import com.shalenmathew.movieflix.presentation.viewmodels.ScheduledViewModel
 import com.google.gson.Gson
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 
 @AndroidEntryPoint
@@ -111,6 +113,8 @@ class HomeFragment : BaseFragment() {
             fragmentHomeIndicator.attachToRecyclerView(fragmentHomeBannerImgRv)
         }
     }
+
+
 
 
 

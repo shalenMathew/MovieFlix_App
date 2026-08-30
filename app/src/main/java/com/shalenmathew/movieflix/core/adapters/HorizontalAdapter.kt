@@ -16,7 +16,7 @@ import com.shalenmathew.movieflix.domain.model.MovieResult
 
 class HorizontalAdapter(
     private var onPosterClick: ((movieResult: MovieResult) -> Unit)? = null,
-    private var onLongClick: ((movieResult: MovieResult) -> Unit)? = null,
+    private var onLongClick: ((view: View, movieResult: MovieResult) -> Unit)? = null,
     private var onLoadMore: (() -> Unit)? = null
 ) : ListAdapter<MovieResult, HorizontalAdapter.ViewHolder>(DiffUtilCallback()) {
 
@@ -75,7 +75,7 @@ class HorizontalAdapter(
                 }
 
                 itemListPoster.setOnLongClickListener {
-                    onLongClick?.invoke(item)
+                    onLongClick?.invoke(root, item)
                     true
                 }
             }

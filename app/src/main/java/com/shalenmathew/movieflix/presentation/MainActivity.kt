@@ -44,6 +44,15 @@ class MainActivity : AppCompatActivity() {
         // Setup bottom navigation with nav controller
         binding.bottomNavigationView.setupWithNavController(navController)
 
+        binding.bottomNavigationView.setOnItemSelectedListener { item ->
+            // Trigger haptic feedback
+            binding.bottomNavigationView.performHapticFeedback(android.view.HapticFeedbackConstants.VIRTUAL_KEY)
+            
+            // Standard navigation behavior
+            androidx.navigation.ui.NavigationUI.onNavDestinationSelected(item, navController)
+            true
+        }
+
         // Avoid re-navigating to the same destination when clicking the bottom nav item again
         binding.bottomNavigationView.setOnItemReselectedListener {
             // Do nothing
@@ -156,13 +165,13 @@ class MainActivity : AppCompatActivity() {
     
     fun showQuickActionMenu(
         targetView: android.view.View,
-        isTV: Boolean,
-        callback: QuickActionOverlay.QuickActionCallback
+        actions: List<QuickActionOverlay.ActionItem>,
+        onDismiss: (() -> Unit)? = null
     ) {
         if (quickActionOverlay == null) {
             quickActionOverlay = QuickActionOverlay(this)
         }
-        quickActionOverlay?.show(binding.root, targetView, isTV, callback)
+        quickActionOverlay?.show(binding.root, targetView, actions, onDismiss)
     }
 
     override fun onNewIntent(intent: android.content.Intent) {

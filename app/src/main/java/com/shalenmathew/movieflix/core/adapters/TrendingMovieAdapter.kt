@@ -14,7 +14,10 @@ import com.shalenmathew.movieflix.core.utils.loadImage
 import com.shalenmathew.movieflix.databinding.ItemTopMovieBinding
 import com.shalenmathew.movieflix.domain.model.MovieResult
 
-class TrendingMovieAdapter(private val onClick:(movie:MovieResult)-> Unit): ListAdapter<MovieResult,TrendingMovieAdapter.ViewHolder>(DiffUtilCallback()) {
+class TrendingMovieAdapter(
+    private val onClick:(movie:MovieResult)-> Unit,
+    private var onLongClick: ((view: View, movieResult: MovieResult) -> Unit)? = null
+): ListAdapter<MovieResult,TrendingMovieAdapter.ViewHolder>(DiffUtilCallback()) {
 
    inner  class ViewHolder(itemView:View):RecyclerView.ViewHolder(itemView){
 
@@ -34,6 +37,11 @@ class TrendingMovieAdapter(private val onClick:(movie:MovieResult)-> Unit): List
                    }else{
                        Toast.makeText(context, context.getString(R.string.msg_check_internet), Toast.LENGTH_SHORT).show()
                    }
+                }
+
+                root.setOnLongClickListener {
+                    onLongClick?.invoke(root, movie)
+                    true
                 }
             }
         }

@@ -17,7 +17,7 @@ import com.shalenmathew.movieflix.domain.model.MovieResult
 
 class WatchListAdapter(
     private var onPosterClick: ((movieResult: MovieResult) -> Unit),
-    private var onLongClick: ((movieResult: MovieResult) -> Unit)
+    private var onLongClick: ((view: View, movieResult: MovieResult) -> Unit)
 ): ListAdapter<WatchListEntity, WatchListAdapter.ViewHolder>(DiffUtilCallback()) {
     
     private var scheduledMovieIds = setOf<Int>()
@@ -62,7 +62,7 @@ fun bind(watchListEntity: WatchListEntity)=binding.apply{
     }
 
     root.setOnLongClickListener {
-        onLongClick(item)
+        onLongClick(root, item)
         true
     }
 }

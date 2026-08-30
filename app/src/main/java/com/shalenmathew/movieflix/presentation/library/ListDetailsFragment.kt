@@ -25,9 +25,12 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.gson.Gson
 import com.shalenmathew.movieflix.R
 import com.shalenmathew.movieflix.core.adapters.HorizontalAdapter
+import com.shalenmathew.movieflix.presentation.MainActivity
+import com.shalenmathew.movieflix.core.utils.QuickActionOverlay
 import com.shalenmathew.movieflix.core.utils.ClickHandler
 import com.shalenmathew.movieflix.core.utils.Constants
 import com.shalenmathew.movieflix.core.utils.showToast
+import com.shalenmathew.movieflix.core.utils.shareMovie
 import com.shalenmathew.movieflix.databinding.FragmentListDetailsBinding
 import com.shalenmathew.movieflix.domain.model.MovieResult
 import com.shalenmathew.movieflix.presentation.viewmodels.CustomListViewModel
@@ -92,37 +95,37 @@ class ListDetailsFragment : Fragment() {
                     findNavController().navigate(R.id.movieDetailsFragment, bundle)
                 }
             },
-            onLongClick = { movie ->
-                showQuickActionsBottomSheet(movie)
+            onLongClick = { view, movie ->
+                showFloatingQuickActions(view, movie)
             }
         )
         mBinding.listMoviesRv.adapter = adapter
     }
 
-    private fun showQuickActionsBottomSheet(movie: MovieResult) {
-        val ctx = context ?: return
-        val dialog = BottomSheetDialog(ctx, R.style.SheetDialog)
-        val view = layoutInflater.inflate(R.layout.bottom_sheet_quick_actions, null)
-
-        val header = view.findViewById<android.widget.TextView>(R.id.quick_actions_header)
-        val shareItem = view.findViewById<View>(R.id.quick_action_share)
-        val removeItem = view.findViewById<View>(R.id.quick_action_remove)
-        val collectionItem = view.findViewById<View>(R.id.quick_action_collection)
-
-        header.text = movie.title ?: movie.name
+    private fun showFloatingQuickActions(targetView: View, movie: MovieResult) {
+        val mainActivity = requireActivity() as? MainActivity ?: return
         
-        // Hide options not requested for custom lists
-        shareItem.visibility = View.GONE
-        removeItem.visibility = View.GONE
+        val actions = mutableListOf<QuickActionOverlay.ActionItem>()
 
-        collectionItem.setOnClickListener {
-            dialog.dismiss()
-            showChooseCustomListBottomSheet(movie)
-        }
+        actions.add(QuickActionOverlay.ActionItem(
+            icon = R.drawable.baseline_share_24,
+            label = getString(R.string.share).plus(" Movie"),
+            action = { shareMovie(requireContext(), movie.title ?: movie.name ?: "", "") }
+        ))
 
-        dialog.setContentView(view)
-        dialog.show()
+        actions.add(QuickActionOverlay.ActionItem(
+            icon = R.drawable.baseline_add_circle_24,
+            label = getString(R.string.add_to_collection),
+            action = { showChooseCustomListBottomSheet(movie) }
+        ))
+
+        mainActivity.showQuickActionMenu(
+            targetView = targetView,
+            actions = actions
+        )
     }
+
+
 
     private fun showChooseCustomListBottomSheet(movie: MovieResult) {
         val ctx = context ?: return
