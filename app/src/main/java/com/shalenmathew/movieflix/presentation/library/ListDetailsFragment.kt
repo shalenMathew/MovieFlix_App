@@ -84,6 +84,48 @@ class ListDetailsFragment : Fragment() {
         mBinding.listDetailsShareBtn.setOnClickListener {
             shareListAsImage()
         }
+
+        mBinding.listDetailsEditBtn.setOnClickListener {
+            showEditListDialog()
+        }
+    }
+
+    private fun showEditListDialog() {
+        val dialog = BottomSheetDialog(requireContext(), R.style.SheetDialog)
+        val view = layoutInflater.inflate(R.layout.dialog_create_list, null)
+        
+        val header = view.findViewById<TextView>(R.id.dialog_title)
+        val nameEt = view.findViewById<com.google.android.material.textfield.TextInputEditText>(R.id.list_name_et)
+        val descEt = view.findViewById<com.google.android.material.textfield.TextInputEditText>(R.id.list_desc_et)
+        val confirmBtn = view.findViewById<com.google.android.material.button.MaterialButton>(R.id.create_list_confirm_btn)
+
+        header?.text = getString(R.string.edit_list)
+        nameEt?.setText(listName)
+        descEt?.setText(listDesc)
+        confirmBtn?.text = getString(R.string.save_changes)
+
+        confirmBtn?.setOnClickListener {
+            val newName = nameEt?.text.toString().trim()
+            if (newName.isNotEmpty()) {
+                val newDesc = descEt?.text.toString().trim().takeIf { it.isNotEmpty() }
+                viewModel.updateListDetails(listId, newName, newDesc)
+                
+                // Update local UI
+                listName = newName
+                listDesc = newDesc
+                mBinding.listDetailsName.text = newName
+                mBinding.listDetailsDesc.text = newDesc ?: ""
+                mBinding.listDetailsDesc.visibility = if (newDesc.isNullOrEmpty()) View.GONE else View.VISIBLE
+                
+                dialog.dismiss()
+                showToast(requireContext(), "List updated successfully!")
+            } else {
+                nameEt?.error = getString(R.string.error_name_empty)
+            }
+        }
+
+        dialog.setContentView(view)
+        dialog.show()
     }
 
     private fun setupRecyclerView() {

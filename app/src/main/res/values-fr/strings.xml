@@ -97,6 +97,12 @@
     <string name="preview_collage">Aperçu du collage</string>
     <string name="download">Télécharger</string>
     <string name="share">Partager</string>
+    <string name="edit">Modifier</string>
+    <string name="edit_list">Modifier la liste</string>
+    <string name="save_changes">Enregistrer les modifications</string>
+    <string name="msg_delete_list_title">Supprimer la liste ?</string>
+    <string name="msg_delete_list_message">Êtes-vous sûr de vouloir supprimer \"%1$s\" ? Cette action est irréversible.</string>
+    <string name="btn_delete">Supprimer</string>
     <string name="cancel">Annuler</string>
     <string name="finally_over">Mince, enfin fini !</string>
     <string name="add_to_watchlist">Ajouter à la liste de surveillance</string>

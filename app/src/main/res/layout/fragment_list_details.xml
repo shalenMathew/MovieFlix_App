@@ -38,16 +38,33 @@
                 android:textSize="@dimen/_14ssp"
                 tools:text="Best Horror 2024" />
 
-            <ImageView
-                android:id="@+id/list_details_share_btn"
-                android:layout_width="@dimen/_24sdp"
-                android:layout_height="@dimen/_24sdp"
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
-                android:src="@drawable/baseline_share_24"
-                app:tint="@color/white"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:contentDescription="Share List" />
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/list_details_edit_btn"
+                    android:layout_width="@dimen/_24sdp"
+                    android:layout_height="@dimen/_24sdp"
+                    android:layout_marginEnd="@dimen/_12sdp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:contentDescription="@string/edit_list"
+                    android:src="@drawable/ic_edit"
+                    app:tint="@color/white" />
+
+                <ImageView
+                    android:id="@+id/list_details_share_btn"
+                    android:layout_width="@dimen/_24sdp"
+                    android:layout_height="@dimen/_24sdp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:contentDescription="Share List"
+                    android:src="@drawable/baseline_share_24"
+                    app:tint="@color/white" />
+
+            </LinearLayout>
 
         </RelativeLayout>
 

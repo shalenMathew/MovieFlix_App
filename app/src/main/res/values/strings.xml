@@ -123,6 +123,12 @@
     <string name="preview_collage">Preview Collage</string>
     <string name="download">Download</string>
     <string name="share">Share</string>
+    <string name="edit">Edit</string>
+    <string name="edit_list">Edit List</string>
+    <string name="save_changes">Save Changes</string>
+    <string name="msg_delete_list_title">Delete List?</string>
+    <string name="msg_delete_list_message">Are you sure you want to delete \"%1$s\"? This action cannot be undone.</string>
+    <string name="btn_delete">Delete</string>
     <string name="cancel">Cancel</string>
     <string name="finally_over">Damn, finally over!</string>
     <string name="add_to_watchlist">Add to Watchlist</string>

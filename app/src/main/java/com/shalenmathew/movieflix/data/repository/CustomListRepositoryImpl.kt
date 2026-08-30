@@ -52,6 +52,10 @@ class CustomListRepositoryImpl @Inject constructor(
         customListDao.deleteList(CustomListEntity(id = listId, name = "", description = null))
     }
 
+    override suspend fun updateListDetails(listId: Int, name: String, description: String?) {
+        customListDao.updateListDetails(listId, name, description)
+    }
+
     override suspend fun addMovieToList(listId: Int, movie: MovieResult) {
         customListDao.addMovieToList(
             CustomListMovieEntity(

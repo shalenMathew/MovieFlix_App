@@ -8,6 +8,7 @@ interface CustomListRepository {
     fun getAllLists(): Flow<List<UserCustomList>>
     suspend fun createList(name: String, description: String?): Long
     suspend fun deleteList(listId: Int)
+    suspend fun updateListDetails(listId: Int, name: String, description: String?)
     suspend fun addMovieToList(listId: Int, movie: com.shalenmathew.movieflix.domain.model.MovieResult)
     suspend fun removeMovieFromList(listId: Int, mediaId: Int)
     suspend fun updateMoviePosterAcrossLists(mediaId: Int, posterPath: String)

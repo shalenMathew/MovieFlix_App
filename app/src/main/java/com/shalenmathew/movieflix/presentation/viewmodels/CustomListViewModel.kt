@@ -31,6 +31,12 @@ class CustomListViewModel @Inject constructor(
         }
     }
 
+    fun updateListDetails(listId: Int, name: String, description: String?) {
+        viewModelScope.launch {
+            repository.updateListDetails(listId, name, description)
+        }
+    }
+
     fun addMovieToList(listId: Int, movie: MovieResult) {
         viewModelScope.launch {
             repository.addMovieToList(listId, movie)

@@ -8,6 +8,7 @@
     android:padding="@dimen/_16sdp">
 
     <TextView
+        android:id="@+id/dialog_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/create_new_list"

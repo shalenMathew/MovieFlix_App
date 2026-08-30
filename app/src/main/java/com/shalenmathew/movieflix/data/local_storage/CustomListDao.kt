@@ -19,6 +19,9 @@ interface CustomListDao {
     @Delete
     suspend fun deleteList(list: CustomListEntity)
 
+    @Query("UPDATE custom_list_table SET name = :name, description = :description WHERE id = :listId")
+    suspend fun updateListDetails(listId: Int, name: String, description: String?)
+
     @Query("SELECT * FROM custom_list_table ORDER BY createdAt DESC")
     fun getAllLists(): Flow<List<CustomListEntity>>
 

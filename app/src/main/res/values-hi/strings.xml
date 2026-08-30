@@ -97,6 +97,12 @@
     <string name="preview_collage">कोलाज पूर्वावलोकन</string>
     <string name="download">डाउनलोड</string>
     <string name="share">साझा करें</string>
+    <string name="edit">संपादित करें</string>
+    <string name="edit_list">सूची संपादित करें</string>
+    <string name="save_changes">परिवर्तन सहेजें</string>
+    <string name="msg_delete_list_title">सूची हटाएं?</string>
+    <string name="msg_delete_list_message">क्या आप वाकई \"%1$s\" को हटाना चाहते हैं? इस क्रिया को पूर्ववत नहीं किया जा सकता है।</string>
+    <string name="btn_delete">हटाएं</string>
     <string name="cancel">रद्द करें</string>
     <string name="finally_over">धिक्कार है, आखिरकार खत्म हो गया!</string>
     <string name="add_to_watchlist">वॉचलिस्ट में जोड़ें</string>

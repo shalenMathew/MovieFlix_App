@@ -54,10 +54,22 @@ class CustomListsFragment : Fragment() {
                 }
             },
             onDeleteClick = { list ->
-                viewModel.deleteList(list.id)
+                showDeleteConfirmationDialog(list)
             }
         )
         mBinding.customListsRv.adapter = adapter
+    }
+
+    private fun showDeleteConfirmationDialog(list: com.shalenmathew.movieflix.domain.model.UserCustomList) {
+        com.google.android.material.dialog.MaterialAlertDialogBuilder(requireContext(), R.style.TrackingAlertDialog)
+            .setTitle(getString(R.string.msg_delete_list_title))
+            .setMessage(getString(R.string.msg_delete_list_message, list.name))
+            .setPositiveButton(getString(R.string.btn_delete)) { _, _ ->
+                viewModel.deleteList(list.id)
+                showToast(requireContext(), "List deleted")
+            }
+            .setNegativeButton(getString(R.string.cancel), null)
+            .show()
     }
 
     private fun observeData() {
