@@ -141,6 +141,8 @@
     <string name="track_series">Track Series</string>
     <string name="track_series_subtitle">Cache all episodes to track your currently watching episodes</string>
     <string name="add_to_collection">Add to Collection</string>
+    <string name="new_collection">New Collection</string>
+    <string name="items_count">%1$d Items</string>
     <string name="save_to_custom_list">Save to one of your custom lists</string>
     <string name="created_on_movieflix">Created on MovieFlix</string>
     <string name="no_internet_connection">No Internet Connection</string>

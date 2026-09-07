@@ -9,5 +9,6 @@ data class CustomListEntity(
     val id: Int = 0,
     val name: String,
     val description: String?,
-    val createdAt: Long = System.currentTimeMillis()
+    val createdAt: Long = System.currentTimeMillis(),
+    val isPinned: Boolean = false
 )

@@ -244,6 +244,12 @@ val MIGRATION_14_15 = object : Migration(14, 15) {
     }
 }
 
+val MIGRATION_15_16 = object : Migration(15, 16) {
+    override fun migrate(db: SupportSQLiteDatabase) {
+        db.execSQL("ALTER TABLE custom_list_table ADD COLUMN isPinned INTEGER NOT NULL DEFAULT 0")
+    }
+}
+
 private fun complex5To6Migration(db: SupportSQLiteDatabase) {
     db.execSQL("""
             CREATE TABLE IF NOT EXISTS scheduled_movies_table (

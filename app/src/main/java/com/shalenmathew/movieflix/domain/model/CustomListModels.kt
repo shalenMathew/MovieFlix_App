@@ -6,7 +6,8 @@ data class UserCustomList(
     val description: String?,
     val createdAt: Long,
     val movieCount: Int = 0,
-    val topPosters: List<String> = emptyList()
+    val topPosters: List<String> = emptyList(),
+    val isPinned: Boolean = false
 )
 
 data class CustomListMovie(

@@ -107,6 +107,8 @@
     <string name="finally_over">धिक्कार है, आखिरकार खत्म हो गया!</string>
     <string name="add_to_watchlist">वॉचलिस्ट में जोड़ें</string>
     <string name="add_to_favorites">पसंदीदा में जोड़ें</string>
+    <string name="new_collection">नया संग्रह</string>
+    <string name="items_count">%1$d आइटम</string>
     <string name="stop_tracking_clear_space">ट्रैकिंग बंद करें और जगह खाली करें</string>
     <string name="done">हो गया</string>
     <string name="more_options">अधिक विकल्प</string>

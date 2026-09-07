@@ -107,6 +107,8 @@
     <string name="finally_over">Mince, enfin fini !</string>
     <string name="add_to_watchlist">Ajouter à la liste de surveillance</string>
     <string name="add_to_favorites">Ajouter aux favoris</string>
+    <string name="new_collection">Nouvelle Collection</string>
+    <string name="items_count">%1$d Articles</string>
     <string name="stop_tracking_clear_space">Arrêter le suivi et libérer de l\'espace</string>
     <string name="done">Terminé</string>
     <string name="more_options">Plus d\'options</string>

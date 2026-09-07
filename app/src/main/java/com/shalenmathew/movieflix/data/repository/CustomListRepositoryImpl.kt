@@ -11,7 +11,9 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.flowOf
 import javax.inject.Inject
 
 class CustomListRepositoryImpl @Inject constructor(
@@ -21,26 +23,38 @@ class CustomListRepositoryImpl @Inject constructor(
     @OptIn(ExperimentalCoroutinesApi::class)
     override fun getAllLists(): Flow<List<UserCustomList>> {
         return customListDao.getAllLists().flatMapLatest { entities ->
-            val flows = entities.map { entity ->
-                combine(
-                    customListDao.getMovieCountInList(entity.id),
-                    customListDao.getTopPostersForList(entity.id)
-                ) { count, posters ->
-                    UserCustomList(
-                        id = entity.id,
-                        name = entity.name,
-                        description = entity.description,
-                        createdAt = entity.createdAt,
-                        movieCount = count,
-                        topPosters = posters.filterNotNull()
-                    )
-                }
-            }
-            if (flows.isEmpty()) {
-                kotlinx.coroutines.flow.flowOf(emptyList())
-            } else {
-                combine(flows) { it.toList() }
-            }
+            mapEntitiesToUserCustomLists(entities)
+        }
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    override fun getPinnedLists(): Flow<List<UserCustomList>> {
+        return customListDao.getPinnedLists().flatMapLatest { entities ->
+            mapEntitiesToUserCustomLists(entities)
+        }
+    }
+
+    private fun mapEntitiesToUserCustomLists(entities: List<CustomListEntity>): Flow<List<UserCustomList>> {
+        val flows = entities.map { entity ->
+            combine(
+                customListDao.getMovieCountInList(entity.id),
+                customListDao.getTopPostersForList(entity.id)
+            ) { count, posters ->
+                UserCustomList(
+                    id = entity.id,
+                    name = entity.name,
+                    description = entity.description,
+                    createdAt = entity.createdAt,
+                    movieCount = count,
+                    topPosters = posters.filterNotNull(),
+                    isPinned = entity.isPinned
+                )
+            }.distinctUntilChanged()
+        }
+        return if (flows.isEmpty()) {
+            flowOf(emptyList())
+        } else {
+            combine(flows) { it.toList() }
         }
     }
 
@@ -54,6 +68,10 @@ class CustomListRepositoryImpl @Inject constructor(
 
     override suspend fun updateListDetails(listId: Int, name: String, description: String?) {
         customListDao.updateListDetails(listId, name, description)
+    }
+
+    override suspend fun updatePinnedStatus(listId: Int, isPinned: Boolean) {
+        customListDao.updatePinnedStatus(listId, isPinned)
     }
 
     override suspend fun addMovieToList(listId: Int, movie: MovieResult) {

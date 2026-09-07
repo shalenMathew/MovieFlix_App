@@ -10,33 +10,63 @@
         android:paddingBottom="@dimen/_16sdp"
         android:background="?attr/selectableItemBackground">
 
-        <!-- List Header (Name + Delete) -->
+        <!-- List Header (Name + Pin + More) -->
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingHorizontal="@dimen/_4sdp"
             android:layout_marginBottom="@dimen/_8sdp">
 
-            <TextView
-                android:id="@+id/list_name"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_toStartOf="@id/delete_list_btn"
-                android:fontFamily="@font/montserrat_bold"
-                android:textColor="@color/white"
-                android:textSize="@dimen/_14ssp"
-                tools:text="MCU" />
+                android:layout_toStartOf="@id/more_list_btn"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:id="@+id/list_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/montserrat_bold"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/_14ssp"
+                    tools:text="MCU" />
+
+                <ImageView
+                    android:id="@+id/pinned_indicator"
+                    android:layout_width="@dimen/_12sdp"
+                    android:layout_height="@dimen/_12sdp"
+                    android:layout_marginStart="@dimen/_8sdp"
+                    android:src="@drawable/ic_pin"
+                    android:alpha="0.8"
+                    android:visibility="gone"
+                    tools:visibility="visible"
+                    app:tint="@color/white"
+                    android:contentDescription="@null" />
+
+            </LinearLayout>
 
             <ImageView
-                android:id="@+id/delete_list_btn"
-                android:layout_width="@dimen/_20sdp"
-                android:layout_height="@dimen/_20sdp"
+                android:id="@+id/more_list_btn"
+                android:layout_width="@dimen/_24sdp"
+                android:layout_height="@dimen/_24sdp"
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
-                android:alpha="0.6"
+                android:alpha="0.8"
+                android:padding="@dimen/_2sdp"
                 android:background="?attr/selectableItemBackgroundBorderless"
-                android:src="@drawable/baseline_delete_24"
-                app:tint="@color/white" />
+                android:src="@drawable/baseline_more_horiz_24"
+                app:tint="@color/white"
+                android:contentDescription="@null" />
+
+            <!-- Hidden Delete Button for ID mapping -->
+            <ImageView
+                android:id="@+id/delete_list_btn"
+                android:layout_width="1dp"
+                android:layout_height="1dp"
+                android:visibility="gone"
+                android:contentDescription="@null" />
 
         </RelativeLayout>
 

@@ -15,13 +15,14 @@ import com.shalenmathew.movieflix.domain.model.UserCustomList
 
 class CustomListAdapter(
     private val onListClick: (UserCustomList) -> Unit,
-    private val onDeleteClick: (UserCustomList) -> Unit
+    private val onMoreClick: (View, UserCustomList) -> Unit
 ) : ListAdapter<UserCustomList, CustomListAdapter.ViewHolder>(ListDiffCallback()) {
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val name: TextView = itemView.findViewById(R.id.list_name)
         val description: TextView = itemView.findViewById(R.id.list_description)
-        val deleteBtn: ImageView = itemView.findViewById(R.id.delete_list_btn)
+        val moreBtn: ImageView = itemView.findViewById(R.id.more_list_btn)
+        val pinnedIndicator: ImageView = itemView.findViewById(R.id.pinned_indicator)
         
         private val posterImages = listOf<ImageView>(
             itemView.findViewById(R.id.poster_1),
@@ -35,6 +36,8 @@ class CustomListAdapter(
             description.text = list.description ?: ""
             description.visibility = if (list.description.isNullOrEmpty()) View.GONE else View.VISIBLE
             
+            pinnedIndicator.visibility = if (list.isPinned) View.VISIBLE else View.GONE
+
             // Bind top 4 posters
             val topPosters = list.topPosters
             posterImages.forEachIndexed { index, imageView ->
@@ -56,7 +59,7 @@ class CustomListAdapter(
             }
 
             itemView.setOnClickListener { onListClick(list) }
-            deleteBtn.setOnClickListener { onDeleteClick(list) }
+            moreBtn.setOnClickListener { onMoreClick(it, list) }
         }
     }
 

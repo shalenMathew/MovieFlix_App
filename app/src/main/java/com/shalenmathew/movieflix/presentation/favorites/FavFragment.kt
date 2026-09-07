@@ -13,7 +13,12 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.gson.Gson
 import com.shalenmathew.movieflix.R
+import android.view.MotionEvent
+import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.ConcatAdapter
 import com.shalenmathew.movieflix.core.adapters.FavAdapters
+import com.shalenmathew.movieflix.core.adapters.FavCollectionsAdapter
+import com.shalenmathew.movieflix.core.adapters.FavCreateCollectionAdapter
 import com.shalenmathew.movieflix.core.utils.ClickHandler
 import com.shalenmathew.movieflix.core.utils.Constants
 import com.shalenmathew.movieflix.core.utils.gone
@@ -37,6 +42,7 @@ import com.shalenmathew.movieflix.core.utils.loadImage
 import android.widget.TextView
 import android.widget.ImageView
 import androidx.activity.result.contract.ActivityResultContracts
+import com.google.android.material.textfield.TextInputEditText
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -54,6 +60,8 @@ class FavFragment : Fragment() {
     private var _binding: FragmentFavBinding? = null
     private val binding get() = _binding!!
     private lateinit var adapter: FavAdapters
+    private lateinit var collectionsAdapter: FavCollectionsAdapter
+    private lateinit var createCollectionAdapter: FavCreateCollectionAdapter
     private var fullList: List<FavouritesEntity> = emptyList()
 
     private var currentMediaIdForPoster: Int? = null
@@ -77,6 +85,39 @@ class FavFragment : Fragment() {
 
     private fun init() {
         favMovieViewModel.getAllMovieData()
+        
+        createCollectionAdapter = FavCreateCollectionAdapter(
+            onClick = { showCreateListDialog() }
+        )
+
+        collectionsAdapter = FavCollectionsAdapter(
+            onCollectionClick = { list ->
+                if (ClickHandler.isClickAllowed() && findNavController().currentDestination?.id == R.id.libraryFragment) {
+                    val bundle = Bundle().apply {
+                        putInt("listId", list.id)
+                        putString("listName", list.name)
+                        putString("listDesc", list.description)
+                    }
+                    findNavController().navigate(R.id.action_libraryFragment_to_listDetailsFragment, bundle)
+                }
+            }
+        )
+
+        val concatAdapter = ConcatAdapter(createCollectionAdapter, collectionsAdapter)
+        binding.fragmentFavCollectionsRv.adapter = concatAdapter
+        
+        // Fix for ViewPager2 swipe conflict
+        binding.fragmentFavCollectionsRv.addOnItemTouchListener(object : RecyclerView.OnItemTouchListener {
+            override fun onInterceptTouchEvent(rv: RecyclerView, e: MotionEvent): Boolean {
+                if (e.action == MotionEvent.ACTION_MOVE) {
+                    rv.parent.requestDisallowInterceptTouchEvent(true)
+                }
+                return false
+            }
+            override fun onTouchEvent(rv: RecyclerView, e: MotionEvent) {}
+            override fun onRequestDisallowInterceptTouchEvent(disallowIntercept: Boolean) {}
+        })
+
         adapter = FavAdapters(
             onPosterClick = {
                 if (ClickHandler.isClickAllowed() && findNavController().currentDestination?.id == R.id.libraryFragment) {
@@ -282,8 +323,32 @@ class FavFragment : Fragment() {
 
         createBtn.setOnClickListener {
             dialog.dismiss()
-            // Optional: navigate to custom list fragment to create
-            showToast(ctx, "Go to Lists tab to create new lists")
+            showCreateListDialog()
+        }
+
+        dialog.setContentView(view)
+        dialog.show()
+    }
+
+    private fun showCreateListDialog() {
+        val ctx = context ?: return
+        val dialog = BottomSheetDialog(ctx, R.style.SheetDialog)
+        val view = layoutInflater.inflate(R.layout.dialog_create_list, null)
+        
+        val nameEt = view.findViewById<TextInputEditText>(R.id.list_name_et)
+        val descEt = view.findViewById<TextInputEditText>(R.id.list_desc_et)
+        val createBtn = view.findViewById<View>(R.id.create_list_confirm_btn)
+
+        createBtn.setOnClickListener {
+            val name = nameEt.text.toString().trim()
+            if (name.isNotEmpty()) {
+                // Lists created from Favorites are automatically pinned
+                customListViewModel.createAndPinList(name, descEt.text.toString().trim().takeIf { it.isNotEmpty() })
+                dialog.dismiss()
+                showToast(ctx, "Collection created and pinned")
+            } else {
+                nameEt.error = "Name cannot be empty"
+            }
         }
 
         dialog.setContentView(view)
@@ -291,6 +356,12 @@ class FavFragment : Fragment() {
     }
 
     private fun observe() {
+        customListViewModel.pinnedLists.observe(viewLifecycleOwner) { lists ->
+            collectionsAdapter.submitList(lists)
+            // Row is always visible to show the "Create New" card
+            binding.fragmentFavCollectionsRv.visible()
+        }
+        
         favMovieViewModel.getAllMovieData().observe(viewLifecycleOwner) { list ->
             fullList = list
             val currentQuery = librarySearchVm.searchQuery.value
@@ -335,11 +406,15 @@ class FavFragment : Fragment() {
             binding.fragmentFavPlaceholder.gone()
             binding.peekingLogo.gone()
             binding.peekingShelf.gone()
+            binding.tvNoResult.gone()
+            // Collections row is only useful if there are actually favorites to organize
+            binding.fragmentFavCollectionsRv.visible()
         } else {
             adapter.submitList(emptyList())
             binding.fragmentFavRv.gone()
+            binding.fragmentFavCollectionsRv.gone()
 
-            if (query.isBlank()) {
+            if (query.isNullOrBlank()) {
                 binding.tvNoResult.gone()
                 binding.fragmentFavPlaceholder.visible()
                 binding.peekingLogo.visible()

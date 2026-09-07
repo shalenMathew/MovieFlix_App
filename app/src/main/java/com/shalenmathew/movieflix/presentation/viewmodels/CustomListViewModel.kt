@@ -18,10 +18,18 @@ class CustomListViewModel @Inject constructor(
 ) : ViewModel() {
 
     val allLists: LiveData<List<UserCustomList>> = repository.getAllLists().asLiveData()
+    val pinnedLists: LiveData<List<UserCustomList>> = repository.getPinnedLists().asLiveData()
 
     fun createList(name: String, description: String?) {
         viewModelScope.launch {
             repository.createList(name, description)
+        }
+    }
+
+    fun createAndPinList(name: String, description: String?) {
+        viewModelScope.launch {
+            val listId = repository.createList(name, description)
+            repository.updatePinnedStatus(listId.toInt(), true)
         }
     }
 
@@ -34,6 +42,12 @@ class CustomListViewModel @Inject constructor(
     fun updateListDetails(listId: Int, name: String, description: String?) {
         viewModelScope.launch {
             repository.updateListDetails(listId, name, description)
+        }
+    }
+
+    fun togglePinList(listId: Int, isPinned: Boolean) {
+        viewModelScope.launch {
+            repository.updatePinnedStatus(listId, isPinned)
         }
     }
 
