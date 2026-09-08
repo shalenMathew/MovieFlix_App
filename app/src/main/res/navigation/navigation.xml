@@ -117,8 +117,8 @@
         android:label="fragment_settings"
         tools:layout="@layout/fragment_settings">
         <action
-            android:id="@+id/action_settingsFragment_to_comingSoonFragment"
-            app:destination="@id/coming_soon_fragment" />
+            android:id="@+id/action_settingsFragment_to_howToUseFragment"
+            app:destination="@id/how_to_use_fragment" />
         <action
             android:id="@+id/action_settingsFragment_to_moreAppsFragment"
             app:destination="@id/more_apps_fragment" />
@@ -141,6 +141,12 @@
         android:name="com.shalenmathew.movieflix.presentation.settings.LanguageFragment"
         android:label="fragment_language"
         tools:layout="@layout/fragment_language" />
+
+    <fragment
+        android:id="@+id/how_to_use_fragment"
+        android:name="com.shalenmathew.movieflix.presentation.settings.HowToUseFragment"
+        android:label="fragment_how_to_use"
+        tools:layout="@layout/fragment_how_to_use" />
 
     <fragment
         android:id="@+id/coming_soon_fragment"

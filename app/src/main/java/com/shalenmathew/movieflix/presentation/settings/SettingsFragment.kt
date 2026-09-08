@@ -7,7 +7,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.shalenmathew.movieflix.BuildConfig
@@ -49,8 +48,7 @@ class SettingsFragment : Fragment() {
         binding.itemTroubleshoot.itemSettingTitle.text = getString(R.string.learn_how_to_use)
         binding.itemTroubleshoot.itemSettingIcon.setImageResource(R.drawable.ic_troubleshoot)
         binding.itemTroubleshoot.root.setOnClickListener {
-            val bundle = bundleOf("TITLE" to getString(R.string.learn_how_to_use))
-            findNavController().navigate(R.id.action_settingsFragment_to_comingSoonFragment, bundle)
+            findNavController().navigate(R.id.action_settingsFragment_to_howToUseFragment)
         }
 
         // Language
