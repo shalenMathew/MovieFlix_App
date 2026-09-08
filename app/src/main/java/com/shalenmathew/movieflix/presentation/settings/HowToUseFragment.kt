@@ -69,6 +69,14 @@ class HowToUseFragment : Fragment() {
                 "By long-pressing any movie or show poster in your Favorites or Watchlist, you can quickly share, remove, add to a list, or even change the poster image."
             ),
             FAQItem(
+                "What is the Tracking feature?",
+                "It helps you keep record of your progress through TV shows. You can start tracking a series from its detail screen under 'More Options'. Once tracked, use the Tracking tab to mark episodes as watched."
+            ),
+            FAQItem(
+                "Customize Tracking banners",
+                "In the Tracking tab, long-press on any series banner to customize its look with official artwork or your own gallery images."
+            ),
+            FAQItem(
                 "How to backup data?",
                 "Go to Settings > Backup to export your data as a file. You can import this file later to restore your entire library."
             )
