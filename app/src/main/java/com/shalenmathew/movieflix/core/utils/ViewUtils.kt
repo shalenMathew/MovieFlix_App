@@ -246,7 +246,30 @@ val MIGRATION_14_15 = object : Migration(14, 15) {
 
 val MIGRATION_15_16 = object : Migration(15, 16) {
     override fun migrate(db: SupportSQLiteDatabase) {
-        db.execSQL("ALTER TABLE custom_list_table ADD COLUMN isPinned INTEGER NOT NULL DEFAULT 0")
+        // Drop temp table if it exists from a failed run
+        db.execSQL("DROP TABLE IF EXISTS custom_list_table_new")
+
+        // 1. Create new table with the EXACT schema Room expects (No DEFAULT values)
+        db.execSQL("""
+            CREATE TABLE `custom_list_table_new` (
+                `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, 
+                `name` TEXT NOT NULL, 
+                `description` TEXT, 
+                `createdAt` INTEGER NOT NULL, 
+                `isPinnedToFav` INTEGER NOT NULL, 
+                `isPinnedToWatchlist` INTEGER NOT NULL
+            )
+        """.trimIndent())
+
+        // 2. Copy data from the old table (setting pins to 0 by default during copy)
+        db.execSQL("""
+            INSERT INTO custom_list_table_new (id, name, description, createdAt, isPinnedToFav, isPinnedToWatchlist)
+            SELECT id, name, description, createdAt, 0, 0 FROM custom_list_table
+        """.trimIndent())
+
+        // 3. Drop old table and rename new one
+        db.execSQL("DROP TABLE custom_list_table")
+        db.execSQL("ALTER TABLE custom_list_table_new RENAME TO custom_list_table")
     }
 }
 

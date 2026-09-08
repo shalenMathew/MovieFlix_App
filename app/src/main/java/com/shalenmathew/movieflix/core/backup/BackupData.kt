@@ -3,7 +3,7 @@ package com.shalenmathew.movieflix.core.backup
 import com.shalenmathew.movieflix.data.local_storage.entity.*
 
 data class BackupData(
-    val version: Int = 1,
+    val version: Int = 2,
     val backupTime: Long = System.currentTimeMillis(),
     val favorites: List<FavouritesEntity> = emptyList(),
     val watchList: List<WatchListEntity> = emptyList(),

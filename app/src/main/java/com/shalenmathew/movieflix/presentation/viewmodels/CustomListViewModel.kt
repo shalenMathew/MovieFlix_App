@@ -18,7 +18,8 @@ class CustomListViewModel @Inject constructor(
 ) : ViewModel() {
 
     val allLists: LiveData<List<UserCustomList>> = repository.getAllLists().asLiveData()
-    val pinnedLists: LiveData<List<UserCustomList>> = repository.getPinnedLists().asLiveData()
+    val pinnedFavLists: LiveData<List<UserCustomList>> = repository.getPinnedFavLists().asLiveData()
+    val pinnedWatchlistLists: LiveData<List<UserCustomList>> = repository.getPinnedWatchlistLists().asLiveData()
 
     fun createList(name: String, description: String?) {
         viewModelScope.launch {
@@ -26,10 +27,17 @@ class CustomListViewModel @Inject constructor(
         }
     }
 
-    fun createAndPinList(name: String, description: String?) {
+    fun createAndPinToFavList(name: String, description: String?) {
         viewModelScope.launch {
             val listId = repository.createList(name, description)
-            repository.updatePinnedStatus(listId.toInt(), true)
+            repository.updatePinnedToFavStatus(listId.toInt(), true)
+        }
+    }
+
+    fun createAndPinToWatchlist(name: String, description: String?) {
+        viewModelScope.launch {
+            val listId = repository.createList(name, description)
+            repository.updatePinnedToWatchlistStatus(listId.toInt(), true)
         }
     }
 
@@ -45,9 +53,15 @@ class CustomListViewModel @Inject constructor(
         }
     }
 
-    fun togglePinList(listId: Int, isPinned: Boolean) {
+    fun togglePinToFavList(listId: Int, isPinned: Boolean) {
         viewModelScope.launch {
-            repository.updatePinnedStatus(listId, isPinned)
+            repository.updatePinnedToFavStatus(listId, isPinned)
+        }
+    }
+
+    fun togglePinToWatchlist(listId: Int, isPinned: Boolean) {
+        viewModelScope.launch {
+            repository.updatePinnedToWatchlistStatus(listId, isPinned)
         }
     }
 

@@ -77,14 +77,25 @@ class CustomListsFragment : Fragment() {
         
         view.findViewById<TextView>(R.id.list_options_header).text = list.name
         
-        val pinBtn = view.findViewById<View>(R.id.action_pin_list)
-        val pinText = view.findViewById<TextView>(R.id.pin_text)
-
-        pinText.text = if (list.isPinned) "Unpin from Favorites" else "Pin to Favorites"
+        // Favorites Pin
+        val pinFavBtn = view.findViewById<View>(R.id.action_pin_list)
+        val pinFavText = view.findViewById<TextView>(R.id.pin_text)
+        pinFavText.text = if (list.isPinnedToFav) "Unpin from Favorites" else "Pin to Favorites"
         
-        pinBtn.setOnClickListener {
-            viewModel.togglePinList(list.id, !list.isPinned)
-            showToast(requireContext(), if (list.isPinned) "Unpinned" else "Pinned")
+        pinFavBtn.setOnClickListener {
+            viewModel.togglePinToFavList(list.id, !list.isPinnedToFav)
+            showToast(requireContext(), if (list.isPinnedToFav) "Unpinned from Favorites" else "Pinned to Favorites")
+            dialog.dismiss()
+        }
+
+        // Watchlist Pin
+        val pinWatchlistBtn = view.findViewById<View>(R.id.action_pin_watchlist)
+        val pinWatchlistText = view.findViewById<TextView>(R.id.pin_watchlist_text)
+        pinWatchlistText.text = if (list.isPinnedToWatchlist) "Unpin from Watchlist" else "Pin to Watchlist"
+
+        pinWatchlistBtn.setOnClickListener {
+            viewModel.togglePinToWatchlist(list.id, !list.isPinnedToWatchlist)
+            showToast(requireContext(), if (list.isPinnedToWatchlist) "Unpinned from Watchlist" else "Pinned to Watchlist")
             dialog.dismiss()
         }
 

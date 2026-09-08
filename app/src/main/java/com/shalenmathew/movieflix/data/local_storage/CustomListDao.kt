@@ -22,14 +22,20 @@ interface CustomListDao {
     @Query("UPDATE custom_list_table SET name = :name, description = :description WHERE id = :listId")
     suspend fun updateListDetails(listId: Int, name: String, description: String?)
 
-    @Query("UPDATE custom_list_table SET isPinned = :isPinned WHERE id = :listId")
-    suspend fun updatePinnedStatus(listId: Int, isPinned: Boolean)
+    @Query("UPDATE custom_list_table SET isPinnedToFav = :isPinned WHERE id = :listId")
+    suspend fun updatePinnedToFavStatus(listId: Int, isPinned: Boolean)
+
+    @Query("UPDATE custom_list_table SET isPinnedToWatchlist = :isPinned WHERE id = :listId")
+    suspend fun updatePinnedToWatchlistStatus(listId: Int, isPinned: Boolean)
 
     @Query("SELECT * FROM custom_list_table ORDER BY createdAt DESC")
     fun getAllLists(): Flow<List<CustomListEntity>>
 
-    @Query("SELECT * FROM custom_list_table WHERE isPinned = 1 ORDER BY createdAt DESC")
-    fun getPinnedLists(): Flow<List<CustomListEntity>>
+    @Query("SELECT * FROM custom_list_table WHERE isPinnedToFav = 1 ORDER BY createdAt DESC")
+    fun getPinnedFavLists(): Flow<List<CustomListEntity>>
+
+    @Query("SELECT * FROM custom_list_table WHERE isPinnedToWatchlist = 1 ORDER BY createdAt DESC")
+    fun getPinnedWatchlistLists(): Flow<List<CustomListEntity>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addMovieToList(movie: CustomListMovieEntity)

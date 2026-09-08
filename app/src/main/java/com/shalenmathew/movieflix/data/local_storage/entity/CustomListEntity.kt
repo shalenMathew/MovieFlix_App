@@ -10,5 +10,6 @@ data class CustomListEntity(
     val name: String,
     val description: String?,
     val createdAt: Long = System.currentTimeMillis(),
-    val isPinned: Boolean = false
+    val isPinnedToFav: Boolean = false,
+    val isPinnedToWatchlist: Boolean = false
 )

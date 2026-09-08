@@ -28,8 +28,15 @@ class CustomListRepositoryImpl @Inject constructor(
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    override fun getPinnedLists(): Flow<List<UserCustomList>> {
-        return customListDao.getPinnedLists().flatMapLatest { entities ->
+    override fun getPinnedFavLists(): Flow<List<UserCustomList>> {
+        return customListDao.getPinnedFavLists().flatMapLatest { entities ->
+            mapEntitiesToUserCustomLists(entities)
+        }
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    override fun getPinnedWatchlistLists(): Flow<List<UserCustomList>> {
+        return customListDao.getPinnedWatchlistLists().flatMapLatest { entities ->
             mapEntitiesToUserCustomLists(entities)
         }
     }
@@ -47,7 +54,8 @@ class CustomListRepositoryImpl @Inject constructor(
                     createdAt = entity.createdAt,
                     movieCount = count,
                     topPosters = posters.filterNotNull(),
-                    isPinned = entity.isPinned
+                    isPinnedToFav = entity.isPinnedToFav,
+                    isPinnedToWatchlist = entity.isPinnedToWatchlist
                 )
             }.distinctUntilChanged()
         }
@@ -70,8 +78,12 @@ class CustomListRepositoryImpl @Inject constructor(
         customListDao.updateListDetails(listId, name, description)
     }
 
-    override suspend fun updatePinnedStatus(listId: Int, isPinned: Boolean) {
-        customListDao.updatePinnedStatus(listId, isPinned)
+    override suspend fun updatePinnedToFavStatus(listId: Int, isPinned: Boolean) {
+        customListDao.updatePinnedToFavStatus(listId, isPinned)
+    }
+
+    override suspend fun updatePinnedToWatchlistStatus(listId: Int, isPinned: Boolean) {
+        customListDao.updatePinnedToWatchlistStatus(listId, isPinned)
     }
 
     override suspend fun addMovieToList(listId: Int, movie: MovieResult) {

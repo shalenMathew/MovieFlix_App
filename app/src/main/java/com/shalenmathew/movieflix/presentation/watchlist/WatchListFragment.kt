@@ -13,6 +13,11 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.gson.Gson
 import com.shalenmathew.movieflix.R
+import android.view.MotionEvent
+import androidx.recyclerview.widget.ConcatAdapter
+import androidx.recyclerview.widget.RecyclerView
+import com.shalenmathew.movieflix.core.adapters.FavCollectionsAdapter
+import com.shalenmathew.movieflix.core.adapters.FavCreateCollectionAdapter
 import com.shalenmathew.movieflix.core.adapters.WatchListAdapter
 import com.shalenmathew.movieflix.core.utils.ClickHandler
 import com.shalenmathew.movieflix.core.utils.Constants
@@ -27,6 +32,7 @@ import com.shalenmathew.movieflix.presentation.viewmodels.CustomListViewModel
 import com.shalenmathew.movieflix.presentation.MainActivity
 import com.shalenmathew.movieflix.core.utils.QuickActionOverlay
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.material.textfield.TextInputEditText
 import com.shalenmathew.movieflix.core.utils.showToast
 import com.shalenmathew.movieflix.core.utils.shareMovie
 import dagger.hilt.android.AndroidEntryPoint
@@ -44,6 +50,8 @@ class WatchListFragment : Fragment() {
     private val binding get() = _binding!!
 
     private lateinit var adapter: WatchListAdapter
+    private lateinit var collectionsAdapter: FavCollectionsAdapter
+    private lateinit var createCollectionAdapter: FavCreateCollectionAdapter
 
     private var fullList: List<WatchListEntity> = emptyList()
 
@@ -61,6 +69,39 @@ class WatchListFragment : Fragment() {
 
     private fun inIt() {
         watchListViewModel.getAllWatchListData()
+
+        createCollectionAdapter = FavCreateCollectionAdapter(
+            onClick = { showCreateListDialog() }
+        )
+
+        collectionsAdapter = FavCollectionsAdapter(
+            onCollectionClick = { list ->
+                if (ClickHandler.isClickAllowed() && findNavController().currentDestination?.id == R.id.libraryFragment) {
+                    val bundle = Bundle().apply {
+                        putInt("listId", list.id)
+                        putString("listName", list.name)
+                        putString("listDesc", list.description)
+                    }
+                    findNavController().navigate(R.id.action_libraryFragment_to_listDetailsFragment, bundle)
+                }
+            }
+        )
+
+        val concatAdapter = ConcatAdapter(createCollectionAdapter, collectionsAdapter)
+        binding.fragmentWatchListCollectionsRv.adapter = concatAdapter
+
+        // Fix for ViewPager2 swipe conflict
+        binding.fragmentWatchListCollectionsRv.addOnItemTouchListener(object : RecyclerView.OnItemTouchListener {
+            override fun onInterceptTouchEvent(rv: RecyclerView, e: MotionEvent): Boolean {
+                if (e.action == MotionEvent.ACTION_MOVE) {
+                    rv.parent.requestDisallowInterceptTouchEvent(true)
+                }
+                return false
+            }
+            override fun onTouchEvent(rv: RecyclerView, e: MotionEvent) {}
+            override fun onRequestDisallowInterceptTouchEvent(disallowIntercept: Boolean) {}
+        })
+
         adapter = WatchListAdapter(
             onPosterClick = {
                 if (ClickHandler.isClickAllowed() && findNavController().currentDestination?.id == R.id.libraryFragment) {
@@ -157,7 +198,37 @@ class WatchListFragment : Fragment() {
         dialog.show()
     }
 
+    private fun showCreateListDialog() {
+        val ctx = context ?: return
+        val dialog = BottomSheetDialog(ctx, R.style.SheetDialog)
+        val view = layoutInflater.inflate(R.layout.dialog_create_list, null)
+        
+        val nameEt = view.findViewById<TextInputEditText>(R.id.list_name_et)
+        val descEt = view.findViewById<TextInputEditText>(R.id.list_desc_et)
+        val createBtn = view.findViewById<View>(R.id.create_list_confirm_btn)
+
+        createBtn.setOnClickListener {
+            val name = nameEt.text.toString().trim()
+            if (name.isNotEmpty()) {
+                // Lists created from Watchlist are automatically pinned to Watchlist
+                customListViewModel.createAndPinToWatchlist(name, descEt.text.toString().trim().takeIf { it.isNotEmpty() })
+                dialog.dismiss()
+                showToast(ctx, "Collection created and pinned to Watchlist")
+            } else {
+                nameEt.error = "Name cannot be empty"
+            }
+        }
+
+        dialog.setContentView(view)
+        dialog.show()
+    }
+
     private fun observer() {
+        customListViewModel.pinnedWatchlistLists.observe(viewLifecycleOwner) { lists ->
+            collectionsAdapter.submitList(lists)
+            binding.fragmentWatchListCollectionsRv.visible()
+        }
+
         watchListViewModel.getAllWatchListData().observe(viewLifecycleOwner) { list ->
             fullList = list
             val currentQuery = librarySearchVm.searchQuery.value
@@ -202,12 +273,15 @@ class WatchListFragment : Fragment() {
             binding.fragmentWatchListPlaceholder.gone()
             binding.peekingLogo.gone()
             binding.peekingShelf.gone()
+            binding.tvNoResult.gone()
+            binding.fragmentWatchListCollectionsRv.visible()
         }
         else {
             adapter.submitList(emptyList())
             binding.fragmentWatchListRv.gone()
+            binding.fragmentWatchListCollectionsRv.gone()
 
-            if (query.isBlank()) {
+            if (query.isNullOrBlank()) {
                 binding.tvNoResult.gone()
                 binding.fragmentWatchListPlaceholder.visible()
                 binding.peekingLogo.visible()

@@ -36,7 +36,7 @@ class CustomListAdapter(
             description.text = list.description ?: ""
             description.visibility = if (list.description.isNullOrEmpty()) View.GONE else View.VISIBLE
             
-            pinnedIndicator.visibility = if (list.isPinned) View.VISIBLE else View.GONE
+            pinnedIndicator.visibility = if (list.isPinnedToFav || list.isPinnedToWatchlist) View.VISIBLE else View.GONE
 
             // Bind top 4 posters
             val topPosters = list.topPosters

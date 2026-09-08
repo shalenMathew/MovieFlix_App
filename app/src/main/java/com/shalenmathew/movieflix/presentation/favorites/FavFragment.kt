@@ -342,10 +342,10 @@ class FavFragment : Fragment() {
         createBtn.setOnClickListener {
             val name = nameEt.text.toString().trim()
             if (name.isNotEmpty()) {
-                // Lists created from Favorites are automatically pinned
-                customListViewModel.createAndPinList(name, descEt.text.toString().trim().takeIf { it.isNotEmpty() })
+                // Lists created from Favorites are automatically pinned to Favorites
+                customListViewModel.createAndPinToFavList(name, descEt.text.toString().trim().takeIf { it.isNotEmpty() })
                 dialog.dismiss()
-                showToast(ctx, "Collection created and pinned")
+                showToast(ctx, "Collection created and pinned to Favorites")
             } else {
                 nameEt.error = "Name cannot be empty"
             }
@@ -356,7 +356,7 @@ class FavFragment : Fragment() {
     }
 
     private fun observe() {
-        customListViewModel.pinnedLists.observe(viewLifecycleOwner) { lists ->
+        customListViewModel.pinnedFavLists.observe(viewLifecycleOwner) { lists ->
             collectionsAdapter.submitList(lists)
             // Row is always visible to show the "Create New" card
             binding.fragmentFavCollectionsRv.visible()

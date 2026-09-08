@@ -7,7 +7,8 @@ data class UserCustomList(
     val createdAt: Long,
     val movieCount: Int = 0,
     val topPosters: List<String> = emptyList(),
-    val isPinned: Boolean = false
+    val isPinnedToFav: Boolean = false,
+    val isPinnedToWatchlist: Boolean = false
 )
 
 data class CustomListMovie(
