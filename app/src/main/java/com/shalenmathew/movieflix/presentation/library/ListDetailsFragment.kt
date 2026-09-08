@@ -157,7 +157,7 @@ class ListDetailsFragment : Fragment() {
 
         actions.add(QuickActionOverlay.ActionItem(
             icon = R.drawable.baseline_add_circle_24,
-            label = getString(R.string.add_to_collection),
+            label = getString(R.string.add_to_list),
             action = { showChooseCustomListBottomSheet(movie) }
         ))
 

@@ -311,7 +311,7 @@
                                 android:layout_marginStart="@dimen/_5sdp"
                                 android:fontFamily="@font/montserrat_bold"
                                 android:gravity="start"
-                                android:text="@string/lbl_my_collection"
+                                android:text="@string/lbl_my_gallery"
                                 android:textColor="@color/white"
                                 android:textSize="@dimen/_14sdp" />
 

@@ -115,7 +115,7 @@
     <string name="schedule_reminder">Programmer un rappel</string>
     <string name="notify_me_to_watch_this_movie_later">M\'avertir pour regarder ce film plus tard</string>
     <string name="track_series">Suivre la série</string>
-    <string name="add_to_collection">Ajouter à la collection</string>
+    <string name="add_to_list">Ajouter à la liste</string>
     <string name="save_to_custom_list">Enregistrer dans l\'une de vos listes personnalisées</string>
     <string name="no_internet_connection">Pas de connexion Internet</string>
     <string name="open_settings">Ouvrir les paramètres</string>
@@ -146,4 +146,6 @@
     <string name="msg_unknown_error">Erreur inconnue</string>
     <string name="msg_episodes_count">Épisodes %1$d</string>
     <string name="add_banner_from_gallery">Ajouter une bannière de la galerie</string>
+    <string name="lbl_my_gallery">Galerie média</string>
+    <string name="lbl_add_to_gallery">Ajouter à la galerie</string>
 </resources>

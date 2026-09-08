@@ -13,7 +13,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/add_to_collection"
+            android:text="@string/add_to_list"
             android:fontFamily="@font/montserrat_bold"
             android:textColor="@color/white"
             android:textSize="@dimen/_16ssp"

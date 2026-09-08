@@ -32,7 +32,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_6sdp"
             android:fontFamily="@font/montserrat_semibold"
-            android:text="@string/lbl_add_to_collection"
+            android:text="@string/lbl_add_to_gallery"
             android:textColor="@color/white"
             android:textSize="@dimen/_10ssp"
             android:gravity="center" />
