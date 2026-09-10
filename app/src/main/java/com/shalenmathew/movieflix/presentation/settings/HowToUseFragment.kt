@@ -77,6 +77,10 @@ class HowToUseFragment : Fragment() {
                 "In the Tracking tab, long-press on any series banner to customize its look with official artwork or your own gallery images."
             ),
             FAQItem(
+                "Why is the notification not displayed?",
+                "Ensure that notification permissions are granted in your device settings. Also, check if the app is excluded from battery optimization, as strict power-saving modes can delay or block scheduled reminders."
+            ),
+            FAQItem(
                 "How to backup data?",
                 "Go to Settings > Backup to export your data as a file. You can import this file later to restore your entire library."
             )
