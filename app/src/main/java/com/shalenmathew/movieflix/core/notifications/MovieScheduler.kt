@@ -15,7 +15,7 @@ class MovieScheduler @Inject constructor(
     private val context: Context
 ) {
 
-    fun scheduleMovieNotification(movieResult: MovieResult, scheduledTimeMillis: Long) {
+    fun scheduleMovieNotification(movieResult: MovieResult, scheduledTimeMillis: Long, customMessage: String? = null) {
         val currentTime = System.currentTimeMillis()
         val delay = scheduledTimeMillis - currentTime
 
@@ -37,6 +37,7 @@ class MovieScheduler @Inject constructor(
             .putString(ScheduledMovieWorker.KEY_MOVIE_POSTER, posterUrl)
             .putString(ScheduledMovieWorker.KEY_MOVIE_RESULT_JSON, movieResultJson)
             .putLong(ScheduledMovieWorker.KEY_SCHEDULED_DATE, scheduledTimeMillis)
+            .putString(ScheduledMovieWorker.KEY_CUSTOM_MESSAGE, customMessage)
             .build()
 
         val workRequest = OneTimeWorkRequestBuilder<ScheduledMovieWorker>()

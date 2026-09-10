@@ -5,12 +5,17 @@ import android.app.TimePickerDialog
 import android.content.Context
 import android.content.res.Configuration
 import android.view.ContextThemeWrapper
+import android.view.LayoutInflater
+import android.view.View
+import android.widget.Toast
+import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.material.textfield.TextInputEditText
 import com.shalenmathew.movieflix.R
 import java.util.Calendar
 
 object ScheduleDateTimeDialog {
 
-    fun show(context: Context, onDateTimeSelected: (Long) -> Unit) {
+    fun show(context: Context, onDateTimeSelected: (Long, String?) -> Unit) {
         val calendar = Calendar.getInstance()
         val currentYear = calendar.get(Calendar.YEAR)
         val currentMonth = calendar.get(Calendar.MONTH)
@@ -43,12 +48,12 @@ object ScheduleDateTimeDialog {
                         
                         // Validate that selected time is in the future
                         if (scheduledTime > System.currentTimeMillis()) {
-                            onDateTimeSelected(scheduledTime)
+                            showCustomMessageDialog(context, scheduledTime, onDateTimeSelected)
                         } else {
-                            android.widget.Toast.makeText(
+                            Toast.makeText(
                                 context,
                                 "Please select a future date and time",
-                                android.widget.Toast.LENGTH_SHORT
+                                Toast.LENGTH_SHORT
                             ).show()
                         }
                     },
@@ -66,5 +71,26 @@ object ScheduleDateTimeDialog {
         // Set minimum date to today
         datePickerDialog.datePicker.minDate = System.currentTimeMillis()
         datePickerDialog.show()
+    }
+
+    private fun showCustomMessageDialog(
+        context: Context,
+        scheduledTime: Long,
+        onDateTimeSelected: (Long, String?) -> Unit
+    ) {
+        val dialog = BottomSheetDialog(context, R.style.SheetDialog)
+        val view = LayoutInflater.from(context).inflate(R.layout.dialog_schedule_message, null)
+        
+        val editText = view.findViewById<TextInputEditText>(R.id.schedule_message_et)
+        val confirmBtn = view.findViewById<View>(R.id.schedule_confirm_btn)
+
+        confirmBtn.setOnClickListener {
+            val message = editText.text.toString().trim().takeIf { it.isNotEmpty() }
+            dialog.dismiss()
+            onDateTimeSelected(scheduledTime, message)
+        }
+
+        dialog.setContentView(view)
+        dialog.show()
     }
 }

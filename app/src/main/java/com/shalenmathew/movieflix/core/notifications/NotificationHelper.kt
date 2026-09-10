@@ -9,6 +9,9 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.Canvas
+import android.graphics.Matrix
+import android.graphics.Paint
 import android.os.Build
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
@@ -45,7 +48,8 @@ object NotificationHelper {
         movieId: Int,
         movieTitle: String,
         moviePosterUrl: String?,
-        movieResultJson: String
+        movieResultJson: String,
+        customMessage: String? = null
     ) {
         createNotificationChannel(context)
 
@@ -65,31 +69,39 @@ object NotificationHelper {
             PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
         )
 
-        // Load movie poster image
+
+        val appLogoBitmap = getScaledBitmapFromResource(context, R.drawable.logo_5)
+        
+
         val posterBitmap = moviePosterUrl?.let { loadImageFromUrl(it) }
+
+        val notificationTitle = customMessage ?: "MovieFlix Reminder"
+        val notificationContent = "Reminder: $movieTitle"
 
         val notificationBuilder = NotificationCompat.Builder(context, CHANNEL_ID)
             .setSmallIcon(R.drawable.ic_notification_bell)
-            .setContentTitle("⏰ Time to watch: $movieTitle")
-            .setContentText("Your scheduled movie/show is ready to watch!")
+            .setContentTitle(notificationTitle)
+            .setContentText(notificationContent)
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setContentIntent(pendingIntent)
             .setAutoCancel(true)
             .setVibrate(longArrayOf(0, 500, 250, 500))
+            .setLargeIcon(appLogoBitmap) // Set app logo as default large icon
 
         // Add large image if poster loaded successfully
         if (posterBitmap != null) {
             notificationBuilder.setStyle(
                 NotificationCompat.BigPictureStyle()
                     .bigPicture(posterBitmap)
-                    .bigLargeIcon(null as Bitmap?) // Hide large icon when expanded
+                    .setSummaryText(notificationContent)
+                    .bigLargeIcon(appLogoBitmap) // Show app logo when expanded
             )
-            notificationBuilder.setLargeIcon(posterBitmap)
+            notificationBuilder.setLargeIcon(posterBitmap) // Swap logo for poster in collapsed view
         } else {
             // Fallback to text style if image fails to load
             notificationBuilder.setStyle(
                 NotificationCompat.BigTextStyle()
-                    .bigText("Your scheduled movie/show \"$movieTitle\" is ready to watch! Open the app to start tracking.")
+                    .bigText(notificationContent)
             )
         }
 
@@ -152,5 +164,66 @@ object NotificationHelper {
         } else {
             NotificationManagerCompat.from(context).notify(notificationId, notification)
         }
+    }
+
+    private fun getScaledBitmapFromResource(context: Context, resId: Int): Bitmap? {
+        val resources = context.resources
+        
+        // Get the system's preferred large icon size (usually square)
+        val targetWidth = resources.getDimensionPixelSize(android.R.dimen.notification_large_icon_width)
+        val targetHeight = resources.getDimensionPixelSize(android.R.dimen.notification_large_icon_height)
+        
+        // Decode with bounds only to get original dimensions
+        val options = BitmapFactory.Options().apply {
+            inJustDecodeBounds = true
+        }
+        BitmapFactory.decodeResource(resources, resId, options)
+        
+        // Calculate the optimal sample size
+        options.inSampleSize = calculateInSampleSize(options, targetWidth, targetHeight)
+        options.inJustDecodeBounds = false
+        
+        val decodedBitmap = BitmapFactory.decodeResource(resources, resId, options) ?: return null
+        
+        // Create a new bitmap with the exact system dimensions and a transparent background
+        val outputBitmap = Bitmap.createBitmap(targetWidth, targetHeight, Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(outputBitmap)
+        
+        // Calculate scaling to fit center without stretching (preserve aspect ratio)
+        val scale = Math.min(
+            targetWidth.toFloat() / decodedBitmap.width,
+            targetHeight.toFloat() / decodedBitmap.height
+        )
+        
+        val xTranslation = (targetWidth - decodedBitmap.width * scale) / 2.0f
+        val yTranslation = (targetHeight - decodedBitmap.height * scale) / 2.0f
+        
+        val matrix = Matrix().apply {
+            postScale(scale, scale)
+            postTranslate(xTranslation, yTranslation)
+        }
+        
+        val paint = Paint().apply {
+            isAntiAlias = true
+            isFilterBitmap = true
+        }
+        
+        canvas.drawBitmap(decodedBitmap, matrix, paint)
+        
+        return outputBitmap
+    }
+
+    private fun calculateInSampleSize(options: BitmapFactory.Options, reqWidth: Int, reqHeight: Int): Int {
+        val (height: Int, width: Int) = options.outHeight to options.outWidth
+        var inSampleSize = 1
+
+        if (height > reqHeight || width > reqWidth) {
+            val halfHeight: Int = height / 2
+            val halfWidth: Int = width / 2
+            while (halfHeight / inSampleSize >= reqHeight && halfWidth / inSampleSize >= reqWidth) {
+                inSampleSize *= 2
+            }
+        }
+        return inSampleSize
     }
 }

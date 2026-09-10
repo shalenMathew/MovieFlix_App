@@ -9,5 +9,6 @@ import com.shalenmathew.movieflix.domain.model.MovieResult
 data class ScheduledEntity(
     @PrimaryKey val id: Int,
     val movieResult: MovieResult,
-    val scheduledDate: Long // Timestamp in milliseconds
+    val scheduledDate: Long, // Timestamp in milliseconds
+    val customMessage: String? = null
 )

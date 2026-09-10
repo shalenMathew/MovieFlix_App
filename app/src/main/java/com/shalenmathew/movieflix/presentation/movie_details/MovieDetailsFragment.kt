@@ -461,6 +461,7 @@ class MovieDetailsFragment : BottomSheetDialogFragment() {
                 binding.addButtonIcon.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_add))
             }
             updateLastWatchedUI()
+            updateUserActivityCardVisibility()
         }
 
         favMovieViewModel.getAllMovieData().observe(viewLifecycleOwner) { list ->
@@ -471,6 +472,9 @@ class MovieDetailsFragment : BottomSheetDialogFragment() {
                     setupPersonalNoteView(mediaId!!, res.personalNote)
                 }
                 binding.fragmentMovieDetailsPersonalNoteLl.isVisible = true
+                binding.fragmentMovieDetailsOverview.isVisible = false
+                binding.fragmentMovieDetailsGenre.isVisible = false
+                binding.fragmentMovieDetailsReleaseDate.isVisible = false
                 updateScheduleButtonVisibility()
                 
                 // Observe gallery images
@@ -487,8 +491,17 @@ class MovieDetailsFragment : BottomSheetDialogFragment() {
                 binding.favIcon.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.fav_outline))
                 binding.fragmentMovieDetailsPersonalNoteLl.isVisible = false
                 binding.fragmentMovieDetailsGalleryLl.isVisible = false
+                binding.fragmentMovieDetailsOverview.isVisible = true
+                binding.fragmentMovieDetailsGenre.isVisible = true
+                
+                // Show release date only if it's not empty (restore normal behavior)
+                val releaseDate = binding.fragmentMovieDetailsReleaseDate.text.toString()
+                if (releaseDate.isNotEmpty() && releaseDate != getString(R.string.release_date, "")) {
+                    binding.fragmentMovieDetailsReleaseDate.isVisible = true
+                }
             }
             updateLastWatchedUI()
+            updateUserActivityCardVisibility()
         }
 
         scheduledViewModel.getAllScheduledMovies().observe(viewLifecycleOwner) { scheduledList ->
@@ -510,6 +523,7 @@ class MovieDetailsFragment : BottomSheetDialogFragment() {
             // Update recommendation adapter with scheduled movie IDs
             val ids = scheduledList.mapNotNull { entity -> entity.id }.toSet()
             recommendationAdapter.updateScheduledMovies(ids)
+            updateUserActivityCardVisibility()
         }
 
         searchMovieViewModel.searchMovieLiveData.observe(viewLifecycleOwner) {
@@ -833,11 +847,10 @@ class MovieDetailsFragment : BottomSheetDialogFragment() {
                     text = getString(R.string.lbl_scheduled_on, "$day$daySuffix", dateStr)
                     visibility = View.VISIBLE
                 }
-                binding.fragmentMovieDetailsScheduledIcon.visibility = View.VISIBLE
             } else {
                 binding.fragmentMovieDetailsScheduledDate.visibility = View.GONE
-                binding.fragmentMovieDetailsScheduledIcon.visibility = View.GONE
             }
+            updateUserActivityCardVisibility()
         } catch (e: Exception) {
             e.printStackTrace()
             // Silently fail if view is not ready
@@ -1093,10 +1106,10 @@ class MovieDetailsFragment : BottomSheetDialogFragment() {
         }
 
         val ctx = context ?: return
-        ScheduleDateTimeDialog.show(ctx) { selectedDateTime ->
+        ScheduleDateTimeDialog.show(ctx) { selectedDateTime, customMessage ->
             if (!::movieResult.isInitialized) return@show
 
-            scheduledViewModel.insertScheduledMovie(movieResult, selectedDateTime)
+            scheduledViewModel.insertScheduledMovie(movieResult, selectedDateTime, customMessage)
             currentScheduledDate = selectedDateTime
             isScheduled = true
             updateScheduleButtonIcon()
@@ -1175,6 +1188,7 @@ class MovieDetailsFragment : BottomSheetDialogFragment() {
 
             fragmentMovieDetailsPersonalNoteTextInputLayout.isVisible = false
         }
+        updateUserActivityCardVisibility()
     }
 
     /**
@@ -1748,6 +1762,25 @@ class MovieDetailsFragment : BottomSheetDialogFragment() {
         }
     }
 
+    private fun updateUserActivityCardVisibility() {
+        binding.apply {
+            val isScheduledVisible = fragmentMovieDetailsScheduledDate.isVisible
+            val isLastWatchedVisible = fragmentMovieDetailsLastWatched.isVisible
+            val isNoteVisible = fragmentMovieDetailsPersonalNoteLl.isVisible
+
+            // Update row visibility
+            fragmentMovieDetailsScheduledRow.isVisible = isScheduledVisible
+            fragmentMovieDetailsLastWatchedRow.isVisible = isLastWatchedVisible
+
+            // Manage dividers
+            activityDivider1.isVisible = isScheduledVisible && (isLastWatchedVisible || isNoteVisible)
+            activityDivider2.isVisible = isLastWatchedVisible && isNoteVisible
+
+            // Show card only if at least one item is visible
+            fragmentMovieDetailsActivityCard.isVisible = isScheduledVisible || isLastWatchedVisible || isNoteVisible
+        }
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         stopScheduleTimeCheck()
@@ -1776,6 +1809,7 @@ class MovieDetailsFragment : BottomSheetDialogFragment() {
         } else {
             binding.fragmentMovieDetailsLastWatched.visibility = View.GONE
         }
+        updateUserActivityCardVisibility()
     }
 
     private fun showChoosePosterBottomSheet() {

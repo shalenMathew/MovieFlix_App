@@ -17,12 +17,12 @@ class ScheduledViewModel @Inject constructor(
     private val movieScheduler: MovieScheduler
 ) : ViewModel() {
 
-    fun insertScheduledMovie(movieResult: MovieResult, scheduledDate: Long) {
-        val scheduledEntity = ScheduledEntity(movieResult.id!!, movieResult, scheduledDate)
+    fun insertScheduledMovie(movieResult: MovieResult, scheduledDate: Long, customMessage: String? = null) {
+        val scheduledEntity = ScheduledEntity(movieResult.id!!, movieResult, scheduledDate, customMessage)
         viewModelScope.launch {
             scheduledMovies.insertScheduledMovie(scheduledEntity)
             // Schedule the notification
-            movieScheduler.scheduleMovieNotification(movieResult, scheduledDate)
+            movieScheduler.scheduleMovieNotification(movieResult, scheduledDate, customMessage)
         }
     }
 

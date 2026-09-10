@@ -166,134 +166,232 @@
                             app:iconGravity="textStart"
                             app:iconTint="@color/white" />
 
-                        <TextView
-                            android:id="@+id/fragment_movie_details_last_watched"
+                        <com.google.android.material.card.MaterialCardView
+                            android:id="@+id/fragment_movie_details_activity_card"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="@dimen/_5sdp"
-                            android:layout_marginEnd="@dimen/_5sdp"
-                            android:fontFamily="@font/montserrat_medium"
-                            android:gravity="start"
-                            android:paddingVertical="@dimen/_8sdp"
-                            android:textColor="@color/white"
-                            android:textSize="@dimen/_11ssp"
+                            android:layout_marginHorizontal="@dimen/_12sdp"
+                            android:layout_marginTop="@dimen/_8sdp"
                             android:visibility="gone"
-                            tools:text="Last watched : Season 2 ep 5"
-                            tools:visibility="visible" />
-
-                        <LinearLayout
-                            android:id="@+id/fragment_movie_details_personal_note_ll"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            android:visibility="gone"
+                            app:cardBackgroundColor="@color/gray_shade_1"
+                            app:cardCornerRadius="@dimen/_12sdp"
+                            app:cardElevation="0dp"
+                            app:strokeColor="@color/white"
+                            app:strokeWidth="1dp"
                             tools:visibility="visible">
 
-                            <TextView
-                                android:id="@+id/fragment_movie_details_personal_note_title"
+                            <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_marginStart="@dimen/_5sdp"
-                                android:fontFamily="@font/montserrat_bold"
-                                android:gravity="start"
-                                android:text="@string/personal_note"
-                                android:textColor="@color/white"
-                                android:textSize="@dimen/_14sdp" />
+                                android:orientation="vertical"
+                                android:padding="@dimen/_10sdp">
 
-                            <FrameLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content">
-
-                                <com.google.android.material.button.MaterialButton
-                                    android:id="@+id/fragment_movie_details_personal_note_btn"
-                                    style="@style/Widget.MaterialComponents.Button.TextButton"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginHorizontal="@dimen/_18sdp"
-                                    android:autoSizeMaxTextSize="@dimen/_13ssp"
-                                    android:autoSizeMinTextSize="@dimen/_11ssp"
-                                    android:autoSizeTextType="uniform"
-                                    android:fontFamily="@font/montserrat_medium"
-                                    android:letterSpacing="0.1"
-                                    android:maxLines="1"
-                                    android:text="@string/click_to_add_your_personal_note"
-                                    android:textAllCaps="false"
-                                    android:textColor="@color/white"
-                                    android:visibility="gone"
-                                    app:icon="@drawable/baseline_add_circle_24"
-                                    app:iconGravity="textStart"
-                                    app:iconTint="@color/white"
-                                    tools:targetApi="26"
-                                    tools:visibility="gone" />
-
-                                <com.google.android.material.textfield.TextInputLayout
-                                    android:id="@+id/fragment_movie_details_personal_note_text_input_layout"
-                                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="@dimen/_5sdp"
-                                    android:layout_marginBottom="@dimen/_12sdp"
-                                    android:hint="@string/enter_your_note"
-                                    android:textColorHint="@color/white"
-                                    android:visibility="gone"
-                                    app:boxCornerRadiusBottomEnd="@dimen/_5sdp"
-                                    app:boxCornerRadiusBottomStart="@dimen/_5sdp"
-                                    app:boxCornerRadiusTopEnd="@dimen/_5sdp"
-                                    app:boxCornerRadiusTopStart="@dimen/_5sdp"
-                                    app:boxStrokeColor="@color/personal_note_box_color"
-                                    app:hintTextColor="@color/white"
-                                    tools:visibility="gone">
-
-                                    <com.google.android.material.textfield.TextInputEditText
-                                        android:id="@+id/fragment_movie_details_personal_note_edit_text"
-                                        android:layout_width="match_parent"
-                                        android:layout_height="wrap_content"
-                                        android:fontFamily="@font/montserrat_medium"
-                                        android:gravity="top"
-                                        android:imeActionLabel="Save"
-                                        android:imeOptions="actionDone"
-                                        android:inputType="text"
-                                        android:maxLines="1"
-                                        android:minHeight="@dimen/_52sdp"
-                                        android:textColor="@color/white"
-                                        android:textSize="@dimen/_13ssp" />
-
-                                </com.google.android.material.textfield.TextInputLayout>
-
+                                <!-- Scheduled Row -->
                                 <LinearLayout
-                                    android:id="@+id/personal_note_text_ll"
+                                    android:id="@+id/fragment_movie_details_scheduled_row"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginStart="@dimen/_5sdp"
-                                    android:layout_marginTop="@dimen/_8sdp"
-                                    android:layout_marginBottom="@dimen/_12sdp"
                                     android:gravity="center_vertical"
-                                    tools:ignore="UseCompoundDrawables">
-
-                                    <TextView
-                                        android:id="@+id/fragment_movie_details_personal_note"
-                                        android:layout_width="0dp"
-                                        android:layout_height="wrap_content"
-                                        android:layout_marginEnd="@dimen/_12sdp"
-                                        android:layout_weight="1"
-                                        android:fontFamily="@font/montserrat_medium"
-                                        android:textColor="@color/white"
-                                        android:textSize="@dimen/_13ssp"
-                                        android:visibility="gone"
-                                        tools:text="beautiful movie another twisted tale by fujimoto sensei 😭😭"
-                                        tools:visibility="visible" />
+                                    android:orientation="horizontal"
+                                    android:paddingVertical="@dimen/_4sdp"
+                                    android:visibility="gone"
+                                    tools:visibility="visible">
 
                                     <ImageView
-                                        android:id="@+id/fragment_movie_details_personal_note_delete_btn"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:contentDescription="@string/delete_personal_note"
-                                        android:padding="@dimen/_8sdp"
-                                        android:src="@drawable/baseline_delete_24"
+                                        android:id="@+id/fragment_movie_details_scheduled_icon"
+                                        android:layout_width="@dimen/_18sdp"
+                                        android:layout_height="@dimen/_18sdp"
+                                        android:src="@drawable/ic_calendar_check"
                                         app:tint="@color/white" />
+
+                                    <TextView
+                                        android:id="@+id/fragment_movie_details_scheduled_date"
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginStart="@dimen/_8sdp"
+                                        android:layout_weight="1"
+                                        android:fontFamily="@font/montserrat_semibold"
+                                        android:textColor="@color/white"
+                                        android:textSize="@dimen/_10ssp"
+                                        tools:text="Scheduled on: 28th October 2025, 5:30 PM" />
                                 </LinearLayout>
-                            </FrameLayout>
-                        </LinearLayout>
+
+                                <!-- Divider 1 -->
+                                <View
+                                    android:id="@+id/activity_divider_1"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="1dp"
+                                    android:layout_marginVertical="@dimen/_4sdp"
+                                    android:background="@color/divider"
+                                    android:visibility="gone" />
+
+                                <!-- Last Watched Row -->
+                                <LinearLayout
+                                    android:id="@+id/fragment_movie_details_last_watched_row"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="center_vertical"
+                                    android:orientation="horizontal"
+                                    android:paddingVertical="@dimen/_4sdp"
+                                    android:visibility="gone"
+                                    tools:visibility="visible">
+
+                                    <ImageView
+                                        android:layout_width="@dimen/_18sdp"
+                                        android:layout_height="@dimen/_18sdp"
+                                        android:src="@drawable/baseline_done_all_24"
+                                        app:tint="@color/white" />
+
+                                    <TextView
+                                        android:id="@+id/fragment_movie_details_last_watched"
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginStart="@dimen/_8sdp"
+                                        android:layout_weight="1"
+                                        android:fontFamily="@font/montserrat_bold"
+                                        android:textColor="@color/white"
+                                        android:textSize="@dimen/_10ssp"
+                                        tools:text="Last watched: Season 2 ep 5" />
+                                </LinearLayout>
+
+                                <!-- Divider 2 -->
+                                <View
+                                    android:id="@+id/activity_divider_2"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="1dp"
+                                    android:layout_marginVertical="@dimen/_4sdp"
+                                    android:background="@color/divider"
+                                    android:visibility="gone" />
+
+                                <!-- Personal Note Section -->
+                                <LinearLayout
+                                    android:id="@+id/fragment_movie_details_personal_note_ll"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="vertical"
+                                    android:paddingVertical="@dimen/_4sdp"
+                                    android:visibility="gone"
+                                    tools:visibility="visible">
+
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:gravity="center_vertical"
+                                        android:orientation="horizontal">
+
+                                        <ImageView
+                                            android:layout_width="@dimen/_18sdp"
+                                            android:layout_height="@dimen/_18sdp"
+                                            android:src="@drawable/ic_pin"
+                                            app:tint="@color/white" />
+
+                                        <TextView
+                                            android:id="@+id/fragment_movie_details_personal_note_title"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginStart="@dimen/_8sdp"
+                                            android:fontFamily="@font/montserrat_bold"
+                                            android:text="@string/personal_note"
+                                            android:textColor="@color/white"
+                                            android:textSize="@dimen/_10ssp" />
+                                    </LinearLayout>
+
+                                    <FrameLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="@dimen/_4sdp">
+
+                                        <com.google.android.material.button.MaterialButton
+                                            android:id="@+id/fragment_movie_details_personal_note_btn"
+                                            style="@style/Widget.MaterialComponents.Button.TextButton"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:autoSizeMaxTextSize="@dimen/_12ssp"
+                                            android:autoSizeMinTextSize="@dimen/_10ssp"
+                                            android:autoSizeTextType="uniform"
+                                            android:fontFamily="@font/montserrat_medium"
+                                            android:letterSpacing="0.1"
+                                            android:maxLines="1"
+                                            android:text="@string/click_to_add_your_personal_note"
+                                            android:textAllCaps="false"
+                                            android:textColor="@color/white"
+                                            android:visibility="gone"
+                                            app:icon="@drawable/baseline_add_circle_24"
+                                            app:iconGravity="textStart"
+                                            app:iconTint="@color/white"
+                                            tools:targetApi="26"
+                                            tools:visibility="gone" />
+
+                                        <com.google.android.material.textfield.TextInputLayout
+                                            android:id="@+id/fragment_movie_details_personal_note_text_input_layout"
+                                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginTop="@dimen/_5sdp"
+                                            android:layout_marginBottom="@dimen/_8sdp"
+                                            android:hint="@string/enter_your_note"
+                                            android:textColorHint="@color/white"
+                                            android:visibility="gone"
+                                            app:boxCornerRadiusBottomEnd="@dimen/_5sdp"
+                                            app:boxCornerRadiusBottomStart="@dimen/_5sdp"
+                                            app:boxCornerRadiusTopEnd="@dimen/_5sdp"
+                                            app:boxCornerRadiusTopStart="@dimen/_5sdp"
+                                            app:boxStrokeColor="@color/personal_note_box_color"
+                                            app:hintTextColor="@color/white"
+                                            tools:visibility="gone">
+
+                                            <com.google.android.material.textfield.TextInputEditText
+                                                android:id="@+id/fragment_movie_details_personal_note_edit_text"
+                                                android:layout_width="match_parent"
+                                                android:layout_height="wrap_content"
+                                                android:fontFamily="@font/montserrat_medium"
+                                                android:gravity="top"
+                                                android:imeActionLabel="Save"
+                                                android:imeOptions="actionDone"
+                                                android:inputType="text"
+                                                android:maxLines="1"
+                                                android:minHeight="@dimen/_48sdp"
+                                                android:textColor="@color/white"
+                                                android:textSize="@dimen/_11ssp" />
+
+                                        </com.google.android.material.textfield.TextInputLayout>
+
+                                        <LinearLayout
+                                            android:id="@+id/personal_note_text_ll"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginStart="@dimen/_4sdp"
+                                            android:layout_marginTop="@dimen/_4sdp"
+                                            android:layout_marginBottom="@dimen/_8sdp"
+                                            android:gravity="center_vertical"
+                                            tools:ignore="UseCompoundDrawables">
+
+                                            <TextView
+                                                android:id="@+id/fragment_movie_details_personal_note"
+                                                android:layout_width="0dp"
+                                                android:layout_height="wrap_content"
+                                                android:layout_marginEnd="@dimen/_12sdp"
+                                                android:layout_weight="1"
+                                                android:fontFamily="@font/montserrat_medium"
+                                                android:textColor="@color/white"
+                                                android:textSize="@dimen/_11ssp"
+                                                android:visibility="gone"
+                                                tools:text="beautiful movie another twisted tale by fujimoto sensei 😭😭"
+                                                tools:visibility="visible" />
+
+                                            <ImageView
+                                                android:id="@+id/fragment_movie_details_personal_note_delete_btn"
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:contentDescription="@string/delete_personal_note"
+                                                android:padding="@dimen/_8sdp"
+                                                android:src="@drawable/baseline_delete_24"
+                                                app:tint="@color/white" />
+                                        </LinearLayout>
+                                    </FrameLayout>
+                                </LinearLayout>
+                            </LinearLayout>
+                        </com.google.android.material.card.MaterialCardView>
 
                         <!-- Personal Gallery Section -->
                         <LinearLayout
@@ -327,36 +425,6 @@
                                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                                 tools:listitem="@layout/item_personal_gallery" />
 
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="@dimen/_5sdp"
-                            android:layout_marginTop="@dimen/_8sdp"
-                            android:layout_marginEnd="@dimen/_5sdp"
-                            android:layout_marginBottom="@dimen/_12sdp"
-                            android:orientation="horizontal">
-
-                            <ImageView
-                                android:id="@+id/fragment_movie_details_scheduled_icon"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:src="@drawable/ic_calendar_check" />
-
-                            <TextView
-                                android:id="@+id/fragment_movie_details_scheduled_date"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center"
-                                android:layout_marginStart="@dimen/_5sdp"
-                                android:fontFamily="@font/montserrat_semibold"
-                                android:textColor="@color/white"
-                                android:textSize="@dimen/_10ssp"
-                                android:visibility="gone"
-                                app:drawableTint="@color/white"
-                                tools:text="Scheduled on: 28th October 2025, 5:30 PM"
-                                tools:visibility="visible" />
                         </LinearLayout>
 
                         <TextView

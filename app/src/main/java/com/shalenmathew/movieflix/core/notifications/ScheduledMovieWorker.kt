@@ -29,6 +29,7 @@ class ScheduledMovieWorker(
             val moviePosterUrl = inputData.getString(KEY_MOVIE_POSTER)
             val movieResultJson = inputData.getString(KEY_MOVIE_RESULT_JSON) ?: ""
             val scheduledDate = inputData.getLong(KEY_SCHEDULED_DATE, 0L)
+            val customMessage = inputData.getString(KEY_CUSTOM_MESSAGE)
 
             if (movieId == -1) {
                 return@withContext Result.failure()
@@ -40,7 +41,8 @@ class ScheduledMovieWorker(
                 movieId,
                 movieTitle,
                 moviePosterUrl,
-                movieResultJson
+                movieResultJson,
+                customMessage
             )
 
             // Wait 10 seconds before removing the schedule
@@ -83,6 +85,7 @@ class ScheduledMovieWorker(
         const val KEY_MOVIE_POSTER = "movie_poster"
         const val KEY_MOVIE_RESULT_JSON = "movie_result_json"
         const val KEY_SCHEDULED_DATE = "scheduled_date"
+        const val KEY_CUSTOM_MESSAGE = "custom_message"
         const val WORK_NAME_PREFIX = "scheduled_movie_"
     }
 }

@@ -25,7 +25,7 @@ import com.shalenmathew.movieflix.data.local_storage.entity.EpisodeTrackingEntit
         com.shalenmathew.movieflix.data.local_storage.entity.CustomListMovieEntity::class,
         com.shalenmathew.movieflix.data.local_storage.entity.PersonalGalleryEntity::class
     ],
-    version = 16
+    version = 17
 )
 @TypeConverters(MovieDataTypeConverter::class)
 abstract class MovieDatabase : RoomDatabase() {
