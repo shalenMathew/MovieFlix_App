@@ -12,6 +12,7 @@ import com.shalenmathew.movieflix.data.model.TVDetailResponse
 import com.shalenmathew.movieflix.data.model.TVImagesResponse
 import com.shalenmathew.movieflix.data.model.TVSeasonResponse
 import com.shalenmathew.movieflix.data.model.WhereToWatchProviderResponse
+import com.shalenmathew.movieflix.domain.model.MovieResult
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -161,6 +162,12 @@ interface ApiClient {
         @Path("tv_id") tvId: Int,
         @Query("language") lang: String? = "en-US"
     ): Response<TVDetailResponse>
+
+    @GET("3/movie/{movie_id}")
+    suspend fun fetchMovieDetailApiCall(
+        @Path("movie_id") movieId: Int,
+        @Query("language") lang: String? = "en-US"
+    ): Response<MovieResult>
 
     @GET("3/tv/{tv_id}/images")
     suspend fun fetchTVImagesApiCall(

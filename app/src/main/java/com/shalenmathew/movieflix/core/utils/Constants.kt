@@ -23,6 +23,7 @@ object Constants {
     const val BASE_YOUTUBE_URL = "https://www.youtube.com/watch?v="
 
     const val MEDIA_SEND_REQUEST_KEY = "media_set_fragment_result_request_key"
+    const val MEDIA_SEND_REQUEST_ID_KEY = "media_set_fragment_result_request_id_key"
 
     const val TRAILER = "Trailer"
     const val TEASER = "Teaser";

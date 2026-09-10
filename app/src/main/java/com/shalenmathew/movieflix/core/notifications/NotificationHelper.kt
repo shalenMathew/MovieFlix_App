@@ -48,17 +48,15 @@ object NotificationHelper {
         movieId: Int,
         movieTitle: String,
         moviePosterUrl: String?,
-        movieResultJson: String,
         customMessage: String? = null
     ) {
         createNotificationChannel(context)
 
-        // Create intent to open the specific movie
+        // Create intent to open the specific movie using ID instead of full JSON
         val intent = Intent(context, MainActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_SINGLE_TOP
             action = Intent.ACTION_VIEW
             putExtra("OPEN_MOVIE_DETAILS", true)
-            putExtra("MOVIE_DATA", movieResultJson)
             putExtra("MOVIE_ID", movieId)
         }
 

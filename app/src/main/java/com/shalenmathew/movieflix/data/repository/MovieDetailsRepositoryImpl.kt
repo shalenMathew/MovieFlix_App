@@ -16,6 +16,7 @@ import com.shalenmathew.movieflix.domain.model.CrewMember
 import com.shalenmathew.movieflix.domain.model.HomeFeedData
 import com.shalenmathew.movieflix.domain.model.MovieList
 import com.shalenmathew.movieflix.domain.model.MediaVideoResultList
+import com.shalenmathew.movieflix.domain.model.MovieResult
 import com.shalenmathew.movieflix.domain.model.WatchProviders
 import com.shalenmathew.movieflix.domain.repository.MovieInfoRepository
 import kotlinx.coroutines.Dispatchers
@@ -546,6 +547,24 @@ class MovieDetailsRepositoryImpl(
                     emit(NetworkResults.Success(response.body()))
                 } else {
                     emit(NetworkResults.Error(appContext.getString(R.string.msg_failed_fetch_images)))
+                }
+            } else {
+                emit(NetworkResults.Error(appContext.getString(R.string.no_internet_connection)))
+            }
+        } catch (e: Exception) {
+            emit(NetworkResults.Error(e.message ?: appContext.getString(R.string.msg_something_went_wrong)))
+        }
+    }
+
+    override fun getMovieDetails(movieId: Int): Flow<NetworkResults<MovieResult>> = flow {
+        emit(NetworkResults.Loading())
+        try {
+            if (networkChecker(appContext)) {
+                val response = remoteDataSource.getMovieDetails(movieId)
+                if (response.isSuccessful && response.body() != null) {
+                    emit(NetworkResults.Success(response.body()!!))
+                } else {
+                    emit(NetworkResults.Error(appContext.getString(R.string.msg_something_went_wrong)))
                 }
             } else {
                 emit(NetworkResults.Error(appContext.getString(R.string.no_internet_connection)))

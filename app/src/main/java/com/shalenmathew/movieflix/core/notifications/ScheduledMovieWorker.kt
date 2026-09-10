@@ -1,25 +1,21 @@
 package com.shalenmathew.movieflix.core.notifications
 
 import android.content.Context
-import androidx.room.Room
+import androidx.hilt.work.HiltWorker
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
-import com.google.gson.Gson
-import com.shalenmathew.movieflix.core.utils.Constants
-import com.shalenmathew.movieflix.core.utils.GsonParser
-import com.shalenmathew.movieflix.core.utils.MIGRATION_3_4
-import com.shalenmathew.movieflix.core.utils.MIGRATION_3_5
-import com.shalenmathew.movieflix.core.utils.MIGRATION_4_5
-import com.shalenmathew.movieflix.core.utils.MIGRATION_5_6
-import com.shalenmathew.movieflix.core.utils.MIGRATION_6_7
-import com.shalenmathew.movieflix.data.local_storage.MovieDataTypeConverter
-import com.shalenmathew.movieflix.data.local_storage.MovieDatabase
+import com.shalenmathew.movieflix.data.local_storage.MovieDao
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedInject
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
 
-class ScheduledMovieWorker(
-    private val context: Context,
-    workerParams: WorkerParameters
+@HiltWorker
+class ScheduledMovieWorker @AssistedInject constructor(
+    @Assisted private val context: Context,
+    @Assisted workerParams: WorkerParameters,
+    private val movieDao: MovieDao
 ) : CoroutineWorker(context, workerParams) {
 
     override suspend fun doWork(): Result = withContext(Dispatchers.IO) {
@@ -27,8 +23,6 @@ class ScheduledMovieWorker(
             val movieId = inputData.getInt(KEY_MOVIE_ID, -1)
             val movieTitle = inputData.getString(KEY_MOVIE_TITLE) ?: "Movie"
             val moviePosterUrl = inputData.getString(KEY_MOVIE_POSTER)
-            val movieResultJson = inputData.getString(KEY_MOVIE_RESULT_JSON) ?: ""
-            val scheduledDate = inputData.getLong(KEY_SCHEDULED_DATE, 0L)
             val customMessage = inputData.getString(KEY_CUSTOM_MESSAGE)
 
             if (movieId == -1) {
@@ -41,32 +35,20 @@ class ScheduledMovieWorker(
                 movieId,
                 movieTitle,
                 moviePosterUrl,
-                movieResultJson,
                 customMessage
             )
 
             // Wait 10 seconds before removing the schedule
             // This gives user time to see and interact with notification
-            kotlinx.coroutines.delay(10000L) // 10 seconds
+            delay(10000L) // 10 seconds
 
             // Remove the schedule from database after 10 seconds
             // This allows user to schedule the movie again
             try {
-                val database = Room.databaseBuilder(
-                    context.applicationContext,
-                    MovieDatabase::class.java,
-                    Constants.DATABASE_NAME
-                )
-                .addTypeConverter(MovieDataTypeConverter(GsonParser(Gson())))
-                .addMigrations(MIGRATION_3_4, MIGRATION_4_5, MIGRATION_5_6, MIGRATION_6_7)
-                .build()
-                
-                val scheduledEntity = database.dao.getScheduledMovieById(movieId)
+                val scheduledEntity = movieDao.getScheduledMovieById(movieId)
                 scheduledEntity?.let {
-                    database.dao.deleteScheduledMovie(it)
+                    movieDao.deleteScheduledMovie(it)
                 }
-                
-                database.close()
             } catch (e: Exception) {
                 e.printStackTrace()
                 // Continue even if database cleanup fails

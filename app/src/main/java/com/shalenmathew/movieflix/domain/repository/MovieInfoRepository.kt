@@ -6,6 +6,7 @@ import com.shalenmathew.movieflix.domain.model.CrewMember
 import com.shalenmathew.movieflix.domain.model.HomeFeedData
 import com.shalenmathew.movieflix.domain.model.MovieList
 import com.shalenmathew.movieflix.domain.model.MediaVideoResultList
+import com.shalenmathew.movieflix.domain.model.MovieResult
 import com.shalenmathew.movieflix.domain.model.TVDetail
 import com.shalenmathew.movieflix.domain.model.TVSeason
 import com.shalenmathew.movieflix.domain.model.WatchProviders
@@ -40,6 +41,8 @@ fun getTVCast(tvId: Int): Flow<NetworkResults<List<CastMember>>>
 fun getMovieCrew(movieId: Int): Flow<NetworkResults<List<CrewMember>>>
 
 fun getTVCrew(tvId: Int): Flow<NetworkResults<List<CrewMember>>>
+
+fun getMovieDetails(movieId: Int): Flow<NetworkResults<MovieResult>>
 
 fun getTVDetail(tvId: Int): Flow<NetworkResults<TVDetail>>
 

@@ -110,13 +110,16 @@ class MainActivity : AppCompatActivity() {
 
     private fun handleNotificationIntent() {
         if (intent?.getBooleanExtra("OPEN_MOVIE_DETAILS", false) == true) {
-            val movieData = intent.getStringExtra("MOVIE_DATA")
-            if (!movieData.isNullOrEmpty()) {
+            val movieId = intent.getIntExtra("MOVIE_ID", -1)
+            
+            if (movieId != -1) {
                 // Navigate to movie details with a delay to ensure nav controller is ready
                 binding.root.postDelayed({
                     try {
                         val currentDestination = navController.currentDestination?.id
-                        val bundle = bundleOf(Constants.MEDIA_SEND_REQUEST_KEY to movieData)
+                        val bundle = bundleOf(
+                            Constants.MEDIA_SEND_REQUEST_ID_KEY to movieId
+                        )
                         
                         // Navigate from a valid destination that has an action to movieDetailsFragment
                         when (currentDestination) {

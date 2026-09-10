@@ -147,8 +147,10 @@ dependencies {
 
 
     //Dagger - Hilt
-    implementation ("com.google.dagger:hilt-android:2.57.2")
-    kapt ("com.google.dagger:hilt-compiler:2.57.2")
+    implementation ("com.google.dagger:hilt-android:2.60.1")
+    kapt ("com.google.dagger:hilt-android-compiler:2.60.1")
+    implementation("androidx.hilt:hilt-work:1.4.0")
+    kapt("androidx.hilt:hilt-compiler:1.4.0")
 
     //Shimmer
     implementation ("com.facebook.shimmer:shimmer:0.5.0")

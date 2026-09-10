@@ -6,6 +6,7 @@ import com.shalenmathew.movieflix.domain.model.CrewMember
 import com.shalenmathew.movieflix.domain.model.HomeFeedData
 import com.shalenmathew.movieflix.domain.model.MovieList
 import com.shalenmathew.movieflix.domain.model.MediaVideoResultList
+import com.shalenmathew.movieflix.domain.model.MovieResult
 import com.shalenmathew.movieflix.domain.model.TVDetail
 import com.shalenmathew.movieflix.domain.model.TVSeason
 import com.shalenmathew.movieflix.domain.model.WatchProviders
@@ -73,5 +74,9 @@ class  GetMovieInfo @Inject constructor(private val movieInfoRepository: MovieIn
 
     fun getTVImages(tvId: Int, includeLanguages: String? = null): Flow<NetworkResults<com.shalenmathew.movieflix.data.model.TVImagesResponse>> {
         return movieInfoRepository.getTVImages(tvId, includeLanguages)
+    }
+
+    fun getMovieDetails(movieId: Int): Flow<NetworkResults<MovieResult>> {
+        return movieInfoRepository.getMovieDetails(movieId)
     }
 }

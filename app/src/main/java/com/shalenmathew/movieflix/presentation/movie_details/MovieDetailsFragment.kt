@@ -344,6 +344,20 @@ class MovieDetailsFragment : BottomSheetDialogFragment() {
     }
 
     private fun setUpObservers() {
+        
+        homeInfoViewModel.movieDetails.observe(viewLifecycleOwner) { result ->
+            when (result) {
+                is NetworkResults.Success -> {
+                    result.data?.let { bindMovieData(it) }
+                }
+                is NetworkResults.Error -> {
+                    context?.let { showToast(it, result.message ?: getString(R.string.msg_something_went_wrong)) }
+                }
+                is NetworkResults.Loading -> {
+                    // Could show a loading state here if needed
+                }
+            }
+        }
 
         homeInfoViewModel.mediaTrailerList.observe(viewLifecycleOwner) {
             when (it) {
@@ -1556,95 +1570,94 @@ class MovieDetailsFragment : BottomSheetDialogFragment() {
         currentSeriesProgressCache = null
         binding.fragmentMovieDetailsLastWatched.visibility = View.GONE
 
+        // Check for ID-based navigation first
+        val movieId = arguments?.getInt(Constants.MEDIA_SEND_REQUEST_ID_KEY, -1) ?: -1
+        if (movieId != -1) {
+            homeInfoViewModel.getMovieDetails(movieId)
+            return
+        }
+
         val result = Gson().fromJson(
             arguments?.getString(Constants.MEDIA_SEND_REQUEST_KEY),
             MovieResult::class.java
         )
 
-        result?.let {
-            mediaId = it.id
-            movieResult = it
+        result?.let { bindMovieData(it) }
+    }
 
-            val genreList: List<Int>? = it.genreIds
-            val title = if (!it.title.isNullOrEmpty()) it.title else it.name
+    private fun bindMovieData(it: MovieResult) {
+        mediaId = it.id
+        movieResult = it
 
-            val overView = it.overview
-            val language = it.originalLanguage
-            val rating = it.voteAverage
-            val year = it.releaseDate
-            val img = it.backdropPath
-            val releaseDate = it.releaseDate
+        val genreList: List<Int>? = it.genreIds
+        val title = if (!it.title.isNullOrEmpty()) it.title else it.name
 
-            binding.apply {
-                fragmentMovieDetailsTitle.text = title
-                fragmentMovieDetailsGenre.text = getGenreListById(requireContext(), genreList).joinToString { genre ->
-                    genre.name
-                }
-                
-                val isLocal = img != null && (img.startsWith("content://") || img.count { it == '/' } > 1)
-                val fullUrl = when {
-                    isLocal -> img
-                    img?.startsWith("http") == true -> img
-                    else -> TMDB_IMAGE_BASE_URL_W780.plus(img)
-                }
-                posterImage.loadImage(fullUrl)
-                
-                fragmentMovieDetailsLang.text = language
-                overView?.let { setExpandableText(fragmentMovieDetailsOverview, it) }
-                fragmentMovieDetailsRating.text = String.format("%.1f", rating)
-                fragmentMovieDetailsYear.text = formatDate(year)
-                releaseDate?.let { rDate ->
-                    if (rDate.trim().isNotEmpty()) {
-                        fragmentMovieDetailsReleaseDate.visibility = View.VISIBLE
-                        fragmentMovieDetailsReleaseDate.text =
-                            getString(R.string.release_date, rDate)
-                    }
-                }
+        val overView = it.overview
+        val language = it.originalLanguage
+        val rating = it.voteAverage
+        val year = it.releaseDate
+        val img = it.backdropPath
+        val releaseDate = it.releaseDate
 
+        binding.apply {
+            fragmentMovieDetailsTitle.text = title
+            fragmentMovieDetailsGenre.text = getGenreListById(requireContext(), genreList).joinToString { genre ->
+                genre.name
             }
+            
+            val isLocal = img != null && (img.startsWith("content://") || img.count { it == '/' } > 1)
+            val fullUrl = when {
+                isLocal -> img
+                img?.startsWith("http") == true -> img
+                else -> TMDB_IMAGE_BASE_URL_W780.plus(img)
+            }
+            posterImage.loadImage(fullUrl)
+            
+            fragmentMovieDetailsLang.text = language
+            overView?.let { setExpandableText(fragmentMovieDetailsOverview, it) }
+            fragmentMovieDetailsRating.text = String.format("%.1f", rating)
+            fragmentMovieDetailsYear.text = formatDate(year)
+            releaseDate?.let { rDate ->
+                if (rDate.trim().isNotEmpty()) {
+                    fragmentMovieDetailsReleaseDate.visibility = View.VISIBLE
+                    fragmentMovieDetailsReleaseDate.text =
+                        getString(R.string.release_date, rDate)
+                }
+            }
+        }
 
-            mediaId?.let { id ->
+        mediaId?.let { id ->
+            when (it.mediaType) {
+                "movie" -> {
+                    isTVShow = false
+                    binding.tabsSection.visibility = View.GONE
+                    binding.episodesSection.visibility = View.GONE
+                    binding.aboutSection.visibility = View.VISIBLE
 
+                    homeInfoViewModel.getMovieTrailer(id)
+                    loadSecondaryData(id)
+                }
+                "tv" -> {
+                    isTVShow = true
+                    binding.tabsSection.visibility = View.VISIBLE
+                    binding.aboutSection.visibility = View.VISIBLE
+                    binding.episodesSection.visibility = View.GONE
 
-                when (it.mediaType) {
-                    "movie" -> {
-                        isTVShow = false
-                        binding.tabsSection.visibility = View.GONE
-                        binding.episodesSection.visibility = View.GONE
-                        binding.aboutSection.visibility = View.VISIBLE
+                    homeInfoViewModel.getTVTrailer(id)
+                    loadSecondaryData(id)
+                    seriesTrackingViewModel.checkTrackingStatus(id)
+                }
+                else -> {
+                    isTVShow = false
+                    binding.tabsSection.visibility = View.GONE
+                    binding.episodesSection.visibility = View.GONE
+                    binding.aboutSection.visibility = View.VISIBLE
 
-                        homeInfoViewModel.getMovieTrailer(id)
-                        // Load cast, recommendations, and watch providers lazily
-                        loadSecondaryData(id)
-                    }
-
-                    "tv" -> {
-                        isTVShow = true
-                        binding.tabsSection.visibility = View.VISIBLE
-                        binding.aboutSection.visibility = View.VISIBLE
-                        binding.episodesSection.visibility = View.GONE
-
-                        homeInfoViewModel.getTVTrailer(id)
-                        // Load cast, recommendations, watch providers, and TV details lazily
-                        loadSecondaryData(id)
-                        seriesTrackingViewModel.checkTrackingStatus(id)
-                    }
-
-                    else -> {
-                        isTVShow = false
-                        binding.tabsSection.visibility = View.GONE
-                        binding.episodesSection.visibility = View.GONE
-                        binding.aboutSection.visibility = View.VISIBLE
-
-                        if (!title.isNullOrEmpty()) {
-                            searchMovieViewModel.fetchSearchMovie(title)
-                        }
-
+                    if (!title.isNullOrEmpty()) {
+                        searchMovieViewModel.fetchSearchMovie(title)
                     }
                 }
-                // Removed immediate loading of recommendations and watch providers
             }
-
         }
     }
 

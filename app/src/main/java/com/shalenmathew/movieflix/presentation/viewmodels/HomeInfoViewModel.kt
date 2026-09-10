@@ -10,6 +10,7 @@ import com.shalenmathew.movieflix.domain.model.CrewMember
 import com.shalenmathew.movieflix.domain.model.HomeFeedData
 import com.shalenmathew.movieflix.domain.model.MovieList
 import com.shalenmathew.movieflix.domain.model.MediaVideoResultList
+import com.shalenmathew.movieflix.domain.model.MovieResult
 import com.shalenmathew.movieflix.domain.model.TVDetail
 import com.shalenmathew.movieflix.domain.model.TVSeason
 import com.shalenmathew.movieflix.domain.model.WatchProviders
@@ -49,6 +50,9 @@ class HomeInfoViewModel @Inject constructor(private val getMovieInfo: GetMovieIn
 
     private var _mediaImages = MutableLiveData<NetworkResults<com.shalenmathew.movieflix.data.model.TVImagesResponse>>()
     val mediaImages: LiveData<NetworkResults<com.shalenmathew.movieflix.data.model.TVImagesResponse>> = _mediaImages
+
+    private var _movieDetails = MutableLiveData<NetworkResults<MovieResult>>()
+    val movieDetails: LiveData<NetworkResults<MovieResult>> = _movieDetails
 
     // Pagination support
     private var _loadMoreMovies = MutableLiveData<NetworkResults<Pair<String, MovieList>>>()
@@ -201,6 +205,15 @@ class HomeInfoViewModel @Inject constructor(private val getMovieInfo: GetMovieIn
         viewModelScope.launch {
             getMovieInfo.getTVImages(tvId, includeLanguages).onEach {
                 _mediaImages.value = it
+            }.launchIn(this)
+        }
+    }
+
+    fun getMovieDetails(movieId: Int) {
+        _movieDetails.value = NetworkResults.Loading()
+        viewModelScope.launch {
+            getMovieInfo.getMovieDetails(movieId).onEach {
+                _movieDetails.value = it
             }.launchIn(this)
         }
     }
