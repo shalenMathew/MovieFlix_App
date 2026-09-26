@@ -30,6 +30,35 @@
         android:paddingBottom="@dimen/_12sdp"
         tools:text="List Name" />
 
+    <!-- Edit Action -->
+    <LinearLayout
+        android:id="@+id/action_edit_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingVertical="@dimen/_12sdp"
+        android:paddingHorizontal="@dimen/_16sdp"
+        android:foreground="?attr/selectableItemBackground"
+        android:gravity="center_vertical">
+
+        <ImageView
+            android:layout_width="@dimen/_20sdp"
+            android:layout_height="@dimen/_20sdp"
+            android:src="@drawable/ic_edit"
+            app:tint="@color/white"
+            android:contentDescription="@null" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_16sdp"
+            android:text="@string/edit_list"
+            android:fontFamily="@font/montserrat_semibold"
+            android:textColor="@color/white"
+            android:textSize="@dimen/_12ssp" />
+
+    </LinearLayout>
+
     <!-- Pin Action -->
     <LinearLayout
         android:id="@+id/action_pin_list"

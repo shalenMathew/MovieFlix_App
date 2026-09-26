@@ -25,6 +25,8 @@ import com.shalenmathew.movieflix.domain.model.UserCustomList
 import dagger.hilt.android.AndroidEntryPoint
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
+import com.google.android.material.button.MaterialButton
+import com.google.android.material.textfield.TextInputEditText
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -77,6 +79,12 @@ class CustomListsFragment : Fragment() {
         
         view.findViewById<TextView>(R.id.list_options_header).text = list.name
         
+        // Edit Action
+        view.findViewById<View>(R.id.action_edit_list).setOnClickListener {
+            dialog.dismiss()
+            showEditListDialog(list)
+        }
+
         // Favorites Pin
         val pinFavBtn = view.findViewById<View>(R.id.action_pin_list)
         val pinFavText = view.findViewById<TextView>(R.id.pin_text)
@@ -102,6 +110,36 @@ class CustomListsFragment : Fragment() {
         view.findViewById<View>(R.id.action_delete_list).setOnClickListener {
             dialog.dismiss()
             showDeleteConfirmationDialog(list)
+        }
+
+        dialog.setContentView(view)
+        dialog.show()
+    }
+
+    private fun showEditListDialog(list: UserCustomList) {
+        val dialog = BottomSheetDialog(requireContext(), R.style.SheetDialog)
+        val view = layoutInflater.inflate(R.layout.dialog_create_list, null)
+        
+        val header = view.findViewById<TextView>(R.id.dialog_title)
+        val nameEt = view.findViewById<TextInputEditText>(R.id.list_name_et)
+        val descEt = view.findViewById<TextInputEditText>(R.id.list_desc_et)
+        val confirmBtn = view.findViewById<MaterialButton>(R.id.create_list_confirm_btn)
+
+        header?.text = getString(R.string.edit_list)
+        nameEt?.setText(list.name)
+        descEt?.setText(list.description)
+        confirmBtn?.text = getString(R.string.save_changes)
+
+        confirmBtn?.setOnClickListener {
+            val newName = nameEt?.text.toString().trim()
+            if (newName.isNotEmpty()) {
+                val newDesc = descEt?.text.toString().trim().takeIf { it.isNotEmpty() }
+                viewModel.updateListDetails(list.id, newName, newDesc)
+                dialog.dismiss()
+                showToast(requireContext(), "List updated successfully!")
+            } else {
+                nameEt?.error = getString(R.string.error_name_empty)
+            }
         }
 
         dialog.setContentView(view)

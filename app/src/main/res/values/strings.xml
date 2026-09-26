@@ -144,7 +144,7 @@
     <string name="new_collection">New Collection</string>
     <string name="items_count">%1$d Items</string>
     <string name="save_to_custom_list">Save to one of your custom lists</string>
-    <string name="created_on_movieflix">Created on MovieFlix</string>
+    <string name="created_on_movieflix">MovieFlix</string>
     <string name="no_internet_connection">No Internet Connection</string>
     <string name="open_settings">Open Settings</string>
     <string name="setting_item">Setting Item</string>

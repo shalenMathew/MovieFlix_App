@@ -22,6 +22,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.gson.Gson
 import com.shalenmathew.movieflix.R
 import com.shalenmathew.movieflix.core.adapters.HorizontalAdapter
@@ -33,6 +34,7 @@ import com.shalenmathew.movieflix.core.utils.showToast
 import com.shalenmathew.movieflix.core.utils.shareMovie
 import com.shalenmathew.movieflix.databinding.FragmentListDetailsBinding
 import com.shalenmathew.movieflix.domain.model.MovieResult
+import com.shalenmathew.movieflix.domain.model.UserCustomList
 import com.shalenmathew.movieflix.presentation.viewmodels.CustomListViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
@@ -51,6 +53,7 @@ class ListDetailsFragment : Fragment() {
     private var listId: Int = -1
     private var listName: String = ""
     private var listDesc: String? = null
+    private var currentList: UserCustomList? = null
 
     private lateinit var adapter: HorizontalAdapter
     private var currentMovies: List<MovieResult> = emptyList()
@@ -84,48 +87,6 @@ class ListDetailsFragment : Fragment() {
         mBinding.listDetailsShareBtn.setOnClickListener {
             shareListAsImage()
         }
-
-        mBinding.listDetailsEditBtn.setOnClickListener {
-            showEditListDialog()
-        }
-    }
-
-    private fun showEditListDialog() {
-        val dialog = BottomSheetDialog(requireContext(), R.style.SheetDialog)
-        val view = layoutInflater.inflate(R.layout.dialog_create_list, null)
-        
-        val header = view.findViewById<TextView>(R.id.dialog_title)
-        val nameEt = view.findViewById<com.google.android.material.textfield.TextInputEditText>(R.id.list_name_et)
-        val descEt = view.findViewById<com.google.android.material.textfield.TextInputEditText>(R.id.list_desc_et)
-        val confirmBtn = view.findViewById<com.google.android.material.button.MaterialButton>(R.id.create_list_confirm_btn)
-
-        header?.text = getString(R.string.edit_list)
-        nameEt?.setText(listName)
-        descEt?.setText(listDesc)
-        confirmBtn?.text = getString(R.string.save_changes)
-
-        confirmBtn?.setOnClickListener {
-            val newName = nameEt?.text.toString().trim()
-            if (newName.isNotEmpty()) {
-                val newDesc = descEt?.text.toString().trim().takeIf { it.isNotEmpty() }
-                viewModel.updateListDetails(listId, newName, newDesc)
-                
-                // Update local UI
-                listName = newName
-                listDesc = newDesc
-                mBinding.listDetailsName.text = newName
-                mBinding.listDetailsDesc.text = newDesc ?: ""
-                mBinding.listDetailsDesc.visibility = if (newDesc.isNullOrEmpty()) View.GONE else View.VISIBLE
-                
-                dialog.dismiss()
-                showToast(requireContext(), "List updated successfully!")
-            } else {
-                nameEt?.error = getString(R.string.error_name_empty)
-            }
-        }
-
-        dialog.setContentView(view)
-        dialog.show()
     }
 
     private fun setupRecyclerView() {
@@ -215,6 +176,18 @@ class ListDetailsFragment : Fragment() {
     }
 
     private fun observeData() {
+        viewModel.allLists.observe(viewLifecycleOwner) { lists ->
+            val found = lists.find { it.id == listId }
+            if (found != null) {
+                currentList = found
+                listName = found.name
+                listDesc = found.description
+                mBinding.listDetailsName.text = listName
+                mBinding.listDetailsDesc.text = listDesc ?: ""
+                mBinding.listDetailsDesc.visibility = if (listDesc.isNullOrEmpty()) View.GONE else View.VISIBLE
+            }
+        }
+
         if (listId != -1) {
             viewModel.getMoviesInList(listId).observe(viewLifecycleOwner) { movies ->
                 val movieResults = movies.map { 
