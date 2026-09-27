@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/sharable_root"
+    android:layout_width="1080px"
+    android:layout_height="wrap_content"
+    android:background="#FFFFFF"
+    android:orientation="vertical"
+    android:padding="50px">
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardBackgroundColor="#FFFFFF"
+        app:cardCornerRadius="30px"
+        app:cardElevation="0dp"
+        app:strokeWidth="0dp">
+
+        <GridLayout
+            android:id="@+id/sharable_grid"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:columnCount="3"
+            android:useDefaultMargins="false">
+
+            <!-- 9 Posters with zero gap -->
+            <ImageView
+                android:id="@+id/poster_1" android:layout_width="326px" android:layout_height="489px" android:scaleType="centerCrop" android:contentDescription="@null" />
+            <ImageView
+                android:id="@+id/poster_2" android:layout_width="326px" android:layout_height="489px" android:scaleType="centerCrop" android:contentDescription="@null" />
+            <ImageView
+                android:id="@+id/poster_3" android:layout_width="326px" android:layout_height="489px" android:scaleType="centerCrop" android:contentDescription="@null" />
+            <ImageView
+                android:id="@+id/poster_4" android:layout_width="326px" android:layout_height="489px" android:scaleType="centerCrop" android:contentDescription="@null" />
+            <ImageView
+                android:id="@+id/poster_5" android:layout_width="326px" android:layout_height="489px" android:scaleType="centerCrop" android:contentDescription="@null" />
+            <ImageView
+                android:id="@+id/poster_6" android:layout_width="326px" android:layout_height="489px" android:scaleType="centerCrop" android:contentDescription="@null" />
+            <ImageView
+                android:id="@+id/poster_7" android:layout_width="326px" android:layout_height="489px" android:scaleType="centerCrop" android:contentDescription="@null" />
+            <ImageView
+                android:id="@+id/poster_8" android:layout_width="326px" android:layout_height="489px" android:scaleType="centerCrop" android:contentDescription="@null" />
+            <ImageView
+                android:id="@+id/poster_9" android:layout_width="326px" android:layout_height="489px" android:scaleType="centerCrop" android:contentDescription="@null" />
+
+        </GridLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <TextView
+        android:id="@+id/sharable_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50px"
+        android:fontFamily="@font/montserrat_bold"
+        android:gravity="center"
+        android:textColor="#111111"
+        android:textSize="68px"
+        tools:text="my kinda shit" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="100px"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="50px"
+            android:layout_height="50px"
+            android:src="@mipmap/ic_launcher"
+            android:contentDescription="@null" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16px"
+            android:fontFamily="@font/montserrat_bold"
+            android:text="@string/created_on_movieflix"
+            android:textColor="#333333"
+            android:textSize="24px" />
+
+    </LinearLayout>
+
+</LinearLayout>
