@@ -21,7 +21,9 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.material.chip.ChipGroup
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.gson.Gson
 import com.shalenmathew.movieflix.R
@@ -30,6 +32,8 @@ import com.shalenmathew.movieflix.presentation.MainActivity
 import com.shalenmathew.movieflix.core.utils.QuickActionOverlay
 import com.shalenmathew.movieflix.core.utils.ClickHandler
 import com.shalenmathew.movieflix.core.utils.Constants
+import com.shalenmathew.movieflix.core.utils.ListShareImageGenerator
+import com.shalenmathew.movieflix.core.utils.ListShareTemplate
 import com.shalenmathew.movieflix.core.utils.showToast
 import com.shalenmathew.movieflix.core.utils.shareMovie
 import com.shalenmathew.movieflix.databinding.FragmentListDetailsBinding
@@ -234,38 +238,7 @@ class ListDetailsFragment : Fragment() {
                 }
 
                 withContext(Dispatchers.Main) {
-                    val shareView = LayoutInflater.from(requireContext()).inflate(R.layout.layout_sharable_list, null)
-                    shareView.findViewById<TextView>(R.id.sharable_title).text = listName
-                    shareView.findViewById<TextView>(R.id.sharable_desc).text = listDesc ?: ""
-                    shareView.findViewById<View>(R.id.sharable_desc).visibility = if (listDesc.isNullOrEmpty()) View.GONE else View.VISIBLE
-
-                    val posterIds = listOf(R.id.poster_1, R.id.poster_2, R.id.poster_3, R.id.poster_4, R.id.poster_5, R.id.poster_6, R.id.poster_7, R.id.poster_8, R.id.poster_9)
-                    
-                    posterIds.forEachIndexed { index, id ->
-                        val imageView = shareView.findViewById<ImageView>(id)
-                        if (index < posterBitmaps.size) {
-                            imageView.setImageBitmap(posterBitmaps[index])
-                            imageView.visibility = View.VISIBLE
-                        } else {
-                            imageView.visibility = View.GONE
-                        }
-                    }
-
-                    // Dynamically calculate height based on content
-                    val width = 1080
-                    
-                    shareView.measure(
-                        View.MeasureSpec.makeMeasureSpec(width, View.MeasureSpec.EXACTLY),
-                        View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED)
-                    )
-                    val measuredHeight = shareView.measuredHeight
-                    shareView.layout(0, 0, width, measuredHeight)
-
-                    val bitmap = Bitmap.createBitmap(width, measuredHeight, Bitmap.Config.ARGB_8888)
-                    val canvas = Canvas(bitmap)
-                    shareView.draw(canvas)
-
-                    showSharePreviewBottomSheet(bitmap)
+                    showSharePreviewBottomSheet(posterBitmaps)
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
@@ -276,24 +249,60 @@ class ListDetailsFragment : Fragment() {
         }
     }
 
-    private fun showSharePreviewBottomSheet(bitmap: Bitmap) {
+    private fun showSharePreviewBottomSheet(posterBitmaps: List<Bitmap>) {
         val dialog = BottomSheetDialog(requireContext(), R.style.SheetDialog)
+        dialog.setOnShowListener { dialogInterface ->
+            val bottomSheetDialog = dialogInterface as BottomSheetDialog
+            val bottomSheet = bottomSheetDialog.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet)
+            if (bottomSheet != null) {
+                val behavior = BottomSheetBehavior.from(bottomSheet)
+                behavior.state = BottomSheetBehavior.STATE_EXPANDED
+                behavior.skipCollapsed = true
+            }
+        }
         val view = layoutInflater.inflate(R.layout.bottom_sheet_share_preview, null)
 
         val previewImg = view.findViewById<ImageView>(R.id.share_preview_image)
+        val chipGroup = view.findViewById<ChipGroup>(R.id.share_template_chip_group)
         val downloadBtn = view.findViewById<View>(R.id.share_download_btn)
         val shareBtn = view.findViewById<View>(R.id.share_now_btn)
         val cancelBtn = view.findViewById<View>(R.id.share_cancel_btn)
 
-        previewImg.setImageBitmap(bitmap)
+        var selectedTemplate = ListShareTemplate.CLASSIC_DARK
+        var currentBitmap = ListShareImageGenerator.generateImage(
+            requireContext(),
+            listName,
+            listDesc,
+            posterBitmaps,
+            selectedTemplate
+        )
+
+        previewImg.setImageBitmap(currentBitmap)
+
+        chipGroup?.setOnCheckedStateChangeListener { _, checkedIds ->
+            if (checkedIds.isNotEmpty()) {
+                selectedTemplate = when (checkedIds.first()) {
+                    R.id.chip_template_minimal -> ListShareTemplate.MINIMAL_LIGHT
+                    else -> ListShareTemplate.CLASSIC_DARK
+                }
+                currentBitmap = ListShareImageGenerator.generateImage(
+                    requireContext(),
+                    listName,
+                    listDesc,
+                    posterBitmaps,
+                    selectedTemplate
+                )
+                previewImg.setImageBitmap(currentBitmap)
+            }
+        }
 
         downloadBtn.setOnClickListener {
-            saveBitmapToGallery(bitmap)
+            saveBitmapToGallery(currentBitmap)
             dialog.dismiss()
         }
 
         shareBtn.setOnClickListener {
-            saveAndShareBitmap(bitmap)
+            saveAndShareBitmap(currentBitmap)
             dialog.dismiss()
         }
 
