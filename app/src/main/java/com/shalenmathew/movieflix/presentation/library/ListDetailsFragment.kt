@@ -34,6 +34,7 @@ import com.shalenmathew.movieflix.core.utils.ClickHandler
 import com.shalenmathew.movieflix.core.utils.Constants
 import com.shalenmathew.movieflix.core.utils.ListShareImageGenerator
 import com.shalenmathew.movieflix.core.utils.ListShareTemplate
+import com.shalenmathew.movieflix.core.utils.shareMediaCard
 import com.shalenmathew.movieflix.core.utils.showToast
 import com.shalenmathew.movieflix.core.utils.shareMovie
 import com.shalenmathew.movieflix.databinding.FragmentListDetailsBinding
@@ -117,7 +118,7 @@ class ListDetailsFragment : Fragment() {
         actions.add(QuickActionOverlay.ActionItem(
             icon = R.drawable.baseline_share_24,
             label = getString(R.string.share).plus(" Movie"),
-            action = { shareMovie(requireContext(), movie.title ?: movie.name ?: "", "") }
+            action = { shareMediaCard(this, movie) }
         ))
 
         actions.add(QuickActionOverlay.ActionItem(

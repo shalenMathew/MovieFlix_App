@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/sharable_media_root"
+    android:layout_width="1080px"
+    android:layout_height="wrap_content"
+    android:background="#FFFFFF"
+    android:orientation="vertical"
+    android:padding="50px">
+
+    <!-- Top Metadata Header -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:baselineAligned="false"
+        android:orientation="horizontal">
+
+        <!-- Client Column -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="35px"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/montserrat_bold"
+                android:text="@string/label_client"
+                android:textColor="#888888"
+                android:textSize="18px" />
+
+            <TextView
+                android:id="@+id/media_client"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/anton"
+                android:textColor="#111111"
+                android:textSize="36px"
+                android:textAllCaps="true"
+                tools:text="HBO" />
+
+        </LinearLayout>
+
+        <!-- Release Date Column -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="35px"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/montserrat_bold"
+                android:text="@string/label_release_date"
+                android:textColor="#888888"
+                android:textSize="18px" />
+
+            <TextView
+                android:id="@+id/media_release_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/anton"
+                android:textColor="#111111"
+                android:textSize="36px"
+                android:textAllCaps="true"
+                tools:text="FEBRUARY 2, 2022" />
+
+        </LinearLayout>
+
+        <!-- Category Column -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="35px"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/montserrat_bold"
+                android:text="@string/label_category"
+                android:textColor="#888888"
+                android:textSize="18px" />
+
+            <TextView
+                android:id="@+id/media_category"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/anton"
+                android:textColor="#111111"
+                android:textSize="36px"
+                android:textAllCaps="true"
+                tools:text="TV-SERIES" />
+
+        </LinearLayout>
+
+        <!-- App Branding Column (Far Right) -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="end"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/montserrat_bold"
+                android:text="@string/label_app"
+                android:textColor="#888888"
+                android:textSize="18px" />
+
+            <TextView
+                android:id="@+id/media_app_branding"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/anton"
+                android:textColor="#111111"
+                android:textSize="36px"
+                android:textAllCaps="true"
+                tools:text="MOVIEFLIX" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <!-- Main Title Banner (Giant Red Condensed Anton) -->
+    <TextView
+        android:id="@+id/media_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15px"
+        android:layout_marginBottom="20px"
+        android:fontFamily="@font/anton"
+        android:textColor="#FF0000"
+        android:textSize="140px"
+        android:textAllCaps="true"
+        android:includeFontPadding="false"
+        android:maxLines="2"
+        android:lineHeight="155px"
+        android:ellipsize="end"
+        tools:text="EUPHORIA AND LOT OF BULLSHIT" />
+
+    <!-- Hero Image & Director Card -->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="1550px">
+
+        <ImageView
+            android:id="@+id/media_hero_image"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:contentDescription="@null"
+            tools:src="@tools:sample/backgrounds/scenic" />
+
+        <!-- White Director Inset Card at Bottom-Right -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:background="#FFFFFF"
+            android:paddingHorizontal="36px"
+            android:paddingTop="20px"
+            android:paddingBottom="20px"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/media_director_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/anton"
+                android:textColor="#000000"
+                android:textSize="72px"
+                android:includeFontPadding="false"
+                tools:text="Director" />
+
+            <TextView
+                android:id="@+id/media_subtitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4px"
+                android:fontFamily="@font/montserrat_bold"
+                android:textColor="#333333"
+                android:textSize="22px"
+                android:textAllCaps="true"
+                tools:text="TV SERIES" />
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+</LinearLayout>

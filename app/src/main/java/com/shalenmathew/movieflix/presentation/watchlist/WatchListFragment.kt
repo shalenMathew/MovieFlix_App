@@ -33,6 +33,7 @@ import com.shalenmathew.movieflix.presentation.MainActivity
 import com.shalenmathew.movieflix.core.utils.QuickActionOverlay
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.textfield.TextInputEditText
+import com.shalenmathew.movieflix.core.utils.shareMediaCard
 import com.shalenmathew.movieflix.core.utils.showToast
 import com.shalenmathew.movieflix.core.utils.shareMovie
 import dagger.hilt.android.AndroidEntryPoint
@@ -127,7 +128,7 @@ class WatchListFragment : Fragment() {
         actions.add(QuickActionOverlay.ActionItem(
             icon = R.drawable.baseline_share_24,
             label = getString(R.string.share).plus(" Movie"),
-            action = { shareMovie(requireContext(), movie.title ?: movie.name ?: "", "") }
+            action = { shareMediaCard(this, movie) }
         ))
 
         actions.add(QuickActionOverlay.ActionItem(

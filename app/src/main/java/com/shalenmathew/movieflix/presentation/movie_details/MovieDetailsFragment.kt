@@ -3,11 +3,16 @@ package com.shalenmathew.movieflix.presentation.movie_details
 import android.Manifest
 import android.app.Dialog
 import android.content.Context
+import android.content.ContentValues
+import android.content.Intent
+import android.graphics.Bitmap
 import android.graphics.Typeface
 import android.os.Build
 import android.os.Bundle
+import android.os.Environment
 import android.os.Handler
 import android.os.Looper
+import android.provider.MediaStore
 import android.text.SpannableString
 import android.text.Spanned
 import android.text.TextPaint
@@ -26,15 +31,23 @@ import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.content.ContextCompat
+import androidx.core.content.FileProvider
 import androidx.core.view.isVisible
 import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import com.bumptech.glide.Glide
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.google.android.material.chip.ChipGroup
 import com.google.android.material.tabs.TabLayout
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import java.io.File
+import java.io.FileOutputStream
 import com.google.gson.Gson
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.PlayerConstants
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
@@ -50,11 +63,14 @@ import com.shalenmathew.movieflix.core.utils.ClickHandler
 import com.shalenmathew.movieflix.core.utils.Constants
 import com.shalenmathew.movieflix.core.utils.Constants.BASE_YOUTUBE_URL
 import com.shalenmathew.movieflix.core.utils.Constants.TMDB_IMAGE_BASE_URL_W780
+import com.shalenmathew.movieflix.core.utils.MediaShareImageGenerator
+import com.shalenmathew.movieflix.core.utils.MediaShareTemplate
 import com.shalenmathew.movieflix.core.utils.NetworkResults
 import com.shalenmathew.movieflix.core.utils.formatDate
 import com.shalenmathew.movieflix.core.utils.getGenreListById
 import com.shalenmathew.movieflix.core.utils.gone
 import com.shalenmathew.movieflix.core.utils.loadImage
+import com.shalenmathew.movieflix.core.utils.shareMediaCard
 import com.shalenmathew.movieflix.core.utils.shareMovie
 import com.shalenmathew.movieflix.core.utils.showToast
 import com.shalenmathew.movieflix.databinding.FragmentMovieDetailsBinding
@@ -68,9 +84,6 @@ import com.shalenmathew.movieflix.presentation.viewmodels.SeriesTrackingViewMode
 import com.shalenmathew.movieflix.presentation.viewmodels.WatchListViewModel
 import com.shalenmathew.movieflix.presentation.viewmodels.CustomListViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import java.text.SimpleDateFormat
 import java.util.Locale
 
@@ -245,8 +258,7 @@ class MovieDetailsFragment : BottomSheetDialogFragment() {
 
             fragmentMovieDetailsShareBtn.setOnClickListener() {
                 if (!::movieResult.isInitialized) return@setOnClickListener
-                val ctx = context ?: return@setOnClickListener
-                shareMovie(ctx, movieResult.title.toString(), youtubeUrl)
+                shareMediaCard(this@MovieDetailsFragment, movieResult)
             }
 
             fragmentMovieDetailsMoreBtn.setOnClickListener {

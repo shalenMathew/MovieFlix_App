@@ -43,6 +43,7 @@ import android.widget.TextView
 import android.widget.ImageView
 import androidx.activity.result.contract.ActivityResultContracts
 import com.google.android.material.textfield.TextInputEditText
+import com.shalenmathew.movieflix.core.utils.shareMediaCard
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -146,7 +147,7 @@ class FavFragment : Fragment() {
         actions.add(QuickActionOverlay.ActionItem(
             icon = R.drawable.baseline_share_24,
             label = getString(R.string.share).plus(" Movie"),
-            action = { shareMovie(requireContext(), movie.title ?: movie.name ?: "", "") }
+            action = { shareMediaCard(this, movie) }
         ))
 
         actions.add(QuickActionOverlay.ActionItem(
