@@ -6,8 +6,10 @@
     android:layout_height="wrap_content"
     android:background="#FFFFFF"
     android:orientation="vertical"
-    android:padding="50px">
+    android:paddingHorizontal="180px"
+    android:paddingVertical="180px">
 
+    <!-- Inner Safe Area Content Container -->
     <!-- Top Metadata Header -->
     <LinearLayout
         android:layout_width="match_parent"
@@ -19,7 +21,7 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="28px"
+            android:layout_marginEnd="18px"
             android:orientation="vertical">
 
             <TextView
@@ -28,7 +30,7 @@
                 android:fontFamily="@font/montserrat_bold"
                 android:text="@string/label_client"
                 android:textColor="#888888"
-                android:textSize="24px" />
+                android:textSize="18px" />
 
             <TextView
                 android:id="@+id/media_client"
@@ -36,7 +38,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/anton"
                 android:textColor="#111111"
-                android:textSize="48px"
+                android:textSize="34px"
                 android:textAllCaps="true"
                 tools:text="HBO" />
 
@@ -46,7 +48,7 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="28px"
+            android:layout_marginEnd="18px"
             android:orientation="vertical">
 
             <TextView
@@ -55,7 +57,7 @@
                 android:fontFamily="@font/montserrat_bold"
                 android:text="@string/label_release_date"
                 android:textColor="#888888"
-                android:textSize="24px" />
+                android:textSize="18px" />
 
             <TextView
                 android:id="@+id/media_release_date"
@@ -63,7 +65,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/anton"
                 android:textColor="#111111"
-                android:textSize="48px"
+                android:textSize="34px"
                 android:textAllCaps="true"
                 tools:text="FEBRUARY 2, 2022" />
 
@@ -73,7 +75,7 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="28px"
+            android:layout_marginEnd="18px"
             android:orientation="vertical">
 
             <TextView
@@ -82,7 +84,7 @@
                 android:fontFamily="@font/montserrat_bold"
                 android:text="@string/label_category"
                 android:textColor="#888888"
-                android:textSize="24px" />
+                android:textSize="18px" />
 
             <TextView
                 android:id="@+id/media_category"
@@ -90,7 +92,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/anton"
                 android:textColor="#111111"
-                android:textSize="48px"
+                android:textSize="34px"
                 android:textAllCaps="true"
                 tools:text="TV-SERIES" />
 
@@ -110,7 +112,7 @@
                 android:fontFamily="@font/montserrat_bold"
                 android:text="@string/label_app"
                 android:textColor="#888888"
-                android:textSize="24px" />
+                android:textSize="18px" />
 
             <TextView
                 android:id="@+id/media_app_branding"
@@ -118,7 +120,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/anton"
                 android:textColor="#111111"
-                android:textSize="48px"
+                android:textSize="34px"
                 android:textAllCaps="true"
                 tools:text="MOVIEFLIX" />
 
@@ -131,22 +133,22 @@
         android:id="@+id/media_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15px"
-        android:layout_marginBottom="20px"
+        android:layout_marginTop="10px"
+        android:layout_marginBottom="14px"
         android:fontFamily="@font/anton"
         android:textColor="#FF0000"
-        android:textSize="140px"
+        android:textSize="100px"
         android:textAllCaps="true"
         android:includeFontPadding="false"
         android:maxLines="2"
-        android:lineHeight="155px"
+        android:lineHeight="110px"
         android:ellipsize="end"
-        tools:text="EUPHORIA AND LOT OF BULLSHIT" />
+        tools:text="EUPHORIA" />
 
-    <!-- Hero Image & Director Card -->
+    <!-- Hero Image & Director Card (Safe Area Centerpiece) -->
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="1550px">
+        android:layout_height="980px">
 
         <ImageView
             android:id="@+id/media_hero_image"
@@ -163,9 +165,9 @@
             android:layout_alignParentBottom="true"
             android:layout_alignParentEnd="true"
             android:background="#FFFFFF"
-            android:paddingHorizontal="36px"
-            android:paddingTop="20px"
-            android:paddingBottom="20px"
+            android:paddingHorizontal="24px"
+            android:paddingTop="12px"
+            android:paddingBottom="12px"
             android:orientation="vertical">
 
             <TextView
@@ -174,7 +176,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/anton"
                 android:textColor="#000000"
-                android:textSize="72px"
+                android:textSize="48px"
                 android:includeFontPadding="false"
                 tools:text="Director" />
 
@@ -182,10 +184,10 @@
                 android:id="@+id/media_subtitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4px"
+                android:layout_marginTop="2px"
                 android:fontFamily="@font/montserrat_bold"
                 android:textColor="#333333"
-                android:textSize="22px"
+                android:textSize="16px"
                 android:textAllCaps="true"
                 tools:text="TV SERIES" />
 
