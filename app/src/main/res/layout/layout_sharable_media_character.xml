@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="1080px"
+    android:layout_height="wrap_content"
+    android:background="#F4F0E9"
+    android:orientation="vertical"
+    android:paddingHorizontal="180px"
+    android:paddingVertical="180px">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:baselineAligned="false"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/montserrat_bold"
+                android:text="@string/label_client"
+                android:textColor="#77736D"
+                android:textSize="16px"
+                android:maxLines="1"
+                android:ellipsize="end" />
+            <TextView
+                android:id="@+id/character_client"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/anton"
+                android:textColor="#171615"
+                android:textSize="23px"
+                android:maxLines="1"
+                android:ellipsize="end"
+                tools:text="PARAMOUNT" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.75"
+            android:layout_marginStart="18px"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/montserrat_bold"
+                android:text="@string/label_service"
+                android:textColor="#77736D"
+                android:textSize="16px"
+                android:maxLines="1"
+                android:ellipsize="end" />
+            <TextView
+                android:id="@+id/character_service"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/anton"
+                android:textColor="#171615"
+                android:textSize="23px"
+                android:maxLines="1"
+                android:ellipsize="end"
+                tools:text="FOLEY" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="18px"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/montserrat_bold"
+                android:text="@string/label_category"
+                android:textColor="#77736D"
+                android:textSize="16px"
+                android:maxLines="1"
+                android:ellipsize="end" />
+            <TextView
+                android:id="@+id/character_category"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/anton"
+                android:textColor="#171615"
+                android:textSize="23px"
+                android:maxLines="1"
+                android:ellipsize="end"
+                tools:text="TV SERIES" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.4"
+            android:layout_marginStart="18px"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/montserrat_bold"
+                android:text="@string/label_main_character"
+                android:textColor="#77736D"
+                android:textSize="16px"
+                android:maxLines="1"
+                android:ellipsize="end" />
+            <TextView
+                android:id="@+id/character_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/anton"
+                android:textColor="#171615"
+                android:textSize="23px"
+                android:maxLines="1"
+                android:ellipsize="end"
+                tools:text="WHEN HES NOT TESTING" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.15"
+            android:layout_marginStart="18px"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/montserrat_bold"
+                android:text="@string/label_popular_artist"
+                android:textColor="#77736D"
+                android:textSize="16px"
+                android:maxLines="1"
+                android:ellipsize="end" />
+            <TextView
+                android:id="@+id/character_artist"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/anton"
+                android:textColor="#171615"
+                android:textSize="23px"
+                android:maxLines="1"
+                android:ellipsize="end"
+                tools:text="BIKO GONZALEZ" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.95"
+            android:layout_marginStart="18px"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/montserrat_bold"
+                android:text="@string/label_release_date"
+                android:textColor="#77736D"
+                android:textSize="16px"
+                android:maxLines="1"
+                android:ellipsize="end" />
+            <TextView
+                android:id="@+id/character_release_date"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/anton"
+                android:textColor="#171615"
+                android:textSize="23px"
+                android:maxLines="1"
+                android:ellipsize="end"
+                tools:text="DEC, 2024" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="980px"
+        android:layout_marginTop="14px">
+
+        <ImageView
+            android:id="@+id/character_hero_image"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:contentDescription="@null"
+            tools:src="@tools:sample/backgrounds/scenic" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:background="#F4F0E9"
+            android:orientation="vertical"
+            android:paddingStart="24px"
+            android:paddingTop="20px"
+            android:paddingEnd="16px"
+            android:paddingBottom="12px">
+
+            <TextView
+                android:id="@+id/character_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/anton"
+                android:textColor="#D93127"
+                android:textSize="88px"
+                android:includeFontPadding="false"
+                android:maxWidth="650px"
+                android:maxLines="2"
+                android:lineHeight="96px"
+                android:ellipsize="end"
+                android:textAllCaps="true"
+                tools:text="THE DEXTER: ORIGINAL SIN" />
+
+            <TextView
+                android:id="@+id/character_service_credit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12px"
+                android:fontFamily="@font/montserrat_bold"
+                android:textColor="#171615"
+                android:textSize="20px"
+                android:textAllCaps="true"
+                tools:text="FOLEY DESIGN" />
+        </LinearLayout>
+    </FrameLayout>
+
+    <TextView
+        android:id="@+id/character_overview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="36px"
+        android:fontFamily="@font/montserrat_bold"
+        android:textColor="#393632"
+        android:textSize="15px"
+        android:lineSpacingExtra="4px"
+        android:maxLines="4"
+        android:ellipsize="end"
+        tools:text="In 1991, young Dexter Morgan begins his internship as a forensic technician for the Miami Metro Police Department while transitioning into an avenging serial killer." />
+
+</LinearLayout>

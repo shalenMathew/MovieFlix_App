@@ -46,7 +46,8 @@ enum class MediaShareTemplate(
     val title: String,
     @param:LayoutRes val layoutResId: Int
 ) {
-    EDITORIAL_POSTER("editorial_poster", "Editorial Poster", R.layout.layout_sharable_media_editorial)
+    EDITORIAL_POSTER("editorial_poster", "Editorial Poster", R.layout.layout_sharable_media_editorial),
+    CHARACTER_POSTER("editorial_poster_2", "Editorial Poster 2", R.layout.layout_sharable_media_character)
 }
 
 object MediaShareImageGenerator {
@@ -57,39 +58,59 @@ object MediaShareImageGenerator {
         heroBitmap: Bitmap?,
         template: MediaShareTemplate,
         clientProvider: String? = null,
-        directorName: String? = null
+        directorName: String? = null,
+        castName: String? = null,
+        characterName: String? = null
     ): Bitmap {
         val shareView = LayoutInflater.from(context).inflate(template.layoutResId, null)
 
         val title = movie.title ?: movie.name ?: ""
         val isTv = movie.mediaType.equals("tv", ignoreCase = true)
 
-        // Title
-        shareView.findViewById<TextView>(R.id.media_title)?.text = title
+        if (template == MediaShareTemplate.CHARACTER_POSTER) {
+            shareView.findViewById<TextView>(R.id.character_client)?.text =
+                clientProvider?.takeIf(String::isNotBlank)?.uppercase(Locale.ENGLISH) ?: "PARAMOUNT"
+            shareView.findViewById<TextView>(R.id.character_service)?.text = "FOLEY"
+            shareView.findViewById<TextView>(R.id.character_category)?.text =
+                if (isTv) "TV SERIES" else "FEATURE FILM"
+            shareView.findViewById<TextView>(R.id.character_name)?.text =
+                characterName?.takeIf(String::isNotBlank) ?: "LEAD CHARACTER"
+            shareView.findViewById<TextView>(R.id.character_artist)?.text =
+                castName?.takeIf(String::isNotBlank) ?: "FEATURED ARTIST"
+            shareView.findViewById<TextView>(R.id.character_release_date)?.text =
+                formatCompactDate(movie.releaseDate)
+            shareView.findViewById<TextView>(R.id.character_title)?.text = title
+            shareView.findViewById<TextView>(R.id.character_service_credit)?.text = "FOLEY DESIGN"
+            shareView.findViewById<TextView>(R.id.character_overview)?.text =
+                movie.overview?.takeIf(String::isNotBlank)
+                    ?: "A story worth discovering. Add a description to learn more about this title."
+            val imageView = shareView.findViewById<ImageView>(R.id.character_hero_image)
+            if (imageView != null && heroBitmap != null) {
+                imageView.setImageBitmap(heroBitmap)
+            }
+        } else {
+            shareView.findViewById<TextView>(R.id.media_title)?.text = title
 
-        // Category
-        val categoryText = if (isTv) "TV-SERIES" else "FEATURE FILM"
-        shareView.findViewById<TextView>(R.id.media_category)?.text = categoryText
-        shareView.findViewById<TextView>(R.id.media_subtitle)?.text = if (isTv) "TV SERIES" else "FEATURE FILM"
+            val categoryText = if (isTv) "TV-SERIES" else "FEATURE FILM"
+            shareView.findViewById<TextView>(R.id.media_category)?.text = categoryText
+            shareView.findViewById<TextView>(R.id.media_subtitle)?.text =
+                if (isTv) "TV SERIES" else "FEATURE FILM"
 
-        // Release Date
-        val rawDate = movie.releaseDate ?: ""
-        val formattedDate = formatDate(rawDate)
-        shareView.findViewById<TextView>(R.id.media_release_date)?.text = formattedDate
+            val rawDate = movie.releaseDate ?: ""
+            val formattedDate = formatDate(rawDate)
+            shareView.findViewById<TextView>(R.id.media_release_date)?.text = formattedDate
 
-        // Client & App Branding
-        val clientText = clientProvider?.uppercase(Locale.ENGLISH) ?: "HBO"
-        shareView.findViewById<TextView>(R.id.media_client)?.text = clientText
-        shareView.findViewById<TextView>(R.id.media_app_branding)?.text = "MOVIEFLIX"
+            val clientText = clientProvider?.uppercase(Locale.ENGLISH) ?: "HBO"
+            shareView.findViewById<TextView>(R.id.media_client)?.text = clientText
+            shareView.findViewById<TextView>(R.id.media_app_branding)?.text = "MOVIEFLIX"
 
-        // Director
-        val directorText = directorName ?: "Director"
-        shareView.findViewById<TextView>(R.id.media_director_label)?.text = directorText
+            val directorText = directorName ?: "Director"
+            shareView.findViewById<TextView>(R.id.media_director_label)?.text = directorText
 
-        // Hero Image
-        val heroImageView = shareView.findViewById<ImageView>(R.id.media_hero_image)
-        if (heroImageView != null && heroBitmap != null) {
-            heroImageView.setImageBitmap(heroBitmap)
+            val heroImageView = shareView.findViewById<ImageView>(R.id.media_hero_image)
+            if (heroImageView != null && heroBitmap != null) {
+                heroImageView.setImageBitmap(heroBitmap)
+            }
         }
 
         val width = 1080
@@ -115,6 +136,22 @@ object MediaShareImageGenerator {
             if (date != null) {
                 val outputFormat = SimpleDateFormat("MMMM d, yyyy", Locale.ENGLISH)
                 outputFormat.format(date).uppercase(Locale.ENGLISH)
+            } else {
+                rawDate.uppercase(Locale.ENGLISH)
+            }
+        } catch (e: Exception) {
+            rawDate.uppercase(Locale.ENGLISH)
+        }
+    }
+
+    private fun formatCompactDate(rawDate: String?): String {
+        if (rawDate.isNullOrBlank()) return "DEC, 2024"
+        return try {
+            val date = SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH).parse(rawDate)
+            if (date != null) {
+                SimpleDateFormat("MMM, yyyy", Locale.ENGLISH)
+                    .format(date)
+                    .uppercase(Locale.ENGLISH)
             } else {
                 rawDate.uppercase(Locale.ENGLISH)
             }
@@ -152,6 +189,8 @@ fun shareMediaCard(fragment: Fragment, movie: MovieResult) {
             // 2. Fetch Client Provider & Director Name
             var clientProvider: String? = null
             var directorName: String? = null
+            var castName: String? = null
+            var characterName: String? = null
 
             if (movieId != -1) {
                 try {
@@ -182,11 +221,15 @@ fun shareMediaCard(fragment: Fragment, movie: MovieResult) {
                         apiClient.fetchMovieCastApiCall(movieId)
                     }
                     if (castResponse.isSuccessful) {
-                        val crewList = castResponse.body()?.crew ?: emptyList()
+                        val castBody = castResponse.body()
+                        val crewList = castBody?.crew ?: emptyList()
                         val director = crewList.firstOrNull { it.job.equals("Director", ignoreCase = true) }
                             ?: crewList.firstOrNull { it.department.equals("Directing", ignoreCase = true) }
                             ?: crewList.firstOrNull { it.job.equals("Executive Producer", ignoreCase = true) }
                         directorName = director?.name
+                        val leadCast = castBody?.cast?.firstOrNull()
+                        castName = leadCast?.name
+                        characterName = leadCast?.character
                     }
                 } catch (e: Exception) {
                     e.printStackTrace()
@@ -194,7 +237,15 @@ fun shareMediaCard(fragment: Fragment, movie: MovieResult) {
             }
 
             withContext(Dispatchers.Main) {
-                showMediaSharePreviewBottomSheet(fragment, movie, heroBitmap, clientProvider, directorName)
+                showMediaSharePreviewBottomSheet(
+                    fragment,
+                    movie,
+                    heroBitmap,
+                    clientProvider,
+                    directorName,
+                    castName,
+                    characterName
+                )
             }
         } catch (e: Exception) {
             e.printStackTrace()
@@ -210,7 +261,9 @@ private fun showMediaSharePreviewBottomSheet(
     movie: MovieResult,
     heroBitmap: Bitmap?,
     clientProvider: String?,
-    directorName: String?
+    directorName: String?,
+    castName: String?,
+    characterName: String?
 ) {
     val ctx = fragment.context ?: return
     val dialog = BottomSheetDialog(ctx, R.style.SheetDialog)
@@ -231,19 +284,29 @@ private fun showMediaSharePreviewBottomSheet(
     val shareBtn = view.findViewById<View>(R.id.share_now_btn)
     val cancelBtn = view.findViewById<View>(R.id.share_cancel_btn)
 
-    chipGroup?.visibility = View.GONE
+    view.findViewById<View>(R.id.chip_template_classic).visibility = View.GONE
+    view.findViewById<View>(R.id.chip_template_minimal).visibility = View.GONE
+    view.findViewById<View>(R.id.chip_media_editorial).visibility = View.VISIBLE
+    view.findViewById<View>(R.id.chip_media_character).visibility = View.VISIBLE
+    chipGroup?.check(R.id.chip_media_editorial)
 
-    val template = MediaShareTemplate.EDITORIAL_POSTER
-    val currentBitmap = MediaShareImageGenerator.generateImage(
-        ctx,
-        movie,
-        heroBitmap,
-        template,
-        clientProvider,
-        directorName
+    var selectedTemplate = MediaShareTemplate.EDITORIAL_POSTER
+    var currentBitmap = MediaShareImageGenerator.generateImage(
+        ctx, movie, heroBitmap, selectedTemplate, clientProvider, directorName, castName, characterName
     )
-
     previewImg.setImageBitmap(currentBitmap)
+
+    chipGroup?.setOnCheckedStateChangeListener { _, checkedIds ->
+        selectedTemplate = if (R.id.chip_media_character in checkedIds) {
+            MediaShareTemplate.CHARACTER_POSTER
+        } else {
+            MediaShareTemplate.EDITORIAL_POSTER
+        }
+        currentBitmap = MediaShareImageGenerator.generateImage(
+            ctx, movie, heroBitmap, selectedTemplate, clientProvider, directorName, castName, characterName
+        )
+        previewImg.setImageBitmap(currentBitmap)
+    }
 
     downloadBtn.setOnClickListener {
         saveMediaBitmapToGallery(ctx, currentBitmap)
