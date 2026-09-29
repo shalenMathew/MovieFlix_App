@@ -21,7 +21,12 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.chip.ChipGroup
 import com.shalenmathew.movieflix.R
+import com.shalenmathew.movieflix.data.network.ApiClient
 import com.shalenmathew.movieflix.domain.model.MovieResult
+import dagger.hilt.EntryPoint
+import dagger.hilt.InstallIn
+import dagger.hilt.android.EntryPointAccessors
+import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -29,6 +34,12 @@ import java.io.File
 import java.io.FileOutputStream
 import java.text.SimpleDateFormat
 import java.util.Locale
+
+@EntryPoint
+@InstallIn(SingletonComponent::class)
+interface MediaShareEntryPoint {
+    fun getApiClient(): ApiClient
+}
 
 enum class MediaShareTemplate(
     val id: String,
@@ -44,7 +55,9 @@ object MediaShareImageGenerator {
         context: Context,
         movie: MovieResult,
         heroBitmap: Bitmap?,
-        template: MediaShareTemplate
+        template: MediaShareTemplate,
+        clientProvider: String? = null,
+        directorName: String? = null
     ): Bitmap {
         val shareView = LayoutInflater.from(context).inflate(template.layoutResId, null)
 
@@ -65,11 +78,13 @@ object MediaShareImageGenerator {
         shareView.findViewById<TextView>(R.id.media_release_date)?.text = formattedDate
 
         // Client & App Branding
-        shareView.findViewById<TextView>(R.id.media_client)?.text = "HBO"
+        val clientText = clientProvider?.uppercase(Locale.ENGLISH) ?: "HBO"
+        shareView.findViewById<TextView>(R.id.media_client)?.text = clientText
         shareView.findViewById<TextView>(R.id.media_app_branding)?.text = "MOVIEFLIX"
 
         // Director
-        shareView.findViewById<TextView>(R.id.media_director_label)?.text = "Director"
+        val directorText = directorName ?: "Director"
+        shareView.findViewById<TextView>(R.id.media_director_label)?.text = directorText
 
         // Hero Image
         val heroImageView = shareView.findViewById<ImageView>(R.id.media_hero_image)
@@ -116,6 +131,10 @@ fun shareMediaCard(fragment: Fragment, movie: MovieResult) {
 
     fragment.lifecycleScope.launch(Dispatchers.IO) {
         try {
+            val movieId = movie.id ?: -1
+            val isTv = movie.mediaType.equals("tv", ignoreCase = true)
+
+            // 1. Fetch Hero Image
             val imagePath = movie.posterPath ?: movie.backdropPath
             val isLocal = imagePath != null && (imagePath.startsWith("content://") || imagePath.count { it == '/' } > 1)
             val fullPath = if (isLocal) imagePath else Constants.TMDB_IMAGE_BASE_URL_W780.plus(imagePath)
@@ -130,8 +149,52 @@ fun shareMediaCard(fragment: Fragment, movie: MovieResult) {
                 null
             }
 
+            // 2. Fetch Client Provider & Director Name
+            var clientProvider: String? = null
+            var directorName: String? = null
+
+            if (movieId != -1) {
+                try {
+                    val entryPoint = EntryPointAccessors.fromApplication(
+                        ctx.applicationContext,
+                        MediaShareEntryPoint::class.java
+                    )
+                    val apiClient = entryPoint.getApiClient()
+
+                    // Watch Provider
+                    val providerResponse = if (isTv) {
+                        apiClient.getTVWatchProvidersApiCall(movieId)
+                    } else {
+                        apiClient.getMovieWatchProvidersApiCall(movieId)
+                    }
+                    if (providerResponse.isSuccessful) {
+                        val results = providerResponse.body()?.results
+                        val provider = results?.IN?.flatrate?.firstOrNull()
+                            ?: results?.IN?.buy?.firstOrNull()
+                            ?: results?.IN?.rent?.firstOrNull()
+                        clientProvider = provider?.providerName
+                    }
+
+                    // Credits / Director
+                    val castResponse = if (isTv) {
+                        apiClient.fetchTVCastApiCall(movieId)
+                    } else {
+                        apiClient.fetchMovieCastApiCall(movieId)
+                    }
+                    if (castResponse.isSuccessful) {
+                        val crewList = castResponse.body()?.crew ?: emptyList()
+                        val director = crewList.firstOrNull { it.job.equals("Director", ignoreCase = true) }
+                            ?: crewList.firstOrNull { it.department.equals("Directing", ignoreCase = true) }
+                            ?: crewList.firstOrNull { it.job.equals("Executive Producer", ignoreCase = true) }
+                        directorName = director?.name
+                    }
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+            }
+
             withContext(Dispatchers.Main) {
-                showMediaSharePreviewBottomSheet(fragment, movie, heroBitmap)
+                showMediaSharePreviewBottomSheet(fragment, movie, heroBitmap, clientProvider, directorName)
             }
         } catch (e: Exception) {
             e.printStackTrace()
@@ -142,7 +205,13 @@ fun shareMediaCard(fragment: Fragment, movie: MovieResult) {
     }
 }
 
-private fun showMediaSharePreviewBottomSheet(fragment: Fragment, movie: MovieResult, heroBitmap: Bitmap?) {
+private fun showMediaSharePreviewBottomSheet(
+    fragment: Fragment,
+    movie: MovieResult,
+    heroBitmap: Bitmap?,
+    clientProvider: String?,
+    directorName: String?
+) {
     val ctx = fragment.context ?: return
     val dialog = BottomSheetDialog(ctx, R.style.SheetDialog)
     dialog.setOnShowListener { dialogInterface ->
@@ -169,7 +238,9 @@ private fun showMediaSharePreviewBottomSheet(fragment: Fragment, movie: MovieRes
         ctx,
         movie,
         heroBitmap,
-        template
+        template,
+        clientProvider,
+        directorName
     )
 
     previewImg.setImageBitmap(currentBitmap)
