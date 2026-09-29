@@ -43,33 +43,6 @@
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="0.75"
-            android:layout_marginStart="18px"
-            android:orientation="vertical">
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/montserrat_bold"
-                android:text="@string/label_service"
-                android:textColor="#77736D"
-                android:textSize="16px"
-                android:maxLines="1"
-                android:ellipsize="end" />
-            <TextView
-                android:id="@+id/character_service"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/anton"
-                android:textColor="#171615"
-                android:textSize="23px"
-                android:maxLines="1"
-                android:ellipsize="end"
-                tools:text="FOLEY" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
             android:layout_weight="1"
             android:layout_marginStart="18px"
             android:orientation="vertical">
@@ -206,11 +179,11 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/anton"
                 android:textColor="#D93127"
-                android:textSize="88px"
+                android:textSize="54px"
                 android:includeFontPadding="false"
                 android:maxWidth="650px"
                 android:maxLines="2"
-                android:lineHeight="96px"
+                android:lineHeight="62px"
                 android:ellipsize="end"
                 android:textAllCaps="true"
                 tools:text="THE DEXTER: ORIGINAL SIN" />
@@ -224,7 +197,7 @@
                 android:textColor="#171615"
                 android:textSize="20px"
                 android:textAllCaps="true"
-                tools:text="FOLEY DESIGN" />
+                tools:text="DIRECTOR NAME" />
         </LinearLayout>
     </FrameLayout>
 

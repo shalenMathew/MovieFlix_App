@@ -151,7 +151,6 @@
     <string name="label_category" translatable="false">CATEGORY</string>
     <string name="label_release_date" translatable="false">RELEASE DATE</string>
     <string name="label_app" translatable="false">APP</string>
-    <string name="label_service" translatable="false">SERVICE</string>
     <string name="label_main_character" translatable="false">MAIN CHARACTER</string>
     <string name="label_popular_artist" translatable="false">POPULAR ARTIST</string>
     <string name="template_editorial_poster" translatable="false">Editorial Poster</string>

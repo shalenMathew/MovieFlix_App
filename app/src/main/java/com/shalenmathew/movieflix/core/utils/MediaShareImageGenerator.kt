@@ -70,7 +70,6 @@ object MediaShareImageGenerator {
         if (template == MediaShareTemplate.CHARACTER_POSTER) {
             shareView.findViewById<TextView>(R.id.character_client)?.text =
                 clientProvider?.takeIf(String::isNotBlank)?.uppercase(Locale.ENGLISH) ?: "PARAMOUNT"
-            shareView.findViewById<TextView>(R.id.character_service)?.text = "FOLEY"
             shareView.findViewById<TextView>(R.id.character_category)?.text =
                 if (isTv) "TV SERIES" else "FEATURE FILM"
             shareView.findViewById<TextView>(R.id.character_name)?.text =
@@ -80,7 +79,8 @@ object MediaShareImageGenerator {
             shareView.findViewById<TextView>(R.id.character_release_date)?.text =
                 formatCompactDate(movie.releaseDate)
             shareView.findViewById<TextView>(R.id.character_title)?.text = title
-            shareView.findViewById<TextView>(R.id.character_service_credit)?.text = "FOLEY DESIGN"
+            shareView.findViewById<TextView>(R.id.character_service_credit)?.text =
+                directorName?.takeIf(String::isNotBlank) ?: "DIRECTOR NAME"
             shareView.findViewById<TextView>(R.id.character_overview)?.text =
                 movie.overview?.takeIf(String::isNotBlank)
                     ?: "A story worth discovering. Add a description to learn more about this title."
