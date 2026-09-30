@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Canvas
+import android.net.Uri
 import android.os.Build
 import android.os.Environment
 import android.provider.MediaStore
@@ -13,6 +14,7 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.LayoutRes
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
@@ -39,6 +41,20 @@ import java.util.Locale
 @InstallIn(SingletonComponent::class)
 interface MediaShareEntryPoint {
     fun getApiClient(): ApiClient
+}
+
+class MediaSharePosterPicker(fragment: Fragment) {
+    private var pendingResult: ((Uri?) -> Unit)? = null
+    private val launcher = fragment.registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
+        val result = pendingResult
+        pendingResult = null
+        result?.invoke(uri)
+    }
+
+    fun launch(onResult: (Uri?) -> Unit) {
+        pendingResult = onResult
+        launcher.launch("image/*")
+    }
 }
 
 enum class MediaShareTemplate(
@@ -161,7 +177,7 @@ object MediaShareImageGenerator {
     }
 }
 
-fun shareMediaCard(fragment: Fragment, movie: MovieResult) {
+fun shareMediaCard(fragment: Fragment, movie: MovieResult, posterPicker: MediaSharePosterPicker) {
     val ctx = fragment.context ?: return
 
     showToast(ctx, "Generating sharable image...")
@@ -244,7 +260,8 @@ fun shareMediaCard(fragment: Fragment, movie: MovieResult) {
                     clientProvider,
                     directorName,
                     castName,
-                    characterName
+                    characterName,
+                    posterPicker
                 )
             }
         } catch (e: Exception) {
@@ -263,7 +280,8 @@ private fun showMediaSharePreviewBottomSheet(
     clientProvider: String?,
     directorName: String?,
     castName: String?,
-    characterName: String?
+    characterName: String?,
+    posterPicker: MediaSharePosterPicker
 ) {
     val ctx = fragment.context ?: return
     val dialog = BottomSheetDialog(ctx, R.style.SheetDialog)
@@ -283,17 +301,28 @@ private fun showMediaSharePreviewBottomSheet(
     val downloadBtn = view.findViewById<View>(R.id.share_download_btn)
     val shareBtn = view.findViewById<View>(R.id.share_now_btn)
     val cancelBtn = view.findViewById<View>(R.id.share_cancel_btn)
+    val customPosterBtn = view.findViewById<View>(R.id.share_custom_poster_btn)
 
     view.findViewById<View>(R.id.chip_template_classic).visibility = View.GONE
     view.findViewById<View>(R.id.chip_template_minimal).visibility = View.GONE
     view.findViewById<View>(R.id.chip_media_editorial).visibility = View.VISIBLE
     view.findViewById<View>(R.id.chip_media_character).visibility = View.VISIBLE
+    customPosterBtn.visibility = View.VISIBLE
     chipGroup?.check(R.id.chip_media_editorial)
 
     var selectedTemplate = MediaShareTemplate.EDITORIAL_POSTER
+    var selectedHeroBitmap = heroBitmap
     var currentBitmap = MediaShareImageGenerator.generateImage(
-        ctx, movie, heroBitmap, selectedTemplate, clientProvider, directorName, castName, characterName
+        ctx, movie, selectedHeroBitmap, selectedTemplate, clientProvider, directorName, castName, characterName
     )
+
+    fun updatePreview() {
+        currentBitmap = MediaShareImageGenerator.generateImage(
+            ctx, movie, selectedHeroBitmap, selectedTemplate, clientProvider, directorName, castName, characterName
+        )
+        previewImg.setImageBitmap(currentBitmap)
+    }
+
     previewImg.setImageBitmap(currentBitmap)
 
     chipGroup?.setOnCheckedStateChangeListener { _, checkedIds ->
@@ -302,10 +331,36 @@ private fun showMediaSharePreviewBottomSheet(
         } else {
             MediaShareTemplate.EDITORIAL_POSTER
         }
-        currentBitmap = MediaShareImageGenerator.generateImage(
-            ctx, movie, heroBitmap, selectedTemplate, clientProvider, directorName, castName, characterName
-        )
-        previewImg.setImageBitmap(currentBitmap)
+        updatePreview()
+    }
+
+    customPosterBtn.setOnClickListener {
+        posterPicker.launch { uri ->
+            if (uri != null) {
+                fragment.lifecycleScope.launch(Dispatchers.IO) {
+                    val customPoster = try {
+                        Glide.with(fragment)
+                            .asBitmap()
+                            .load(uri)
+                            .fitCenter()
+                            .submit(1080, 1600)
+                            .get()
+                    } catch (e: Exception) {
+                        null
+                    }
+
+                    withContext(Dispatchers.Main) {
+                        if (!dialog.isShowing) return@withContext
+                        if (customPoster == null) {
+                            showToast(ctx, "Unable to load selected poster")
+                        } else {
+                            selectedHeroBitmap = customPoster
+                            updatePreview()
+                        }
+                    }
+                }
+            }
+        }
     }
 
     downloadBtn.setOnClickListener {

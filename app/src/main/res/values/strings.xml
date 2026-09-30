@@ -121,6 +121,7 @@
     <string name="description_optional">Description (Optional)</string>
     <string name="create_list">Create List</string>
     <string name="preview_collage">Preview Collage</string>
+    <string name="select_custom_poster">Select your custom poster</string>
     <string name="download">Download</string>
     <string name="share">Share</string>
     <string name="edit">Edit</string>

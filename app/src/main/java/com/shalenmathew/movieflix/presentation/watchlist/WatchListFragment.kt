@@ -34,6 +34,7 @@ import com.shalenmathew.movieflix.core.utils.QuickActionOverlay
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.textfield.TextInputEditText
 import com.shalenmathew.movieflix.core.utils.shareMediaCard
+import com.shalenmathew.movieflix.core.utils.MediaSharePosterPicker
 import com.shalenmathew.movieflix.core.utils.showToast
 import com.shalenmathew.movieflix.core.utils.shareMovie
 import dagger.hilt.android.AndroidEntryPoint
@@ -41,6 +42,7 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class WatchListFragment : Fragment() {
+    private val mediaSharePosterPicker = MediaSharePosterPicker(this)
 
     private val watchListViewModel: WatchListViewModel by viewModels()
     private val scheduledViewModel: ScheduledViewModel by viewModels()
@@ -128,7 +130,7 @@ class WatchListFragment : Fragment() {
         actions.add(QuickActionOverlay.ActionItem(
             icon = R.drawable.baseline_share_24,
             label = getString(R.string.share).plus(" Movie"),
-            action = { shareMediaCard(this, movie) }
+            action = { shareMediaCard(this, movie, mediaSharePosterPicker) }
         ))
 
         actions.add(QuickActionOverlay.ActionItem(

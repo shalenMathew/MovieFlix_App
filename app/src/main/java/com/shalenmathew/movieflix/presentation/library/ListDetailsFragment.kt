@@ -35,6 +35,7 @@ import com.shalenmathew.movieflix.core.utils.Constants
 import com.shalenmathew.movieflix.core.utils.ListShareImageGenerator
 import com.shalenmathew.movieflix.core.utils.ListShareTemplate
 import com.shalenmathew.movieflix.core.utils.shareMediaCard
+import com.shalenmathew.movieflix.core.utils.MediaSharePosterPicker
 import com.shalenmathew.movieflix.core.utils.showToast
 import com.shalenmathew.movieflix.core.utils.shareMovie
 import com.shalenmathew.movieflix.databinding.FragmentListDetailsBinding
@@ -50,6 +51,7 @@ import java.io.FileOutputStream
 
 @AndroidEntryPoint
 class ListDetailsFragment : Fragment() {
+    private val mediaSharePosterPicker = MediaSharePosterPicker(this)
 
     private val viewModel: CustomListViewModel by viewModels()
     private var _binding: FragmentListDetailsBinding? = null
@@ -118,7 +120,7 @@ class ListDetailsFragment : Fragment() {
         actions.add(QuickActionOverlay.ActionItem(
             icon = R.drawable.baseline_share_24,
             label = getString(R.string.share).plus(" Movie"),
-            action = { shareMediaCard(this, movie) }
+            action = { shareMediaCard(this, movie, mediaSharePosterPicker) }
         ))
 
         actions.add(QuickActionOverlay.ActionItem(

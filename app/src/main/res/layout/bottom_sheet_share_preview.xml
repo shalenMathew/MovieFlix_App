@@ -88,6 +88,21 @@
 
         </HorizontalScrollView>
 
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/share_custom_poster_btn"
+            style="@style/Widget.Material3.Button.TextButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_4sdp"
+            android:gravity="center"
+            android:text="@string/select_custom_poster"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:visibility="gone"
+            app:icon="@drawable/baseline_add_circle_24"
+            app:iconGravity="textStart"
+            app:iconTint="@color/white" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

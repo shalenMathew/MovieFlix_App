@@ -64,6 +64,7 @@ import com.shalenmathew.movieflix.core.utils.Constants
 import com.shalenmathew.movieflix.core.utils.Constants.BASE_YOUTUBE_URL
 import com.shalenmathew.movieflix.core.utils.Constants.TMDB_IMAGE_BASE_URL_W780
 import com.shalenmathew.movieflix.core.utils.MediaShareImageGenerator
+import com.shalenmathew.movieflix.core.utils.MediaSharePosterPicker
 import com.shalenmathew.movieflix.core.utils.MediaShareTemplate
 import com.shalenmathew.movieflix.core.utils.NetworkResults
 import com.shalenmathew.movieflix.core.utils.formatDate
@@ -162,6 +163,7 @@ class MovieDetailsFragment : BottomSheetDialogFragment() {
             handleLocalPosterSelection(it)
         }
     }
+    private val mediaSharePosterPicker = MediaSharePosterPicker(this)
 
     private val pickBannerLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
         uri?.let {
@@ -258,7 +260,7 @@ class MovieDetailsFragment : BottomSheetDialogFragment() {
 
             fragmentMovieDetailsShareBtn.setOnClickListener() {
                 if (!::movieResult.isInitialized) return@setOnClickListener
-                shareMediaCard(this@MovieDetailsFragment, movieResult)
+                shareMediaCard(this@MovieDetailsFragment, movieResult, mediaSharePosterPicker)
             }
 
             fragmentMovieDetailsMoreBtn.setOnClickListener {
@@ -2058,4 +2060,3 @@ class MovieDetailsFragment : BottomSheetDialogFragment() {
     }
 
 }
-
