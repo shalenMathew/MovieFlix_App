@@ -38,10 +38,15 @@ object ListShareImageGenerator {
             descView.visibility = if (listDesc.isNullOrEmpty()) View.GONE else View.VISIBLE
         }
 
+        val isMoreThanSix = posterBitmaps.size > 6
+        val numColumns = if (isMoreThanSix) 4 else 3
+        val gridLayout = shareView.findViewById<GridLayout>(R.id.sharable_grid)
+        gridLayout?.columnCount = numColumns
+
         val posterIds = listOf(
-            R.id.poster_1, R.id.poster_2, R.id.poster_3,
-            R.id.poster_4, R.id.poster_5, R.id.poster_6,
-            R.id.poster_7, R.id.poster_8, R.id.poster_9
+            R.id.poster_1, R.id.poster_2, R.id.poster_3, R.id.poster_4,
+            R.id.poster_5, R.id.poster_6, R.id.poster_7, R.id.poster_8,
+            R.id.poster_9, R.id.poster_10, R.id.poster_11, R.id.poster_12
         )
 
         posterIds.forEachIndexed { index, id ->
@@ -50,24 +55,51 @@ object ListShareImageGenerator {
                 if (index < posterBitmaps.size) {
                     imageView.setImageBitmap(posterBitmaps[index])
                     imageView.visibility = View.VISIBLE
+
+                    val row = index / numColumns
+                    val col = index % numColumns
+
+                    val width = if (isMoreThanSix) {
+                        if (template == ListShareTemplate.CLASSIC_DARK) 230 else 245
+                    } else {
+                        if (template == ListShareTemplate.CLASSIC_DARK) 310 else 326
+                    }
+
+                    val height = if (isMoreThanSix) {
+                        if (template == ListShareTemplate.CLASSIC_DARK) 345 else 368
+                    } else {
+                        if (template == ListShareTemplate.CLASSIC_DARK) 465 else 489
+                    }
+
+                    val params = GridLayout.LayoutParams(
+                        GridLayout.spec(row),
+                        GridLayout.spec(col)
+                    ).apply {
+                        this.width = width
+                        this.height = height
+                        if (template == ListShareTemplate.CLASSIC_DARK) {
+                            setMargins(5, 5, 5, 5)
+                        } else {
+                            setMargins(0, 0, 0, 0)
+                        }
+                    }
+
+                    // Center 1 or 2 items horizontally ONLY for Minimal Poster when items <= 2
+                    if (template == ListShareTemplate.MINIMAL_LIGHT && !isMoreThanSix) {
+                        val leftMargin = when (posterBitmaps.size) {
+                            1 -> 327
+                            2 -> 164
+                            else -> 0
+                        }
+                        if (index == 0) {
+                            params.setMargins(leftMargin, 0, 0, 0)
+                        }
+                    }
+
+                    imageView.layoutParams = params
                 } else {
                     imageView.visibility = View.GONE
                 }
-            }
-        }
-
-        // Center 1 or 2 items horizontally ONLY for Minimal Poster
-        if (template == ListShareTemplate.MINIMAL_LIGHT) {
-            val poster1 = shareView.findViewById<ImageView>(R.id.poster_1)
-            if (poster1 != null && poster1.layoutParams is GridLayout.LayoutParams) {
-                val params = poster1.layoutParams as GridLayout.LayoutParams
-                val leftMargin = when (posterBitmaps.size) {
-                    1 -> 327
-                    2 -> 164
-                    else -> 0
-                }
-                params.setMargins(leftMargin, params.topMargin, params.rightMargin, params.bottomMargin)
-                poster1.layoutParams = params
             }
         }
 

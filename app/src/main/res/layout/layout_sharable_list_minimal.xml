@@ -21,28 +21,34 @@
             android:id="@+id/sharable_grid"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:columnCount="3"
+            android:columnCount="4"
             android:useDefaultMargins="false">
 
-            <!-- 9 Posters with zero gap -->
+            <!-- 12 Posters in 4 Columns x 3 Rows Max (Zero Gap) -->
             <ImageView
-                android:id="@+id/poster_1" android:layout_width="326px" android:layout_height="489px" android:scaleType="centerCrop" android:contentDescription="@null" />
+                android:id="@+id/poster_1" android:layout_width="245px" android:layout_height="368px" android:scaleType="centerCrop" android:contentDescription="@null" />
             <ImageView
-                android:id="@+id/poster_2" android:layout_width="326px" android:layout_height="489px" android:scaleType="centerCrop" android:contentDescription="@null" />
+                android:id="@+id/poster_2" android:layout_width="245px" android:layout_height="368px" android:scaleType="centerCrop" android:contentDescription="@null" />
             <ImageView
-                android:id="@+id/poster_3" android:layout_width="326px" android:layout_height="489px" android:scaleType="centerCrop" android:contentDescription="@null" />
+                android:id="@+id/poster_3" android:layout_width="245px" android:layout_height="368px" android:scaleType="centerCrop" android:contentDescription="@null" />
             <ImageView
-                android:id="@+id/poster_4" android:layout_width="326px" android:layout_height="489px" android:scaleType="centerCrop" android:contentDescription="@null" />
+                android:id="@+id/poster_4" android:layout_width="245px" android:layout_height="368px" android:scaleType="centerCrop" android:contentDescription="@null" />
             <ImageView
-                android:id="@+id/poster_5" android:layout_width="326px" android:layout_height="489px" android:scaleType="centerCrop" android:contentDescription="@null" />
+                android:id="@+id/poster_5" android:layout_width="245px" android:layout_height="368px" android:scaleType="centerCrop" android:contentDescription="@null" />
             <ImageView
-                android:id="@+id/poster_6" android:layout_width="326px" android:layout_height="489px" android:scaleType="centerCrop" android:contentDescription="@null" />
+                android:id="@+id/poster_6" android:layout_width="245px" android:layout_height="368px" android:scaleType="centerCrop" android:contentDescription="@null" />
             <ImageView
-                android:id="@+id/poster_7" android:layout_width="326px" android:layout_height="489px" android:scaleType="centerCrop" android:contentDescription="@null" />
+                android:id="@+id/poster_7" android:layout_width="245px" android:layout_height="368px" android:scaleType="centerCrop" android:contentDescription="@null" />
             <ImageView
-                android:id="@+id/poster_8" android:layout_width="326px" android:layout_height="489px" android:scaleType="centerCrop" android:contentDescription="@null" />
+                android:id="@+id/poster_8" android:layout_width="245px" android:layout_height="368px" android:scaleType="centerCrop" android:contentDescription="@null" />
             <ImageView
-                android:id="@+id/poster_9" android:layout_width="326px" android:layout_height="489px" android:scaleType="centerCrop" android:contentDescription="@null" />
+                android:id="@+id/poster_9" android:layout_width="245px" android:layout_height="368px" android:scaleType="centerCrop" android:contentDescription="@null" />
+            <ImageView
+                android:id="@+id/poster_10" android:layout_width="245px" android:layout_height="368px" android:scaleType="centerCrop" android:contentDescription="@null" />
+            <ImageView
+                android:id="@+id/poster_11" android:layout_width="245px" android:layout_height="368px" android:scaleType="centerCrop" android:contentDescription="@null" />
+            <ImageView
+                android:id="@+id/poster_12" android:layout_width="245px" android:layout_height="368px" android:scaleType="centerCrop" android:contentDescription="@null" />
 
         </GridLayout>
 
@@ -62,7 +68,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="100px"
+        android:layout_marginTop="50px"
+        android:layout_marginBottom="10px"
         android:gravity="center"
         android:orientation="horizontal">
 

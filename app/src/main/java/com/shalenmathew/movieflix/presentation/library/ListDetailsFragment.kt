@@ -216,7 +216,7 @@ class ListDetailsFragment : Fragment() {
     }
 
     private fun shareListAsImage() {
-        val moviesToShare = currentMovies.take(9)
+        val moviesToShare = currentMovies.take(12)
         if (moviesToShare.isEmpty()) {
             showToast(requireContext(), "Add movies to the list first!")
             return

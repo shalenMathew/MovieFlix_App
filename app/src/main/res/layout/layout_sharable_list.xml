@@ -41,28 +41,34 @@
         android:id="@+id/sharable_grid"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:columnCount="3"
+        android:columnCount="4"
         android:useDefaultMargins="false">
 
-        <!-- 9 Posters with 2:3 ratio (~310px wide, ~465px high) - Restored Padding and Corners -->
+        <!-- 12 Posters in 4 Columns x 3 Rows Max -->
         <com.google.android.material.imageview.ShapeableImageView
-            android:id="@+id/poster_1" android:layout_width="310px" android:layout_height="465px" android:scaleType="centerCrop" android:layout_margin="5px" app:shapeAppearanceOverlay="@style/RoundedCornerImage" />
+            android:id="@+id/poster_1" android:layout_width="230px" android:layout_height="345px" android:scaleType="centerCrop" android:layout_margin="5px" app:shapeAppearanceOverlay="@style/RoundedCornerImage" />
         <com.google.android.material.imageview.ShapeableImageView
-            android:id="@+id/poster_2" android:layout_width="310px" android:layout_height="465px" android:scaleType="centerCrop" android:layout_margin="5px" app:shapeAppearanceOverlay="@style/RoundedCornerImage" />
+            android:id="@+id/poster_2" android:layout_width="230px" android:layout_height="345px" android:scaleType="centerCrop" android:layout_margin="5px" app:shapeAppearanceOverlay="@style/RoundedCornerImage" />
         <com.google.android.material.imageview.ShapeableImageView
-            android:id="@+id/poster_3" android:layout_width="310px" android:layout_height="465px" android:scaleType="centerCrop" android:layout_margin="5px" app:shapeAppearanceOverlay="@style/RoundedCornerImage" />
+            android:id="@+id/poster_3" android:layout_width="230px" android:layout_height="345px" android:scaleType="centerCrop" android:layout_margin="5px" app:shapeAppearanceOverlay="@style/RoundedCornerImage" />
         <com.google.android.material.imageview.ShapeableImageView
-            android:id="@+id/poster_4" android:layout_width="310px" android:layout_height="465px" android:scaleType="centerCrop" android:layout_margin="5px" app:shapeAppearanceOverlay="@style/RoundedCornerImage" />
+            android:id="@+id/poster_4" android:layout_width="230px" android:layout_height="345px" android:scaleType="centerCrop" android:layout_margin="5px" app:shapeAppearanceOverlay="@style/RoundedCornerImage" />
         <com.google.android.material.imageview.ShapeableImageView
-            android:id="@+id/poster_5" android:layout_width="310px" android:layout_height="465px" android:scaleType="centerCrop" android:layout_margin="5px" app:shapeAppearanceOverlay="@style/RoundedCornerImage" />
+            android:id="@+id/poster_5" android:layout_width="230px" android:layout_height="345px" android:scaleType="centerCrop" android:layout_margin="5px" app:shapeAppearanceOverlay="@style/RoundedCornerImage" />
         <com.google.android.material.imageview.ShapeableImageView
-            android:id="@+id/poster_6" android:layout_width="310px" android:layout_height="465px" android:scaleType="centerCrop" android:layout_margin="5px" app:shapeAppearanceOverlay="@style/RoundedCornerImage" />
+            android:id="@+id/poster_6" android:layout_width="230px" android:layout_height="345px" android:scaleType="centerCrop" android:layout_margin="5px" app:shapeAppearanceOverlay="@style/RoundedCornerImage" />
         <com.google.android.material.imageview.ShapeableImageView
-            android:id="@+id/poster_7" android:layout_width="310px" android:layout_height="465px" android:scaleType="centerCrop" android:layout_margin="5px" app:shapeAppearanceOverlay="@style/RoundedCornerImage" />
+            android:id="@+id/poster_7" android:layout_width="230px" android:layout_height="345px" android:scaleType="centerCrop" android:layout_margin="5px" app:shapeAppearanceOverlay="@style/RoundedCornerImage" />
         <com.google.android.material.imageview.ShapeableImageView
-            android:id="@+id/poster_8" android:layout_width="310px" android:layout_height="465px" android:scaleType="centerCrop" android:layout_margin="5px" app:shapeAppearanceOverlay="@style/RoundedCornerImage" />
+            android:id="@+id/poster_8" android:layout_width="230px" android:layout_height="345px" android:scaleType="centerCrop" android:layout_margin="5px" app:shapeAppearanceOverlay="@style/RoundedCornerImage" />
         <com.google.android.material.imageview.ShapeableImageView
-            android:id="@+id/poster_9" android:layout_width="310px" android:layout_height="465px" android:scaleType="centerCrop" android:layout_margin="5px" app:shapeAppearanceOverlay="@style/RoundedCornerImage" />
+            android:id="@+id/poster_9" android:layout_width="230px" android:layout_height="345px" android:scaleType="centerCrop" android:layout_margin="5px" app:shapeAppearanceOverlay="@style/RoundedCornerImage" />
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/poster_10" android:layout_width="230px" android:layout_height="345px" android:scaleType="centerCrop" android:layout_margin="5px" app:shapeAppearanceOverlay="@style/RoundedCornerImage" />
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/poster_11" android:layout_width="230px" android:layout_height="345px" android:scaleType="centerCrop" android:layout_margin="5px" app:shapeAppearanceOverlay="@style/RoundedCornerImage" />
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/poster_12" android:layout_width="230px" android:layout_height="345px" android:scaleType="centerCrop" android:layout_margin="5px" app:shapeAppearanceOverlay="@style/RoundedCornerImage" />
 
     </GridLayout>
 
@@ -76,7 +82,8 @@
         <ImageView
             android:layout_width="60px"
             android:layout_height="60px"
-            android:src="@mipmap/ic_launcher" />
+            android:src="@mipmap/ic_launcher"
+            android:contentDescription="@null" />
 
         <TextView
             android:layout_width="wrap_content"
