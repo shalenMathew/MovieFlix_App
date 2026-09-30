@@ -32,8 +32,8 @@ android {
         applicationId = "com.shalenmathew.movieflix"
         minSdk = 24
         targetSdk = 36
-        versionCode = 8
-        versionName = "2.1"
+        versionCode = 9
+        versionName = "2.2"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
 
