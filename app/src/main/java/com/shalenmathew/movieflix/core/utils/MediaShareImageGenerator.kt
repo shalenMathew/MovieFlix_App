@@ -289,9 +289,12 @@ object MediaShareImageGenerator {
             }
         }
 
-        val seasonCount = seasonRatingsMap?.keys?.size ?: 4
-        val width = if (template == MediaShareTemplate.SERIES_HEATMAP_POSTER && seasonCount > 5) {
-            1080 + ((seasonCount - 5) * 110)
+        val seasonCount = (seasonRatingsMap?.keys?.size ?: 4).coerceAtMost(10)
+        val width = if (template == MediaShareTemplate.SERIES_HEATMAP_POSTER) {
+            val gridWidth = 60 + (seasonCount * 106)
+            val widthNeededForGrid = gridWidth * 3 / 2 + 140
+            val existingWidth = 1080 + ((seasonCount - 5).coerceAtLeast(0) * 110)
+            maxOf(existingWidth, widthNeededForGrid)
         } else {
             1080
         }
