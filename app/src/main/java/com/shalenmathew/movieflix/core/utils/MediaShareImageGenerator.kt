@@ -174,6 +174,8 @@ object MediaShareImageGenerator {
                                 Color.WHITE to ContextCompat.getDrawable(context, R.drawable.bg_heatmap_dark_green)
                             scoreVal >= 8.0 ->
                                 Color.BLACK to ContextCompat.getDrawable(context, R.drawable.bg_heatmap_green)
+                            scoreVal >= 7.6 ->
+                                Color.BLACK to ContextCompat.getDrawable(context, R.drawable.bg_heatmap_mint)
                             scoreVal >= 5.0 ->
                                 Color.BLACK to ContextCompat.getDrawable(context, R.drawable.bg_heatmap_yellow)
                             else ->
@@ -220,6 +222,8 @@ object MediaShareImageGenerator {
                                 Color.WHITE to ContextCompat.getDrawable(context, R.drawable.bg_heatmap_dark_green)
                             scoreVal >= 8.0 ->
                                 Color.BLACK to ContextCompat.getDrawable(context, R.drawable.bg_heatmap_green)
+                            scoreVal >= 7.6 ->
+                                Color.BLACK to ContextCompat.getDrawable(context, R.drawable.bg_heatmap_mint)
                             scoreVal >= 5.0 ->
                                 Color.BLACK to ContextCompat.getDrawable(context, R.drawable.bg_heatmap_yellow)
                             else ->
