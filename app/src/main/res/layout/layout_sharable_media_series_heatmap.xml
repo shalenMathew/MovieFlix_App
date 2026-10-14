@@ -8,94 +8,22 @@
     android:orientation="vertical"
     android:padding="60px">
 
-    <!-- Top Header: Legend and Branding -->
+    <!-- Top Header: Branding -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:gravity="center_vertical"
+        android:gravity="end|center_vertical"
         android:layout_marginBottom="40px">
-
-        <!-- Legend Items -->
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="horizontal"
-            android:gravity="center_vertical">
-
-            <!-- Legend 1: Absolute Cinema -->
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:layout_marginEnd="20px">
-                <View
-                    android:layout_width="20px"
-                    android:layout_height="20px"
-                    android:background="@drawable/circle_blue"
-                    android:layout_marginEnd="8px" />
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Absolute Cinema"
-                    android:textColor="#FFFFFF"
-                    android:textSize="18px"
-                    android:fontFamily="@font/montserrat_bold" />
-            </LinearLayout>
-
-            <!-- Legend 2: Awesome -->
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:layout_marginEnd="20px">
-                <View
-                    android:layout_width="20px"
-                    android:layout_height="20px"
-                    android:background="@drawable/circle_green"
-                    android:layout_marginEnd="8px" />
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Awesome"
-                    android:textColor="#FFFFFF"
-                    android:textSize="18px"
-                    android:fontFamily="@font/montserrat_bold" />
-            </LinearLayout>
-
-            <!-- Legend 3: Good -->
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical">
-                <View
-                    android:layout_width="20px"
-                    android:layout_height="20px"
-                    android:background="@drawable/circle_yellow"
-                    android:layout_marginEnd="8px" />
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Good"
-                    android:textColor="#FFFFFF"
-                    android:textSize="18px"
-                    android:fontFamily="@font/montserrat_bold" />
-            </LinearLayout>
-
-        </LinearLayout>
 
         <!-- App / Brand Title -->
         <TextView
             android:id="@+id/heatmap_brand_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="| MovieFlix"
+            android:text="| MOVIEFLIX"
             android:textColor="#FFFFFF"
-            android:textSize="28px"
+            android:textSize="40px"
             android:fontFamily="@font/anton"
             android:textAllCaps="true" />
 
@@ -105,7 +33,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
 
         <!-- Episode Heatmap Grid Container -->
         <LinearLayout
@@ -203,23 +132,27 @@
 
         <!-- Right Poster Card -->
         <LinearLayout
+            android:id="@+id/heatmap_poster_container"
             android:layout_width="0dp"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_weight="0.8"
             android:orientation="vertical"
             android:gravity="center">
 
             <androidx.cardview.widget.CardView
+                android:id="@+id/heatmap_poster_card"
                 android:layout_width="match_parent"
                 android:layout_height="460px"
                 android:elevation="0dp"
-                android:radius="16px">
+                android:radius="16px"
+                android:background="#0B0B0D">
 
                 <ImageView
                     android:id="@+id/heatmap_hero_image"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:scaleType="centerCrop"
+                    android:scaleType="fitCenter"
+                    android:background="#0B0B0D"
                     tools:src="@tools:sample/avatars" />
 
             </androidx.cardview.widget.CardView>

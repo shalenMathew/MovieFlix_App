@@ -96,7 +96,7 @@ object MediaShareImageGenerator {
         if (template == MediaShareTemplate.SERIES_HEATMAP_POSTER) {
             shareView.findViewById<TextView>(R.id.heatmap_show_title)?.text = title
             shareView.findViewById<TextView>(R.id.heatmap_brand_title)?.text =
-                "| " + (clientProvider?.takeIf(String::isNotBlank)?.uppercase(Locale.ENGLISH) ?: "CINE BASE")
+                "| " + context.getString(R.string.app_name).uppercase(Locale.ENGLISH)
 
             val imageView = shareView.findViewById<ImageView>(R.id.heatmap_hero_image)
             if (imageView != null && heroBitmap != null) {
@@ -306,6 +306,27 @@ object MediaShareImageGenerator {
             View.MeasureSpec.makeMeasureSpec(width, View.MeasureSpec.EXACTLY),
             View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED)
         )
+        if (template == MediaShareTemplate.SERIES_HEATMAP_POSTER) {
+            val gridHeight = shareView.findViewById<View>(R.id.heatmap_grid_container)?.measuredHeight
+            val posterCard = shareView.findViewById<View>(R.id.heatmap_poster_card)
+            val showTitle = shareView.findViewById<TextView>(R.id.heatmap_show_title)
+            if (gridHeight != null && posterCard != null && showTitle != null) {
+                val titleLayoutParams = showTitle.layoutParams as LinearLayout.LayoutParams
+                val titleHeight = showTitle.measuredHeight + titleLayoutParams.topMargin
+                val episodeCount = shareView.findViewById<LinearLayout>(
+                    R.id.heatmap_episodes_rows_container
+                )?.childCount ?: 0
+                val maxCardHeight = if (episodeCount >= 10) 560 else 460
+                val cardHeight = (gridHeight - titleHeight).coerceAtLeast(0).coerceAtMost(maxCardHeight)
+                posterCard.layoutParams = posterCard.layoutParams.apply {
+                    height = cardHeight
+                }
+                shareView.measure(
+                    View.MeasureSpec.makeMeasureSpec(width, View.MeasureSpec.EXACTLY),
+                    View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED)
+                )
+            }
+        }
         val measuredHeight = shareView.measuredHeight.coerceAtLeast(100)
         shareView.layout(0, 0, width, measuredHeight)
 
