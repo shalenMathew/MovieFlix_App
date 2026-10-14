@@ -28,28 +28,16 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.chip.ChipGroup
 import com.shalenmathew.movieflix.R
-import com.shalenmathew.movieflix.data.network.ApiClient
+import com.shalenmathew.movieflix.data.remote.MediaShareDataLoader
+import com.shalenmathew.movieflix.domain.model.MediaShareData
 import com.shalenmathew.movieflix.domain.model.MovieResult
-import dagger.hilt.EntryPoint
-import dagger.hilt.InstallIn
-import dagger.hilt.android.EntryPointAccessors
-import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
-import kotlinx.coroutines.awaitAll
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.FileOutputStream
 import java.text.SimpleDateFormat
 import java.util.Locale
-
-@EntryPoint
-@InstallIn(SingletonComponent::class)
-interface MediaShareEntryPoint {
-    fun getApiClient(): ApiClient
-}
 
 class MediaSharePosterPicker(fragment: Fragment) {
     private var pendingResult: ((Uri?) -> Unit)? = null
@@ -370,139 +358,41 @@ object MediaShareImageGenerator {
     }
 }
 
-fun shareMediaCard(fragment: Fragment, movie: MovieResult, posterPicker: MediaSharePosterPicker) {
+fun shareMediaCard(
+    fragment: Fragment,
+    movie: MovieResult,
+    posterPicker: MediaSharePosterPicker,
+    mediaShareDataLoader: MediaShareDataLoader
+) {
     val ctx = fragment.context ?: return
 
     showToast(ctx, "Generating sharable image...")
 
-    fragment.lifecycleScope.launch(Dispatchers.IO) {
+    fragment.lifecycleScope.launch {
         try {
-            val movieId = movie.id ?: -1
-            val isTv = movie.mediaType.equals("tv", ignoreCase = true)
-
-            // 1. Fetch Hero Image
+            val shareData = mediaShareDataLoader.load(movie)
             val imagePath = movie.posterPath ?: movie.backdropPath
             val isLocal = imagePath != null && (imagePath.startsWith("content://") || imagePath.count { it == '/' } > 1)
             val fullPath = if (isLocal) imagePath else Constants.TMDB_IMAGE_BASE_URL_W780.plus(imagePath)
 
             val heroBitmap = try {
-                Glide.with(fragment)
-                    .asBitmap()
-                    .load(fullPath)
-                    .submit()
-                    .get()
+                withContext(Dispatchers.IO) {
+                    Glide.with(fragment)
+                        .asBitmap()
+                        .load(fullPath)
+                        .submit()
+                        .get()
+                }
             } catch (e: Exception) {
+                if (e is kotlinx.coroutines.CancellationException) throw e
                 null
             }
 
-            // 2. Fetch Client Provider, Director & Season Ratings
-            var clientProvider: String? = null
-            var directorName: String? = null
-            var castName: String? = null
-            var characterName: String? = null
-            var numberOfSeasons = 0
-            var maxEpisodes = 0
-            val seasonRatingsMap = mutableMapOf<Int, List<Double?>>()
-
-            if (movieId != -1) {
-                try {
-                    val entryPoint = EntryPointAccessors.fromApplication(
-                        ctx.applicationContext,
-                        MediaShareEntryPoint::class.java
-                    )
-                    val apiClient = entryPoint.getApiClient()
-
-                    if (isTv) {
-                        val tvDetailResponse = apiClient.fetchTVDetailApiCall(movieId)
-                        if (tvDetailResponse.isSuccessful) {
-                            val detail = tvDetailResponse.body()
-                            val seasonsList = detail?.seasons?.filter { (it.season_number ?: 0) > 0 } ?: emptyList()
-                            numberOfSeasons = seasonsList.size
-                            maxEpisodes = seasonsList.maxOfOrNull { it.episode_count ?: 0 } ?: 0
-
-                            if (numberOfSeasons <= 10 && maxEpisodes <= 30) {
-                                val results = coroutineScope {
-                                    seasonsList.take(10).map { season ->
-                                        val seasonNum = season.season_number ?: 1
-                                        async(Dispatchers.IO) {
-                                            try {
-                                                val seasonResp = apiClient.fetchTVSeasonApiCall(movieId, seasonNum)
-                                                if (seasonResp.isSuccessful) {
-                                                    val episodes = seasonResp.body()?.episodes ?: emptyList()
-                                                    seasonNum to episodes.map { it.vote_average }
-                                                } else {
-                                                    seasonNum to emptyList()
-                                                }
-                                            } catch (e: Exception) {
-                                                seasonNum to emptyList()
-                                            }
-                                        }
-                                    }.awaitAll()
-                                }
-                                for ((sNum, ratings) in results) {
-                                    seasonRatingsMap[sNum] = ratings
-                                }
-                            }
-                        }
-                    }
-
-                    // Watch Provider
-                    val providerResponse = if (isTv) {
-                        apiClient.getTVWatchProvidersApiCall(movieId)
-                    } else {
-                        apiClient.getMovieWatchProvidersApiCall(movieId)
-                    }
-                    if (providerResponse.isSuccessful) {
-                        val results = providerResponse.body()?.results
-                        val provider = results?.IN?.flatrate?.firstOrNull()
-                            ?: results?.IN?.buy?.firstOrNull()
-                            ?: results?.IN?.rent?.firstOrNull()
-                        clientProvider = provider?.providerName
-                    }
-
-                    // Credits / Director
-                    val castResponse = if (isTv) {
-                        apiClient.fetchTVCastApiCall(movieId)
-                    } else {
-                        apiClient.fetchMovieCastApiCall(movieId)
-                    }
-                    if (castResponse.isSuccessful) {
-                        val castBody = castResponse.body()
-                        val crewList = castBody?.crew ?: emptyList()
-                        val director = crewList.firstOrNull { it.job.equals("Director", ignoreCase = true) }
-                            ?: crewList.firstOrNull { it.department.equals("Directing", ignoreCase = true) }
-                            ?: crewList.firstOrNull { it.job.equals("Executive Producer", ignoreCase = true) }
-                        directorName = director?.name
-                        val leadCast = castBody?.cast?.firstOrNull()
-                        castName = leadCast?.name
-                        characterName = leadCast?.character
-                    }
-                } catch (e: Exception) {
-                    e.printStackTrace()
-                }
-            }
-
-            val isHeatmapAllowed = !isTv || (numberOfSeasons <= 10 && maxEpisodes <= 30)
-
-            withContext(Dispatchers.Main) {
-                showMediaSharePreviewBottomSheet(
-                    fragment,
-                    movie,
-                    heroBitmap,
-                    clientProvider,
-                    directorName,
-                    castName,
-                    characterName,
-                    isHeatmapAllowed,
-                    seasonRatingsMap,
-                    posterPicker
-                )
-            }
+            showMediaSharePreviewBottomSheet(fragment, movie, heroBitmap, shareData, posterPicker)
         } catch (e: Exception) {
+            if (e is kotlinx.coroutines.CancellationException) throw e
             e.printStackTrace()
-            withContext(Dispatchers.Main) {
-                showToast(ctx, "Failed to generate image")
-            }
+            showToast(ctx, "Failed to generate image")
         }
     }
 }
@@ -511,12 +401,7 @@ private fun showMediaSharePreviewBottomSheet(
     fragment: Fragment,
     movie: MovieResult,
     heroBitmap: Bitmap?,
-    clientProvider: String?,
-    directorName: String?,
-    castName: String?,
-    characterName: String?,
-    isHeatmapAllowed: Boolean,
-    seasonRatingsMap: Map<Int, List<Double?>>,
+    shareData: MediaShareData,
     posterPicker: MediaSharePosterPicker
 ) {
     val ctx = fragment.context ?: return
@@ -551,12 +436,16 @@ private fun showMediaSharePreviewBottomSheet(
     var selectedTemplate = MediaShareTemplate.EDITORIAL_POSTER
     var selectedHeroBitmap = heroBitmap
     var currentBitmap = MediaShareImageGenerator.generateImage(
-        ctx, movie, selectedHeroBitmap, selectedTemplate, clientProvider, directorName, castName, characterName, seasonRatingsMap
+        ctx, movie, selectedHeroBitmap, selectedTemplate,
+        shareData.clientProvider, shareData.directorName, shareData.castName,
+        shareData.characterName, shareData.seasonRatingsMap
     )
 
     fun updatePreview() {
         currentBitmap = MediaShareImageGenerator.generateImage(
-            ctx, movie, selectedHeroBitmap, selectedTemplate, clientProvider, directorName, castName, characterName, seasonRatingsMap
+            ctx, movie, selectedHeroBitmap, selectedTemplate,
+            shareData.clientProvider, shareData.directorName, shareData.castName,
+            shareData.characterName, shareData.seasonRatingsMap
         )
         previewImg.setImageBitmap(currentBitmap)
     }
@@ -565,7 +454,7 @@ private fun showMediaSharePreviewBottomSheet(
 
     chipGroup?.setOnCheckedStateChangeListener { _, checkedIds ->
         if (R.id.chip_media_heatmap in checkedIds) {
-            if (!isHeatmapAllowed) {
+            if (!shareData.isHeatmapAllowed) {
                 showToast(ctx, "Series Heatmap poster supports up to 10 seasons and 30 episodes per season")
                 chipGroup.check(R.id.chip_media_editorial)
                 return@setOnCheckedStateChangeListener

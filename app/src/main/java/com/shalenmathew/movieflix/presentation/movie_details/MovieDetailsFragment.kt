@@ -65,6 +65,7 @@ import com.shalenmathew.movieflix.core.utils.Constants.BASE_YOUTUBE_URL
 import com.shalenmathew.movieflix.core.utils.Constants.TMDB_IMAGE_BASE_URL_W780
 import com.shalenmathew.movieflix.core.utils.MediaShareImageGenerator
 import com.shalenmathew.movieflix.core.utils.MediaSharePosterPicker
+import com.shalenmathew.movieflix.data.remote.MediaShareDataLoader
 import com.shalenmathew.movieflix.core.utils.MediaShareTemplate
 import com.shalenmathew.movieflix.core.utils.NetworkResults
 import com.shalenmathew.movieflix.core.utils.formatDate
@@ -87,11 +88,13 @@ import com.shalenmathew.movieflix.presentation.viewmodels.CustomListViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import java.text.SimpleDateFormat
 import java.util.Locale
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MovieDetailsFragment : BottomSheetDialogFragment() {
     //remember to add dialog in nav graph or bottom sheet will not work
 
+    @Inject lateinit var mediaShareDataLoader: MediaShareDataLoader
     private var _binding: FragmentMovieDetailsBinding? = null
     val binding get() = _binding!!
     private val homeInfoViewModel: HomeInfoViewModel by viewModels()
@@ -260,7 +263,12 @@ class MovieDetailsFragment : BottomSheetDialogFragment() {
 
             fragmentMovieDetailsShareBtn.setOnClickListener() {
                 if (!::movieResult.isInitialized) return@setOnClickListener
-                shareMediaCard(this@MovieDetailsFragment, movieResult, mediaSharePosterPicker)
+                shareMediaCard(
+                    this@MovieDetailsFragment,
+                    movieResult,
+                    mediaSharePosterPicker,
+                    mediaShareDataLoader
+                )
             }
 
             fragmentMovieDetailsMoreBtn.setOnClickListener {
