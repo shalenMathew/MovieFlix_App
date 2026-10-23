@@ -32,6 +32,8 @@ import com.shalenmathew.movieflix.data.remote.MediaShareDataLoader
 import com.shalenmathew.movieflix.domain.model.MediaShareData
 import com.shalenmathew.movieflix.domain.model.MovieResult
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.File
@@ -59,6 +61,7 @@ enum class MediaShareTemplate(
     @param:LayoutRes val layoutResId: Int
 ) {
     KEEP_IT_SIMPLE("keep_it_simple", "Keep It Simple", R.layout.layout_sharable_media_simple),
+    FILM_STILL_POSTER("film_still", "Old Polaroid", R.layout.layout_sharable_media_film_still),
     EDITORIAL_POSTER("editorial_poster", "Editorial Poster", R.layout.layout_sharable_media_editorial),
     CHARACTER_POSTER("editorial_poster_2", "Editorial Poster 2", R.layout.layout_sharable_media_character),
     SERIES_HEATMAP_POSTER("series_heatmap", "Series Heatmap", R.layout.layout_sharable_media_series_heatmap)
@@ -95,6 +98,27 @@ object MediaShareImageGenerator {
             if (heroImageView != null && heroBitmap != null) {
                 val roundedHero = getRoundedCornerBitmap(heroBitmap, 32f)
                 heroImageView.setImageBitmap(roundedHero)
+            }
+        } else if (template == MediaShareTemplate.FILM_STILL_POSTER) {
+            shareView.findViewById<TextView>(R.id.film_still_title)?.text = title
+
+            val directorText = directorName?.takeIf(String::isNotBlank)?.uppercase(Locale.ENGLISH) ?: "UNKNOWN"
+            shareView.findViewById<TextView>(R.id.film_still_directed_by)?.text =
+                formatMetadataLine("directed by", directorText)
+
+            val castText = castName?.takeIf(String::isNotBlank)?.uppercase(Locale.ENGLISH) ?: "UNKNOWN"
+            shareView.findViewById<TextView>(R.id.film_still_starring)?.text =
+                formatMetadataLine("starring", castText)
+
+            val formattedDate = formatCompactDate(movie.releaseDate).uppercase(Locale.ENGLISH)
+            shareView.findViewById<TextView>(R.id.film_still_released)?.text =
+                formatMetadataLine("released", formattedDate)
+
+            shareView.findViewById<TextView>(R.id.film_still_branding)?.text = "MOVIEFLIX"
+
+            val imageView = shareView.findViewById<ImageView>(R.id.film_still_image)
+            if (imageView != null && heroBitmap != null) {
+                imageView.setImageBitmap(heroBitmap)
             }
         } else if (template == MediaShareTemplate.SERIES_HEATMAP_POSTER) {
             shareView.findViewById<TextView>(R.id.heatmap_show_title)?.text = title
@@ -358,6 +382,31 @@ object MediaShareImageGenerator {
         return output
     }
 
+    private fun formatMetadataLine(label: String, value: String): CharSequence {
+        val fullText = "$label $value"
+        val spannable = android.text.SpannableString(fullText)
+        val labelLength = label.length
+
+        spannable.setSpan(
+            android.text.style.ForegroundColorSpan(Color.parseColor("#666666")),
+            0, labelLength,
+            android.text.Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+        )
+
+        spannable.setSpan(
+            android.text.style.StyleSpan(android.graphics.Typeface.BOLD),
+            labelLength, fullText.length,
+            android.text.Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+        )
+        spannable.setSpan(
+            android.text.style.ForegroundColorSpan(Color.BLACK),
+            labelLength, fullText.length,
+            android.text.Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+        )
+
+        return spannable
+    }
+
     private fun formatDate(rawDate: String?): String {
         if (rawDate.isNullOrBlank()) return "UNKNOWN"
         return try {
@@ -404,24 +453,25 @@ fun shareMediaCard(
     fragment.lifecycleScope.launch {
         try {
             val shareData = mediaShareDataLoader.load(movie)
-            val imagePath = movie.posterPath ?: movie.backdropPath
-            val isLocal = imagePath != null && (imagePath.startsWith("content://") || imagePath.count { it == '/' } > 1)
-            val fullPath = if (isLocal) imagePath else Constants.TMDB_IMAGE_BASE_URL_W780.plus(imagePath)
 
-            val heroBitmap = try {
-                withContext(Dispatchers.IO) {
-                    Glide.with(fragment)
-                        .asBitmap()
-                        .load(fullPath)
-                        .submit()
-                        .get()
+            val posterPath = movie.posterPath ?: movie.backdropPath
+            val backdropPath = movie.backdropPath ?: movie.posterPath
+
+            val (posterBitmap, backdropBitmap) = coroutineScope {
+                val posterDef = async(Dispatchers.IO) {
+                    val isLocal = posterPath != null && (posterPath.startsWith("content://") || posterPath.count { it == '/' } > 1)
+                    val fullPath = if (isLocal) posterPath else Constants.TMDB_IMAGE_BASE_URL_W780.plus(posterPath ?: "")
+                    try { Glide.with(fragment).asBitmap().load(fullPath).submit().get() } catch (e: Exception) { null }
                 }
-            } catch (e: Exception) {
-                if (e is kotlinx.coroutines.CancellationException) throw e
-                null
+                val backdropDef = async(Dispatchers.IO) {
+                    val isLocal = backdropPath != null && (backdropPath.startsWith("content://") || backdropPath.count { it == '/' } > 1)
+                    val fullPath = if (isLocal) backdropPath else Constants.TMDB_IMAGE_BASE_URL_W780.plus(backdropPath ?: "")
+                    try { Glide.with(fragment).asBitmap().load(fullPath).submit().get() } catch (e: Exception) { null }
+                }
+                posterDef.await() to backdropDef.await()
             }
 
-            showMediaSharePreviewBottomSheet(fragment, movie, heroBitmap, shareData, posterPicker)
+            showMediaSharePreviewBottomSheet(fragment, movie, posterBitmap, backdropBitmap, shareData, posterPicker)
         } catch (e: Exception) {
             if (e is kotlinx.coroutines.CancellationException) throw e
             e.printStackTrace()
@@ -433,7 +483,8 @@ fun shareMediaCard(
 private fun showMediaSharePreviewBottomSheet(
     fragment: Fragment,
     movie: MovieResult,
-    heroBitmap: Bitmap?,
+    posterBitmap: Bitmap?,
+    backdropBitmap: Bitmap?,
     shareData: MediaShareData,
     posterPicker: MediaSharePosterPicker
 ) {
@@ -461,6 +512,7 @@ private fun showMediaSharePreviewBottomSheet(
     view.findViewById<View>(R.id.chip_template_classic).visibility = View.GONE
     view.findViewById<View>(R.id.chip_template_minimal).visibility = View.GONE
     view.findViewById<View>(R.id.chip_media_simple).visibility = View.VISIBLE
+    view.findViewById<View>(R.id.chip_media_film_still).visibility = View.VISIBLE
     view.findViewById<View>(R.id.chip_media_editorial).visibility = View.VISIBLE
     view.findViewById<View>(R.id.chip_media_character).visibility = View.VISIBLE
     view.findViewById<View>(R.id.chip_media_heatmap).visibility = if (isTv) View.VISIBLE else View.GONE
@@ -468,16 +520,27 @@ private fun showMediaSharePreviewBottomSheet(
     chipGroup?.check(R.id.chip_media_simple)
 
     var selectedTemplate = MediaShareTemplate.KEEP_IT_SIMPLE
-    var selectedHeroBitmap = heroBitmap
+    var isCustomImage = false
+    var customBitmap: Bitmap? = null
+
+    fun currentHeroBitmap(): Bitmap? {
+        if (isCustomImage) return customBitmap
+        return if (selectedTemplate == MediaShareTemplate.FILM_STILL_POSTER) {
+            backdropBitmap ?: posterBitmap
+        } else {
+            posterBitmap ?: backdropBitmap
+        }
+    }
+
     var currentBitmap = MediaShareImageGenerator.generateImage(
-        ctx, movie, selectedHeroBitmap, selectedTemplate,
+        ctx, movie, currentHeroBitmap(), selectedTemplate,
         shareData.clientProvider, shareData.directorName, shareData.castName,
         shareData.characterName, shareData.seasonRatingsMap
     )
 
     fun updatePreview() {
         currentBitmap = MediaShareImageGenerator.generateImage(
-            ctx, movie, selectedHeroBitmap, selectedTemplate,
+            ctx, movie, currentHeroBitmap(), selectedTemplate,
             shareData.clientProvider, shareData.directorName, shareData.castName,
             shareData.characterName, shareData.seasonRatingsMap
         )
@@ -496,6 +559,7 @@ private fun showMediaSharePreviewBottomSheet(
         }
         selectedTemplate = when {
             R.id.chip_media_simple in checkedIds -> MediaShareTemplate.KEEP_IT_SIMPLE
+            R.id.chip_media_film_still in checkedIds -> MediaShareTemplate.FILM_STILL_POSTER
             R.id.chip_media_character in checkedIds -> MediaShareTemplate.CHARACTER_POSTER
             R.id.chip_media_heatmap in checkedIds -> MediaShareTemplate.SERIES_HEATMAP_POSTER
             else -> MediaShareTemplate.EDITORIAL_POSTER
@@ -523,7 +587,8 @@ private fun showMediaSharePreviewBottomSheet(
                         if (customPoster == null) {
                             showToast(ctx, "Unable to load selected poster")
                         } else {
-                            selectedHeroBitmap = customPoster
+                            isCustomImage = true
+                            customBitmap = customPoster
                             updatePreview()
                         }
                     }

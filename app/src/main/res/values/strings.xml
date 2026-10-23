@@ -155,6 +155,7 @@
     <string name="label_main_character" translatable="false">MAIN CHARACTER</string>
     <string name="label_popular_artist" translatable="false">POPULAR ARTIST</string>
     <string name="template_keep_it_simple" translatable="false">Keep It Simple</string>
+    <string name="template_film_still" translatable="false">Old Polaroid</string>
     <string name="template_editorial_poster" translatable="false">Editorial Poster</string>
     <string name="template_character_poster" translatable="false">Editorial Poster 2</string>
     <string name="no_internet_connection">No Internet Connection</string>

@@ -76,6 +76,15 @@
                     android:visibility="gone" />
 
                 <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_media_film_still"
+                    style="@style/Widget.Material3.Chip.Filter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/template_film_still"
+                    android:textColor="@color/white"
+                    android:visibility="gone" />
+
+                <com.google.android.material.chip.Chip
                     android:id="@+id/chip_media_editorial"
                     style="@style/Widget.Material3.Chip.Filter"
                     android:layout_width="wrap_content"
