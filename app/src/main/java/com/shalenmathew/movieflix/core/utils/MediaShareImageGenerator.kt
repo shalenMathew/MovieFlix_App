@@ -58,6 +58,7 @@ enum class MediaShareTemplate(
     val title: String,
     @param:LayoutRes val layoutResId: Int
 ) {
+    KEEP_IT_SIMPLE("keep_it_simple", "Keep It Simple", R.layout.layout_sharable_media_simple),
     EDITORIAL_POSTER("editorial_poster", "Editorial Poster", R.layout.layout_sharable_media_editorial),
     CHARACTER_POSTER("editorial_poster_2", "Editorial Poster 2", R.layout.layout_sharable_media_character),
     SERIES_HEATMAP_POSTER("series_heatmap", "Series Heatmap", R.layout.layout_sharable_media_series_heatmap)
@@ -81,7 +82,21 @@ object MediaShareImageGenerator {
         val title = movie.title ?: movie.name ?: ""
         val isTv = movie.mediaType.equals("tv", ignoreCase = true)
 
-        if (template == MediaShareTemplate.SERIES_HEATMAP_POSTER) {
+        if (template == MediaShareTemplate.KEEP_IT_SIMPLE) {
+            shareView.findViewById<TextView>(R.id.simple_media_title)?.text = title
+
+            val directorOrCast = directorName?.takeIf(String::isNotBlank)
+                ?: castName?.takeIf(String::isNotBlank)
+                ?: characterName?.takeIf(String::isNotBlank)
+                ?: ""
+            shareView.findViewById<TextView>(R.id.simple_media_director)?.text = directorOrCast.uppercase(Locale.ENGLISH)
+
+            val heroImageView = shareView.findViewById<ImageView>(R.id.simple_media_hero_image)
+            if (heroImageView != null && heroBitmap != null) {
+                val roundedHero = getRoundedCornerBitmap(heroBitmap, 32f)
+                heroImageView.setImageBitmap(roundedHero)
+            }
+        } else if (template == MediaShareTemplate.SERIES_HEATMAP_POSTER) {
             shareView.findViewById<TextView>(R.id.heatmap_show_title)?.text = title
             shareView.findViewById<TextView>(R.id.heatmap_brand_title)?.text =
                 "| " + context.getString(R.string.app_name).uppercase(Locale.ENGLISH)
@@ -445,13 +460,14 @@ private fun showMediaSharePreviewBottomSheet(
     val isTv = movie.mediaType.equals("tv", ignoreCase = true)
     view.findViewById<View>(R.id.chip_template_classic).visibility = View.GONE
     view.findViewById<View>(R.id.chip_template_minimal).visibility = View.GONE
+    view.findViewById<View>(R.id.chip_media_simple).visibility = View.VISIBLE
     view.findViewById<View>(R.id.chip_media_editorial).visibility = View.VISIBLE
     view.findViewById<View>(R.id.chip_media_character).visibility = View.VISIBLE
     view.findViewById<View>(R.id.chip_media_heatmap).visibility = if (isTv) View.VISIBLE else View.GONE
     customPosterBtn.visibility = View.VISIBLE
-    chipGroup?.check(R.id.chip_media_editorial)
+    chipGroup?.check(R.id.chip_media_simple)
 
-    var selectedTemplate = MediaShareTemplate.EDITORIAL_POSTER
+    var selectedTemplate = MediaShareTemplate.KEEP_IT_SIMPLE
     var selectedHeroBitmap = heroBitmap
     var currentBitmap = MediaShareImageGenerator.generateImage(
         ctx, movie, selectedHeroBitmap, selectedTemplate,
@@ -474,11 +490,12 @@ private fun showMediaSharePreviewBottomSheet(
         if (R.id.chip_media_heatmap in checkedIds) {
             if (!shareData.isHeatmapAllowed) {
                 showToast(ctx, "Series Heatmap poster supports up to 10 seasons and 30 episodes per season")
-                chipGroup.check(R.id.chip_media_editorial)
+                chipGroup.check(R.id.chip_media_simple)
                 return@setOnCheckedStateChangeListener
             }
         }
         selectedTemplate = when {
+            R.id.chip_media_simple in checkedIds -> MediaShareTemplate.KEEP_IT_SIMPLE
             R.id.chip_media_character in checkedIds -> MediaShareTemplate.CHARACTER_POSTER
             R.id.chip_media_heatmap in checkedIds -> MediaShareTemplate.SERIES_HEATMAP_POSTER
             else -> MediaShareTemplate.EDITORIAL_POSTER
