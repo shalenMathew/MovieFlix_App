@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/sharable_media_root"
+    android:layout_width="1080px"
+    android:layout_height="wrap_content"
+    android:background="#F5F5F0"
+    android:orientation="vertical"
+    android:paddingHorizontal="50px"
+    android:paddingVertical="50px">
+
+    <!-- Film Still Backdrop Image with Sharp Edges -->
+    <ImageView
+        android:id="@+id/film_still_image"
+        android:layout_width="match_parent"
+        android:layout_height="660px"
+        android:layout_marginBottom="24px"
+        android:scaleType="centerCrop"
+        android:contentDescription="@null"
+        tools:src="@tools:sample/backgrounds/scenic" />
+
+    <!-- Movie / TV Title (Anton Heavy Condensed Font with Tight Line Height) -->
+    <TextView
+        android:id="@+id/film_still_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10px"
+        android:fontFamily="@font/anton"
+        android:textColor="#000000"
+        android:textSize="84px"
+        android:lineHeight="82px"
+        app:autoSizeTextType="uniform"
+        app:autoSizeMinTextSize="40px"
+        app:autoSizeMaxTextSize="84px"
+        android:includeFontPadding="false"
+        android:maxLines="2"
+        android:textAllCaps="true"
+        android:ellipsize="end"
+        tools:text="INGLOURIOUS BASTERDS" />
+
+    <!-- Metadata Details Block (Montserrat Medium) -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginBottom="24px">
+
+        <!-- Line 1: Directed by -->
+        <TextView
+            android:id="@+id/film_still_directed_by"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/montserrat_medium"
+            android:textColor="#111111"
+            android:textSize="26px"
+            android:includeFontPadding="false"
+            android:maxLines="1"
+            android:ellipsize="end"
+            tools:text="directed by QUENTIN TARANTINO" />
+
+        <!-- Line 2: Starring -->
+        <TextView
+            android:id="@+id/film_still_starring"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4px"
+            android:fontFamily="@font/montserrat_medium"
+            android:textColor="#111111"
+            android:textSize="26px"
+            android:includeFontPadding="false"
+            android:maxLines="1"
+            android:ellipsize="end"
+            tools:text="starring BRAD PITT" />
+
+        <!-- Line 3: Released -->
+        <TextView
+            android:id="@+id/film_still_released"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4px"
+            android:fontFamily="@font/montserrat_medium"
+            android:textColor="#111111"
+            android:textSize="26px"
+            android:includeFontPadding="false"
+            android:maxLines="1"
+            android:ellipsize="end"
+            tools:text="released AUG 2009" />
+
+    </LinearLayout>
+
+    <!-- Bottom App Branding -->
+    <TextView
+        android:id="@+id/film_still_branding"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/montserrat_bold"
+        android:textColor="#000000"
+        android:textSize="28px"
+        android:textAllCaps="true"
+        android:letterSpacing="0.05"
+        android:includeFontPadding="false"
+        tools:text="MOVIEFLIX" />
+
+</LinearLayout>
