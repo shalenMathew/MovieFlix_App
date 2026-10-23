@@ -277,7 +277,8 @@ object MediaShareImageGenerator {
 
             val heroImageView = shareView.findViewById<ImageView>(R.id.media_hero_image)
             if (heroImageView != null && heroBitmap != null) {
-                heroImageView.setImageBitmap(heroBitmap)
+                val roundedHero = getRoundedCornerBitmap(heroBitmap, 32f)
+                heroImageView.setImageBitmap(roundedHero)
             }
         }
 
@@ -325,35 +326,52 @@ object MediaShareImageGenerator {
         return bitmap
     }
 
-    private fun formatDate(rawDate: String): String {
-        if (rawDate.isBlank()) return "RELEASE DATE"
+    private fun getRoundedCornerBitmap(bitmap: Bitmap, cornerRadiusPx: Float): Bitmap {
+        val output = Bitmap.createBitmap(bitmap.width, bitmap.height, Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(output)
+        val paint = android.graphics.Paint().apply {
+            isAntiAlias = true
+            color = android.graphics.Color.BLACK
+        }
+        val rect = android.graphics.Rect(0, 0, bitmap.width, bitmap.height)
+        val rectF = android.graphics.RectF(rect)
+
+        canvas.drawRoundRect(rectF, cornerRadiusPx, cornerRadiusPx, paint)
+        paint.xfermode = android.graphics.PorterDuffXfermode(android.graphics.PorterDuff.Mode.SRC_IN)
+        canvas.drawBitmap(bitmap, rect, rect, paint)
+
+        return output
+    }
+
+    private fun formatDate(rawDate: String?): String {
+        if (rawDate.isNullOrBlank()) return "UNKNOWN"
         return try {
             val inputFormat = SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH)
             val date = inputFormat.parse(rawDate)
             if (date != null) {
-                val outputFormat = SimpleDateFormat("MMMM d, yyyy", Locale.ENGLISH)
+                val outputFormat = SimpleDateFormat("MMM yyyy", Locale.ENGLISH)
                 outputFormat.format(date).uppercase(Locale.ENGLISH)
             } else {
-                rawDate.uppercase(Locale.ENGLISH)
+                "UNKNOWN"
             }
         } catch (e: Exception) {
-            rawDate.uppercase(Locale.ENGLISH)
+            "UNKNOWN"
         }
     }
 
     private fun formatCompactDate(rawDate: String?): String {
-        if (rawDate.isNullOrBlank()) return "DEC, 2024"
+        if (rawDate.isNullOrBlank()) return "UNKNOWN"
         return try {
             val date = SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH).parse(rawDate)
             if (date != null) {
-                SimpleDateFormat("MMM, yyyy", Locale.ENGLISH)
+                SimpleDateFormat("MMM yyyy", Locale.ENGLISH)
                     .format(date)
                     .uppercase(Locale.ENGLISH)
             } else {
-                rawDate.uppercase(Locale.ENGLISH)
+                "UNKNOWN"
             }
         } catch (e: Exception) {
-            rawDate.uppercase(Locale.ENGLISH)
+            "UNKNOWN"
         }
     }
 }
