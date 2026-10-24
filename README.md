@@ -101,11 +101,11 @@ https://github.com/shalenMathew/MovieFlix_App/discussions/70
 
 ## Star History
 
-<a href="https://star-history.dera.page/#shalenMathew/MovieFlix_App&type=timeline">
+<a href="https://www.star-history.com/?repos=shalenmathew%2Fmovieflix_app&type=date&legend=top-left">
  <picture>
-   <source media="(prefers-color-scheme: dark)" srcset="https://star-history.dera.page/svg?repos=shalenMathew/MovieFlix_App&type=timeline&theme=dark" />
-   <source media="(prefers-color-scheme: light)" srcset="https://star-history.dera.page/svg?repos=shalenMathew/MovieFlix_App&type=timeline" />
-   <img alt="Star History Chart" src="https://star-history.dera.page/svg?repos=shalenMathew/MovieFlix_App&type=timeline" />
+   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/chart?repos=shalenmathew/movieflix_app&type=date&theme=dark&legend=top-left" />
+   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/chart?repos=shalenmathew/movieflix_app&type=date&legend=top-left" />
+   <img alt="Star History Chart" src="https://api.star-history.com/chart?repos=shalenmathew/movieflix_app&type=date&legend=top-left" />
  </picture>
 </a>
 
