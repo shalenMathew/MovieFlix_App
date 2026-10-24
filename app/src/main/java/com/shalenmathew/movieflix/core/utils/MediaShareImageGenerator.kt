@@ -62,6 +62,7 @@ enum class MediaShareTemplate(
 ) {
     KEEP_IT_SIMPLE("keep_it_simple", "Keep It Simple", R.layout.layout_sharable_media_simple),
     FILM_STILL_POSTER("film_still", "Old Polaroid", R.layout.layout_sharable_media_film_still),
+    RETRO_DROP("retro_drop", "Retro Drop", R.layout.layout_sharable_media_retro_drop),
     EDITORIAL_POSTER("editorial_poster", "Editorial Poster", R.layout.layout_sharable_media_editorial),
     CHARACTER_POSTER("editorial_poster_2", "Editorial Poster 2", R.layout.layout_sharable_media_character),
     SERIES_HEATMAP_POSTER("series_heatmap", "Series Heatmap", R.layout.layout_sharable_media_series_heatmap)
@@ -78,7 +79,8 @@ object MediaShareImageGenerator {
         directorName: String? = null,
         castName: String? = null,
         characterName: String? = null,
-        seasonRatingsMap: Map<Int, List<Double?>>? = null
+        seasonRatingsMap: Map<Int, List<Double?>>? = null,
+        retroColorHex: String = "#28739E"
     ): Bitmap {
         val shareView = LayoutInflater.from(context).inflate(template.layoutResId, null)
 
@@ -119,6 +121,23 @@ object MediaShareImageGenerator {
             val imageView = shareView.findViewById<ImageView>(R.id.film_still_image)
             if (imageView != null && heroBitmap != null) {
                 imageView.setImageBitmap(heroBitmap)
+            }
+        } else if (template == MediaShareTemplate.RETRO_DROP) {
+            shareView.findViewById<View>(R.id.sharable_media_root)?.setBackgroundColor(Color.parseColor(retroColorHex))
+            shareView.findViewById<TextView>(R.id.retro_drop_title)?.text = title
+
+            val pillView = shareView.findViewById<TextView>(R.id.retro_drop_pill)
+            if (pillView != null) {
+                pillView.text = context.getString(R.string.app_name).lowercase(Locale.ENGLISH)
+                val pillBg = ContextCompat.getDrawable(context, R.drawable.bg_retro_drop_pill)?.mutate()
+                pillBg?.setTint(Color.parseColor(retroColorHex))
+                pillView.background = pillBg
+            }
+
+            val imageView = shareView.findViewById<ImageView>(R.id.retro_drop_image)
+            if (imageView != null && heroBitmap != null) {
+                val roundedHero = getRoundedCornerBitmap(heroBitmap, 48f)
+                imageView.setImageBitmap(roundedHero)
             }
         } else if (template == MediaShareTemplate.SERIES_HEATMAP_POSTER) {
             shareView.findViewById<TextView>(R.id.heatmap_show_title)?.text = title
@@ -460,13 +479,13 @@ fun shareMediaCard(
             val (posterBitmap, backdropBitmap) = coroutineScope {
                 val posterDef = async(Dispatchers.IO) {
                     val isLocal = posterPath != null && (posterPath.startsWith("content://") || posterPath.count { it == '/' } > 1)
-                    val fullPath = if (isLocal) posterPath else Constants.TMDB_IMAGE_BASE_URL_W780.plus(posterPath ?: "")
-                    try { Glide.with(fragment).asBitmap().load(fullPath).submit().get() } catch (e: Exception) { null }
+                    val fullPath = if (isLocal) posterPath else "https://image.tmdb.org/t/p/original/".plus(posterPath ?: "")
+                    try { Glide.with(fragment).asBitmap().load(fullPath).submit(1080, 1600).get() } catch (e: Exception) { null }
                 }
                 val backdropDef = async(Dispatchers.IO) {
                     val isLocal = backdropPath != null && (backdropPath.startsWith("content://") || backdropPath.count { it == '/' } > 1)
-                    val fullPath = if (isLocal) backdropPath else Constants.TMDB_IMAGE_BASE_URL_W780.plus(backdropPath ?: "")
-                    try { Glide.with(fragment).asBitmap().load(fullPath).submit().get() } catch (e: Exception) { null }
+                    val fullPath = if (isLocal) backdropPath else "https://image.tmdb.org/t/p/original/".plus(backdropPath ?: "")
+                    try { Glide.with(fragment).asBitmap().load(fullPath).submit(1280, 720).get() } catch (e: Exception) { null }
                 }
                 posterDef.await() to backdropDef.await()
             }
@@ -513,6 +532,7 @@ private fun showMediaSharePreviewBottomSheet(
     view.findViewById<View>(R.id.chip_template_minimal).visibility = View.GONE
     view.findViewById<View>(R.id.chip_media_simple).visibility = View.VISIBLE
     view.findViewById<View>(R.id.chip_media_film_still).visibility = View.VISIBLE
+    view.findViewById<View>(R.id.chip_media_retro_drop).visibility = View.VISIBLE
     view.findViewById<View>(R.id.chip_media_editorial).visibility = View.VISIBLE
     view.findViewById<View>(R.id.chip_media_character).visibility = View.VISIBLE
     view.findViewById<View>(R.id.chip_media_heatmap).visibility = if (isTv) View.VISIBLE else View.GONE
@@ -525,7 +545,7 @@ private fun showMediaSharePreviewBottomSheet(
 
     fun currentHeroBitmap(): Bitmap? {
         if (isCustomImage) return customBitmap
-        return if (selectedTemplate == MediaShareTemplate.FILM_STILL_POSTER) {
+        return if (selectedTemplate == MediaShareTemplate.FILM_STILL_POSTER || selectedTemplate == MediaShareTemplate.RETRO_DROP) {
             backdropBitmap ?: posterBitmap
         } else {
             posterBitmap ?: backdropBitmap
@@ -538,14 +558,43 @@ private fun showMediaSharePreviewBottomSheet(
         shareData.characterName, shareData.seasonRatingsMap
     )
 
+    val colorPaletteContainer = view.findViewById<View>(R.id.share_color_palette_container)
+    val swatchBlueFrame = view.findViewById<View>(R.id.color_swatch_blue_frame)
+    val swatchGreenFrame = view.findViewById<View>(R.id.color_swatch_green_frame)
+    val swatchRedFrame = view.findViewById<View>(R.id.color_swatch_red_frame)
+
+    var selectedRetroColor = "#28739E"
+
+    fun updateColorPaletteVisibility() {
+        if (selectedTemplate == MediaShareTemplate.RETRO_DROP) {
+            colorPaletteContainer?.visibility = View.VISIBLE
+        } else {
+            colorPaletteContainer?.visibility = View.GONE
+        }
+    }
+
     fun updatePreview() {
+        updateColorPaletteVisibility()
         currentBitmap = MediaShareImageGenerator.generateImage(
             ctx, movie, currentHeroBitmap(), selectedTemplate,
             shareData.clientProvider, shareData.directorName, shareData.castName,
-            shareData.characterName, shareData.seasonRatingsMap
+            shareData.characterName, shareData.seasonRatingsMap,
+            selectedRetroColor
         )
         previewImg.setImageBitmap(currentBitmap)
     }
+
+    fun selectRetroColor(colorHex: String) {
+        selectedRetroColor = colorHex
+        swatchBlueFrame?.setBackgroundResource(if (colorHex == "#28739E") R.drawable.bg_color_swatch_selected else android.R.color.transparent)
+        swatchGreenFrame?.setBackgroundResource(if (colorHex == "#2dac77") R.drawable.bg_color_swatch_selected else android.R.color.transparent)
+        swatchRedFrame?.setBackgroundResource(if (colorHex == "#ac2d2d") R.drawable.bg_color_swatch_selected else android.R.color.transparent)
+        updatePreview()
+    }
+
+    swatchBlueFrame?.setOnClickListener { selectRetroColor("#28739E") }
+    swatchGreenFrame?.setOnClickListener { selectRetroColor("#2dac77") }
+    swatchRedFrame?.setOnClickListener { selectRetroColor("#ac2d2d") }
 
     previewImg.setImageBitmap(currentBitmap)
 
@@ -560,6 +609,7 @@ private fun showMediaSharePreviewBottomSheet(
         selectedTemplate = when {
             R.id.chip_media_simple in checkedIds -> MediaShareTemplate.KEEP_IT_SIMPLE
             R.id.chip_media_film_still in checkedIds -> MediaShareTemplate.FILM_STILL_POSTER
+            R.id.chip_media_retro_drop in checkedIds -> MediaShareTemplate.RETRO_DROP
             R.id.chip_media_character in checkedIds -> MediaShareTemplate.CHARACTER_POSTER
             R.id.chip_media_heatmap in checkedIds -> MediaShareTemplate.SERIES_HEATMAP_POSTER
             else -> MediaShareTemplate.EDITORIAL_POSTER

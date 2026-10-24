@@ -16,7 +16,7 @@
         android:id="@+id/simple_media_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="36px"
+        android:layout_marginBottom="5px"
         android:fontFamily="@font/shrikhand_regular"
         android:gravity="center"
         android:textColor="#000000"
