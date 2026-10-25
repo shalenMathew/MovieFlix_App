@@ -14,6 +14,7 @@ import androidx.glance.ImageProvider
 import androidx.glance.action.ActionParameters
 import androidx.glance.action.clickable
 import androidx.glance.appwidget.GlanceAppWidget
+import androidx.glance.appwidget.LinearProgressIndicator
 import androidx.glance.appwidget.action.ActionCallback
 import androidx.glance.appwidget.action.actionRunCallback
 import androidx.glance.appwidget.action.actionStartActivity
@@ -285,34 +286,16 @@ private fun UpNextItemRow(context: Context, item: UpNextItem) {
 
             Spacer(modifier = GlanceModifier.height(6.dp))
 
-            // Progress Bar (Rounded with Soft Muted Purple Accent #7352C7)
-            Row(
+            // Progress Bar (Rounded with Soft Muted Purple Accent)
+            LinearProgressIndicator(
+                progress = item.progressPercent / 100f,
                 modifier = GlanceModifier
                     .fillMaxWidth()
                     .height(6.dp)
-                    .cornerRadius(3.dp)
-                    .background(ColorProvider(day = Color(0xFF333333), night = Color(0xFF333333)))
-            ) {
-                val purpleFill = item.progressPercent.coerceAtLeast(1)
-                val remainingFill = (100 - purpleFill).coerceAtLeast(0)
-
-                Box(
-                    modifier = GlanceModifier
-                        .defaultWeight()
-                        .fillMaxHeight()
-                        .cornerRadius(3.dp)
-                        .background(ColorProvider(day = Color(0xFF6E41EC), night = Color(0xFF5E53E0)))
-                ) {}
-
-                if (remainingFill > 0) {
-                    Spacer(
-                        modifier = GlanceModifier
-                            .width(remainingFill.dp)
-                            .fillMaxHeight()
-                            .background(ColorProvider(day = Color(0xFF333333), night = Color(0xFF333333)))
-                    )
-                }
-            }
+                    .cornerRadius(3.dp),
+                color = ColorProvider(day = Color(0xFF7352C7), night = Color(0xFF7352C7)),
+                backgroundColor = ColorProvider(day = Color(0xFF333333), night = Color(0xFF333333))
+            )
         }
 
         Spacer(modifier = GlanceModifier.width(12.dp))
