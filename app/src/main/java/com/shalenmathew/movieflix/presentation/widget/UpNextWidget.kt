@@ -285,21 +285,23 @@ private fun UpNextItemRow(context: Context, item: UpNextItem) {
 
             Spacer(modifier = GlanceModifier.height(6.dp))
 
-            // Progress Bar
+            // Progress Bar (Rounded with Soft Muted Purple Accent #7352C7)
             Row(
                 modifier = GlanceModifier
                     .fillMaxWidth()
                     .height(6.dp)
+                    .cornerRadius(3.dp)
                     .background(ColorProvider(day = Color(0xFF333333), night = Color(0xFF333333)))
             ) {
-                val blueFill = item.progressPercent.coerceAtLeast(1)
-                val remainingFill = (100 - blueFill).coerceAtLeast(0)
+                val purpleFill = item.progressPercent.coerceAtLeast(1)
+                val remainingFill = (100 - purpleFill).coerceAtLeast(0)
 
                 Box(
                     modifier = GlanceModifier
                         .defaultWeight()
                         .fillMaxHeight()
-                        .background(ColorProvider(day = Color(0xFF28739E), night = Color(0xFF28739E)))
+                        .cornerRadius(3.dp)
+                        .background(ColorProvider(day = Color(0xFF6E41EC), night = Color(0xFF5E53E0)))
                 ) {}
 
                 if (remainingFill > 0) {
@@ -307,7 +309,7 @@ private fun UpNextItemRow(context: Context, item: UpNextItem) {
                         modifier = GlanceModifier
                             .width(remainingFill.dp)
                             .fillMaxHeight()
-                            .background(ColorProvider(day = Color(0xFF555555), night = Color(0xFF555555)))
+                            .background(ColorProvider(day = Color(0xFF333333), night = Color(0xFF333333)))
                     )
                 }
             }
