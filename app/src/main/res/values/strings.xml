@@ -155,6 +155,8 @@
     <string name="label_main_character" translatable="false">MAIN CHARACTER</string>
     <string name="label_popular_artist" translatable="false">POPULAR ARTIST</string>
     <string name="label_theme_color" translatable="false">Theme Color:</string>
+    <string name="widget_up_next_title" translatable="false">UP Next</string>
+    <string name="widget_up_next_description" translatable="false">Track your next episodes and watch progress for your series.</string>
     <string name="template_keep_it_simple" translatable="false">Keep It Simple</string>
     <string name="template_film_still" translatable="false">Old Polaroid</string>
     <string name="template_retro_drop" translatable="false">Retro Drop</string>

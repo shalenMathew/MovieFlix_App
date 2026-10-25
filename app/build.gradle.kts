@@ -4,6 +4,7 @@ import java.util.Properties
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+    id("org.jetbrains.kotlin.plugin.compose")
     id ("kotlin-kapt")
     id("com.google.devtools.ksp")
     id ("kotlin-parcelize")
@@ -77,6 +78,11 @@ android {
         dataBinding = true
         viewBinding = true
         buildConfig = true
+        compose = true
+    }
+
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.5.15"
     }
 
     lint {
@@ -169,6 +175,13 @@ dependencies {
     // WorkManager for scheduled notifications
     implementation ("androidx.work:work-runtime-ktx:2.10.0")
     androidTestImplementation("androidx.work:work-testing:2.10.0")
+
+    // Jetpack Glance for Home Screen Widgets
+    implementation(platform("androidx.compose:compose-bom:2024.09.00"))
+    implementation("androidx.compose.runtime:runtime")
+    implementation("androidx.compose.ui:ui")
+    implementation("androidx.glance:glance-appwidget:1.2.0")
+    implementation("androidx.glance:glance-material3:1.2.0")
 
 
     // mockito

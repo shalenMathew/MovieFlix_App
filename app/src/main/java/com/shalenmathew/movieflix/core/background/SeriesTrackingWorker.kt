@@ -105,6 +105,8 @@ class SeriesTrackingWorker(
             dao.insertEpisodes(episodeEntities)
             dao.updateSyncStatus(seriesId, "COMPLETED")
 
+            com.shalenmathew.movieflix.presentation.widget.updateUpNextWidget(context)
+
             Result.success()
         } catch (e: Exception) {
             dao.updateSyncStatus(seriesId, "FAILED")

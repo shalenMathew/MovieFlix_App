@@ -39,6 +39,9 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        // Schedule periodic 6-hour background sync for Up Next Widget
+        com.shalenmathew.movieflix.core.background.UpNextWidgetWorker.schedulePeriodicSync(this)
+
 
 
         // Setup bottom navigation with nav controller
