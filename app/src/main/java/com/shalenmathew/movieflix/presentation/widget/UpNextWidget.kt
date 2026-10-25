@@ -213,11 +213,20 @@ private fun UpNextWidgetContent(context: Context, items: List<UpNextItem>) {
                     )
                 )
             }
+        } else if (items.size <= 2) {
+            Column(
+                modifier = GlanceModifier
+                    .fillMaxSize()
+                    .clickable(actionStartActivity(upNextIntent(context)))
+            ) {
+                items.forEach { item ->
+                    UpNextItemRow(context, item)
+                }
+            }
         } else {
             LazyColumn(
                 modifier = GlanceModifier
                     .fillMaxSize()
-                    .clickable(actionStartActivity(upNextIntent(context)))
             ) {
                 items(items) { item ->
                     UpNextItemRow(context, item)
