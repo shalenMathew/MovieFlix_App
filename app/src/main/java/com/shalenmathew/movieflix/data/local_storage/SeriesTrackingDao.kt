@@ -34,6 +34,17 @@ interface SeriesTrackingDao {
     """)
     fun getAllTrackedSeries(): Flow<List<TrackedSeriesWithProgress>>
 
+    @Query("""
+        SELECT s.*, p.lastWatchedEpisodeId, p.lastWatchedSeasonNumber, p.lastWatchedEpisodeNumber 
+        FROM series_tracking_table s 
+        LEFT JOIN series_progress_table p ON s.id = p.seriesId 
+        ORDER BY s.lastUpdated DESC
+    """)
+    suspend fun getTrackedSeriesListSync(): List<TrackedSeriesWithProgress>
+
+    @Query("SELECT * FROM episodes_tracking_table WHERE seriesId = :seriesId ORDER BY seasonNumber ASC, episodeNumber ASC")
+    suspend fun getAllEpisodesForSeriesSync(seriesId: Int): List<EpisodeTrackingEntity>
+
     @Query("SELECT * FROM series_tracking_table WHERE id = :seriesId")
     suspend fun getSeriesById(seriesId: Int): SeriesTrackingEntity?
 

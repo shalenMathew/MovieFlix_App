@@ -45,12 +45,15 @@ import androidx.activity.result.contract.ActivityResultContracts
 import com.google.android.material.textfield.TextInputEditText
 import com.shalenmathew.movieflix.core.utils.shareMediaCard
 import com.shalenmathew.movieflix.core.utils.MediaSharePosterPicker
+import com.shalenmathew.movieflix.data.remote.MediaShareDataLoader
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class FavFragment : Fragment() {
+    @Inject lateinit var mediaShareDataLoader: MediaShareDataLoader
     private val mediaSharePosterPicker = MediaSharePosterPicker(this)
 
     private val favMovieViewModel: FavMovieViewModel by viewModels()
@@ -150,7 +153,7 @@ class FavFragment : Fragment() {
         actions.add(QuickActionOverlay.ActionItem(
             icon = R.drawable.baseline_share_24,
             label = getString(R.string.share).plus(" Movie"),
-            action = { shareMediaCard(this, movie, mediaSharePosterPicker) }
+            action = { shareMediaCard(this, movie, mediaSharePosterPicker, mediaShareDataLoader) }
         ))
 
         actions.add(QuickActionOverlay.ActionItem(

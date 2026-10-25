@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/sharable_media_root"
+    android:layout_width="1080px"
+    android:layout_height="wrap_content"
+    android:background="#28739E"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    android:paddingHorizontal="50px"
+    android:paddingVertical="50px">
+
+    <!-- Outer Rounded Border Frame enclosing ONLY the Image -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_retro_drop_border"
+        android:orientation="vertical"
+        android:padding="24px"
+        android:layout_marginBottom="20px">
+
+        <!-- Image Container with Top Oval Pill Overlay -->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="780px">
+
+            <!-- Backdrop Film Still Image -->
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/retro_drop_image"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:contentDescription="@null"
+                app:shapeAppearanceOverlay="@style/RoundedCornerRetroDropImage"
+                tools:src="@tools:sample/backgrounds/scenic" />
+
+            <!-- Top Oval Pill Badge Overlay (Blue oval with cream italic text) -->
+            <TextView
+                android:id="@+id/retro_drop_pill"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="28px"
+                android:background="@drawable/bg_retro_drop_pill"
+                android:fontFamily="@font/shrikhand_regular"
+                android:textColor="#FDEDC9"
+                android:textSize="24px"
+                android:paddingHorizontal="36px"
+                android:paddingVertical="12px"
+                android:includeFontPadding="false"
+                tools:text="movieflix" />
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+    <!-- Title OUTSIDE the Border below the Image -->
+    <TextView
+        android:id="@+id/retro_drop_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/shrikhand_regular"
+        android:gravity="center"
+        android:textColor="#FDEDC9"
+        android:textSize="96px"
+        android:lineHeight="90px"
+        app:autoSizeTextType="uniform"
+        app:autoSizeMinTextSize="48px"
+        app:autoSizeMaxTextSize="96px"
+        android:includeFontPadding="false"
+        android:maxLines="2"
+        android:ellipsize="end"
+        tools:text="One Piece" />
+
+</LinearLayout>

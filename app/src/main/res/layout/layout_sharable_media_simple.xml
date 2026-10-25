@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/sharable_media_root"
+    android:layout_width="1080px"
+    android:layout_height="wrap_content"
+    android:background="#F5F5F0"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    android:paddingHorizontal="80px"
+    android:paddingVertical="140px">
+
+    <!-- Media Title (Shrikhand Font with Auto-Size & Full Width) -->
+    <TextView
+        android:id="@+id/simple_media_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5px"
+        android:fontFamily="@font/shrikhand_regular"
+        android:gravity="center"
+        android:textColor="#000000"
+        android:textSize="80px"
+        app:autoSizeTextType="uniform"
+        app:autoSizeMinTextSize="40px"
+        app:autoSizeMaxTextSize="96px"
+        android:includeFontPadding="false"
+        android:maxLines="2"
+        android:ellipsize="end"
+        tools:text="bear" />
+
+    <!-- Hero Poster Image with Rounded Corners & Editorial Inset Margin -->
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/simple_media_hero_image"
+        android:layout_width="match_parent"
+        android:layout_height="980px"
+        android:layout_marginHorizontal="80px"
+        android:layout_marginBottom="36px"
+        android:scaleType="centerCrop"
+        android:contentDescription="@null"
+        app:shapeAppearanceOverlay="@style/RoundedCornerSharablePoster"
+        tools:src="@tools:sample/backgrounds/scenic" />
+
+    <!-- Director / Cast Name (Montserrat Bold) -->
+    <TextView
+        android:id="@+id/simple_media_director"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="80px"
+        android:fontFamily="@font/montserrat_bold"
+        android:gravity="center"
+        android:textColor="#000000"
+        android:textSize="28px"
+        android:textAllCaps="true"
+        android:letterSpacing="0.05"
+        android:includeFontPadding="false"
+        android:maxLines="2"
+        android:ellipsize="end"
+        tools:text="CARMEN BERZATTO" />
+
+</LinearLayout>

@@ -5,17 +5,22 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Canvas
+import android.graphics.Color
 import android.net.Uri
 import android.os.Build
 import android.os.Environment
 import android.provider.MediaStore
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.annotation.LayoutRes
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
+import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
@@ -23,25 +28,18 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.chip.ChipGroup
 import com.shalenmathew.movieflix.R
-import com.shalenmathew.movieflix.data.network.ApiClient
+import com.shalenmathew.movieflix.data.remote.MediaShareDataLoader
+import com.shalenmathew.movieflix.domain.model.MediaShareData
 import com.shalenmathew.movieflix.domain.model.MovieResult
-import dagger.hilt.EntryPoint
-import dagger.hilt.InstallIn
-import dagger.hilt.android.EntryPointAccessors
-import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.FileOutputStream
 import java.text.SimpleDateFormat
 import java.util.Locale
-
-@EntryPoint
-@InstallIn(SingletonComponent::class)
-interface MediaShareEntryPoint {
-    fun getApiClient(): ApiClient
-}
 
 class MediaSharePosterPicker(fragment: Fragment) {
     private var pendingResult: ((Uri?) -> Unit)? = null
@@ -62,8 +60,12 @@ enum class MediaShareTemplate(
     val title: String,
     @param:LayoutRes val layoutResId: Int
 ) {
+    KEEP_IT_SIMPLE("keep_it_simple", "Keep It Simple", R.layout.layout_sharable_media_simple),
+    FILM_STILL_POSTER("film_still", "Old Polaroid", R.layout.layout_sharable_media_film_still),
+    RETRO_DROP("retro_drop", "Retro Drop", R.layout.layout_sharable_media_retro_drop),
     EDITORIAL_POSTER("editorial_poster", "Editorial Poster", R.layout.layout_sharable_media_editorial),
-    CHARACTER_POSTER("editorial_poster_2", "Editorial Poster 2", R.layout.layout_sharable_media_character)
+    CHARACTER_POSTER("editorial_poster_2", "Editorial Poster 2", R.layout.layout_sharable_media_character),
+    SERIES_HEATMAP_POSTER("series_heatmap", "Series Heatmap", R.layout.layout_sharable_media_series_heatmap)
 }
 
 object MediaShareImageGenerator {
@@ -76,14 +78,222 @@ object MediaShareImageGenerator {
         clientProvider: String? = null,
         directorName: String? = null,
         castName: String? = null,
-        characterName: String? = null
+        characterName: String? = null,
+        seasonRatingsMap: Map<Int, List<Double?>>? = null,
+        retroColorHex: String = "#28739E"
     ): Bitmap {
         val shareView = LayoutInflater.from(context).inflate(template.layoutResId, null)
 
         val title = movie.title ?: movie.name ?: ""
         val isTv = movie.mediaType.equals("tv", ignoreCase = true)
 
-        if (template == MediaShareTemplate.CHARACTER_POSTER) {
+        if (template == MediaShareTemplate.KEEP_IT_SIMPLE) {
+            shareView.findViewById<TextView>(R.id.simple_media_title)?.text = title
+
+            val directorOrCast = directorName?.takeIf(String::isNotBlank)
+                ?: castName?.takeIf(String::isNotBlank)
+                ?: characterName?.takeIf(String::isNotBlank)
+                ?: ""
+            shareView.findViewById<TextView>(R.id.simple_media_director)?.text = directorOrCast.uppercase(Locale.ENGLISH)
+
+            val heroImageView = shareView.findViewById<ImageView>(R.id.simple_media_hero_image)
+            if (heroImageView != null && heroBitmap != null) {
+                val roundedHero = getRoundedCornerBitmap(heroBitmap, 32f)
+                heroImageView.setImageBitmap(roundedHero)
+            }
+        } else if (template == MediaShareTemplate.FILM_STILL_POSTER) {
+            shareView.findViewById<TextView>(R.id.film_still_title)?.text = title
+
+            val directorText = directorName?.takeIf(String::isNotBlank)?.uppercase(Locale.ENGLISH) ?: "UNKNOWN"
+            shareView.findViewById<TextView>(R.id.film_still_directed_by)?.text =
+                formatMetadataLine("directed by", directorText)
+
+            val castText = castName?.takeIf(String::isNotBlank)?.uppercase(Locale.ENGLISH) ?: "UNKNOWN"
+            shareView.findViewById<TextView>(R.id.film_still_starring)?.text =
+                formatMetadataLine("starring", castText)
+
+            val formattedDate = formatCompactDate(movie.releaseDate).uppercase(Locale.ENGLISH)
+            shareView.findViewById<TextView>(R.id.film_still_released)?.text =
+                formatMetadataLine("released", formattedDate)
+
+            shareView.findViewById<TextView>(R.id.film_still_branding)?.text = "MOVIEFLIX"
+
+            val imageView = shareView.findViewById<ImageView>(R.id.film_still_image)
+            if (imageView != null && heroBitmap != null) {
+                imageView.setImageBitmap(heroBitmap)
+            }
+        } else if (template == MediaShareTemplate.RETRO_DROP) {
+            shareView.findViewById<View>(R.id.sharable_media_root)?.setBackgroundColor(Color.parseColor(retroColorHex))
+            shareView.findViewById<TextView>(R.id.retro_drop_title)?.text = title
+
+            val pillView = shareView.findViewById<TextView>(R.id.retro_drop_pill)
+            if (pillView != null) {
+                pillView.text = context.getString(R.string.app_name).lowercase(Locale.ENGLISH)
+                val pillBg = ContextCompat.getDrawable(context, R.drawable.bg_retro_drop_pill)?.mutate()
+                pillBg?.setTint(Color.parseColor(retroColorHex))
+                pillView.background = pillBg
+            }
+
+            val imageView = shareView.findViewById<ImageView>(R.id.retro_drop_image)
+            if (imageView != null && heroBitmap != null) {
+                val roundedHero = getRoundedCornerBitmap(heroBitmap, 48f)
+                imageView.setImageBitmap(roundedHero)
+            }
+        } else if (template == MediaShareTemplate.SERIES_HEATMAP_POSTER) {
+            shareView.findViewById<TextView>(R.id.heatmap_show_title)?.text = title
+            shareView.findViewById<TextView>(R.id.heatmap_brand_title)?.text =
+                "| " + context.getString(R.string.app_name).uppercase(Locale.ENGLISH)
+
+            val imageView = shareView.findViewById<ImageView>(R.id.heatmap_hero_image)
+            if (imageView != null && heroBitmap != null) {
+                imageView.setImageBitmap(heroBitmap)
+            }
+
+            val rowsContainer = shareView.findViewById<LinearLayout>(R.id.heatmap_episodes_rows_container)
+            val headersRow = shareView.findViewById<LinearLayout>(R.id.heatmap_season_headers_row)
+            val avgRowContainer = shareView.findViewById<LinearLayout>(R.id.heatmap_avg_row_container)
+
+            if (rowsContainer != null) {
+                rowsContainer.removeAllViews()
+
+                // Only show the actual seasons the show has (no fake dash columns for non-existent seasons)
+                val availableSeasons = seasonRatingsMap?.keys?.sorted()?.take(10)?.takeIf { it.isNotEmpty() } ?: listOf(1)
+
+                if (headersRow != null) {
+                    headersRow.removeAllViews()
+                    headersRow.gravity = Gravity.CENTER_HORIZONTAL
+                    headersRow.addView(TextView(context).apply {
+                        layoutParams = LinearLayout.LayoutParams(60, LinearLayout.LayoutParams.WRAP_CONTENT)
+                    })
+                    for (sNum in availableSeasons) {
+                        headersRow.addView(TextView(context).apply {
+                            layoutParams = LinearLayout.LayoutParams(100, LinearLayout.LayoutParams.WRAP_CONTENT)
+                            text = "S$sNum"
+                            setTextColor(Color.parseColor("#AAAAAA"))
+                            textSize = 20f
+                            gravity = Gravity.CENTER
+                            typeface = ResourcesCompat.getFont(context, R.font.montserrat_bold)
+                        })
+                    }
+                }
+
+                val maxEpCount = availableSeasons.maxOfOrNull { sNum ->
+                    seasonRatingsMap?.get(sNum)?.size ?: 30
+                }?.coerceAtMost(30) ?: 30
+
+                for (epNum in 1..maxEpCount) {
+                    val rowLayout = LinearLayout(context).apply {
+                        layoutParams = LinearLayout.LayoutParams(
+                            LinearLayout.LayoutParams.MATCH_PARENT,
+                            LinearLayout.LayoutParams.WRAP_CONTENT
+                        ).apply {
+                            bottomMargin = 8
+                        }
+                        orientation = LinearLayout.HORIZONTAL
+                        gravity = Gravity.CENTER_VERTICAL or Gravity.CENTER_HORIZONTAL
+                    }
+
+                    val labelTv = TextView(context).apply {
+                        layoutParams = LinearLayout.LayoutParams(60, LinearLayout.LayoutParams.WRAP_CONTENT)
+                        text = "E$epNum"
+                        setTextColor(Color.parseColor("#AAAAAA"))
+                        textSize = 14f
+                        typeface = ResourcesCompat.getFont(context, R.font.montserrat_bold)
+                    }
+                    rowLayout.addView(labelTv)
+
+                    for (sNum in availableSeasons) {
+                        val ratingsList = seasonRatingsMap?.get(sNum)
+                        val rating = if (ratingsList != null && epNum <= ratingsList.size) ratingsList[epNum - 1] else null
+
+                        val scoreText = if (rating != null && rating > 0.0) {
+                            String.format(Locale.ENGLISH, "%.1f", rating)
+                        } else {
+                            "-"
+                        }
+
+                        val scoreVal = scoreText.toDoubleOrNull()
+                        val (textColor, bgDrawable) = when {
+                            scoreText == "-" || scoreVal == null || scoreVal <= 0.0 ->
+                                Color.WHITE to ContextCompat.getDrawable(context, R.drawable.bg_heatmap_gray)
+                            scoreVal >= 9.0 ->
+                                Color.WHITE to ContextCompat.getDrawable(context, R.drawable.bg_heatmap_dark_green)
+                            scoreVal >= 8.0 ->
+                                Color.BLACK to ContextCompat.getDrawable(context, R.drawable.bg_heatmap_green)
+                            scoreVal >= 7.6 ->
+                                Color.BLACK to ContextCompat.getDrawable(context, R.drawable.bg_heatmap_mint)
+                            scoreVal >= 5.0 ->
+                                Color.BLACK to ContextCompat.getDrawable(context, R.drawable.bg_heatmap_yellow)
+                            else ->
+                                Color.WHITE to ContextCompat.getDrawable(context, R.drawable.bg_heatmap_red)
+                        }
+
+                        val cellTv = TextView(context).apply {
+                            layoutParams = LinearLayout.LayoutParams(100, 40).apply {
+                                setMargins(3, 0, 3, 0)
+                            }
+                            gravity = Gravity.CENTER
+                            text = scoreText
+                            setTextColor(textColor)
+                            textSize = 14f
+                            typeface = ResourcesCompat.getFont(context, R.font.montserrat_bold)
+                            background = bgDrawable
+                        }
+                        rowLayout.addView(cellTv)
+                    }
+                    rowsContainer.addView(rowLayout)
+                }
+
+                if (avgRowContainer != null) {
+                    val labelView = avgRowContainer.getChildAt(0)
+                    avgRowContainer.removeAllViews()
+                    avgRowContainer.gravity = Gravity.CENTER_HORIZONTAL
+                    if (labelView != null) {
+                        labelView.layoutParams = LinearLayout.LayoutParams(60, LinearLayout.LayoutParams.WRAP_CONTENT)
+                        avgRowContainer.addView(labelView)
+                    }
+
+                    for (sNum in availableSeasons) {
+                        val ratingsList = seasonRatingsMap?.get(sNum) ?: emptyList()
+                        val validRatings = ratingsList.filter { it != null && it > 0.0 }.map { it!! }
+                        val rawAvg = if (validRatings.isNotEmpty()) validRatings.average() else 0.0
+                        val avgScore = if (rawAvg > 0.0) String.format(Locale.ENGLISH, "%.1f", rawAvg).toDouble() else 0.0
+                        val avgText = if (avgScore > 0.0) String.format(Locale.ENGLISH, "%.1f", avgScore) else "-"
+
+                        val scoreVal = avgScore.takeIf { it > 0.0 }
+                        val (textColor, bgDrawable) = when {
+                            scoreVal == null ->
+                                Color.WHITE to ContextCompat.getDrawable(context, R.drawable.bg_heatmap_gray)
+                            scoreVal >= 9.0 ->
+                                Color.WHITE to ContextCompat.getDrawable(context, R.drawable.bg_heatmap_dark_green)
+                            scoreVal >= 8.0 ->
+                                Color.BLACK to ContextCompat.getDrawable(context, R.drawable.bg_heatmap_green)
+                            scoreVal >= 7.6 ->
+                                Color.BLACK to ContextCompat.getDrawable(context, R.drawable.bg_heatmap_mint)
+                            scoreVal >= 5.0 ->
+                                Color.BLACK to ContextCompat.getDrawable(context, R.drawable.bg_heatmap_yellow)
+                            else ->
+                                Color.WHITE to ContextCompat.getDrawable(context, R.drawable.bg_heatmap_red)
+                        }
+
+                        val avgCellTv = TextView(context).apply {
+                            layoutParams = LinearLayout.LayoutParams(100, 50).apply {
+                                setMargins(3, 0, 3, 0)
+                            }
+                            gravity = Gravity.CENTER
+                            text = avgText
+                            setTextColor(textColor)
+                            textSize = 16f
+                            typeface = ResourcesCompat.getFont(context, R.font.montserrat_bold)
+                            includeFontPadding = false
+                            setPadding(0, 4, 0, 4)
+                            background = bgDrawable
+                        }
+                        avgRowContainer.addView(avgCellTv)
+                    }
+                }
+            }
+        } else if (template == MediaShareTemplate.CHARACTER_POSTER) {
             shareView.findViewById<TextView>(R.id.character_client)?.text =
                 clientProvider?.takeIf(String::isNotBlank)?.uppercase(Locale.ENGLISH) ?: "PARAMOUNT"
             shareView.findViewById<TextView>(R.id.character_category)?.text =
@@ -125,16 +335,46 @@ object MediaShareImageGenerator {
 
             val heroImageView = shareView.findViewById<ImageView>(R.id.media_hero_image)
             if (heroImageView != null && heroBitmap != null) {
-                heroImageView.setImageBitmap(heroBitmap)
+                val roundedHero = getRoundedCornerBitmap(heroBitmap, 32f)
+                heroImageView.setImageBitmap(roundedHero)
             }
         }
 
-        val width = 1080
+        val seasonCount = (seasonRatingsMap?.keys?.size ?: 4).coerceAtMost(10)
+        val width = if (template == MediaShareTemplate.SERIES_HEATMAP_POSTER) {
+            val gridWidth = 60 + (seasonCount * 106)
+            val widthNeededForGrid = gridWidth * 3 / 2 + 140
+            val existingWidth = 1080 + ((seasonCount - 5).coerceAtLeast(0) * 110)
+            maxOf(existingWidth, widthNeededForGrid)
+        } else {
+            1080
+        }
         shareView.measure(
             View.MeasureSpec.makeMeasureSpec(width, View.MeasureSpec.EXACTLY),
             View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED)
         )
-        val measuredHeight = shareView.measuredHeight
+        if (template == MediaShareTemplate.SERIES_HEATMAP_POSTER) {
+            val gridHeight = shareView.findViewById<View>(R.id.heatmap_grid_container)?.measuredHeight
+            val posterCard = shareView.findViewById<View>(R.id.heatmap_poster_card)
+            val showTitle = shareView.findViewById<TextView>(R.id.heatmap_show_title)
+            if (gridHeight != null && posterCard != null && showTitle != null) {
+                val titleLayoutParams = showTitle.layoutParams as LinearLayout.LayoutParams
+                val titleHeight = showTitle.measuredHeight + titleLayoutParams.topMargin
+                val episodeCount = shareView.findViewById<LinearLayout>(
+                    R.id.heatmap_episodes_rows_container
+                )?.childCount ?: 0
+                val maxCardHeight = if (episodeCount >= 10) 560 else 460
+                val cardHeight = (gridHeight - titleHeight).coerceAtLeast(0).coerceAtMost(maxCardHeight)
+                posterCard.layoutParams = posterCard.layoutParams.apply {
+                    height = cardHeight
+                }
+                shareView.measure(
+                    View.MeasureSpec.makeMeasureSpec(width, View.MeasureSpec.EXACTLY),
+                    View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED)
+                )
+            }
+        }
+        val measuredHeight = shareView.measuredHeight.coerceAtLeast(100)
         shareView.layout(0, 0, width, measuredHeight)
 
         val bitmap = Bitmap.createBitmap(width, measuredHeight, Bitmap.Config.ARGB_8888)
@@ -144,131 +384,117 @@ object MediaShareImageGenerator {
         return bitmap
     }
 
-    private fun formatDate(rawDate: String): String {
-        if (rawDate.isBlank()) return "RELEASE DATE"
+    private fun getRoundedCornerBitmap(bitmap: Bitmap, cornerRadiusPx: Float): Bitmap {
+        val output = Bitmap.createBitmap(bitmap.width, bitmap.height, Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(output)
+        val paint = android.graphics.Paint().apply {
+            isAntiAlias = true
+            color = android.graphics.Color.BLACK
+        }
+        val rect = android.graphics.Rect(0, 0, bitmap.width, bitmap.height)
+        val rectF = android.graphics.RectF(rect)
+
+        canvas.drawRoundRect(rectF, cornerRadiusPx, cornerRadiusPx, paint)
+        paint.xfermode = android.graphics.PorterDuffXfermode(android.graphics.PorterDuff.Mode.SRC_IN)
+        canvas.drawBitmap(bitmap, rect, rect, paint)
+
+        return output
+    }
+
+    private fun formatMetadataLine(label: String, value: String): CharSequence {
+        val fullText = "$label $value"
+        val spannable = android.text.SpannableString(fullText)
+        val labelLength = label.length
+
+        spannable.setSpan(
+            android.text.style.ForegroundColorSpan(Color.parseColor("#666666")),
+            0, labelLength,
+            android.text.Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+        )
+
+        spannable.setSpan(
+            android.text.style.StyleSpan(android.graphics.Typeface.BOLD),
+            labelLength, fullText.length,
+            android.text.Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+        )
+        spannable.setSpan(
+            android.text.style.ForegroundColorSpan(Color.BLACK),
+            labelLength, fullText.length,
+            android.text.Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+        )
+
+        return spannable
+    }
+
+    private fun formatDate(rawDate: String?): String {
+        if (rawDate.isNullOrBlank()) return "UNKNOWN"
         return try {
             val inputFormat = SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH)
             val date = inputFormat.parse(rawDate)
             if (date != null) {
-                val outputFormat = SimpleDateFormat("MMMM d, yyyy", Locale.ENGLISH)
+                val outputFormat = SimpleDateFormat("MMM yyyy", Locale.ENGLISH)
                 outputFormat.format(date).uppercase(Locale.ENGLISH)
             } else {
-                rawDate.uppercase(Locale.ENGLISH)
+                "UNKNOWN"
             }
         } catch (e: Exception) {
-            rawDate.uppercase(Locale.ENGLISH)
+            "UNKNOWN"
         }
     }
 
     private fun formatCompactDate(rawDate: String?): String {
-        if (rawDate.isNullOrBlank()) return "DEC, 2024"
+        if (rawDate.isNullOrBlank()) return "UNKNOWN"
         return try {
             val date = SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH).parse(rawDate)
             if (date != null) {
-                SimpleDateFormat("MMM, yyyy", Locale.ENGLISH)
+                SimpleDateFormat("MMM yyyy", Locale.ENGLISH)
                     .format(date)
                     .uppercase(Locale.ENGLISH)
             } else {
-                rawDate.uppercase(Locale.ENGLISH)
+                "UNKNOWN"
             }
         } catch (e: Exception) {
-            rawDate.uppercase(Locale.ENGLISH)
+            "UNKNOWN"
         }
     }
 }
 
-fun shareMediaCard(fragment: Fragment, movie: MovieResult, posterPicker: MediaSharePosterPicker) {
+fun shareMediaCard(
+    fragment: Fragment,
+    movie: MovieResult,
+    posterPicker: MediaSharePosterPicker,
+    mediaShareDataLoader: MediaShareDataLoader
+) {
     val ctx = fragment.context ?: return
 
     showToast(ctx, "Generating sharable image...")
 
-    fragment.lifecycleScope.launch(Dispatchers.IO) {
+    fragment.lifecycleScope.launch {
         try {
-            val movieId = movie.id ?: -1
-            val isTv = movie.mediaType.equals("tv", ignoreCase = true)
+            val shareData = mediaShareDataLoader.load(movie)
 
-            // 1. Fetch Hero Image
-            val imagePath = movie.posterPath ?: movie.backdropPath
-            val isLocal = imagePath != null && (imagePath.startsWith("content://") || imagePath.count { it == '/' } > 1)
-            val fullPath = if (isLocal) imagePath else Constants.TMDB_IMAGE_BASE_URL_W780.plus(imagePath)
+            val posterPath = movie.posterPath ?: movie.backdropPath
+            val backdropPath = movie.backdropPath ?: movie.posterPath
 
-            val heroBitmap = try {
-                Glide.with(fragment)
-                    .asBitmap()
-                    .load(fullPath)
-                    .submit()
-                    .get()
-            } catch (e: Exception) {
-                null
-            }
-
-            // 2. Fetch Client Provider & Director Name
-            var clientProvider: String? = null
-            var directorName: String? = null
-            var castName: String? = null
-            var characterName: String? = null
-
-            if (movieId != -1) {
-                try {
-                    val entryPoint = EntryPointAccessors.fromApplication(
-                        ctx.applicationContext,
-                        MediaShareEntryPoint::class.java
-                    )
-                    val apiClient = entryPoint.getApiClient()
-
-                    // Watch Provider
-                    val providerResponse = if (isTv) {
-                        apiClient.getTVWatchProvidersApiCall(movieId)
-                    } else {
-                        apiClient.getMovieWatchProvidersApiCall(movieId)
-                    }
-                    if (providerResponse.isSuccessful) {
-                        val results = providerResponse.body()?.results
-                        val provider = results?.IN?.flatrate?.firstOrNull()
-                            ?: results?.IN?.buy?.firstOrNull()
-                            ?: results?.IN?.rent?.firstOrNull()
-                        clientProvider = provider?.providerName
-                    }
-
-                    // Credits / Director
-                    val castResponse = if (isTv) {
-                        apiClient.fetchTVCastApiCall(movieId)
-                    } else {
-                        apiClient.fetchMovieCastApiCall(movieId)
-                    }
-                    if (castResponse.isSuccessful) {
-                        val castBody = castResponse.body()
-                        val crewList = castBody?.crew ?: emptyList()
-                        val director = crewList.firstOrNull { it.job.equals("Director", ignoreCase = true) }
-                            ?: crewList.firstOrNull { it.department.equals("Directing", ignoreCase = true) }
-                            ?: crewList.firstOrNull { it.job.equals("Executive Producer", ignoreCase = true) }
-                        directorName = director?.name
-                        val leadCast = castBody?.cast?.firstOrNull()
-                        castName = leadCast?.name
-                        characterName = leadCast?.character
-                    }
-                } catch (e: Exception) {
-                    e.printStackTrace()
+            val (posterBitmap, backdropBitmap) = coroutineScope {
+                val posterDef = async(Dispatchers.IO) {
+                    val isLocal = posterPath != null && (posterPath.startsWith("content://") || posterPath.count { it == '/' } > 1)
+                    val fullPath = if (isLocal) posterPath else "https://image.tmdb.org/t/p/original/".plus(posterPath ?: "")
+                    try { Glide.with(fragment).asBitmap().load(fullPath).submit(1080, 1600).get() } catch (e: Exception) { null }
                 }
+                val backdropDef = async(Dispatchers.IO) {
+                    val isLocal = backdropPath != null && (backdropPath.startsWith("content://") || backdropPath.count { it == '/' } > 1)
+                    val fullPath = if (isLocal) backdropPath else "https://image.tmdb.org/t/p/original/".plus(backdropPath ?: "")
+                    try { Glide.with(fragment).asBitmap().load(fullPath).submit(1280, 720).get() } catch (e: Exception) { null }
+                }
+                posterDef.await() to backdropDef.await()
             }
 
-            withContext(Dispatchers.Main) {
-                showMediaSharePreviewBottomSheet(
-                    fragment,
-                    movie,
-                    heroBitmap,
-                    clientProvider,
-                    directorName,
-                    castName,
-                    characterName,
-                    posterPicker
-                )
-            }
+            showMediaSharePreviewBottomSheet(fragment, movie, posterBitmap, backdropBitmap, shareData, posterPicker)
         } catch (e: Exception) {
+            if (e is kotlinx.coroutines.CancellationException) throw e
             e.printStackTrace()
-            withContext(Dispatchers.Main) {
-                showToast(ctx, "Failed to generate image")
-            }
+            showToast(ctx, "Failed to generate image")
         }
     }
 }
@@ -276,11 +502,9 @@ fun shareMediaCard(fragment: Fragment, movie: MovieResult, posterPicker: MediaSh
 private fun showMediaSharePreviewBottomSheet(
     fragment: Fragment,
     movie: MovieResult,
-    heroBitmap: Bitmap?,
-    clientProvider: String?,
-    directorName: String?,
-    castName: String?,
-    characterName: String?,
+    posterBitmap: Bitmap?,
+    backdropBitmap: Bitmap?,
+    shareData: MediaShareData,
     posterPicker: MediaSharePosterPicker
 ) {
     val ctx = fragment.context ?: return
@@ -303,33 +527,92 @@ private fun showMediaSharePreviewBottomSheet(
     val cancelBtn = view.findViewById<View>(R.id.share_cancel_btn)
     val customPosterBtn = view.findViewById<View>(R.id.share_custom_poster_btn)
 
+    val isTv = movie.mediaType.equals("tv", ignoreCase = true)
     view.findViewById<View>(R.id.chip_template_classic).visibility = View.GONE
     view.findViewById<View>(R.id.chip_template_minimal).visibility = View.GONE
+    view.findViewById<View>(R.id.chip_media_simple).visibility = View.VISIBLE
+    view.findViewById<View>(R.id.chip_media_film_still).visibility = View.VISIBLE
+    view.findViewById<View>(R.id.chip_media_retro_drop).visibility = View.VISIBLE
     view.findViewById<View>(R.id.chip_media_editorial).visibility = View.VISIBLE
     view.findViewById<View>(R.id.chip_media_character).visibility = View.VISIBLE
+    view.findViewById<View>(R.id.chip_media_heatmap).visibility = if (isTv) View.VISIBLE else View.GONE
     customPosterBtn.visibility = View.VISIBLE
-    chipGroup?.check(R.id.chip_media_editorial)
+    chipGroup?.check(R.id.chip_media_simple)
 
-    var selectedTemplate = MediaShareTemplate.EDITORIAL_POSTER
-    var selectedHeroBitmap = heroBitmap
+    var selectedTemplate = MediaShareTemplate.KEEP_IT_SIMPLE
+    var isCustomImage = false
+    var customBitmap: Bitmap? = null
+
+    fun currentHeroBitmap(): Bitmap? {
+        if (isCustomImage) return customBitmap
+        return if (selectedTemplate == MediaShareTemplate.FILM_STILL_POSTER || selectedTemplate == MediaShareTemplate.RETRO_DROP) {
+            backdropBitmap ?: posterBitmap
+        } else {
+            posterBitmap ?: backdropBitmap
+        }
+    }
+
     var currentBitmap = MediaShareImageGenerator.generateImage(
-        ctx, movie, selectedHeroBitmap, selectedTemplate, clientProvider, directorName, castName, characterName
+        ctx, movie, currentHeroBitmap(), selectedTemplate,
+        shareData.clientProvider, shareData.directorName, shareData.castName,
+        shareData.characterName, shareData.seasonRatingsMap
     )
 
+    val colorPaletteContainer = view.findViewById<View>(R.id.share_color_palette_container)
+    val swatchBlueFrame = view.findViewById<View>(R.id.color_swatch_blue_frame)
+    val swatchGreenFrame = view.findViewById<View>(R.id.color_swatch_green_frame)
+    val swatchRedFrame = view.findViewById<View>(R.id.color_swatch_red_frame)
+
+    var selectedRetroColor = "#28739E"
+
+    fun updateColorPaletteVisibility() {
+        if (selectedTemplate == MediaShareTemplate.RETRO_DROP) {
+            colorPaletteContainer?.visibility = View.VISIBLE
+        } else {
+            colorPaletteContainer?.visibility = View.GONE
+        }
+    }
+
     fun updatePreview() {
+        updateColorPaletteVisibility()
         currentBitmap = MediaShareImageGenerator.generateImage(
-            ctx, movie, selectedHeroBitmap, selectedTemplate, clientProvider, directorName, castName, characterName
+            ctx, movie, currentHeroBitmap(), selectedTemplate,
+            shareData.clientProvider, shareData.directorName, shareData.castName,
+            shareData.characterName, shareData.seasonRatingsMap,
+            selectedRetroColor
         )
         previewImg.setImageBitmap(currentBitmap)
     }
 
+    fun selectRetroColor(colorHex: String) {
+        selectedRetroColor = colorHex
+        swatchBlueFrame?.setBackgroundResource(if (colorHex == "#28739E") R.drawable.bg_color_swatch_selected else android.R.color.transparent)
+        swatchGreenFrame?.setBackgroundResource(if (colorHex == "#2dac77") R.drawable.bg_color_swatch_selected else android.R.color.transparent)
+        swatchRedFrame?.setBackgroundResource(if (colorHex == "#ac2d2d") R.drawable.bg_color_swatch_selected else android.R.color.transparent)
+        updatePreview()
+    }
+
+    swatchBlueFrame?.setOnClickListener { selectRetroColor("#28739E") }
+    swatchGreenFrame?.setOnClickListener { selectRetroColor("#2dac77") }
+    swatchRedFrame?.setOnClickListener { selectRetroColor("#ac2d2d") }
+
     previewImg.setImageBitmap(currentBitmap)
 
     chipGroup?.setOnCheckedStateChangeListener { _, checkedIds ->
-        selectedTemplate = if (R.id.chip_media_character in checkedIds) {
-            MediaShareTemplate.CHARACTER_POSTER
-        } else {
-            MediaShareTemplate.EDITORIAL_POSTER
+        if (R.id.chip_media_heatmap in checkedIds) {
+            if (!shareData.isHeatmapAllowed) {
+                showToast(ctx, "Series Heatmap poster supports up to 10 seasons and 30 episodes per season")
+                chipGroup.check(R.id.chip_media_simple)
+                return@setOnCheckedStateChangeListener
+            }
+        }
+        selectedTemplate = when {
+            R.id.chip_media_simple in checkedIds -> MediaShareTemplate.KEEP_IT_SIMPLE
+            R.id.chip_media_film_still in checkedIds -> MediaShareTemplate.FILM_STILL_POSTER
+            R.id.chip_media_retro_drop in checkedIds -> MediaShareTemplate.RETRO_DROP
+            R.id.chip_media_character in checkedIds -> MediaShareTemplate.CHARACTER_POSTER
+            R.id.chip_media_heatmap in checkedIds -> MediaShareTemplate.SERIES_HEATMAP_POSTER
+            else -> MediaShareTemplate.EDITORIAL_POSTER
         }
         updatePreview()
     }
@@ -354,7 +637,8 @@ private fun showMediaSharePreviewBottomSheet(
                         if (customPoster == null) {
                             showToast(ctx, "Unable to load selected poster")
                         } else {
-                            selectedHeroBitmap = customPoster
+                            isCustomImage = true
+                            customBitmap = customPoster
                             updatePreview()
                         }
                     }

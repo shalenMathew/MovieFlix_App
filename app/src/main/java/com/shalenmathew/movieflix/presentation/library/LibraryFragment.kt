@@ -54,7 +54,8 @@ class LibraryFragment : Fragment() {
 
         lifecycleScope.launch {
             val lastTab = DataStoreReference.getLastSelectedLibraryTab(requireContext()).first()
-            binding.viewPager.setCurrentItem(lastTab, false)
+            val initialTab = if (arguments?.getBoolean(ARG_OPEN_TRACKING_TAB) == true) 3 else lastTab
+            binding.viewPager.setCurrentItem(initialTab, false)
 
             TabLayoutMediator(binding.tabLayout, binding.viewPager) { tab, position ->
                 tab.text = when (position) {
@@ -111,6 +112,12 @@ class LibraryFragment : Fragment() {
         })
     }
 
+    fun selectTrackingTab() {
+        if (_binding != null) {
+            binding.viewPager.setCurrentItem(3, false)
+        }
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
@@ -128,5 +135,9 @@ class LibraryFragment : Fragment() {
                 else -> WatchListFragment()
             }
         }
+    }
+
+    companion object {
+        const val ARG_OPEN_TRACKING_TAB = "open_tracking_tab"
     }
 }

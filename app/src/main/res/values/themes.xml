@@ -30,6 +30,16 @@
         <item name="cornerSize">6dp</item>
     </style>
 
+    <style name="RoundedCornerSharablePoster">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">32px</item>
+    </style>
+
+    <style name="RoundedCornerRetroDropImage">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">48px</item>
+    </style>
+
     <style name="DatePickerThemeLight" parent="Theme.AppCompat.Light.Dialog">
         <item name="colorPrimary">@color/app_color</item>
         <item name="colorAccent">@color/app_color</item>

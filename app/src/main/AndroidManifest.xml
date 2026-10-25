@@ -63,6 +63,18 @@
                 tools:node="remove" />
         </provider>
 
+        <!-- UP Next Series Tracking Widget -->
+        <receiver
+            android:name=".presentation.widget.UpNextWidgetReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/up_next_widget_info" />
+        </receiver>
+
     </application>
 
 </manifest>

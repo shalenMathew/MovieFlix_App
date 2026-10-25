@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/sharable_media_root"
+    android:layout_width="1080px"
+    android:layout_height="wrap_content"
+    android:background="#0B0B0D"
+    android:orientation="vertical"
+    android:padding="60px">
+
+    <!-- Top Header: Branding -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="end|center_vertical"
+        android:layout_marginBottom="40px">
+
+        <!-- App / Brand Title -->
+        <TextView
+            android:id="@+id/heatmap_brand_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="| MOVIEFLIX"
+            android:textColor="#FFFFFF"
+            android:textSize="40px"
+            android:fontFamily="@font/anton"
+            android:textAllCaps="true" />
+
+    </LinearLayout>
+
+    <!-- Main Content Area: Grid on Left, Poster on Right -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
+
+        <!-- Episode Heatmap Grid Container -->
+        <LinearLayout
+            android:id="@+id/heatmap_grid_container"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.6"
+            android:orientation="vertical"
+            android:layout_marginEnd="20px">
+
+            <!-- Season Headers Row -->
+            <LinearLayout
+                android:id="@+id/heatmap_season_headers_row"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="12px">
+
+                <!-- Row label spacer -->
+                <TextView
+                    android:layout_width="60px"
+                    android:layout_height="wrap_content"
+                    tools:ignore="HardcodedText" />
+
+                <!-- Seasons S1, S2, S3, S4 injected dynamically or statically -->
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="S1"
+                    android:textColor="#AAAAAA"
+                    android:textSize="20px"
+                    android:fontFamily="@font/montserrat_bold"
+                    android:gravity="center" />
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="S2"
+                    android:textColor="#AAAAAA"
+                    android:textSize="20px"
+                    android:fontFamily="@font/montserrat_bold"
+                    android:gravity="center" />
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="S3"
+                    android:textColor="#AAAAAA"
+                    android:textSize="20px"
+                    android:fontFamily="@font/montserrat_bold"
+                    android:gravity="center" />
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="S4"
+                    android:textColor="#AAAAAA"
+                    android:textSize="20px"
+                    android:fontFamily="@font/montserrat_bold"
+                    android:gravity="center" />
+            </LinearLayout>
+
+            <!-- Episodes Rows E1 to E25 container -->
+            <LinearLayout
+                android:id="@+id/heatmap_episodes_rows_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <!-- Dynamically populated rows in MediaShareImageGenerator -->
+            </LinearLayout>
+
+            <!-- AVG Row Container -->
+            <LinearLayout
+                android:id="@+id/heatmap_avg_row_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="12px"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:layout_width="70px"
+                    android:layout_height="wrap_content"
+                    android:text="AVG."
+                    android:textColor="#AAAAAA"
+                    android:textSize="18px"
+                    android:fontFamily="@font/montserrat_bold" />
+
+                <!-- Dynamically populated in MediaShareImageGenerator -->
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <!-- Right Poster Card -->
+        <LinearLayout
+            android:id="@+id/heatmap_poster_container"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.8"
+            android:orientation="vertical"
+            android:gravity="center">
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/heatmap_poster_card"
+                android:layout_width="match_parent"
+                android:layout_height="460px"
+                android:elevation="0dp"
+                android:radius="16px"
+                android:background="#0B0B0D">
+
+                <ImageView
+                    android:id="@+id/heatmap_hero_image"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="fitCenter"
+                    android:background="#0B0B0D"
+                    tools:src="@tools:sample/avatars" />
+
+            </androidx.cardview.widget.CardView>
+
+            <TextView
+                android:id="@+id/heatmap_show_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="HAIKYU!!"
+                android:textColor="#FFFFFF"
+                android:textSize="32px"
+                android:fontFamily="@font/anton"
+                android:gravity="center"
+                android:layout_marginTop="20px"
+                android:textAllCaps="true" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

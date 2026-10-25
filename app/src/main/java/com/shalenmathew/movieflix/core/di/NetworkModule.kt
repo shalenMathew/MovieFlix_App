@@ -49,13 +49,16 @@ object NetworkModule {
            .addInterceptor{chain ->
 
                // adding api key before sending request to the server
-               val request = chain.request().newBuilder()
+
                val  originalHttpUrl = chain.request().url
 
                val url = originalHttpUrl.newBuilder()
                    .setQueryParameter("api_key", BuildConfig.MOVIE_API_KEY)
                    .build()
+
+               val request = chain.request().newBuilder()
                request.url(url)
+
                return@addInterceptor chain.proceed(request.build())
            }.addInterceptor { chain ->
                val originalHttpUrl = chain.request().url
@@ -77,6 +80,7 @@ object NetworkModule {
                    .build()
 
                chain.proceed(request)
+
            }.addInterceptor{chain ->
                var request = chain.request()
                request = request.newBuilder().header("Cache-Control", "public, max-age=" + 60 * 5)

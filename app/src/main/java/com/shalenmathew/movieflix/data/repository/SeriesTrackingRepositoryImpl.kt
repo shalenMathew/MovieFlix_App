@@ -82,6 +82,8 @@ class SeriesTrackingRepositoryImpl @Inject constructor(
         
         // Proactive cleanup of progress if not in any other list
         cleanupOrphanedProgress(seriesId)
+
+        com.shalenmathew.movieflix.presentation.widget.updateUpNextWidget(context)
     }
 
     override suspend fun getSeriesById(seriesId: Int): TrackedSeries? {
@@ -129,6 +131,7 @@ class SeriesTrackingRepositoryImpl @Inject constructor(
 
     override suspend fun updateEpisodeWatchedStatus(episodeId: Int, isWatched: Boolean) {
         seriesTrackingDao.updateEpisodeWatchedStatus(episodeId, isWatched)
+        com.shalenmathew.movieflix.presentation.widget.updateUpNextWidget(context)
     }
 
     override suspend fun updateLastWatchedEpisode(seriesId: Int, episodeId: Int, seasonNumber: Int, episodeNumber: Int) {
@@ -140,10 +143,12 @@ class SeriesTrackingRepositoryImpl @Inject constructor(
                 lastWatchedEpisodeNumber = episodeNumber
             )
         )
+        com.shalenmathew.movieflix.presentation.widget.updateUpNextWidget(context)
     }
 
     override suspend fun deleteSeriesProgress(seriesId: Int) {
         seriesTrackingDao.deleteSeriesProgress(seriesId)
+        com.shalenmathew.movieflix.presentation.widget.updateUpNextWidget(context)
     }
 
     override suspend fun cleanupOrphanedProgress(seriesId: Int) {
@@ -158,6 +163,7 @@ class SeriesTrackingRepositoryImpl @Inject constructor(
 
     override suspend fun markPreviousEpisodesAsWatched(seriesId: Int, seasonNumber: Int, episodeNumber: Int) {
         seriesTrackingDao.markPreviousEpisodesAsWatched(seriesId, seasonNumber, episodeNumber)
+        com.shalenmathew.movieflix.presentation.widget.updateUpNextWidget(context)
     }
 
     override suspend fun isSeriesTracked(seriesId: Int): Boolean {

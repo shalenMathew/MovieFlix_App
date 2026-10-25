@@ -67,6 +67,33 @@
                     android:textColor="@color/white" />
 
                 <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_media_simple"
+                    style="@style/Widget.Material3.Chip.Filter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/template_keep_it_simple"
+                    android:textColor="@color/white"
+                    android:visibility="gone" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_media_film_still"
+                    style="@style/Widget.Material3.Chip.Filter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/template_film_still"
+                    android:textColor="@color/white"
+                    android:visibility="gone" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_media_retro_drop"
+                    style="@style/Widget.Material3.Chip.Filter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/template_retro_drop"
+                    android:textColor="@color/white"
+                    android:visibility="gone" />
+
+                <com.google.android.material.chip.Chip
                     android:id="@+id/chip_media_editorial"
                     style="@style/Widget.Material3.Chip.Filter"
                     android:layout_width="wrap_content"
@@ -84,9 +111,77 @@
                     android:textColor="@color/white"
                     android:visibility="gone" />
 
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_media_heatmap"
+                    style="@style/Widget.Material3.Chip.Filter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Series Heatmap"
+                    android:textColor="@color/white"
+                    android:visibility="gone" />
+
             </com.google.android.material.chip.ChipGroup>
 
         </HorizontalScrollView>
+
+        <!-- Color Palette Picker (Visible for Retro Drop) -->
+        <LinearLayout
+            android:id="@+id/share_color_palette_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_8sdp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:visibility="gone">
+
+            <!-- Blue Swatch Circle -->
+            <FrameLayout
+                android:id="@+id/color_swatch_blue_frame"
+                android:layout_width="@dimen/_26sdp"
+                android:layout_height="@dimen/_26sdp"
+                android:layout_marginEnd="@dimen/_10sdp"
+                android:background="@drawable/bg_color_swatch_selected">
+
+                <View
+                    android:id="@+id/color_swatch_blue"
+                    android:layout_width="@dimen/_18sdp"
+                    android:layout_height="@dimen/_18sdp"
+                    android:layout_gravity="center"
+                    android:background="@drawable/circle_color_blue" />
+            </FrameLayout>
+
+            <!-- Green Swatch Circle -->
+            <FrameLayout
+                android:id="@+id/color_swatch_green_frame"
+                android:layout_width="@dimen/_26sdp"
+                android:layout_height="@dimen/_26sdp"
+                android:layout_marginEnd="@dimen/_10sdp"
+                android:background="@android:color/transparent">
+
+                <View
+                    android:id="@+id/color_swatch_green"
+                    android:layout_width="@dimen/_18sdp"
+                    android:layout_height="@dimen/_18sdp"
+                    android:layout_gravity="center"
+                    android:background="@drawable/circle_color_green" />
+            </FrameLayout>
+
+            <!-- Red Swatch Circle -->
+            <FrameLayout
+                android:id="@+id/color_swatch_red_frame"
+                android:layout_width="@dimen/_26sdp"
+                android:layout_height="@dimen/_26sdp"
+                android:background="@android:color/transparent">
+
+                <View
+                    android:id="@+id/color_swatch_red"
+                    android:layout_width="@dimen/_18sdp"
+                    android:layout_height="@dimen/_18sdp"
+                    android:layout_gravity="center"
+                    android:background="@drawable/circle_color_red" />
+            </FrameLayout>
+
+        </LinearLayout>
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/share_custom_poster_btn"
