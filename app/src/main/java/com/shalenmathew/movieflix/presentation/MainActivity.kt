@@ -109,6 +109,7 @@ class MainActivity : AppCompatActivity() {
         
         // Handle notification intent - open movie details if launched from notification
         handleNotificationIntent()
+        handleUpNextWidgetIntent()
     }
 
     private fun handleNotificationIntent() {
@@ -168,6 +169,40 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
+
+    private fun handleUpNextWidgetIntent() {
+        if (intent?.getBooleanExtra(EXTRA_OPEN_TRACKING, false) != true) return
+
+        val destinationListener = object : androidx.navigation.NavController.OnDestinationChangedListener {
+            override fun onDestinationChanged(
+                controller: androidx.navigation.NavController,
+                destination: androidx.navigation.NavDestination,
+                arguments: Bundle?
+            ) {
+                if (destination.id == R.id.splashFragment || destination.id == R.id.introFragment) return
+
+                controller.removeOnDestinationChangedListener(this)
+                intent?.removeExtra(EXTRA_OPEN_TRACKING)
+
+                if (destination.id == R.id.libraryFragment) {
+                    val host = supportFragmentManager.findFragmentById(R.id.fragmentContainerView) as? NavHostFragment
+                    (host?.childFragmentManager?.primaryNavigationFragment as? com.shalenmathew.movieflix.presentation.library.LibraryFragment)
+                        ?.selectTrackingTab()
+                } else {
+                    controller.navigate(
+                        R.id.libraryFragment,
+                        bundleOf(com.shalenmathew.movieflix.presentation.library.LibraryFragment.ARG_OPEN_TRACKING_TAB to true)
+                    )
+                }
+            }
+        }
+        navController.addOnDestinationChangedListener(destinationListener)
+        destinationListener.onDestinationChanged(
+            navController,
+            navController.currentDestination ?: return,
+            navController.currentBackStackEntry?.arguments
+        )
+    }
     
     fun showQuickActionMenu(
         targetView: android.view.View,
@@ -184,5 +219,10 @@ class MainActivity : AppCompatActivity() {
         super.onNewIntent(intent)
         setIntent(intent)
         handleNotificationIntent()
+        handleUpNextWidgetIntent()
+    }
+
+    companion object {
+        const val EXTRA_OPEN_TRACKING = "open_tracking_from_widget"
     }
 }

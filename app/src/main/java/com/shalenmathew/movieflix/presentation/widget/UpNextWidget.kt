@@ -160,6 +160,7 @@ private fun UpNextWidgetContent(context: Context, items: List<UpNextItem>) {
     Column(
         modifier = GlanceModifier
             .fillMaxSize()
+            .clickable(actionStartActivity(upNextIntent(context)))
             .background(ColorProvider(day = Color.Black, night = Color.Black))
             .cornerRadius(16.dp)
             .padding(14.dp)
@@ -168,7 +169,8 @@ private fun UpNextWidgetContent(context: Context, items: List<UpNextItem>) {
         Row(
             modifier = GlanceModifier
                 .fillMaxWidth()
-                .padding(bottom = 10.dp),
+                .padding(bottom = 10.dp)
+                .clickable(actionStartActivity(upNextIntent(context))),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
@@ -198,7 +200,9 @@ private fun UpNextWidgetContent(context: Context, items: List<UpNextItem>) {
 
         if (items.isEmpty()) {
             Box(
-                modifier = GlanceModifier.fillMaxSize(),
+                modifier = GlanceModifier
+                    .fillMaxSize()
+                    .clickable(actionStartActivity(upNextIntent(context))),
                 contentAlignment = Alignment.Center
             ) {
                 Text(
@@ -211,7 +215,9 @@ private fun UpNextWidgetContent(context: Context, items: List<UpNextItem>) {
             }
         } else {
             LazyColumn(
-                modifier = GlanceModifier.fillMaxSize()
+                modifier = GlanceModifier
+                    .fillMaxSize()
+                    .clickable(actionStartActivity(upNextIntent(context)))
             ) {
                 items(items) { item ->
                     UpNextItemRow(context, item)
@@ -223,16 +229,11 @@ private fun UpNextWidgetContent(context: Context, items: List<UpNextItem>) {
 
 @Composable
 private fun UpNextItemRow(context: Context, item: UpNextItem) {
-    val intent = Intent(context, MainActivity::class.java).apply {
-        putExtra("series_id", item.seriesId)
-        flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
-    }
-
     Row(
         modifier = GlanceModifier
             .fillMaxWidth()
             .padding(vertical = 6.dp)
-            .clickable(actionStartActivity(intent)),
+            .clickable(actionStartActivity(upNextIntent(context))),
         verticalAlignment = Alignment.CenterVertically
     ) {
         // Poster Thumbnail
@@ -310,6 +311,11 @@ private fun UpNextItemRow(context: Context, item: UpNextItem) {
             )
         )
     }
+}
+
+private fun upNextIntent(context: Context) = Intent(context, MainActivity::class.java).apply {
+    putExtra(MainActivity.EXTRA_OPEN_TRACKING, true)
+    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
 }
 
 private var widgetUpdateJob: kotlinx.coroutines.Job? = null
