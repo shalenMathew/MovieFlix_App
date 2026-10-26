@@ -9,4 +9,6 @@
     android:resizeMode="horizontal|vertical"
     android:updatePeriodMillis="0"
     android:description="@string/widget_up_next_description"
-    android:initialLayout="@layout/glance_default_loading_layout" />
+    android:initialLayout="@layout/glance_default_loading_layout"
+    android:previewImage="@drawable/widget_upnext"
+    android:previewLayout="@layout/widget_upnext_preview" />
