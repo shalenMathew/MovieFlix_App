@@ -130,7 +130,10 @@ object MediaShareImageGenerator {
             if (pillView != null) {
                 pillView.text = context.getString(R.string.app_name).lowercase(Locale.ENGLISH)
                 val pillBg = ContextCompat.getDrawable(context, R.drawable.bg_retro_drop_pill)?.mutate()
-                pillBg?.setTint(Color.parseColor(retroColorHex))
+                (pillBg as? android.graphics.drawable.GradientDrawable)?.apply {
+                    setColor(Color.parseColor(retroColorHex))
+                    setStroke(4, Color.parseColor("#FDEDC9"))
+                }
                 pillView.background = pillBg
             }
 
