@@ -84,3 +84,184 @@
     <string name="export_desc">Enregistrez votre liste de suivi, vos favoris, vos données de suivi et votre collection dans un fichier ZIP.</string>
     <string name="import_desc">Restaurez vos données et vos médias personnalisés à partir d'un fichier de sauvegarde ZIP précédemment enregistré.</string>
 
+    <!-- UI Components -->
+    <string name="watch_now">Regarder maintenant</string>
+    <string name="play_the_trailer">Lire la bande-annonce</string>
+    <string name="about">À propos</string>
+    <string name="episodes">Épisodes</string>
+    <string name="select_season">Sélectionner la saison</string>
+    <string name="season_1">Saison 1</string>
+    <string name="cast">Casting</string>
+    <string name="more_like_this">Dans le même genre</string>
+    <string name="overview">Synopsis</string>
+    <string name="previous">Précédent</string>
+    <string name="next">Suivant</string>
+    <string name="known_for_acting">reconnu pour ses rôles</string>
+    <string name="biography">Biographie</string>
+    <string name="birthday">Date de naissance :</string>
+    <string name="birthplace">Lieu de naissance :</string>
+    <string name="movies_and_shows">Films et séries</string>
+    <string name="fav_placeholder">Tous vos films favoris s\'affichent ici — essayez d\'en ajouter !</string>
+    <string name="favourites">Favoris</string>
+    <string name="no_result_found">Aucun résultat trouvé</string>
+    <string name="trending_searches">Recherches tendances</string>
+    <string name="intro_subtitle">du divertissement sans fin pour tout le monde</string>
+    <string name="continue_btn">Continuer ></string>
+    <string name="donation_title">Don</string>
+    <string name="tracking_placeholder">Aucune série suivie pour le moment. Commencez à suivre vos séries préférées !</string>
+    <string name="tracking">Suivi</string>
+    <string name="no_series_found">Aucune série trouvée</string>
+    <string name="watchlist_placeholder">Tous vos films à voir plus tard s\'affichent ici — essayez d\'en ajouter !</string>
+    <string name="watch_list">Liste de lecture</string>
+    <string name="coming_soon">Prochainement</string>
+    <string name="no_custom_lists_yet">Aucune liste personnalisée pour l\'instant.</string>
+    <string name="made_by_shalen_mathew">Fait avec ❤️ par Shalen Mathew</string>
+    <string name="create_new_list">Créer une nouvelle liste</string>
+    <string name="list_name">Nom de la liste</string>
+    <string name="description_optional">Description (facultatif)</string>
+    <string name="create_list">Créer la liste</string>
+    <string name="preview_collage">Aperçu du collage</string>
+    <string name="select_custom_poster">Sélectionner votre affiche personnalisée</string>
+    <string name="download">Télécharger</string>
+    <string name="share">Partager</string>
+    <string name="edit">Modifier</string>
+    <string name="edit_list">Modifier la liste</string>
+    <string name="save_changes">Enregistrer les modifications</string>
+    <string name="msg_delete_list_title">Supprimer la liste ?</string>
+    <string name="msg_delete_list_message">Voulez-vous vraiment supprimer "%1$s" ? Cette action est irréversible.</string>
+    <string name="btn_delete">Supprimer</string>
+    <string name="cancel">Annuler</string>
+    <string name="finally_over">Ouf, enfin terminé !</string>
+    <string name="add_to_watchlist">Ajouter à la liste de lecture</string>
+    <string name="add_to_favorites">Ajouter aux favoris</string>
+    <string name="stop_tracking_clear_space">Arrêter le suivi et libérer de l\'espace</string>
+    <string name="done">Terminé</string>
+    <string name="more_options">Plus d\'options</string>
+    <string name="schedule_reminder">Programmer un rappel</string>
+    <string name="notify_me_to_watch_this_movie_later">Me notifier pour regarder ce film plus tard</string>
+    <string name="track_series">Suivre la série</string>
+    <string name="track_series_subtitle">Mettre en cache tous les épisodes pour suivre vos épisodes en cours de visionnage</string>
+    <string name="add_to_list">Ajouter à la liste</string>
+    <string name="new_collection">Nouvelle collection</string>
+    <string name="items_count">%1$d éléments</string>
+    <string name="save_to_custom_list">Enregistrer dans l\'une de vos listes personnalisées</string>
+    <string name="created_on_movieflix">MovieFlix</string>
+    <string name="template_classic_dark" translatable="false">Classic Dark</string>
+    <string name="template_minimal_poster" translatable="false">Minimal Poster</string>
+    <string name="label_client" translatable="false">CLIENT</string>
+    <string name="label_category" translatable="false">CATEGORY</string>
+    <string name="label_release_date" translatable="false">RELEASE DATE</string>
+    <string name="label_app" translatable="false">APP</string>
+    <string name="label_main_character" translatable="false">MAIN CHARACTER</string>
+    <string name="label_popular_artist" translatable="false">POPULAR ARTIST</string>
+    <string name="label_theme_color" translatable="false">Theme Color:</string>
+    <string name="widget_up_next_title" translatable="false">UP Next</string>
+    <string name="widget_up_next_description" translatable="false">Track your next episodes and watch progress for your series.</string>
+    <string name="template_keep_it_simple" translatable="false">Keep It Simple</string>
+    <string name="template_film_still" translatable="false">Old Polaroid</string>
+    <string name="template_retro_drop" translatable="false">Retro Drop</string>
+    <string name="template_editorial_poster" translatable="false">Editorial Poster</string>
+    <string name="template_character_poster" translatable="false">Editorial Poster 2</string>
+    <string name="no_internet_connection">Pas de connexion Internet</string>
+    <string name="open_settings">Ouvrir les paramètres</string>
+    <string name="setting_item">Élément de paramètre</string>
+    <string name="failed_to_load_actor_details">Échec du chargement des détails de l\'acteur</string>
+    <string name="search_hint">Rechercher…</string>
+    <string name="movie_name_placeholder">Nom du film</string>
+    <string name="genres_placeholder">Action • Explosif • Suspense • Palpitant • Aventure</string>
+    <string name="choose_a_new_banner">Choisir une nouvelle bannière</string>
+    <string name="add_banner_from_gallery">Ajouter une bannière depuis la galerie</string>
+    <string name="plus_create_new_list">+ Créer une nouvelle liste</string>
+
+    <!-- Messages and Labels -->
+    <string name="msg_internet_required">Connexion Internet requise</string>
+    <string name="msg_check_internet">Vérifiez votre connexion Internet</string>
+    <string name="msg_no_movie_found">Aucun film trouvé</string>
+    <string name="msg_export_success">Exportation réussie !</string>
+    <string name="msg_export_failed">Échec de l\'exportation !</string>
+    <string name="msg_exporting_background">Exportation de la bibliothèque en arrière-plan...</string>
+    <string name="msg_restore_success">Restauration réussie !</string>
+    <string name="msg_restore_failed">Échec de la restauration !</string>
+    <string name="msg_restoring_background">Restauration de la bibliothèque en arrière-plan...</string>
+    <string name="msg_unknown_category">Catégorie inconnue</string>
+    <string name="msg_no_cast_available">Aucune donnée de casting disponible</string>
+    <string name="msg_no_crew_available">Aucune donnée d\'équipe technique disponible</string>
+    <string name="msg_season_not_found_locally">Saison introuvable localement</string>
+    <string name="msg_failed_fetch_series">Échec de la récupération des informations de la série</string>
+    <string name="msg_failed_fetch_images">Échec de la récupération des images</string>
+    <string name="lbl_episode_number">Épisode %1$d</string>
+    <string name="lbl_last_watched">Dernier visionnage : Saison %1$d ép %2$d</string>
+    <string name="lbl_percent">%1$d%%</string>
+    <string name="msg_finished_episodes">Vous venez de terminer les %1$d épisodes de %2$s.</string>
+    <string name="btn_remove_watchlist">Retirer de la liste de lecture</string>
+    <string name="btn_remove_favorites">Retirer des favoris</string>
+    <string name="msg_no_recommendation">Aucune recommandation</string>
+    <string name="lbl_season_number">Saison %1$d</string>
+    <string name="btn_remove_schedule">Supprimer la planification</string>
+    <string name="msg_notified_on">Vous serez notifié le %1$s</string>
+    <string name="btn_schedule_reminder">Planifier un rappel</string>
+    <string name="msg_schedule_reminder_desc">Recevez une notification pour regarder ce film plus tard</string>
+    <string name="btn_untrack_series">Arrêter le suivi de la série</string>
+    <string name="msg_untrack_series_desc">Arrêter le suivi et supprimer les épisodes mis en cache</string>
+
+    <!-- Toast and Dialog Messages -->
+    <string name="msg_series_removed_tracking">Série retirée du suivi</string>
+    <string name="msg_swap_seasons_tracking">Permuter les saisons dans la liste de suivi</string>
+    <string name="msg_removed_watchlist">Retiré de la liste de lecture</string>
+    <string name="msg_added_watchlist">Ajouté à la liste de lecture</string>
+    <string name="msg_removed_favorites">Retiré des favoris</string>
+    <string name="msg_added_favorites">Ajouté aux favoris</string>
+    <string name="msg_tracking_stopped">Suivi arrêté</string>
+    <string name="msg_banner_updated">Bannière mise à jour !</string>
+    <string name="msg_added_to_watchlist">Film ajouté à la liste de lecture</string>
+    <string name="msg_removed_from_watchlist">Film retiré de la liste de lecture</string>
+    <string name="msg_added_to_favorites">Film ajouté aux favoris</string>
+    <string name="msg_removed_from_favorites">Film retiré des favoris</string>
+    <string name="msg_no_info_available">Aucune information disponible</string>
+    <string name="msg_schedule_removed">Planification supprimée</string>
+    <string name="msg_tracking_started">Début du suivi de la série. Mise en cache des épisodes…</string>
+    <string name="msg_series_untracked">Suivi de la série arrêté</string>
+    <string name="msg_notification_permission_required">L\'autorisation de notification est requise pour les rappels planifiés</string>
+    <string name="msg_allow_notifications_rationale">Autoriser les notifications pour recevoir des rappels pour les films planifiés</string>
+    <string name="msg_movie_data_not_loaded">Données du film non encore chargées. Veuillez réessayer.</string>
+    <string name="msg_scheduled_for">Planifié pour le %1$s. Vous recevrez une notification !</string>
+    <string name="error_name_empty">Le nom ne peut pas être vide</string>
+    <string name="msg_syncing_episodes">Synchronisation des épisodes… veuillez patienter.</string>
+    <string name="msg_no_seasons_available">Aucune saison disponible</string>
+    <string name="msg_media_id_null">L\'identifiant du média est nul</string>
+    <string name="msg_something_went_wrong">Un problème est survenu</string>
+    <string name="msg_unknown_error">Erreur inconnue</string>
+    <string name="msg_episodes_count">%1$d épisodes</string>
+    <string name="msg_no_biography">Aucune biographie disponible pour cette personne.</string>
+    <string name="msg_no_overview_episode">Aucun résumé disponible pour cet épisode.</string>
+    <string name="msg_no_description">Aucune description disponible</string>
+    <string name="msg_no_episodes">Aucun épisode</string>
+    <string name="lbl_known_for">Connu pour %1$s</string>
+    <string name="lbl_actor">Acteur</string>
+    <string name="lbl_cast_member">MEMBRE DU CASTING</string>
+    <string name="btn_previous_season">Saison précédente</string>
+    <string name="btn_next_season">Saison suivante</string>
+    <string name="msg_stop_tracking_title">Arrêter le suivi de la série ?</string>
+    <string name="msg_stop_tracking_message">Cela retirera "%1$s" de votre bibliothèque et supprimera tous les épisodes mis en cache pour le visionnage hors ligne.</string>
+    <string name="btn_stop_tracking">Arrêter le suivi</string>
+    <string name="btn_keep_tracking">Continuer le suivi</string>
+    <string name="btn_pause_trailer">Mettre en pause la bande-annonce</string>
+    <string name="btn_play_trailer">Lire la bande-annonce</string>
+    <string name="lbl_scheduled_on">Planifié le : %1$s %2$s</string>
+
+    <!-- Poster Customization -->
+    <string name="btn_change_movie_poster">Changer l\'affiche du film</string>
+    <string name="btn_change_show_poster">Changer l\'affiche de la série</string>
+    <string name="lbl_choose_a_new_poster">Choisir une nouvelle affiche</string>
+    <string name="btn_add_poster_from_gallery">Ajouter une affiche depuis la galerie</string>
+    <string name="msg_poster_updated">Affiche mise à jour !</string>
+    <string name="btn_change_movie_banner">Changer la bannière du film</string>
+    <string name="btn_change_show_banner">Changer la bannière de la série</string>
+    
+    <!-- My Collection -->
+    <string name="lbl_my_gallery">Galerie multimédia</string>
+    <string name="lbl_add_to_gallery">Ajouter à la galerie</string>
+    <string name="lbl_collection_desc">Enregistrez vos scènes préférées ou vos fan arts depuis la galerie</string>
+    <string name="btn_remove_from_watchlist">Retirer de la liste de lecture</string>
+    <string name="btn_remove_from_favorites">Retirer des favoris</string>
+</resources>
