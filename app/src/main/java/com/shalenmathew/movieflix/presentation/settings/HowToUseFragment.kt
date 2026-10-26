@@ -118,7 +118,7 @@ class HowToUseFragment : Fragment() {
             FAQRow.Item(
                 FAQItem(
                     "Changing posters & banners",
-                    "You can customize the poster or banner of any movie or show with official artwork or images from your device gallery, but this is only possible if the item has been added to Favorites first. Once in Favorites, long-press its poster to customize it."
+                    "You can customize the poster or banner of any movie or show with official artwork or images from your device gallery in both your Watchlist and Favorites. Simply long-press any poster to open options and select 'Change Poster' or 'Change Banner'."
                 )
             ),
             FAQRow.Item(

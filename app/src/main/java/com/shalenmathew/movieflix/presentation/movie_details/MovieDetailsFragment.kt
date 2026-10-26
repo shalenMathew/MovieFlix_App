@@ -936,8 +936,8 @@ class MovieDetailsFragment : BottomSheetDialogFragment() {
 
         header.text = getString(R.string.more_options)
 
-        // Setup Change Poster Option - Limited to Favorites only
-        if (isFav) {
+        // Setup Change Poster Option
+        if (isFav || isInWatchList) {
             changePosterItem.visibility = View.VISIBLE
             changePosterText.text = if (isTVShow) getString(R.string.btn_change_show_poster) else getString(R.string.btn_change_movie_poster)
             changePosterItem.setOnClickListener {
@@ -948,8 +948,8 @@ class MovieDetailsFragment : BottomSheetDialogFragment() {
             changePosterItem.visibility = View.GONE
         }
 
-        // Setup Change Banner Option - Limited to Favorites only
-        if (isFav) {
+        // Setup Change Banner Option
+        if (isFav || isInWatchList) {
             changeBannerItem.visibility = View.VISIBLE
             changeBannerText.text = if (isTVShow) getString(R.string.btn_change_show_banner) else getString(R.string.btn_change_movie_banner)
             changeBannerItem.setOnClickListener {

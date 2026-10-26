@@ -200,7 +200,7 @@
     <string name="btn_remove_schedule">Remove Schedule</string>
     <string name="msg_notified_on">You\'ll be notified on %1$s</string>
     <string name="btn_schedule_reminder">Schedule a Reminder</string>
-    <string name="msg_schedule_reminder_desc">Get a notification to watch this movie later</string>
+    <string name="msg_schedule_reminder_desc">Get a notification to watch this media later</string>
     <string name="btn_untrack_series">Untrack Series</string>
     <string name="msg_untrack_series_desc">Stop tracking and remove cached episodes</string>
 
