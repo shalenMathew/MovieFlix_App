@@ -21,12 +21,12 @@
     <string name="popular_movies">Films populaires</string>
     <string name="popular_tv_shows">Séries TV populaires</string>
     <string name="top_rated">Les mieux notés</string>
-    <string name="anime_series">Séries d'animation</string>
+    <string name="anime_series">Séries d\'animation</string>
     <string name="netflix_shows">Séries Netflix</string>
     <string name="upcoming_movies">Prochains films</string>
     <string name="whats_trending">Quoi de tendance ?</string>
     <string name="amazon_prime_shows">Séries Amazon Prime</string>
-    <string name="now_playing_movies">Films à l'affiche</string>
+    <string name="now_playing_movies">Films à l\'affiche</string>
     <string name="continue_watching">Continuer la lecture</string>
     <string name="genre_action">Action</string>
     <string name="genre_adventure">Aventure</string>
@@ -47,17 +47,17 @@
     <string name="genre_thriller">Thriller</string>
     <string name="genre_war">Guerre</string>
     <string name="genre_western">Western</string>
-    <string name="change_language">Langue de l'application</string>
+    <string name="change_language">Langue de l\'application</string>
     <string name="select_language">Sélectionner la langue</string>
     <string name="english">Anglais</string>
     <string name="spanish">Espagnol</string>
     <string name="hindi">Hindi</string>
     <string name="french">Français</string>
     <string name="german">Allemand</string>
-    <string name="learn_how_to_use">Apprendre à utiliser l'application</string>
-    <string name="app_suggestion">Plus d'applications que vous pourriez aimer</string>
+    <string name="learn_how_to_use">Apprendre à utiliser l\'application</string>
+    <string name="app_suggestion">Plus d\'applications que vous pourriez aimer</string>
     <string name="about_me">À propos de moi</string>
-    <string name="donation">Vos dons aident à garder l'application gratuite pour les autres utilisateurs</string>
+    <string name="donation">Vos dons aident à garder l\'application gratuite pour les autres utilisateurs</string>
     <string name="source_code">Code source</string>
 
     <!-- More Apps -->
@@ -82,7 +82,7 @@
     <string name="export_library">Exporter la bibliothèque</string>
     <string name="import_library">Importer la bibliothèque</string>
     <string name="export_desc">Enregistrez votre liste de suivi, vos favoris, vos données de suivi et votre collection dans un fichier ZIP.</string>
-    <string name="import_desc">Restaurez vos données et vos médias personnalisés à partir d'un fichier de sauvegarde ZIP précédemment enregistré.</string>
+    <string name="import_desc">Restaurez vos données et vos médias personnalisés à partir d\'un fichier de sauvegarde ZIP précédemment enregistré.</string>
 
     <!-- UI Components -->
     <string name="watch_now">Regarder maintenant</string>
