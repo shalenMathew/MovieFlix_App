@@ -2,7 +2,7 @@
     <string name="app_name">MovieFlix</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Bonjour fragment vide</string>
-    <string name="app_terms">"En continuant, vous confirmez être âgé de plus de 18 ans et accepter la Politique de confidentialité et les Conditions d'utilisation"</string>
+    <string name="app_terms">En continuant, vous confirmez être âgé de plus de 18 ans et accepter la Politique de confidentialité et les Conditions d\'utilisation</string>
     <string name="personal_note">Note personnelle 📍</string>
     <string name="click_to_add_your_personal_note">Cliquer pour ajouter votre note personnelle</string>
     <string name="enter_your_note">Saisissez votre note…</string>
@@ -111,7 +111,7 @@
     <string name="tracking_placeholder">Aucune série suivie pour le moment. Commencez à suivre vos séries préférées !</string>
     <string name="tracking">Suivi</string>
     <string name="no_series_found">Aucune série trouvée</string>
-    <string name="watchlist_placeholder">Tous vos films à voir plus tard s\'affichent ici — essayez d\'en ajouter !</string>
+    <string name="watchlist_placeholder">Tous vos films à voir plus tard s\'affichent hier — essayez d\'en ajouter !</string>
     <string name="watch_list">Liste de lecture</string>
     <string name="coming_soon">Prochainement</string>
     <string name="no_custom_lists_yet">Aucune liste personnalisée pour l\'instant.</string>
@@ -190,7 +190,7 @@
     <string name="msg_failed_fetch_series">Échec de la récupération des informations de la série</string>
     <string name="msg_failed_fetch_images">Échec de la récupération des images</string>
     <string name="lbl_episode_number">Épisode %1$d</string>
-    <string name="lbl_last_watched">Dernier visionnage : Saison %1$d ép %2$d</string>
+    <string name="lbl_last_watched">Dernier visionnage : Saison %1$d ép \%2$d</string>
     <string name="lbl_percent">%1$d%%</string>
     <string name="msg_finished_episodes">Vous venez de terminer les %1$d épisodes de %2$s.</string>
     <string name="btn_remove_watchlist">Retirer de la liste de lecture</string>
@@ -247,7 +247,7 @@
     <string name="btn_keep_tracking">Continuer le suivi</string>
     <string name="btn_pause_trailer">Mettre en pause la bande-annonce</string>
     <string name="btn_play_trailer">Lire la bande-annonce</string>
-    <string name="lbl_scheduled_on">Planifié le : %1$s %2$s</string>
+    <string name="lbl_scheduled_on">Planifié le : %1$s \%2$s</string>
 
     <!-- Poster Customization -->
     <string name="btn_change_movie_poster">Changer l\'affiche du film</string>
