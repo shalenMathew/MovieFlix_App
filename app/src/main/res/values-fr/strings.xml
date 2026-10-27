@@ -2,7 +2,7 @@
     <string name="app_name">MovieFlix</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Bonjour fragment vide</string>
-    <string name="app_terms">En continuant, vous confirmez être âgé de plus de 18 ans et accepter la Politique de confidentialité et les Conditions d'utilisation</string>
+    <string name="app_terms">"En continuant, vous confirmez être âgé de plus de 18 ans et accepter la Politique de confidentialité et les Conditions d'utilisation"</string>
     <string name="personal_note">Note personnelle 📍</string>
     <string name="click_to_add_your_personal_note">Cliquer pour ajouter votre note personnelle</string>
     <string name="enter_your_note">Saisissez votre note…</string>
