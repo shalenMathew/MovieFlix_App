@@ -3,6 +3,7 @@ package com.shalenmathew.movieflix.data.repository
 import android.app.Application
 import com.shalenmathew.movieflix.core.utils.NetworkResults
 import com.shalenmathew.movieflix.data.local_storage.LocalDataSource
+import com.shalenmathew.movieflix.data.local_storage.SeriesTrackingDao
 import com.shalenmathew.movieflix.data.local_storage.entity.HomeFeedEntity
 import com.shalenmathew.movieflix.data.model.MovieResponseList
 import com.shalenmathew.movieflix.data.remote.RemoteDataSource
@@ -22,7 +23,6 @@ import org.mockito.kotlin.whenever
 import retrofit2.Response
 import kotlin.test.assertTrue
 
-
 @RunWith(MockitoJUnitRunner::class)
 class MovieDetailsRepositoryImplTest {
 
@@ -33,27 +33,32 @@ class MovieDetailsRepositoryImplTest {
     lateinit var localDataSource: LocalDataSource
 
     @Mock
+    lateinit var seriesTrackingDao: SeriesTrackingDao
+
+    @Mock
     lateinit var application: Application
 
     private lateinit var repository: MovieDetailsRepositoryImpl
 
-
     @Before
     fun setUp(){
-        repository = MovieDetailsRepositoryImpl(remoteDataSource,
-            localDataSource, application, networkChecker = {true})
+        repository = MovieDetailsRepositoryImpl(
+            remoteDataSource,
+            localDataSource,
+            seriesTrackingDao,
+            application,
+            networkChecker = { true }
+        )
     }
 
     @Test
     fun `getHomeFeedData emits loading then success`() = runTest {
-
         val fakeMovies = MovieResponseList(
             results = emptyList(),
             page = null,
             total_pages = null,
             total_results = null
         )
-
 
         val successResponse = Response.success(fakeMovies)
 
@@ -66,21 +71,19 @@ class MovieDetailsRepositoryImplTest {
         whenever(remoteDataSource.getAnime()).thenReturn(successResponse)
         whenever(remoteDataSource.getNowPlayingMovies()).thenReturn(successResponse)
 
-
         val mockEntity = mock(HomeFeedEntity::class.java)
         val homeFeedData = mock(HomeFeedData::class.java)
 
         whenever(localDataSource.readHomeFeedData()).thenReturn(mockEntity)
         whenever(mockEntity.toHomeFeedData()).thenReturn(homeFeedData)
 
-
-        val emission =mutableListOf<NetworkResults<HomeFeedData>>()
+        val emission = mutableListOf<NetworkResults<HomeFeedData>>()
 
         repository.getHomeFeedData().collect {
             emission.add(it)
         }
 
-        assertTrue (emission[0] is NetworkResults.Loading)
+        assertTrue(emission[0] is NetworkResults.Loading)
         assertTrue(emission[1] is NetworkResults.Success)
 
         // Verify the Orchestration Spine
@@ -89,12 +92,13 @@ class MovieDetailsRepositoryImplTest {
         verify(localDataSource).readHomeFeedData()
     }
 
-
     @Test
     fun `getHomeFeedData skips network and reads from DB when offline`() = runTest {
-
         val offlineRepo = MovieDetailsRepositoryImpl(
-            remoteDataSource, localDataSource, application,
+            remoteDataSource,
+            localDataSource,
+            seriesTrackingDao,
+            application,
             networkChecker = { false } // Force offline
         )
 
@@ -105,15 +109,11 @@ class MovieDetailsRepositoryImplTest {
         whenever(localDataSource.readHomeFeedData()).thenReturn(mockEntity)
         whenever(mockEntity.toHomeFeedData()).thenReturn(homeFeedData)
 
-        offlineRepo.getHomeFeedData().collect {  }
+        offlineRepo.getHomeFeedData().collect { }
 
         // Verify that we NEVER touched the remoteDataSource because we were offline
         verifyNoInteractions(remoteDataSource)
 
         verify(localDataSource).readHomeFeedData()
-
     }
-
-
-
 }
